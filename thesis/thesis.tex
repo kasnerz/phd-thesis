@@ -48,7 +48,7 @@
 \usepackage{multicol}
 \usepackage{tikz}
 \usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
+\pgfplotsset{compat=1.17}
 \usepackage{gnuplot-lua-tikz}
 \usetikzlibrary{shapes.geometric}
 \usepackage{epstopdf}
@@ -94,7 +94,7 @@ da-ta-sets
 da-ta-set
 } % -- custom hyphenation
 
-\setmainfont[Ligatures=Common]{Linux Libertine}
+\setmainfont[Ligatures=Common]{Linux Libertine O}
 \setsansfont[Scale=MatchLowercase]{DejaVu Sans}
 \setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
 
@@ -142,13 +142,14 @@ da-ta-set
 
 \def\ignorecolumn#1\unskip{}
 
-\title{Doctoral Thesis Template}
+% \title{Data-to-Text Generation with Neural Language Models}
+\title{Techniques for Neural Data-to-Text Generation}
 
 \def\fulldate{}
-\author{Random Author}
-\date{2022}
+\author{Zdeněk Kasner}
+\date{2024}
 \dept{Institute of Formal and Applied Linguistics}
-\supervisor{prof. Tim McTempleface}
+\supervisor{Mgr. et Mgr. Ondřej Dušek, Ph.D.}
 \studyprogram{Computer Science}
 \studyfield{Computational Linguistics}
 
@@ -174,18 +175,18 @@ da-ta-set
 \vspace{\fill}
 \noindent \rm
 I declare that I carried out this doctoral thesis independently,
-  and only with the cited sources, literature and other professional sources.
+and only with the cited sources, literature and other professional sources.
 
 I understand that my work relates to the rights and obligations
-  under the Act No.~121/2000 Coll., the Copyright Act, as amended,
-  in particular the fact that Charles University has the right
-  to conclude a license agreement on the use of this work as a school work
-  pursuant to Section~60 paragraph~1 of the Copyright Act.
+under the Act No.~121/2000 Coll., the Copyright Act, as amended,
+in particular the fact that Charles University has the right
+to conclude a license agreement on the use of this work as a school work
+pursuant to Section~60 paragraph~1 of the Copyright Act.
 
 \vspace{2cm}
-\noindent Prague, November 17, 1989 (TODO) \hspace{\fill}\theauthor % doplňte patřičné
-                                                             % datum, jméno a
-                                                             % příjmení
+\noindent Prague, \today \hspace{\fill}\theauthor % doplňte patřičné
+% datum, jméno a
+% příjmení
 
 %%%   Do not forget to SIGN the printed book here!
 %%%                  *********
@@ -198,18 +199,18 @@ I understand that my work relates to the rights and obligations
 
 %\selectlanguage{english}
 \begin{description}[leftmargin=7.5em,labelwidth=7em,labelindent=0em,labelsep=0.5em]
-\item[Title:] \thetitle{}
-\item[Author:] \theauthor{}
-\item[Department:] \thedept{}
-\item[Supervisor:] \thesupervisor{},\\ \thedept{}
+  \item[Title:] \thetitle{}
+  \item[Author:] \theauthor{}
+  \item[Department:] \thedept{}
+  \item[Supervisor:] \thesupervisor{},\\ \thedept{}
 \end{description}
 \subsubsection{Abstract:}
 
 \input{abstract_en}
 
 \begin{description}[leftmargin=7.5em,labelwidth=7em,labelindent=0em,labelsep=0.5em]
-        %
-\item[Keywords:] TODO add keywords such as: randomness, deep randomness, deep random processing (notice the nice black block marking the hbox overflow).
+  %
+  \item[Keywords:] TODO
     %
 \end{description}
 
@@ -218,10 +219,10 @@ I understand that my work relates to the rights and obligations
 \addcontentsline{toc}{chapter}{Czech Abstract}
 \selectlanguage{czech}
 \begin{description}[leftmargin=7.5em,labelwidth=7em,labelindent=0em,labelsep=0.5em]
-\item[Název práce:] TODO Český název práce TODO
-\item[Autor:] \theauthor{}
-\item[Katedra:] Ústav formální a aplikované lingvistiky
-\item[Vedoucí práce:] \thesupervisor,\\ Ústav formální a aplikované lingvistiky
+  \item[Název práce:] TODO
+  \item[Autor:] \theauthor{}
+  \item[Katedra:] Ústav formální a aplikované lingvistiky
+  \item[Vedoucí práce:] \thesupervisor,\\ Ústav formální a aplikované lingvistiky
 \end{description}
 
 \subsubsection{Abstrakt:}
@@ -229,9 +230,9 @@ I understand that my work relates to the rights and obligations
 \input{abstract_cs}
 
 \begin{description}[leftmargin=7.5em,labelwidth=7em,labelindent=0em,labelsep=0.5em]
-%
-\item[Klíčová slova:] TODO česká klíčová slova: nevim, nevim, nic
-%
+  %
+  \item[Klíčová slova:] TODO
+    %
 \end{description}
 
 \selectlanguage{english}
@@ -245,24 +246,25 @@ I understand that my work relates to the rights and obligations
 \addcontentsline{toc}{chapter}{Acknowledgements}
 \subsection*{Acknowledgements}
 
-{ TODO Here, you can thank anyone and say anything.
+{
 
-  \vspace{1\baselineskip}
-  \noindent
-  This is how I separated different kinds of thank-yous.
+  TODO
+  % Here, you can thank anyone and say anything.
 
-  \vspace{1\baselineskip}
-  \noindent
-  ... continued. }
+  %   \vspace{1\baselineskip}
+  %   \noindent
+  %   This is how I separated different kinds of thank-yous.
+
+  %   \vspace{1\baselineskip}
+  %   \noindent
+  %   ... continued. 
+}
 
 \vfill
 
 
 {\noindent\footnotesize %
-  TODO Here, you can/should add stuff like: This work has been using language
-  resources and tools developed and/or stored and/or distributed by the
-  LINDAT/CLARIN project of the Ministry of Education, Youth and Sports of the
-  Czech Republic (project LM2015071).%
+  This work has been using language resources and tools developed and/or stored and/or distributed by the  LINDAT/CLARIN project of the Ministry of Education, Youth and Sports of the Czech Republic (project LM2015071).
 }
 
 \cleardoublepage{}
@@ -281,7 +283,7 @@ I understand that my work relates to the rights and obligations
 
 \sloppy
 \include{01-intro}
-\include{02-method}
+% \include{02-method}
 \include{03-conclusions}
 
 %
@@ -293,7 +295,7 @@ I understand that my work relates to the rights and obligations
 \cleardoublepage{}
 \bibliographystyle{csplainnat}
 \addcontentsline{toc}{chapter}{Bibliography}
-{\small \bibliography{references,anthology}}
+{\small \bibliography{references}}
 
 \cleardoublepage{}
 \addcontentsline{toc}{chapter}{List of Abbreviations}
