@@ -94,7 +94,8 @@ da-ta-sets
 da-ta-set
 } % -- custom hyphenation
 
-\setmainfont[Ligatures=Common]{Linux Libertine O}
+\setmainfont[Ligatures=Common]{Libertinus Serif}
+% \setmainfont[Ligatures=Common]{Linux Libertine O}
 \setsansfont[Scale=MatchLowercase]{DejaVu Sans}
 \setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
 
@@ -142,7 +143,7 @@ da-ta-set
 
 \def\ignorecolumn#1\unskip{}
 
-% \title{Data-to-Text Generation with Neural Language Models}
+% \title{Data-to-Text Generation with Pretrained Language Models}
 \title{Techniques for Neural Data-to-Text Generation}
 
 \def\fulldate{}
@@ -282,9 +283,74 @@ pursuant to Section~60 paragraph~1 of the Copyright Act.
 \setcounter{page}{1}
 
 \sloppy
-\include{01-intro}
+% \include{01-intro}
 % \include{02-method}
-\include{03-conclusions}
+% \include{03-conclusions}
+
+\chapter{Introduction}
+\cite{vaswani2017attention}
+\section{Research Questions}
+\section{Main Contributions}
+\section{Thesis Overview}
+
+\chapter{Background}
+\section{Neural Language Models}
+\subsection{Neural Networks}
+\subsection{Transformer Architecture}
+\section{Pretrained Language Models}
+\subsection{Large Language Models}
+\section{Data-to-Text Generation}
+\subsection{Pipeline-based Approaches}
+\subsection{Neural Approaches}
+\subsection{Datasets}
+\section{NLG Evaluation}
+\subsection{Classical Metrics}
+\subsection{Model-based Metrics}
+
+\chapter{Low-Resource Data-to-Text Generation}
+\section{Motivation}
+\section{Iterative Template Fusion with Text-Editing LMs}
+\subsection{Text-Editing LMs}
+\subsection{Experiments}
+\section{Pipelined Text-Based Operations with Pretrained LMs}
+\subsection{Pipeline Operations}
+\subsection{Experiments}
+\section{Finetuning Multilingual LMs}
+\subsection{WebNLG+ Shared Task}
+\subsection{Our Submission}
+\section{Zero-shot Prompting with LLMs}
+
+\chapter{Evaluating Generated Text}
+\section{Motivation}
+\section{Evaluating Semantic Accuracy}
+\subsection{Experiments}
+\section{Token-Level Error Detection}
+\subsection{Shared Task}
+\subsection{Our Submission}
+
+\chapter{Data Processing and Visualization}
+\section{Motivation}
+\section{TabGenie Toolkit}
+\subsection{Data Processing}
+\subsection{Web Interface}
+\subsection{Programming Interface}
+
+
+\chapter{Investigating Model Capabilities}
+\section{Motivation}
+\section{Describing Triples in Knowledge Graphs}
+\subsection{Knowledge Graphs}
+\subsection{Rel2Text Dataset}
+\subsection{Experiments}
+\section{Prompting Open LLMs}
+\subsection{\textsc{Quintd} Toolkit}
+\subsection{Experiments}
+
+
+
+
+\chapter{Conclusions}
+
 
 %
 % TEXT END
