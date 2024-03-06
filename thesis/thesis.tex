@@ -75,11 +75,21 @@
      \@nameuse{BR@r@#1\@extra@b@citeb}}}
 \makeatother
 
-\hypersetup{
-    colorlinks=false,
-    pdfborder={0 0 0},
-    unicode=true,
+
+\definecolor{mydarkblue}{rgb}{0,0.08,0.45}
+\hypersetup{ %
+  colorlinks=true,
+  linkcolor=mydarkblue,
+  citecolor=mydarkblue,
+  filecolor=mydarkblue,
+  urlcolor=mydarkblue,
 }
+
+% \hypersetup{
+%     colorlinks=false,
+%     pdfborder={0 0 0},
+%     unicode=true,
+% }
 
 \input{acronyms}
 
@@ -143,8 +153,8 @@ da-ta-set
 
 \def\ignorecolumn#1\unskip{}
 
-% \title{Data-to-Text Generation with Pretrained Language Models}
-\title{Techniques for Neural Data-to-Text Generation}
+\title{Data-to-Text Generation with Neural Language Models}
+% \title{Techniques for Neural Data-to-Text Generation}
 
 \def\fulldate{}
 \author{Zdeněk Kasner}
@@ -161,6 +171,7 @@ da-ta-set
 %
 %
 \renewcommand{\thepage}{\roman{page}}
+\renewcommand\cite{\citep}
 \selectlanguage{english}
 \maketitle
 
@@ -282,13 +293,33 @@ pursuant to Section~60 paragraph~1 of the Copyright Act.
 \renewcommand{\thepage}{\arabic{page}}
 \setcounter{page}{1}
 
+
+
+
 \sloppy
 % \include{01-intro}
 % \include{02-method}
 % \include{03-conclusions}
 
 \chapter{Introduction}
-\cite{vaswani2017attention}
+The key to computers' versatility and efficiency -- their ``language'' -- is processing, producing, and storing structured data: arrays, lists, tree- and graph-like structures, tables and databases. Producing \textit{natural language} is in fact \textit{natural} only to humans, and to the computers less so. Once the output is computed and eventually meets human eyes,  it needs to be understood and interpreted. Should we thus learn to understand the structured data, or should we teach the computers to translate the data into our language?
+
+The answer seems to be in favor of the latter.
+% From the early days of computing, there were attempts to produce output in natural language. 
+In fact, after the first audacious attempts of computers \textit{translating} between English and Russian from 1950's \cite{sheridan1955research}, \textit{generating} English-only sentences based on the computer state seemed like an arguably simpler task. To take one example, the seminal work from \citet{winograd1971procedures} on SHRDLU, a system which can manipulate blocks according to natural language instructions, spending over 300 pages on achieving natural language understanding, only glosses over language generation, for which the reasoning goes like following:
+\begin{quote}
+  \textit{[R]esponses can be made as complex and varied as we want, since they are created by the programmer, and the program only repeats them.} \cite[p.384]{winograd1971procedures}
+\end{quote}
+
+Skipping more than 50 years ahead, the neural \glsxtrfullpl{lm} based on the Transformer architecture \cite{vaswani2017attention} are only now starting to provide the long-sought solutions for making the computer generating \textit{complex} and \textit{varied} language. Behind us are decades of works on trying to build fluent, accurate and reliable \glsxtrfull{nlg} systems \cite{reiterBuildingAppliedNatural1997,gattSurveyStateArt2018}. Similarly to other ideas in artificial intelligence -- from object recognition \cite{papert1966summer} to self-driving cars \cite{autonomouscars} -- the apparent ease of the task for humans has proven deceptive.
+
+
+
+% Automating natural language generation is therefore one of the holy grails of \acl{ai}.
+
+
+% Data-to-text generation is the process of starting with the textual representation understandable to computers and ending up the the  textual representation undestandable to humans.
+
 \section{Research Questions}
 \section{Main Contributions}
 \section{Thesis Overview}
@@ -309,16 +340,16 @@ pursuant to Section~60 paragraph~1 of the Copyright Act.
 
 \chapter{Low-Resource Data-to-Text Generation}
 \section{Motivation}
+\section{Finetuning LMs}
+\subsection{WebNLG+ Shared Task}
+\subsection{Our Submission}
 \section{Iterative Template Fusion with Text-Editing LMs}
 \subsection{Text-Editing LMs}
 \subsection{Experiments}
 \section{Pipelined Text-Based Operations with Pretrained LMs}
 \subsection{Pipeline Operations}
 \subsection{Experiments}
-\section{Finetuning Multilingual LMs}
-\subsection{WebNLG+ Shared Task}
-\subsection{Our Submission}
-\section{Zero-shot Prompting with LLMs}
+% \section{Zero-shot Prompting with LLMs}
 
 \chapter{Evaluating Generated Text}
 \section{Motivation}
