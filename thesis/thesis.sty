@@ -53,21 +53,21 @@
 %% now redefine the plain style pages (chapter pages, contents pages)
 %% to have the same page number stuff on the bottom
 \fancypagestyle{plain}{
-\fancyhf{}
-\fancyfoot[RO]{\color{black}{\bfseries \thepage}}
-\fancyfoot[LE]{\color{black}{\bfseries \thepage}}
-\renewcommand{\headrulewidth}{0pt}
-%\renewcommand{\footrulewidth}{0.5pt}
+  \fancyhf{}
+  \fancyfoot[RO]{\color{black}{\bfseries \thepage}}
+  \fancyfoot[LE]{\color{black}{\bfseries \thepage}}
+  \renewcommand{\headrulewidth}{0pt}
+  %\renewcommand{\footrulewidth}{0.5pt}
 }
 
 %% this next section (till \makeatother) makes sure that blank pages
 %% are actually completely blank, cause they're not usually
 \def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
-    \hbox{}
-    \vspace*{\fill}
-    \thispagestyle{empty}
-    \newpage
-    \if@twocolumn\hbox{}\newpage\fi\fi\fi}
+      \hbox{}
+      \vspace*{\fill}
+      \thispagestyle{empty}
+      \newpage
+      \if@twocolumn\hbox{}\newpage\fi\fi\fi}
 
 
 %% now change the chapter style
@@ -97,7 +97,7 @@
 
 \usepackage[calcwidth]{titlesec}
 \titleformat{\section}[hang]{\rmfamily}
- {\Large\bf\thesection}{12pt}{\Large\bf\raggedright}[]
+{\Large\bf\thesection}{12pt}{\Large\bf\raggedright}[]
 %\titleformat{\subsection}[hang]{\rmfamily}
 % {\large\thesubsection}{12pt}{\large}[{\titlerule[0.1pt]}]
 \titleformat*{\subsection}{\large\rmfamily\bf\raggedright}
@@ -105,42 +105,42 @@
 \RequirePackage{graphicx}
 
 \renewcommand{\maketitle}{
-\begin{titlepage}
-\begin{center}
-\ \\
+  \begin{titlepage}
+    \begin{center}
+      \ \\
 
-\vspace{20mm}
+      \vspace{20mm}
 
 
-\includegraphics[height=25mm]{logo-mff.pdf}
+      \includegraphics[height=25mm]{logo-mff.pdf}
 
-\vspace{30mm}
+      \vspace{30mm}
 
-{\Large\bf \uppercase{Doctoral Thesis}}
+      {\Large\bf \uppercase{Doctoral Thesis}}
 
-\vspace{20mm}
+      \vspace{20mm}
 
-%\normalsize
-{\Large\textnormal\theauthor}\\
-\vspace{10mm}
-{\Large\bf \@title}\\
-\end{center}
-\vspace{1mm}
-\begin{center}
-\large
-\@dept\\
-\vspace{10mm}
-\noindent Supervisor: \@supervisor\\
-\vspace{10mm}
-{\normalsize
-\begin{tabular}{rl}
-    Study Program: & \@studyprogram\\
-    Specialization: & \@studyfield
-\end{tabular}
-}
-\vspace{10mm}
+      %\normalsize
+      {\Large\textnormal\theauthor}\\
+      \vspace{10mm}
+      {\Large\bf \@title}\\
+    \end{center}
+    \vspace{1mm}
+    \begin{center}
+      \large
+      \@dept\\
+      \vspace{10mm}
+      \noindent Supervisor: \@supervisor\\
+      \vspace{10mm}
+      {\normalsize
+        \begin{tabular}{rl}
+          Study Program: & \@studyprogram
+          % Specialization: & \@studyfield
+        \end{tabular}
+      }
+      \vspace{10mm}
 
-Prague \@date
-\end{center}
-\end{titlepage}
+      Prague \@date
+    \end{center}
+  \end{titlepage}
 }
