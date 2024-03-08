@@ -349,22 +349,44 @@ The field has also gotten more experimental: working with neural models had turn
 
 This shift towards experimental approaches has created a gap between research and industry. While the industry opts for established approaches meeting industrial standards \cite{daleNaturalLanguageGeneration2020,daleNavigatingTextGeneration2023}, the research replaces its artifacts with new ones in an ever-accelerating pace. This progressive approach has its merits: the accessibility and reproducibility of open research, along with  the convergence towards generic aproaches, leads to heavy cross-pollination, making ideas for specific tasks applicable to other tasks. As such, \ac{d2t} generation is helping to advance other areas of \ac{nlp} and contribute to general knowledge on natural language, its production and processing.
 
-The thesis inevitably reflects the shifts in \ac{nlp} research between 2020 and 2024: from early attempts at generating fluent language with neural \acp{lm}, towards dealing with issues of domain generalization and semantic accuracy with larger models.
-Over the course of the thesis, we will aim to reconcile the gap: taking neural-based approaches for \ac{d2t} generation able to generate fluent texts across domains, and turning them into reliable and accurate systems. To achieve that, we will encounter several recurring themes:
+
+
+\section{Motivation}
+\label{sec:rq}
+
+The thesis, we will aim to reconcile the gap: taking neural-based approaches for \ac{d2t} generation able to generate fluent texts across domains, and turning them into reliable and accurate systems. The thesis pivots around neural models which offer new opportunities in making \ac{d2t} generation
+
+Specifically, we aim to answer the following research questions:
+
+\begin{enumerate}
+  \item \textbf{How to process the structured data with neural \acp{lm}?} The \acp{lm} were processed on text modeling, while the
+  \item \textbf{How to make a system built on neural \acp{lm} controllable?}
+  \item \textbf{How to evaluate the outputs of \ac{d2t} generation systems?}
+  \item \textbf{How do the \ac{d2t} generation systems built on neural \acp{lm} behave?}
+\end{enumerate}
+
+
+
+\section{Main Contributions}
+\label{sec:contributions}
+
+
+To achieve that, we will encounter several recurring themes:
 \begin{enumerate}
   \item \textit{transformation} of structured data into format processable by neural models,
   \item \textit{unification} of data formats for making the systems domain-independent,
   \item \textit{modularization} of the systems for making the systems controllable.
 \end{enumerate}
-On the way, we touch various facets of \ac{d2t} generation: improving \ac{d2t} generation itself (\autoref{chap:low-res}), evaluating generated texts (\autoref{chap:evaluation}), processing and visualizing data (\autoref{chap:tabgenie}), and investigating system behavior (\autoref{chap:investigating}).
 
 
-\section{Research Questions}
-\label{sec:rq}
-\section{Main Contributions}
-\label{sec:contributions}
+
 \section{Thesis Overview}
 \label{sec:overview}
+
+
+The thesis inevitably reflects the shifts in \ac{nlp} research between 2020 and 2024: from early attempts at generating fluent language with neural \acp{lm}, towards dealing with issues of domain generalization and semantic accuracy with larger models.
+Over the course of
+On the way, we touch various facets of \ac{d2t} generation: improving \ac{d2t} generation itself (\autoref{chap:low-res}), evaluating generated texts (\autoref{chap:evaluation}), processing and visualizing data (\autoref{chap:tabgenie}), and investigating system behavior (\autoref{chap:investigating}).
 
 \chapter{Background}
 \label{chap:background}
