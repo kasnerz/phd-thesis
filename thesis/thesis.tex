@@ -56,6 +56,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{mathtools}
+\usepackage{quoting,xparse}
 
 % acronyms and glossaries
 \usepackage[acronym, nomain]{glossaries}
@@ -84,6 +85,9 @@
   filecolor=mydarkblue,
   urlcolor=mydarkblue,
 }
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Section}
+\renewcommand{\subsubsectionautorefname}{Section}
 
 % \hypersetup{
 %     colorlinks=false,
@@ -110,9 +114,23 @@ da-ta-set
 \setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
 
 
+\NewDocumentCommand{\bywhom}{m}{% the Bourbaki trick
+  {\nobreak\hfill\penalty50\hskip1em\null\nobreak
+   \hfill\mbox{\normalfont(#1)}%
+   \parfillskip=0pt \finalhyphendemerits=0 \par}%
+}
+
+\NewDocumentEnvironment{pquotation}{m}
+  {\begin{quoting}[
+     indentfirst=true,
+     leftmargin=\parindent,
+     rightmargin=\parindent]\itshape}
+  {\bywhom{#1}\end{quoting}}
+
 \setstretch{1.1} % line spacing
 
 \expandafter\def\expandafter\quote\expandafter{\quote\small} % smaller quotations font
+
 
 % orphan & widow control
 %\clubpenalty 10000
@@ -302,18 +320,16 @@ pursuant to Section~60 paragraph~1 of the Copyright Act.
 % \include{03-conclusions}
 
 \chapter{Introduction}
-Producing \textit{natural language} is in fact \textit{natural} only to humans, to computers less so. The key to computers' versatility and efficiency -- their ``language'' -- is structured data: arrays, lists, tree- and graph-like structures, tables and databases. Once the output is computed and eventually meets human eyes,  it needs to be understood and interpreted. Should we thus learn to understand the structured data, or should we teach the computers to translate the data into our language?
+\label{chap:intro}
+Producing \textit{natural language} is \textit{natural} only to humans, to computers less so. The key to computers' versatility and efficiency -- their ``language'' -- are data structures: arrays, lists, trees and graphs, tables and databases. Once the data stored in these structures meets human eyes, it is vital that humans are able to understand and interpret it. Do we need domain experts to scrutinize over these structures, or can we hope to teach the computers to translate the data into our language?
 
-The answer seems to be in favor of the latter.
-% From the early days of computing, there were attempts to produce output in natural language. 
-In fact, after the first audacious attempts of computers \textit{translating} between English and Russian from 1950's \cite{sheridan1955research}, \textit{generating} English-only sentences based on the computer state seemed like an arguably simpler task. To take one example, the seminal work from \citet{winograd1971procedures} on SHRDLU, a system which can manipulate blocks according to natural language instructions, spending over 300 pages on achieving natural language understanding, only glosses over language generation, for which the reasoning goes like following:
-\begin{quote}
-  \textit{[R]esponses can be made as complex and varied as we want, since they are created by the programmer, and the program only repeats them.} \cite[p.384]{winograd1971procedures}
-\end{quote}
+The answer seems to be in favor of the latter. After all, the first attempts at producing language with computers date back to the dawn of computing, with audacious attempts of \textit{translating} between English and Russian in 1950's \cite{sheridan1955research}. With all the initial excitement, \textit{generating} English-only sentences seemed like a simpler task. Although in 1960's, people slowly began to ponder on the difficulties of generating language---\citet{yngve1961random} notes that creating grammar rules for a simple children's book is difficult since even the first ten sentences provide \textit{``surprisingly wide linguistic diversity''}---the overall sentiment was that language generation will soon be solved up to some minor details. The 461-page seminal work of \citet{winograd1971procedures} on SHRDLU, a system which can manipulate blocks according to user instructions, only glosses over presenting the state of the block world to the user:
+\begin{pquotation}{\citealp[p.384]{winograd1971procedures}}
+  [R]esponses can be made as complex and varied as we want, since they are created by the programmer, and the program only repeats them.
+\end{pquotation}
+Skipping ahead 50 years of research (to which we will return in detail in \autoref{sec:rule-d2t}), the research world beams with excitement again: neural \acp{lm} are now able to generate the long-sought \textit{complex} and \textit{varied} language. Similarly to other ideas in artificial intelligence---from object recognition \cite{papert1966summer} to self-driving cars \cite{autonomouscars}---the apparent ease of the task for humans has proven deceptive. To make progress, we needed to shift our attention linguistic theories and rule-based systems, re-defining our approach in terms of data-based approaches and generic learning algorithms.
 
-Similarly to other ideas in artificial intelligence -- from object recognition \cite{papert1966summer} to self-driving cars \cite{autonomouscars} -- the apparent ease of the task for humans has proven deceptive. Skipping more than 50 years ahead, the neural \glsxtrfullpl{lm} based on the Transformer architecture \cite{vaswani2017attention} are only now starting to provide the long-sought solutions for making the computer generating \textit{complex} and \textit{varied} language. Behind us are decades of works on trying to build fluent, accurate and reliable \glsxtrfull{nlg} systems \cite{reiterBuildingAppliedNatural1997,gattSurveyStateArt2018}.
-
-Over the years, the goal of most of the \acrshort{nlg} systems was rather pragmatic: presenting data to the users in the form they will understand. Natural language, as one of the suitable mediums to describe the data in the computer (along with data visualizations), was used to present the data from weather forecasts to sport reports. In fact, data-to-text generation was all there was to \acrshort{nlg}, (perhaps along with machine translation in the broader sense).
+Over the past decades, the goal of most of the \ac{nlg} systems turned out to be rather pragmatic: taking data from a particular system  and presenting them to the users in the form they will understand. The works in \ac{nlg} were the works in \textit{engineering}, striving to craft systems using well-understood tools to achieve particular results. Natural language, as one of the suitable mediums to describe the data in the computer, was used to present the data from healthcare, to weather forecasts and sport reports. The \ac{nlg} systems built until the arrival of neural models were accurate and reliable, if only a bit too domain-specific and rigid \cite{reiterBuildingAppliedNatural1997,gattSurveyStateArt2018}. The essence of these systems was transforming a non-linguistic inputs to linguistic outputs according to a sequence of rule. In some sense, we can therefore say that transforming data to text---what is now specifically called \ac{d2t} generation---was all there was to \ac{nlg}.
 
 With neural models, the approaches to \glsxtrfull{d2t} generation are getting more experimental and help to advance the \glsxtrfull{nlp} in general.
 
@@ -321,64 +337,111 @@ With neural models, the approaches to \glsxtrfull{d2t} generation are getting mo
 % Data-to-text generation is the process of starting with the textual representation understandable to computers and ending up the the  textual representation undestandable to humans.
 
 \section{Research Questions}
+\label{sec:rq}
 \section{Main Contributions}
+\label{sec:contributions}
 \section{Thesis Overview}
+\label{sec:overview}
 
 \chapter{Background}
+\label{chap:background}
 \section{Neural Language Models}
+\label{sec:lms}
 \subsection{Neural Networks}
+\label{sec:nns}
 \subsection{Transformer Architecture}
+\label{sec:transformer}
 \subsection{Pretrained Language Models}
+\label{sec:plms}
 \subsection{Large Language Models}
+\label{sec:llms}
 \section{Data-to-Text Generation}
+\label{sec:d2t}
 \subsection{Rule-based Approaches}
+\label{sec:rule-d2t}
 \subsection{Neural Approaches}
+\label{sec:neural-d2t}
 \subsection{Datasets}
+\label{sec:datasets}
 \subsection{Evaluation Metrics}
+\label{sec:evaluation}
 
 \chapter{Low-Resource Data-to-Text Generation}
+\label{chap:low-res}
 \section{Motivation}
+\label{sec:low-res-mot}
 \section{Finetuning LMs}
+\label{sec:finetuning}
 \subsection{WebNLG+ Shared Task}
+\label{sec:webnlgp}
 \subsection{Our Submission}
+\label{sec:mbart}
 \section{Iterative Template Fusion with Text-Editing LMs}
+\label{sec:iterative}
 \subsection{Text-Editing LMs}
+\label{sec:text-editing}
 \subsection{Experiments}
+\label{sec:text-editing-exp}
 \section{Pipelined Text-Based Operations with Pretrained LMs}
+\label{sec:pipeline}
 \subsection{Pipeline Operations}
+\label{sec:pipeline-ops}
 \subsection{Experiments}
-% \section{Zero-shot Prompting with LLMs}
+\label{sec:pipeline-exp}
 
 \chapter{Evaluating Generated Text}
+\label{chap:evaluation}
 \section{Motivation}
+\label{sec:evalution-mot}
 \section{Evaluating Semantic Accuracy}
+\label{sec:sem-acc}
 \subsection{Experiments}
+\label{sec:sem-acc-exp}
 \section{Token-Level Error Detection}
+\label{sec:eval-token}
 \subsection{Shared Task}
+\label{sec:eval-st}
 \subsection{Our Submission}
+\label{sec:eval-ours}
 
 \chapter{Data Processing and Visualization}
+\label{chap:data}
 \section{Motivation}
+\label{sec:data-mot}
 \section{TabGenie Toolkit}
+\label{sec:tabgenie}
 \subsection{Data Processing}
+\label{sec:tabgenie-data}
 \subsection{Web Interface}
+\label{sec:tabgenie-web}
 \subsection{Programming Interface}
+\label{sec:tabgenie-cli}
 
 
 \chapter{Investigating Model Capabilities}
+\label{chap:investigating}
 \section{Motivation}
+\label{sec:investigating-mot}
 \section{Describing Triples in Knowledge Graphs}
+\label{sec:describing}
 \subsection{Knowledge Graphs}
+\label{sec:kgs}
 \subsection{Rel2Text Dataset}
+\label{sec:rel2text}
 \subsection{Experiments}
+\label{sec:rel2text-exp}
 \section{Prompting Open LLMs}
+\label{sec:prompting}
 \subsection{\textsc{Quintd} Toolkit}
+\label{sec:quintd}
 \subsection{Experiments}
+\label{sec:quintd-exp}
 
 
 
 
 \chapter{Conclusions}
+\label{chap:conclusions}
 
 
 %
