@@ -5,7 +5,8 @@
 % (but beware, LaTeX adds 1in implicitly)
 \documentclass[12pt,notitlepage,a4paper,openright]{report}
 \pagestyle{plain}
-
+\usepackage{url}
+\def\UrlBreaks{\do\/\do-}
 \PassOptionsToPackage{hyperfootnotes=false}{hyperref}
 
 % fix pdfx
@@ -76,24 +77,27 @@
      \@nameuse{BR@r@#1\@extra@b@citeb}}}
 \makeatother
 
-
-\definecolor{mydarkblue}{rgb}{0,0.08,0.45}
-\hypersetup{ %
-  colorlinks=true,
-  linkcolor=mydarkblue,
-  citecolor=mydarkblue,
-  filecolor=mydarkblue,
-  urlcolor=mydarkblue,
-}
+\renewcommand{\chapterautorefname}{Chapter}
 \renewcommand{\sectionautorefname}{Section}
 \renewcommand{\subsectionautorefname}{Section}
 \renewcommand{\subsubsectionautorefname}{Section}
 
-% \hypersetup{
-%     colorlinks=false,
-%     pdfborder={0 0 0},
-%     unicode=true,
+
+
+% \definecolor{mydarkblue}{rgb}{0,0.08,0.45}
+% \hypersetup{ %
+%   colorlinks=true,
+%   linkcolor=mydarkblue,
+%   citecolor=mydarkblue,
+%   filecolor=mydarkblue,
+%   urlcolor=mydarkblue,
 % }
+
+\hypersetup{
+    colorlinks=false,
+    pdfborder={0 0 0},
+    unicode=true,
+}
 
 \input{acronyms}
 
@@ -321,20 +325,29 @@ pursuant to Section~60 paragraph~1 of the Copyright Act.
 
 \chapter{Introduction}
 \label{chap:intro}
-Producing \textit{natural language} is \textit{natural} only to humans, to computers less so. The key to computers' versatility and efficiency -- their ``language'' -- are data structures: arrays, lists, trees and graphs, tables and databases. Once the data stored in these structures meets human eyes, it is vital that humans are able to understand and interpret it. Do we need domain experts to scrutinize over these structures, or can we hope to teach the computers to translate the data into our language?
+Producing \textit{natural language} is \textit{natural} only to humans, to computers less so. The key to computers' versatility and efficiency -- their ``language'' -- are data structures: arrays, lists, trees and graphs, tables and databases. Once the data stored in these structures meets human eyes, it is vital that we can understand and interpret it. Do we need to scrutinize over these structures, or can we hope to teach the computers to translate the data into our language?
 
-The answer seems to be in favor of the latter. After all, the first attempts at producing language with computers date back to the dawn of computing, with audacious attempts of \textit{translating} between English and Russian in 1950's \cite{sheridan1955research}. With all the initial excitement, \textit{generating} English-only sentences seemed like a simpler task. Although in 1960's, people slowly began to ponder on the difficulties of generating language---\citet{yngve1961random} notes that creating grammar rules for a simple children's book is difficult since even the first ten sentences provide \textit{``surprisingly wide linguistic diversity''}---the overall sentiment was that language generation will soon be solved up to some minor details. The 461-page seminal work of \citet{winograd1971procedures} on SHRDLU, a system which can manipulate blocks according to user instructions, only glosses over presenting the state of the block world to the user:
+The answer seems to be in favor of the latter. The first attempts at producing language with computers date back to the dawn of computing, with audacious attempts of \textit{translating} between English and Russian in 1950's \cite{sheridan1955research}. After the initial excitement, \textit{generating} English-only sentences seemed like a simpler task. Although in 1960's, people slowly began to ponder on the difficulties of generating language---\citet{yngve1961random} notes that creating grammar rules for a simple children's book is difficult since even the first ten sentences provide \textit{``surprisingly wide linguistic diversity''}---the overall sentiment was that language generation will soon be solved up to some minor details. The seminal work of \citet{winograd1971procedures}, describing  across 461 pages the SHRDLU system which can manipulate blocks according to user instructions, only glosses over presenting the state of the block world to the user:
 \begin{pquotation}{\citealp[p.384]{winograd1971procedures}}
   [R]esponses can be made as complex and varied as we want, since they are created by the programmer, and the program only repeats them.
 \end{pquotation}
-Skipping ahead 50 years of research (to which we will return in detail in \autoref{sec:rule-d2t}), the research world beams with excitement again: neural \acp{lm} are now able to generate the long-sought \textit{complex} and \textit{varied} language. Similarly to other ideas in artificial intelligence---from object recognition \cite{papert1966summer} to self-driving cars \cite{autonomouscars}---the apparent ease of the task for humans has proven deceptive. To make progress, we needed to shift our attention linguistic theories and rule-based systems, re-defining our approach in terms of data-based approaches and generic learning algorithms.
+Skipping 50 years ahead, the research world beams with excitement again: neural \acp{lm} are finally able to generate the long-sought \textit{complex and varied language} \cite{vaswani2017attention,radford2019language,brown2020language}. Similarly to other tasks in artificial intelligence---from object recognition \cite{papert1966summer} to self-driving cars \cite{autonomouscars}---the apparent ease of the task for humans has proven deceptive in the hindsight. To make progress, we had to shift our attention from linguistic theories and rule-based systems, re-defining our systems in terms of data-based approaches and generic learning algorithms.
 
-Over the past decades, the goal of most of the \ac{nlg} systems turned out to be rather pragmatic: taking data from a particular system  and presenting them to the users in the form they will understand. The works in \ac{nlg} were the works in \textit{engineering}, striving to craft systems using well-understood tools to achieve particular results. Natural language, as one of the suitable mediums to describe the data in the computer, was used to present the data from healthcare, to weather forecasts and sport reports. The \ac{nlg} systems built until the arrival of neural models were accurate and reliable, if only a bit too domain-specific and rigid \cite{reiterBuildingAppliedNatural1997,gattSurveyStateArt2018}. The essence of these systems was transforming a non-linguistic inputs to linguistic outputs according to a sequence of rule. In some sense, we can therefore say that transforming data to text---what is now specifically called \ac{d2t} generation---was all there was to \ac{nlg}.
+In the previous decades, the goal of \ac{nlg} systems was rather pragmatic.
+% taking structured data from a particular system  and presenting it to the users in the form they will understand. 
+The works in \ac{nlg} were the works of \textit{engineering}: natural language was  taken as one of the suitable mediums to present the structured data to the users in an understandable form. From weather forecasts \cite{belzAutomaticGenerationWeather2008} to healthcare reports \cite{portetAutomaticGenerationTextual2009} and chart captions \cite{demirSummarizingInformationGraphics2012}, the system descriptions were \textit{how-to's} for building modular systems using common tools to achieve well-defined results.
+The \ac{nlg} systems from that time were accurate and reliable, if only a bit too domain-specific and rigid \cite{reiterBuildingAppliedNatural1997,gattSurveyStateArt2018}.
 
-With neural models, the approaches to \glsxtrfull{d2t} generation are getting more experimental and help to advance the \glsxtrfull{nlp} in general.
+% The essence of these systems was transforming a non-linguistic inputs to linguistic outputs according to a sequence of rule. In some sense, we can therefore say that transforming data to text---what is now specifically called \ac{d2t} generation---was all there was to \ac{nlg}.
 
+With neural models, the role of \ac{nlg} as a research field has changed. Given that we gained other ways to generate language than from structured data---summarize and paraphrase other texts, finish incomplete text segments, generate answers to questions, or describe images and videos \cite{Dong2021ASO}---the field of generating texts from structured data has gradually adopted the (perhaps more apt) name of \textit{\ac{d2t} generation}.
+% As one of the \ac{nlg} subfields, it continues to try to solve some of the long-stading issues with language fluency or flexibility of the systems.
+In attempts to address the fluency or flexibility issues with neural models, the field has also gotten more experimental. Working with neural models had turned out to be closer to behavioral sciences than engineering, which was not always welcomed with praise, but opened up new possibilities in building end-to-end and domain-independent systems \cite{ferreiraNeuralDatatotextGeneration2019,dusekEvaluatingStateoftheartEndtoEnd2020,sharmaInnovationsNeuralDatatotext2022}.
 
-% Data-to-text generation is the process of starting with the textual representation understandable to computers and ending up the the  textual representation undestandable to humans.
+This shift towards experimental approaches has created a gap between research and industry. The industry opts for established and reliable approaches meeting industrial standards \cite{daleNaturalLanguageGeneration2020,daleNavigatingTextGeneration2023}, while the research replaces its artifacts with new ones in an ever-accelerating pace. This progressive approach has its merits: the accessibility and reproducibility of open research, along with  the convergence towards generic aproaches based on neural \acp{lm}, leads to heavy cross-pollination, making ideas for specific tasks applicable to other tasks. As such, \ac{d2t} generation is helping to advance other areas of \ac{nlp} and contribute to general knowledge on natural language, its production and processing.
+
+This thesis attempts to reconcile the gap: taking experimental approaches for \ac{d2t} generation and turning them into reliable and accurate systems. It reflects the shifts in \ac{nlp} research between 2020 and 2024: from early experimental attempts at generating fluent language from pretrained \acp{lm}, moving towards dealing with semantic accuracy with \acp{llm}.
+
 
 \section{Research Questions}
 \label{sec:rq}
