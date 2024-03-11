@@ -350,12 +350,12 @@ FUNCTION {format.full.names}
             { ", " * t * }
             {
               numnames #2 >
-                { "," * }
+                { "" * }  % changed by Dominik Macháček 2024-02-27. Bugfix: no ,, in expanded author name \citet*
                 'skip$
               if$
               t "others" =
                 { " et~al." * }
-                { ", " * t * } %  CHANGE mudrd8mz 2005-10-12
+                { " and " * t * } %  CHANGE mudrd8mz 2005-10-12 % changed by Dominik Macháček 2024-02-27 -- use " and "in expanded author name
               if$
             }
           if$

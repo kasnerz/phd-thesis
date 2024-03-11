@@ -1,0 +1,420 @@
+%% EDITABLE LINK: TODO -- from overleaf, if you're using it.
+% 
+
+%%% The main file. It contains definitions of basic parameters and includes all other parts.
+
+%% Settings for single-side (simplex) printing
+% Margins: left 40mm, right 25mm, top and bottom 25mm
+% (but beware, LaTeX adds 1in implicitly)
+\documentclass[12pt,notitlepage,a4paper,openright]{report}
+\pagestyle{plain}
+
+\PassOptionsToPackage{hyperfootnotes=false}{hyperref}
+
+% fix pdfx
+\usepackage{etoolbox}
+% \makeatletter
+% \@ifl@t@r\fmtversion{2021-06-01}%
+%  {\AddToHook{package/after/xmpincl}
+%    {\patchcmd\mcs@xmpincl@patchFile{\if\par}{\ifx\par}{}{\fail}}}{}
+% \makeatother
+
+
+\usepackage[usenames,dvipsnames,svgnames,table,rgb]{xcolor}
+\usepackage[a-2u]{pdfx}
+\usepackage{fontspec}
+\pdfvariable omitcidset=0
+% TODO zapnout až bude potřeba
+%\usepackage{microtype}
+\usepackage[czech,english]{babel}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\usepackage[defaultlines=4,all]{nowidow}
+
+\usepackage[hybrid]{markdown}
+
+\usepackage{graphicx} % nezbytné pro standardní vkládání obrázků do dokumentu
+\usepackage[twoside, inner=3.7cm, outer=2.9cm, top=2.6cm, bottom=3.4cm]{geometry} % nastavení dané velikosti okrajů
+\usepackage{thesis}
+\usepackage[round]{natbib}
+\usepackage{multirow}
+\usepackage{arydshln} % dashed lines in tables
+\usepackage{array}
+\usepackage{amssymb,latexsym,pifont}
+\usepackage{amsmath}
+%\usepackage{longtable}
+\usepackage{enumitem} % custom lists
+\usepackage[normalem]{ulem} % underlining
+\usepackage{setspace} % radkovani
+\usepackage{varioref} % nice references (above/below)
+\usepackage[above,section]{placeins} % avoid figures pushed at end of chapters
+\usepackage{listings}
+
+\usepackage{tabularx}
+\usepackage{makecell}
+\usepackage{booktabs} % nicer lines in table
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}  % resetting from 1.18 because of texlive 2019
+\usepgfplotslibrary{statistics}
+\usepackage{gnuplot-lua-tikz}
+\usetikzlibrary{shapes.geometric}
+\usepackage{epstopdf}
+\usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{mathtools}
+
+
+\usepackage[export]{adjustbox} % vertical alignment in \includegraphics
+
+\usepackage[acronym, nomain, nopostdot]{glossaries}
+\usepackage[shortcuts=ac]{glossaries-extra}
+\preto\chapter{\cleardoublepage\phantomsection\glsresetall}
+\preto\section{\phantomsection}
+\preto\subsection{\phantomsection}
+
+\setabbreviationstyle[acronym]{long-short}
+
+\usepackage{subcaption} % sub figures in a fiture
+\usepackage{standalone} % include standoalone tikz images
+\usepackage{bibentry}
+
+% Dominik's:
+\usepackage{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\usepackage{enumitem}
+\usepackage{rotating}  % Lost in Interpreting...
+%\usepackage[capitalise,noabbrev]{cleveref}
+
+\def\blue#1{\textcolor{blue}{#1}}
+\def\red#1{\textcolor{red}{#1}}
+\def\green#1{\textcolor{olive}{#1}}
+\def\violet#1{\textcolor{violet}{#1}}
+
+% hack bibentry command for list of publications
+\makeatletter
+\renewcommand\bibentry[1]{\nocite{#1}{\frenchspacing
+     \@nameuse{BR@r@#1\@extra@b@citeb}}}
+\makeatother
+
+\hypersetup{
+    colorlinks=false,
+    pdfborder={0 0 0},
+    unicode=true,
+}
+
+%\makeglossaries{}
+\makenoidxglossaries{}
+\input{acronyms}
+
+% Czech babel conflicts with cline, hacky fix (http://tex.stackexchange.com/questions/111999/slovak-and-czech-babel-gives-problems-with-cmidrule-and-cline):
+% - basically disables hyphenation in tables, but it's not used anyway so it doesn't matter
+\preto\tabular{\shorthandoff{-}}
+\preto\tikzpicture{\shorthandoff{-}}
+%
+%
+\hyphenation{%
+da-ta-sets
+da-ta-set
+} % -- custom hyphenation
+
+\setmainfont[Ligatures=Common]{Linux Libertine O}
+\setsansfont[Scale=MatchLowercase]{DejaVu Sans}
+\setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
+
+
+\setstretch{1.1} % radkovani
+
+\expandafter\def\expandafter\quote\expandafter{\quote\small} % mensi pismo u quotations
+
+% orphan & widow control
+%\clubpenalty 10000
+%\widowpenalty 10000
+
+% odstup poznamek od textu
+\def\footnoteskip#1{
+  \renewcommand\footnoterule{
+     \vspace{#1}
+     \hrule width 0.4\columnwidth%
+     \vspace{3pt}
+}
+}
+\footnoteskip{0.8em}
+
+% v obsahu budou jen sections
+\setcounter{tocdepth}{2}
+% necisluju subsections
+\setcounter{secnumdepth}{2}
+
+%% cutting down warnings
+%\hfuzz=2pt
+%\hbadness=10000
+
+% force-ordering citations according to dummy keys
+\newcommand{\dummybiborderkey}[1]{}
+%\newcommand{\myglsxtrshort}[1]{\glsxtrshort{#1}}
+
+\include{borrowed-macros}
+\include{macros}
+\newcommand{\eos}{\texttt{</s>}}
+
+\newcommand{\veryshortarrow}[1][3pt]{\mathrel{%
+     \vcenter{\hbox{\rule[-.5\fontdimen8\textfont3]{#1}{\fontdimen8\textfont3}}}%
+     \mkern-4mu\hbox{\usefont{U}{lasy}{m}{n}\symbol{41}}}}
+
+\newcommand{\paperdisclaim}[1]{%
+\begin{center}\begin{minipage}{0.9\textwidth}
+\footnotesize\it #1
+\end{minipage}\end{center}
+}
+
+% standard deviation -- needs renaming, otherwise leave commented oot
+% \newcommand{\R}[2]{#1 \tiny $\pm$ \small #2}
+
+
+\def\JH#1{{\color{blue}JH: \it #1}}
+\def\ignorecolumn#1\unskip{}
+
+%% My imports
+\setlength{\marginparwidth}{2cm}
+\usepackage{todonotes}
+\usepackage{changepage}
+%\usepackage{subscript} % superscript in WER grid
+%\usepackage{lipsum,xcolor}  % for bold underlining, I think
+%\usepackage[normalem]{ulem}
+\usepackage{soul}
+\usepackage{xurl}
+
+
+\def\draftdate{11.3.2024}
+\title{Title%}
+\XXX{preliminary confidential draft \draftdate}}
+
+
+
+\def\fulldate{}
+\author{\XXX{author name}}
+\date{202\XXX{4}}
+\dept{Institute of Formal and Applied Linguistics}
+\supervisor{\XXX{doc. RNDr. Ondřej Bojar, Ph.D.}}
+% is the program/field name correct? yes, by ZŽ instruction 8.3.2024
+\studyprogram{Computational Linguistics}
+
+
+
+%\appto\appendix{\addtocontents{toc}{\protect\setcounter{tocdepth}{0}}}
+% reinstate the correct level for list of tables and figures
+%\appto\listoffigures{\addtocontents{lof}{\protect\setcounter{tocdepth}{1}}}
+%\appto\listoftables{\addtocontents{lot}{\protect\setcounter{tocdepth}{1}}}
+
+\begin{document}
+
+%
+%
+%
+\renewcommand{\thepage}{\roman{page}}
+\selectlanguage{english}
+\maketitle
+
+\pagestyle{plain}
+\normalsize % nastavení normální velikosti fontu
+\setcounter{page}{2} % nastavení číslování stránek
+
+% TODO: hide/remove
+\XXX{This is a confidential preliminary draft version from \draftdate.  Feedback and reviews are welcome. }
+
+\cleardoublepage{}
+\ \vspace{10mm}
+
+\noindent \it
+
+
+\vspace{\fill}
+\noindent \rm
+I declare that I carried out this doctoral thesis independently,
+  and only with the cited sources, literature and other professional sources.
+
+I understand that my work relates to the rights and obligations
+  under the Act No.~121/2000 Coll., the Copyright Act, as amended,
+  in particular the fact that Charles University has the right
+  to conclude a license agreement on the use of this work as a school work
+  pursuant to Section~60 paragraph~1 of the Copyright Act.
+
+\vspace{2cm}
+\noindent Prague, \XXX{29.\ 2.\ 2024} \hspace{\fill}\theauthor % doplňte patřičné
+                                                             % datum, jméno a
+                                                             % příjmení
+
+%%%   Výtisk pak na tomto míste nezapomeňte PODEPSAT!
+%%%                                         *********
+
+\cleardoublepage{} % přechod na novou stránku
+\pagestyle{plain}
+%\singlespacing
+\phantomsection
+\addcontentsline{toc}{chapter}{English Abstract}
+%%% Následuje strana s abstrakty. Doplňte vlastní údaje.
+%\selectlanguage{english}
+\begin{description}[leftmargin=7.5em,labelwidth=7em,labelindent=0em,labelsep=0.5em]
+\item[Title:] \thetitle{}
+\item[Author:] \theauthor{}
+\item[Department:] \thedept{}
+\item[Supervisor:] \thesupervisor{},\\ \thedept{}
+\end{description}
+\subsubsection{Abstract:}
+
+\input{abstract_en}
+
+\begin{description}[leftmargin=7.5em,labelwidth=7em,labelindent=0em,labelsep=0.5em]
+        %
+% TODO: make consistent with cs and thesis.xmpdata
+\item[Keywords:] simultaneous speech translation, speech translation,
+speech-to-text translation, machine translation, multilinguality,
+mul\-ti-\-sour\-cing, simultaneous interpreting, natural language processing
+    %
+\end{description}
+
+
+\cleardoublepage{}
+\phantomsection
+\addcontentsline{toc}{chapter}{Czech Abstract}
+\selectlanguage{czech}
+\begin{description}[leftmargin=7.5em,labelwidth=7em,labelindent=0em,labelsep=0.5em]
+\item[Název práce:] \XXX{}
+\item[Autor:] \theauthor{}
+\item[Pracoviště:] Ústav formální a aplikované lingvistiky
+\item[Vedoucí práce:] \thesupervisor,\\ Ústav formální a aplikované lingvistiky
+\end{description}
+
+\subsubsection{Abstrakt:}
+
+\input{abstract_cs}
+
+\begin{description}[leftmargin=7.5em,labelwidth=7em,labelindent=0em,labelsep=0.5em]
+%
+\item[Klíčová slova:] %neuronový strojový překlad, katastrofické zapomínání, modulární neuronové sítě, navazující učení, generalizace
+simultánní překlad řeči, překlad řeči, překlad z řeči do textu, strojový
+překlad, vícejazyčnost, vícezdrojovost,
+simultánní tlumočení, zpracování přirozeného jazyka
+%
+\end{description}
+
+\selectlanguage{english}
+
+
+
+
+\cleardoublepage{}
+\ \vspace{10mm}
+\phantomsection
+\addcontentsline{toc}{chapter}{Acknowledgements}
+\subsection*{Acknowledgements}
+
+{ I want to thank my supervisor\XXX{}
+
+  \vspace{1\baselineskip}
+%  \noindent
+
+Lastly, I am grateful for the funding provided by the following projects, which directly and indirectly supported the research in this thesis:
+\XXX{
+%H2020 Bergamot (Browser-based Multilingual Translation; Grant number: 825303),
+%H2020 SSHOC (Social Sciences \& Humanities Open Cloud; Grant number: 823782),
+%\begin{itemize}
+%\item
+H2020 ELITR (European Live Translator; Grant ID: 825460),
+%\item
+GAUK Strojový překlad tlumočených projevů (Machine translation of interpreted speech; Grant ID: GAUK 398120),
+%\item
+Babel Octopus: Robust Multi-Source Speech Translation (START Programme of
+Charles University; Grant ID:  START/SCI/089),
+%\item
+GA \v{C}R Mnohojazyčný strojový překlad (Multi-Lingual Machine Translation;
+Grant ID: 18-24210S),
+%\item
+GA \v{C}R EXPRO NEUREM3 (Neural Representations in Multi-modal and
+Multi-lingual Modeling; Grant ID: 19-26934X, RIV: GX19-26934X),
+%\item 
+LINDAT/CLARIAH-CZ (Language Resources and Digital Arts and Humanities
+Research Infrastructure; Grant ID: LM2023062), and
+%\item
+SVV 260 575 (Teoretické základy informatiky a výpočetní lingvistiky).
+%\end{itemize}
+}
+}
+
+\vfill
+
+
+{\noindent\footnotesize %
+}
+
+\cleardoublepage{}
+\phantomsection 
+\addcontentsline{toc}{chapter}{Contents}
+\tableofcontents % vkládá automaticky generovaný obsah dokumentu
+
+\cleardoublepage{}
+\phantomsection
+\renewcommand{\chapterheadstartvskip}{\vspace*{-10mm}} % mezera u kapitoly
+
+\setstretch{1.2} % correct is 1.2
+%\setstretch{.8} % while writing draft: less pages, faster compilation, faster skimming
+
+%
+% TEXT START
+%
+\renewcommand{\thepage}{\arabic{page}}
+\setcounter{page}{1}
+
+\sloppy
+\include{ch01-intro}
+\include{ch02-method}
+\include{ch03-conclusion}
+%
+% TEXT END
+%
+
+%
+% APPENDIX
+%%
+%\appendix
+%\input{ch0A-appendix}
+%\renewcommand{\chapterheadstartvskip}{\vspace*{0mm}} % mezera u kapitoly
+%
+
+\bibliographystyle{csplainnat}
+\cleardoublepage{}
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliography}
+{\small \bibliography{anthology,references}}  % you can have more references.bib files
+%%
+
+
+%List of Abbreviations
+\def\acrtitle{List of Acronyms}
+\cleardoublepage{}
+\phantomsection
+\addcontentsline{toc}{chapter}{\acrtitle}
+\renewcommand*{\acronymname}{\acrtitle}
+%\printglossary[type=\acronymtype,style=index]
+\printnoidxglossary[nonumberlist]
+
+% TODO: decide to include/exclude following sections
+
+%
+%\addcontentsline{toc}{chapter}{List of Tables}
+%{\small \listoftables\par}
+%
+%\addcontentsline{toc}{chapter}{List of Figures}
+%{\small \listoffigures\par}
+%
+%%\addcontentsline{toc}{chapter}{List of Tables}
+%%{\small \listoftables\par}
+%
+%\cleardoublepage{}
+%\addcontentsline{toc}{chapter}{List of Publications}
+%\include{list_of_publications}
+
+\end{document}

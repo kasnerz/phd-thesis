@@ -1,0 +1,23 @@
+\def\XXX#1{\textcolor{red}{XXX #1}}
+%\def\todo#1{\textcolor{red}{TODO #1}}
+
+% Dominik couldn't find a way to use clever references working, like
+% \Cref{chap:intro} / \Cref{sec:method1} . So there's \Chapref and Sref.
+\def\Chapref#1{Chapter~\ref{#1}}
+\def\Sref#1{Section~\ref{#1}}
+% but \Cref works for \Cref{tab:x} and \Cref{fig:y}
+
+
+
+\def\cite#1{\citep{#1}} %   (Johnson et al., 2017)
+% \citet{johnson-etal-2017-googles,dabre-survey} => Johnson et al. (2017)
+% \citep{johnson-etal-2017-googles,dabre-survey} => (Johnson et al., 2017)
+\def\inparcite#1{\citealp{#1}} % should be Smith, 2012
+
+
+\def\furl#1{\footnote{\url{#1}}}
+\def\hi#1{\textit{#1}}% highlight a term
+
+\def\to{$\rightarrow$}
+\def\red#1{\textcolor{red}{#1}}
+\def\blue#1{\textcolor{blue}{#1}}
