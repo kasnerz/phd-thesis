@@ -68,7 +68,7 @@ camera_abstract_cs.pdf: camera_abstract_cs.tex abstract_cs.tex
 .PHONY: ci
 ci:
 	# make sure git will remember my password
-	git config credential.helper store
+	# git config credential.helper store  # uncomment if you are sure you # want it
 	# git pull push dance with possibly uncommited local modifications
 	if git pull --no-edit; then echo No changes to hide; else git stash; git pull --no-edit; git stash apply; fi; git commit -am "make ci by $(USER)"; git push
 

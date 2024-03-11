@@ -1,21 +1,35 @@
 # phd-thesis-template
 A template PhD thesis at UFAL
 
-The font is Linux Libertine and it needs to be installed first (depending on the machine).
+## Install
 
-Compile with:
+- The font is Linux Libertine and it needs to be installed first (depending on the machine).
 
-```
-make
-```
-... and don't forget to download fresh ACL anthology:
+- fresh ACL Anthology (see https://zlib.net/pigz/)
 
 ```
 wget https://aclanthology.org/anthology.bib.gz
 pigz -d anthology.bib.gz
 ```
 
-(see https://zlib.net/pigz/)
+- optionally: download and unzip verapdf as documented in Makefile.
+
+## Compilation
+
+Either/or alternatives:
+
+1) `make`
+
+2) 
+
+```
+lualatex thesis
+bibtex thesis
+makeglossaries thesis
+lualatex thesis
+lualatex thesis
+```
+
 
 
 ## How to collaborate
