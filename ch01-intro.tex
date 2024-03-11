@@ -1,0 +1,24 @@
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Introduction}%
+\label{chap:intro}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Here goes the text. Use macros in \texttt{macros.tex}, such as
+\XXX{highlighting draft comments}. \todo{Someone may like
+\texttt{\\todo\{this\}}}. Or 
+English\to{}Czech, or define yours \XXX{next time continue here.}
+
+You can use glosses, such as \gls{mt} that generate the
+expanded version with the abbreviation during the first use, and then only
+the acronym for next time. \Gls{mt} shows the capitalized version. Define
+the glosses in \texttt{acronyms.tex}.
+
+Download and unzip the fresh ACL anthology.
+
+Use \texttt{make} for compilation. See Makefile for some special useful commands, such as
+\texttt{make watch}, \texttt{make normostrany}, etc.
+
+Don't forget about the PDF/A compliance check. You can download veraPDF into
+\texttt{vera} dir, and then \texttt{make vera}. If it prints FAIL, the problem will
+be very likely in images included as pdf. See ÚFAL
+wiki\furl{https://wiki.ufal.ms.mff.cuni.cz/internal:thesis} for help.
