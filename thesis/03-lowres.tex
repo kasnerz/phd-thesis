@@ -1,0 +1,61 @@
+\chapter{Low-Resource Data-to-Text Generation}
+\label{chap:low-res}
+% \section{Motivation}
+% \label{sec:low-res-mot}
+\section{Finetuning LMs}
+\label{sec:finetuning}
+
+
+\subsection{WebNLG+ Shared Task}
+\label{sec:webnlgp}
+The WebNLG Challenge 2020 \cite{ferreira2020BilingualBiDirectional2020}\footnote{\url{https://webnlg-challenge.loria.fr/challenge_2020/}} was the second edition of the shared task in mapping structured data to text. The structured data contains sets of RDF triples extracted from DBpedia\footnote{\url{https://www.dbpedia.org}} accompanied with verbalizations which were crowdsourced from human annotators.
+
+The original challenge \citep{gardentWebNLGChallengeGenerating2017,gardent} included 10 domains in the training data: \textit{Airport, Astronaut, Building, City, ComicsCharacter, Food, Monument, SportsTeam, University}, and \textit{WrittenWork}. Each set of triples included several verbalizations to promote lexical variability. %The dataset from the challenge was released to promote the research on data-to-text generation.
+WebNLG 2020 includes several extensions:
+\begin{itemize}
+    \item[(1)] It is \textit{bilingual}: in addition to original English data, a new portion of the dataset with Russian lexicalizations is provided, giving rise to a new task of generating text in Russian.
+    \item[(2)] It is \textit{bidirectional}: in addition to RDF-to-text generation, the challenge also includes a task on text-to-RDF semantic parsing. %, where the goal is to parse the lexicalizations to RDF triples both in English and Russian. 
+        (We did not participate in this task.)
+    \item[(3)] It includes 6 \textit{new categories}: 5 unseen categories from WebNLG Challenge 2017 (\textit{Athlete, Artist, CelestialBody, MeanOfTransportation, Politician}) and 1 new category (\textit{Company}).
+\end{itemize}
+
+
+
+
+\subsection{Our Submission}
+\label{sec:mbart}
+We formulate the RDF-to-text task as \textit{text denoising} and train mBART to solve the task individually for each language (see Figure \ref{fig:mbart}).
+We use the provided XML WebNLG data reader\footnote{\url{https://gitlab.com/webnlg/corpus-reader}} to load and linearize the triples. For each triple, we use the \texttt{flat\_triple()} method which converts each triple into the following format:
+$$
+    \texttt{subject $\vert$ property $\vert$ object}
+$$
+Note that the constituents of the triple (subject, predicate, object) are only marked positionally, without any extra tags. We use a token not present in the training data (“$\blacktriangleright$”) for delimiting individual triples to avoid extending the model vocabulary. We linearize the triples in their default order.
+
+Similarly to \citet{freitag_unsupervised_2018}, we observe that in English, linearized triples can be seen as a noisy version of the output text, where:
+\begin{itemize}[parsep=0pt,itemsep=1pt,topsep=1pt]
+    \setlength\itemsep{0.1cm}
+    \item subjects and objects are copied verbatim,
+    \item predicates are shortened or reworded,
+    \item function words are deleted,
+    \item order of the entities is shuffled.
+\end{itemize}
+mBART's pretraining objective is different from this, but we hypothesize that it is similar enough to be relevant for our task.
+For denoising Russian, our intuition stems from mBART's successful application in machine translation \citep{liu2020multilingual}.
+
+We finetune the pre-trained \texttt{mbart.CC25}\footnote{\url{https://github.com/pytorch/fairseq/tree/master/examples/mbart}} model from the \textsc{fairseq} toolkit \citep{ott2019fairseq}.
+We follow the example instructions for finetuning the model, changing only the \texttt{total\_updates} to 10,000 to reflect the smaller size of our data.  We show the capabilities of our model in Table~\ref{tab:examples}.
+
+
+
+\section{Iterative Template Fusion with Text-Editing LMs}
+\label{sec:iterative}
+\subsection{Text-Editing LMs}
+\label{sec:text-editing}
+\subsection{Experiments}
+\label{sec:text-editing-exp}
+\section{Pipelined Text-Based Operations with Pretrained LMs}
+\label{sec:pipeline}
+\subsection{Pipeline Operations}
+\label{sec:pipeline-ops}
+\subsection{Experiments}
+\label{sec:pipeline-exp}
