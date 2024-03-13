@@ -48,14 +48,14 @@ The main goal of the thesis is to close the gap outlined in the introduction: tu
 
 The auxiliary goal of the thesis is then to \textit{understand}: understand the data we are dealing with, the outputs we can reasonably expect, and the behavior of neural-based systems in certain conditions. The approaches presented for \ac{d2t} generation can often be generalized to other subfield, even though \ac{d2t} generation has several specifics which makes it a good subject for this kind of study: its low-resourceness (due to which---thankfully---there are questions that cannot be answered with ``\emph{scaling}''), the tension between established rule-based approaches and the new-coming neural approaches, and, admittedly, the fact that it is the field that we have gathered the most expertise in.
 
-To make these goals more tangible, the thesis aims to answer the following research questions:
+To make these goals more tangible, the thesis addresses the following research questions:
 
 \begin{description}
-    \item[RQ1] \textbf{In which scenarios are \acp{lm} useful for \ac{d2t} generation?} Identifying the strong sides of \acp{lm} for \ac{d2t} generation is essential before we proceed with integrating them into \ac{d2t} generation systems.
-    \item[RQ2] \textbf{How to efficiently process the structured data with \acp{lm}?} With the knowledge gathered during pre-training on large text corpora, \acp{lm} can produce texts across many domains even in low-resource settings. However, \acp{lm} were pre-trained on modeling \emph{plain text}, while the structured data have specific \emph{inner structure}. If we want to efficiently use the \acp{lm}, we need to find the way to transform the data into a suitable input format while keeping the structure and other meta-information intact.
-    \item[RQ3] \textbf{Can we make \acp{lm}-based systems more controllable?} A neural component in the system raises issues with controllability. We seek to build systems which are more predictable and have intermediate outputs which can be subject to examination.
-    \item[RQ4] \textbf{How to evaluate the outputs of \ac{d2t} generation systems?}
-    \item[RQ5] \textbf{How do the neural \ac{d2t} generation systems behave?}
+    \item[RQ1] \textbf{In which scenarios are \acp{lm} useful for \ac{d2t} generation?} For starters, it is crucial to identify the strong sides of \acp{lm} and get an intuition of where the models can make the most impact. How far can we get with \ac{lm}-only baselines? Are there outcome that we can get with \ac{lm} which are better than any previous approaches? At the same time, it is essential to understand their limitations, and be able to employ the \acp{lm} only where it is actually needed.
+    \item[RQ2] \textbf{How to efficiently process the structured data with \acp{lm}?} With any kind of structured data, we need to deal with the fact that \acp{lm} were pre-trained on modeling plain text, while the data have inner structure. In order to efficiently leverage the knowledge in \acp{lm}---especially in low-resource settings---we need to find the way to transform the data into a suitable input format while keeping the structure of the data (along with other information) intact.
+    \item[RQ3] \textbf{How to make \acp{lm}-based systems more controllable?} Any neural component introduced in the \ac{d2t} generation system will raise issues with controllability. The question is if we can minimize these issues, for example by building systems out of smaller and simpler components, training the models for more predictable tasks, or producing intermediate outputs which can be manually examined.
+    \item[RQ4] \textbf{How to evaluate the outputs of \ac{d2t} generation systems?} Evaluating generated text is hard, and it gets even harder as the quality of the texts starts to approach human level. Since human evaluation is costly and time-consuming, we study how to build automatic metrics for researchers and the system developer, focusing on the most pressing issue in \ac{d2t} generation: the semantic accuracy of the generated texts.
+    \item[RQ5] \textbf{How do the neural \ac{d2t} generation systems behave?} Undestanding the abilities and limitations of the systems we are building is crucial both for researchers and for potentional practicioners in the field. We are interested in measuring the abilities of \ac{lm}-based systems and pointing out their weak spots.
 \end{description}
 
 
@@ -64,13 +64,13 @@ To make these goals more tangible, the thesis aims to answer the following resea
 \label{sec:contributions}
 
 
-Our main contributions, corresponding to the research questions outlined above, are:
+Our main contributions, corresponding numerically to the research questions outlined above, are:
 \begin{enumerate}
-    \item We show that with a very \textbf{simple \ac{lm}-based baseline}, we can achieve strong results on a shared task of generating texts from a knowledge graph (\autoref{sec:finetuning}).
-    \item We show how to \textbf{transform the data to intermediate text-like input} suitable for \acp{lm} using hand-crafted or automatically extracted templates (\Cref{sec:iterative,sec:pipeline,sec:sem-acc}), rule-based \ac{nlg} methods (\autoref{sec:eval-token}), and specialized \acp{lm} (\autoref{sec:describing}).
-    \item We show how we can use \acp{lm} limited to improving text fluency for building \textbf{more controllable \ac{d2t} generation systems} with an iterative approach (\autoref{sec:iterative}) and modular architecture (\autoref{sec:pipeline}).
-    \item We develop \textbf{\ac{lm}-based automatic metrics} for evaluating outputs of \ac{d2t} generation systems on the level of data item mentions (\autoref{sec:sem-acc}) and output tokens (\autoref{sec:eval-token}).
-    \item We build a \textbf{tool for visualizing} the structured data and model outputs (\autoref{sec:tabgenie}), and we \textbf{study \ac{lm} behaviors} across multiple \ac{d2t} tasks, data formats, and domains (\Cref{sec:prompting,sec:describing}).
+    \item We show that with a very \textbf{simple \ac{lm}-based finetuned baseline}, we can achieve strong results on a shared task of generating texts from a knowledge graph (\autoref{sec:finetuning}). We also point out the advantages and limitations of open \acp{llm} on \ac{d2t} generation in zero-shot settings (\autoref{sec:prompting}).
+    \item We show how to \textbf{transform the data to intermediate text-like input} suitable for \acp{lm} using hand-crafted or automatically extracted templates (\Cref{sec:iterative,sec:pipeline,sec:sem-acc}), rule-based \ac{nlg} methods (\autoref{sec:eval-token}), and specialized \acp{lm} (\autoref{sec:describing}). We show that these methods can serve as a basis both for competitive neural-based \ac{d2t} generation systems and for novel \ac{lm}-based evaluation metrics.
+    \item We show how we can limit \acp{lm} to the task of \textit{improving text fluency}, and use these \acp{lm} for building \textbf{more controllable \ac{d2t} generation systems} with an iterative approach (\autoref{sec:iterative}) and modular architecture (\autoref{sec:pipeline}).
+    \item We develop \textbf{\ac{lm}-based automatic metrics} for evaluating outputs of \ac{d2t} generation systems on the level of data item mentions (\autoref{sec:sem-acc}) and output tokens (\autoref{sec:eval-token}), showing strong results regarding correlation with human judgement in comparison with other available metrics.
+    \item We build a \textbf{tool for visualizing} the structured data and model outputs and show how we can unify the format of mutliple \ac{d2t} generation dataset for easier processing (\autoref{sec:tabgenie}). We also \textbf{study the behaviors of open \acp{llm}} across multiple \ac{d2t} tasks, data formats, and domains, evaluate their semantic accuracy, and provide recommendations for future research (\Cref{sec:prompting,sec:describing}).
 \end{enumerate}
 
 
