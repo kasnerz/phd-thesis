@@ -1,6 +1,9 @@
 # unless explicitly added, the thesis PDF will be ignored
 thesis.pdf
 
+# custom
+.vscode
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof

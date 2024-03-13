@@ -93,6 +93,7 @@
 \def\thestudyprogram{\@studyprogram}
 \def\thestudyfield{\@studyfield}
 
+\def\gapsize{10mm}
 
 
 \usepackage[calcwidth]{titlesec}
@@ -122,25 +123,29 @@
 
       %\normalsize
       {\Large\textnormal\theauthor}\\
-      \vspace{10mm}
+      \vspace{\gapsize}
       {\Large\bf \@title}\\
     \end{center}
     \vspace{1mm}
     \begin{center}
       \large
       \@dept\\
-      \vspace{10mm}
+      \vspace{\gapsize}
       \noindent Supervisor: \@supervisor\\
-      \vspace{10mm}
-      {\normalsize
-        \begin{tabular}{rl}
-          Study Program: & \@studyprogram
-          % Specialization: & \@studyfield
-        \end{tabular}
+      \vspace{\gapsize}
+      {%\normalsize
+        \noindent Study Program: \@studyprogram\\
       }
-      \vspace{10mm}
+      %{%\normalsize 
+      %\begin{tabular}{rl}
+      %    Study Program: & \@studyprogram\\
+      %%    Specialization: & \@studyfield
+      %\end{tabular}
+      %}
+      \vspace{\gapsize}
 
       Prague \@date
     \end{center}
   \end{titlepage}
 }
+

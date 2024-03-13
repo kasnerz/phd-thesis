@@ -1,65 +1,23 @@
-%%% This file contains definitions of various useful macros and environments %%%
-%%% Please add more macros here instead of cluttering other files with them. %%%
+\def\XXX#1{\textcolor{red}{XXX #1}}
+%\def\todo#1{\textcolor{red}{TODO #1}}
 
-%%% Minor tweaks of style
-
-% This macro defines a chapter, which is not numbered, but is included
-% in the table of contents.
-\def\chapwithtoc#1{
-\chapter*{#1}
-\addcontentsline{toc}{chapter}{#1}
-}
-
-% Draw black "slugs" whenever a line overflows, so that we can spot it easily.
-\overfullrule=1mm
+% Dominik couldn't find a way to use clever references working, like
+% \Cref{chap:intro} / \Cref{sec:method1} . So there's \Chapref and Sref.
+\def\Chapref#1{Chapter~\ref{#1}}
+\def\Sref#1{Section~\ref{#1}}
+% but \Cref works for \Cref{tab:x} and \Cref{fig:y}
 
 
-%%% The field of all real and natural numbers
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\N}{\mathbb{N}}
 
-%%% Useful operators for statistics and probability
-\DeclareMathOperator{\pr}{\textsf{P}}
-\DeclareMathOperator{\E}{\textsf{E}\,}
-\DeclareMathOperator{\var}{\textrm{var}}
-\DeclareMathOperator{\sd}{\textrm{sd}}
+\def\cite#1{\citep{#1}} %   (Johnson et al., 2017)
+% \citet{johnson-etal-2017-googles,dabre-survey} => Johnson et al. (2017)
+% \citep{johnson-etal-2017-googles,dabre-survey} => (Johnson et al., 2017)
+\def\inparcite#1{\citealp{#1}} % should be Smith, 2012
 
-\DeclareMathOperator*{\argmin}{argmin}
-\DeclareMathOperator*{\argmax}{argmax}
-\DeclareMathOperator*{\softmax}{softmax}
 
-\DeclareMathOperator{\relu}{ReLu}
-\let\emptyset\varnothing{}
+\def\furl#1{\footnote{\url{#1}}}
+\def\hi#1{\textit{#1}}% highlight a term
 
-\DeclareMathOperator*{\sgn}{sgn}
-\DeclareMathOperator{\attn}{Attn}
-\DeclareMathOperator{\multihead}{Multihead}
-\DeclareMathOperator{\concat}{concat}
-
-\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
-\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
-
-%%% Transposition of a vector/matrix
-\newcommand{\T}[1]{#1^\top}
-
-%%% Various math goodies
-\newcommand{\goto}{\rightarrow}
-\newcommand{\gotop}{\stackrel{P}{\longrightarrow}}
-\newcommand{\maon}[1]{o(n^{#1})}
-\newcommand{\abs}[1]{\left|{#1}\right|}
-\newcommand{\dint}{\int_0^\tau\!\!\int_0^\tau}
-\newcommand{\isqr}[1]{\frac{1}{\sqrt{#1}}}
-
-%%% Various table goodies
-\newcommand{\pulrad}[1]{\raisebox{1.5ex}[0pt]{#1}}
-\newcommand{\mc}[1]{\multicolumn{1}{c}{#1}}
-\newcommand{\mcl}[1]{\multicolumn{1}{l}{#1}}
-
-% this is for the examples
-\newcommand{\redund}[1]{\textcolor{black!30!red!100}{\underline{#1}}}
-\newcommand{\greenund}[1]{\textcolor{black!40!green!100}{\underline{#1}}}
-\newcommand{\blueund}[1]{\textcolor{black!30!blue!100}{\underline{#1}}}
-
-% check and cross marks
-\newcommand{\cmark}{\ding{51}}%
-\newcommand{\xmark}{\ding{55}}%
+\def\to{$\rightarrow$}
+\def\red#1{\textcolor{red}{#1}}
+\def\blue#1{\textcolor{blue}{#1}}
