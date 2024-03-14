@@ -13,6 +13,31 @@ In this section, we work our way towards neural \acp{lm}: the mathematical found
 
 \subsection{Neural Networks}
 \label{sec:nns}
+Lets assume our goal is to predict the numerical output $y \in \mathbb{R}$ for the given numerical input $x \in \mathbb{R}$. For an arbitrary $x \rightarrow y$ mapping, that is quite an ambitious goal. To make the task easier, lets also assume that $x$'s and $y$'s are representations of some real-world data, and thus come from naturally occuring distributions $x \in \mathcal{X}$, $y \in \mathcal{Y}$. This suggest there are regularities and underlying patterns in the data, manifested as a certain dependence of $y$ on $x$.
+
+For learning how $y$ depends on $x$ (which will subsequentially allow us to make predictions about the real world phenomena represented by $x$'s and $y$'s), we can use mathematical models designed to capture these regularities in their parameters. The idea is that the models learn the patterns from a limited set of examples called the \textit{training data} $\mathcal{D_{\text{train}}}$, where $\mathcal{D_{\text{train}}} = \{(x_1, y_1), \ldots, (x_{n}, y_{n})\}$, and use the learned parameters to predict the outputs on the \textit{test data} $\mathcal{D_{\text{train}}}$, where $\mathcal{D_{\text{test}}} = \{(x_1, y_1), \ldots, (x_{m}, y_{m})\}$.
+
+% \paragraph{Perceptron Algorithm} One of the early mathematical models designed to do that was the perceptron algorithm. The perceptron algorithm is a simple binary classification algorithm used to learn a linear decision boundary for separating data points into two classes. Given a real-number input $x$ and a binary output $y$, the perceptron algorithm learns a set of weights $w$ and a bias $b$ to make predictions based on the input features.
+
+% \textbf{Algorithm:}
+
+% \begin{enumerate}
+%     \item \textbf{Initialization:} Initialize the weights $w$ and the bias $b$ to small random values or zeros.
+%     \item \textbf{Iterative Update:}
+%           \begin{itemize}
+%               \item For each training example $(x_i, y_i)$:
+%                     \begin{itemize}
+%                         \item Compute the predicted output $\hat{y}_i$ using the current weights and bias: $\hat{y}_i = \text{sign}(w \cdot x_i + b)$.
+%                         \item Update the weights and bias using the perceptron update rule:
+%                               \[ w = w + \alpha (y_i - \hat{y}_i) x_i \]
+%                               \[ b = b + \alpha (y_i - \hat{y}_i) \]
+%                               where $\alpha$ is the learning rate.
+%                     \end{itemize}
+%           \end{itemize}
+%     \item \textbf{Termination:} Repeat the iterative update until convergence or for a fixed number of iterations.
+% \end{enumerate}
+
+% The perceptron algorithm converges if the data is linearly separable; otherwise, it may not converge. Additionally, the learning rate $\alpha$ is a hyperparameter that influences the convergence speed and stability of the algorithm.
 
 
 
