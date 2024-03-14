@@ -30,7 +30,7 @@ For learning the dependence (which will, in turn, allow us to make predictions a
           \begin{itemize}
               \item Compute the predicted output $\hat{y}_i$ using the current weights and bias: $\hat{y}_i = \text{sign}(\textbf{w} \cdot x_i + b)$.
               \item Update the weights and bias using the perceptron update rule:
-                    \[ w = w + (y_i - \hat{y}_i) x_i \]
+                    \[ \textbf{w} = \textbf{w} + (y_i - \hat{y}_i) \textbf{x}_i \]
                     \[ b = b + y_i - \hat{y}_i \]
           \end{itemize}
     \item Repeat until convergence.
