@@ -13,32 +13,30 @@ In this section, we work our way towards neural \acp{lm}: the mathematical found
 
 \subsection{Neural Networks}
 \label{sec:nns}
-Let's assume our goal is to predict the real-number output $y \in \mathbb{R}$ for the given real vector $\mathbf{x} \in \mathbb{R}$. For an arbitrary $\mathbf{x} \rightarrow y$ mapping, that is quite an ambitious goal. To make the task easier, let's also assume that $\mathbf{x}$'s and $y$'s are representations of some real-world data and there is a certain non-trivial dependence of values of $y$ based on $\mathbf{x}$ which can be learned.
+Let's assume our goal is to predict the real-number output $y \in \mathbb{R}$ for the given real vector $\mathbf{x} \in \mathbb{R}$.\footnote{We will stick to the convention that vectors are denoted with boldface, e.g. $\mathbf{x}$, and real numbers with regular font, e.g. $x$.} For an arbitrary $\mathbf{x} \rightarrow y$ mapping, that is quite an ambitious goal. To make the task easier, let's also assume that $\mathbf{x}$'s and $y$'s are representations of some causally connected real-world data, implying there is a certain non-trivial dependence of values of $y$ on $\mathbf{x}$ which can be learned.
 %  and come from naturally occuring distributions $\mathbf{x} \in \mathcal{X}$, $y \in \mathcal{Y}$. 
 % This suggest there are regularities and underlying patterns in the data and .
 
-For learning how $y$ depends on $\mathbf{x}$ (which will subsequentially allow us to make predictions about the real world phenomena represented by $\mathbf{x}$'s and $y$'s), we can use mathematical models designed to capture these regularities and underlying patterns in their parameters. The idea is that the models learn the patterns from a limited set of examples called the \textit{training data},  $\mathcal{D_{\text{train}}} = \{(\mathbf{x}_1, y_1), \ldots, (\mathbf{x}_{n}, y_{n})\}$, and use the learned parameters to predict the outputs on the \textit{test data}, $\mathcal{D_{\text{test}}} = \{(\mathbf{x}_1, y_1), \ldots, (\mathbf{x}_{m}, y_{m})\}$.
+For learning the dependence (which will, in turn, allow us to make predictions about the real-world phenomena represented by $\mathbf{x}$'s and $y$'s), we can use mathematical models designed to capture the underlying rules in their parameters. The idea is that the models estimate the parameters from a limited set of examples called the \textit{training data}:  $\mathcal{D_{\text{train}}} = \{(\mathbf{x}_1, y_1), \ldots, (\mathbf{x}_{n}, y_{n})\}$, and use the learned parameters to predict the outputs on the \textit{test data}: $\mathcal{D_{\text{test}}} = \{(\mathbf{x}_1, y_1), \ldots, (\mathbf{x}_{m}, y_{m})\}$.
 
-\paragraph{Perceptron Algorithm} One of the early mathematical models designed for predicting these outputs (which are in this case binary, $y \in \{-1, 1\}$) from the data is the perceptron algorithm. The perceptron algorithm learns a linear decision boundary for separating data points with $(\mathbf{x_i}, y_i = -1)$ and $y_i = 1$. To do that, the perceptron algorithm learns a set of weights $w$ and a bias $b$ to make predictions based on the input features.
+\paragraph{Perceptron Algorithm} One of the early mathematical models designed for predicting the outputs (in this case binary, $y \in \{-1, 1\}$) based on the input data is the perceptron algorithm. The algorithm learns parameters $\textbf{w}$ and $b$ describing a linear decision boundary, separating the data points $\mathbf{x_i}$ so that the points $\{\mathbf{x_i} | y_i = -1\}$ lay on one side of the boundary and the points $\{\mathbf{x_j} | y_j = 1\}$ on another. The algorithm proceeds as follows:
 
 
 
 
 \begin{enumerate}
-    \item The weights $w$ and the bias $b$ are initialized to small random values or zeros.
+    \item The parameters $\textbf{w}$ and $b$ are initialized to small random values (or zeros).
     \item For each training example $(\mathbf{x}_i, y_i)$:
           \begin{itemize}
-              \item Compute the predicted output $\hat{y}_i$ using the current weights and bias: $\hat{y}_i = \text{sign}(w \cdot x_i + b)$.
+              \item Compute the predicted output $\hat{y}_i$ using the current weights and bias: $\hat{y}_i = \text{sign}(\textbf{w} \cdot x_i + b)$.
               \item Update the weights and bias using the perceptron update rule:
-                    \[ w = w + \alpha (y_i - \hat{y}_i) x_i \]
-                    \[ b = b + \alpha (y_i - \hat{y}_i) \]
-                    where $\alpha$ is the learning rate.
+                    \[ w = w + (y_i - \hat{y}_i) x_i \]
+                    \[ b = b + y_i - \hat{y}_i \]
           \end{itemize}
-    \item \textbf{Termination:} Repeat the iterative update until convergence or for a fixed number of iterations.
+    \item Repeat until convergence.
 \end{enumerate}
 
-The perceptron algorithm converges if the data is linearly separable; otherwise, it may not converge. Additionally, the learning rate $\alpha$ is a hyperparameter that influences the convergence speed and stability of the algorithm.
-
+The perceptron algorithm is guaranteed to converge if the data is linearly separable, i.e., if the data can be separated with a hyperplane.
 
 
 
