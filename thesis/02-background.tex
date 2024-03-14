@@ -2,14 +2,14 @@
 \chapter{Background}
 \label{chap:background}
 
-To establish common ground, this chapter explains the \textbf{basic concepts} used throughout the thesis: neural \acp{lm} in \autoref{sec:lms}---all the way from the basic of neural networks and language modeling up to pretrained and large language models---and \ac{d2t} generation in \autoref{sec:d2t}---covering rule-based and neural-based systems, datasets and evaluation methods. We aim to make the explanations self-contained but brief, covering the important concepts but pointing the interested reader to the respective works for details.
+This chapter explains the \textbf{basic concepts} used throughout the thesis. First, we explain \textbf{neural \acp{lm}}: from the basic of neural networks (§\ref{sec:nns}) and language modeling (§\ref{sec:lm-basics}), up to pretrained (§\ref{sec:plms}) and large language models (§\ref{sec:llms}). Next, we move on to \textbf{\ac{d2t} generation}: covering rule-based (§\ref{sec:rule-d2t}) and neural-based systems (§\ref{sec:neural-d2t}), \ac{d2t} datasets (§\ref{sec:datasets}) and evaluation methods (§\ref{sec:evaluation}). We assume that the reader has certain expertise in related areas of \ac{nlp}, although not necessarily in \ac{nlg}. We also aim to make the work self-contained by covering all the related concepts, but the explanations are brief, and the interested reader is referred to the respective works for details.
 
-Besides explaining the basic concepts, the chapter serves also as an \textbf{overview of the state of the art} in the field. Especially the later subsections (\Cref{sec:plms,sec:llms} for neural \acp{lm} and \Cref{sec:neural-d2t,sec:datasets,sec:evaluation} for \ac{d2t} generation) focus more on describing the datasets and models used for the experiments, summarizing papers referenced throughout the thesis, and providing pointers to the related work.
+Besides explaining the basic concepts, the chapter serves also as an \textbf{overview of the state of the art} in the field. In particular, the later subsections (\Cref{sec:plms,sec:llms} for neural \acp{lm} and \Cref{sec:neural-d2t,sec:datasets,sec:evaluation} for \ac{d2t} generation) focus on summarizing related work, providing pointers to it, and describing the datasets and models used for the experiments. As such, the chapter serves as a main reference for the related work for later chapters, and we will only briefly revisit the most relevant works in the respective chapters.
 
 
 \section{Neural Language Models}
 \label{sec:lms}
-
+In this section, we work our way towards neural \acp{lm}: the mathematical foundations of \acp{nn} the \acp{lm} are built on, and the way \acp{lm} are constructed, trained, and eventually applied in \ac{nlp}.
 
 \subsection{Neural Networks}
 \label{sec:nns}
