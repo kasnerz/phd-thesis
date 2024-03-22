@@ -9,7 +9,7 @@ Besides explaining the basic concepts, the chapter serves also as an \textbf{ove
 
 \section{Neural Language Models}
 \label{sec:lms}
-In this section, we work our way towards neural \acp{lm}: the mathematical foundations of \acp{nn} on which the neural \acp{lm} are built on, and the way \acp{lm} are constructed, trained, and eventually applied in \ac{nlp}.
+In this section, we work our way towards neural \acp{lm}: the mathematical foundations of \acp{nn} on which the neural \acp{lm} are built on (\autoref{sec:nns}), the basic ideas of language modeling (\autoref{sec:lm-basics}) and the way \acp{lm} are constructed, trained, and eventually applied in \ac{nlp} (\Cref{sec:transformer,sec:plms,sec:llms}).
 
 \subsection{Neural Networks}
 \label{sec:nns}
@@ -54,13 +54,21 @@ For efficiency, the neurons are organized in layers, which enables formulating t
 The parameters of \acp{mlp} are updated using the \textit{backpropagation} algorithm. The algorithm aims to minimize the loss function, which describes the gap between model predictions and ground truth. The updates are gradual, updating the network parameters according to their gradients in the reverse order of layers.
 
 
-\subsection{Language Models}
+\subsection{Language Modeling}
 \label{sec:lm-basics}
+We will now look at tools for working with sequences of discrete units (called \textit{tokens}), which will help us to to model and represent texts in natural language. One of the basic notions is an \emph{n}-gram: an n-tuple of consecutive tokens in a sequence.
 
+\paragraph{\emph{n}-gram Models} \emph{n}-gram models predict the a probability distribution over the next token in the sentence
+based on the preceding n-1 tokens
 
+\paragraph{Word Embeddings}
 
-\subsection{Transformer Architecture}
-\label{sec:transformer}
+\paragraph{Neural \acp{lm}}
+
+\paragraph{Encoder-Decoder Models}
+
+\paragraph{Transformer Architecture}
+% \label{sec:transformer}
 \subsection{Pretrained Language Models}
 \label{sec:plms}
 \subsection{Large Language Models}
