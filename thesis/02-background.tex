@@ -2,9 +2,9 @@
 \chapter{Background}
 \label{chap:background}
 
-This chapter explains the \textbf{basic concepts} used throughout the thesis. First, we explain \textbf{neural \acp{lm}}: from the basic of neural networks (§\ref{sec:nns}) and language modeling (§\ref{sec:lm-basics}), up to pretrained (§\ref{sec:plms}) and large language models (§\ref{sec:llms}). Next, we move on to \textbf{\ac{d2t} generation}: covering rule-based (§\ref{sec:rule-d2t}) and neural-based systems (§\ref{sec:neural-d2t}), \ac{d2t} datasets (§\ref{sec:datasets}) and evaluation methods (§\ref{sec:evaluation}). We assume that the reader has certain expertise in related areas of \ac{nlp}, although not necessarily in \ac{nlg}. We also aim to make the work self-contained by covering all the related concepts, but the interested reader is referred to the respective works for details.
+This chapter explains the \textbf{basic concepts} used throughout the thesis. First, we explain \textbf{neural \acp{lm}}: from the basic of neural networks (§\ref{sec:nns}) and language modeling (§\ref{sec:lm-basics}), up to pretrained (§\ref{sec:plms}) and large language models (§\ref{sec:llms}). Next, we move on to \textbf{\ac{d2t} generation}: covering rule-based (§\ref{sec:rule-d2t}) and neural-based systems (§\ref{sec:neural-d2t}), \ac{d2t} datasets (§\ref{sec:datasets}) and evaluation methods (§\ref{sec:evaluation}). We assume that the reader has certain expertise in related areas of \ac{nlp}, although not necessarily in \ac{nlg}. We aim to make the work self-contained by covering all the related concepts, although more detailed explanations are provided in the related work.
 
-Besides explaining the basic concepts, the chapter serves also as an \textbf{overview of the state of the art} in the field. In particular, the later subsections (\Cref{sec:plms,sec:llms} for neural \acp{lm} and \Cref{sec:neural-d2t,sec:datasets,sec:evaluation} for \ac{d2t} generation) focus on providing pointers to related work and describing the datasets and models used for the experiments. As such, the chapter serves as a main reference for the related work, and we will only briefly revisit the most relevant works in the respective chapters.
+Besides explaining the basic concepts, the chapter serves also as an \textbf{overview of the state of the art} in the field. In particular, the later subsections (\Cref{sec:plms,sec:llms} for neural \acp{lm} and \Cref{sec:neural-d2t,sec:datasets,sec:evaluation} for \ac{d2t} generation) focus on providing pointers to related work and describing the datasets and models used for the experiments. As such, the chapter serves as a main reference for the related work: we will only briefly revisit the most relevant works in the respective chapters.
 
 
 \section{Neural Language Models}
@@ -13,30 +13,29 @@ In this section, we work our way towards neural \acp{lm}: the mathematical found
 
 \subsection{Neural Networks}
 \label{sec:nns}
-First, we need to build a tool for learning patterns from data\footnote{Until we get to \ac{d2t} generation in \autoref{sec:d2t}, we will use the word ``\textit{data}'' only in its abstract sense, as in ``any inputs we can apply our algorithms to''. We will use the term ``structured data'' whenever it is necessary to make the distinction.}. This tool---which for us will be the \textbf{neural networks}---will later help us learning patterns about language from large-scale data, and eventually generating the language.
+First, we need to build a tool for learning patterns from data\footnote{Until we get to \ac{d2t} generation in \autoref{sec:d2t}, we will use the word ``\textit{data}'' only in its abstract sense, as in ``any inputs we can apply our algorithms to''. We will use the term ``structured data'' whenever it is necessary to make the distinction.}. This tool---which for us will be the \textbf{neural networks}---will later help us with learning patterns about language from large-scale textual data, and in turn also with generating the language.
 
-Let's say our goal is to predict the real-number output $y \in \mathbb{R}$ for the given real vector $\mathbf{x} \in \mathbb{R}$.\footnote{We will follow the convention that vectors are denoted with boldface letters ($\mathbf{x}$), and real numbers with plain letters ($x$).} Let's also assume that the $\mathbf{x} \rightarrow y$ mapping is not arbitrary (that would leave us with memorizing all the $(\mathbf{x},y)$ pairs), but follows some regularities and underlying patterns that can be learned. Since we usually consider $(\mathbf{x},y)$ to be representations of real-word data, e.g. documents and their labels, this assumption will be naturally satisfied.
+Let's say our goal is to predict the real-number output $y \in \mathbb{R}$ for the given real vector $\mathbf{x} \in \mathbb{R}$.\footnote{We will follow the convention that vectors are denoted with boldface letters ($\mathbf{x}$), and real numbers with plain letters ($x$).} Let's also assume that the $\mathbf{x} \rightarrow y$ mapping is not arbitrary (that would leave us with memorizing all the $(\mathbf{x},y)$ pairs), but follows some regularities and underlying patterns that can be learned. This assumption will be naturally satisfied if we consider $(\mathbf{x},y)$ to be representations of real-word data, e.g. documents and their labels.
 
-For learning the underlying connection between $\mathbf{x}$ and $y$, we will use the mathematical models designed to capture the connection in their parameters. The idea is that the models estimate the parameters from a limited set of examples called the \textit{training data}:  $\mathcal{D_{\text{train}}} = \{(\mathbf{x}_1, y_1), \ldots, (\mathbf{x}_{n}, y_{n})\}$, and use the learned parameters to predict the outputs on the \textit{test data}: $\mathcal{D_{\text{test}}} = \{(\mathbf{x}_1, y_1), \ldots, (\mathbf{x}_{m}, y_{m})\}$.
+For learning the underlying pattern between $\mathbf{x}$ and $y$, we will use mathematical models designed to capture the pattern in their parameters. The idea is that the models estimate the parameters from a limited set of examples called the \textit{training data}:  $\mathcal{D_{\text{train}}} = \{(\mathbf{x}_1, y_1), \ldots, (\mathbf{x}_{n}, y_{n})\}$, and use the learned parameters to predict the outputs on the \textit{test data}: $\mathcal{D_{\text{test}}} = \{(\mathbf{x}_{n+1}, y_{n+1}), \ldots, (\mathbf{x}_{m}, y_{m})\}$.
 
 \paragraph{Perceptron Algorithm} One of the early mathematical models designed for predicting the outputs based on the inputs is the \emph{perceptron algorithm} \cite{rosenblatt1958perceptron}. In this case, we assume the output is binary: $y \in \{-1, 1\}$. The algorithm learns parameters $\textbf{w}$ and $b$ describing a linear decision boundary, separating the data points $\mathbf{x_i}$ so that the points $\{\mathbf{x_i} | y_i = -1\}$ lay on one side of the boundary and the points $\{\mathbf{x_j} | y_j = 1\}$ on another. The algorithm proceeds as follows:
 
 
 \begin{enumerate}
     \item The parameters $\textbf{w}$ and $b$ are initialized to small random values or zeros.
-    \item For each training example $(\mathbf{x}_i, y_i)$:
-          \begin{itemize}
-              \item The algorithm computes the predicted output $\hat{y}_i$ using the current weights and bias: $\hat{y}_i = \text{sign}(\textbf{w} \cdot x_i + b)$.
-              \item The algorithm updates the weights and bias:
-                    \[ \textbf{w} = \textbf{w} + (y_i - \hat{y}_i) \textbf{x}_i \]
-                    \[ b = b + y_i - \hat{y}_i \]
-          \end{itemize}
-    \item This process is repeated until convergence.
+    \item For each training example $(\mathbf{x}_i, y_i)$, the algorithm updates the weights and bias to adjust their current estimate towards the ground truth target:
+          \begin{align}
+              \hat{y}_i  & = \text{sign}(\textbf{w} \cdot x_i + b)       \\
+              \textbf{w} & = \textbf{w} + (y_i - \hat{y}_i) \textbf{x}_i \\
+              b          & = b + y_i - \hat{y}_i
+          \end{align}
+    \item The process is repeated until convergence.
 \end{enumerate}
 
-The perceptron algorithm is guaranteed to converge if the data is linearly separable, i.e., if there exists a hyperplane which separates the data belonging to one class from another \cite{novikoff1962convergence}.
+The perceptron algorithm is guaranteed to converge if there exists a hyperplane which separates the data belonging to one class from another \cite{novikoff1962convergence}.
 
-\paragraph{Multi-layer Perceptron} To overcome the limitations of the perceptron algoritm, we can build a network of interconnected units
+\paragraph{Multi-layer Perceptron} The perceptron cannot learn a non-linear decision boundary, which can be quite limiting for learning real-world patterns. To overcome this limitation, we can use a \textbf{\ac{mlp}}, also known as a \textbf{feed-forward neural network}. The \ac{mlp} consists of multiple layers of perceptrons, where each perceptron in the layer $l$ receives the outputs of all the perceptrons in the layer $l-1$.
 
 \subsection{Language Models}
 \label{sec:lm-basics}
