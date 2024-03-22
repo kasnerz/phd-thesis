@@ -9,7 +9,7 @@ Besides explaining the basic concepts, the chapter serves also as an \textbf{ove
 
 \section{Neural Language Models}
 \label{sec:lms}
-In this section, we work our way towards neural \acp{lm}: the mathematical foundations of \acp{nn} on which the neural \acp{lm} are built on (\autoref{sec:nns}), the basic ideas of language modeling (\autoref{sec:lm-basics}) and the way \acp{lm} are constructed, trained, and eventually applied in \ac{nlp} (\Cref{sec:transformer,sec:plms,sec:llms}).
+In this section, we work our way towards neural \acp{lm}: the mathematical foundations of \acp{nn} on which the neural \acp{lm} are built on (\autoref{sec:nns}), the basic ideas of language modeling (\autoref{sec:lm-basics}) and the way \acp{lm} are constructed, trained, and eventually applied in \ac{nlp} (\Cref{sec:plms,sec:llms}).
 
 \subsection{Neural Networks}
 \label{sec:nns}
@@ -41,17 +41,23 @@ The perceptron algorithm is guaranteed to converge if there exists a hyperplane 
 
 As the name suggests, \ac{mlp} uses multiple units resembling a perceptron called \textit{neurons}. Each neuron computes its output $o$ using the rule:
 \begin{align}
-    o & = a(\mathbf{w} \cdot \mathbf{x} + b)
+    o & = f(\mathbf{w} \cdot \mathbf{x} + b)
 \end{align}
 % \begin{itemize}
-where $a$ is the \textit{activation function}. Instead of signum used in perceptron (\autoref{eq:perceptron1}), \ac{mlp} uses differentiable non-linear functions. Nowadays, the most common activation functions are \acl{relu} (\acs{relu}; \citealp{nair2010rectified}) and its adapted version \acl{gelu} (\acs{gelu}; \citealp{hendrycks2016gaussian}).
+where $f$ is the \textit{activation function}. Instead of signum used in perceptron (\autoref{eq:perceptron1}), \ac{mlp} uses differentiable non-linear functions. Nowadays, the most common activation functions are \acl{relu} (\acs{relu}; \citealp{nair2010rectified}) and its adapted version \acl{gelu} (\acs{gelu}; \citealp{hendrycks2016gaussian}).
 
 For efficiency, the neurons are organized in layers, which enables formulating the \ac{mlp} computations in terms of matrix multiplication. Each layer $i$ of \ac{mlp} is parametrized with a matrix $\mathbf{W} \in \mathbb{R}^{n\times m}$ and a vector of biases $\mathbf{b} \in \mathbb{R}^{m}$, performing the following computation:
 \begin{align}
-    \mathbf{h_i} & = a(\textbf{W} \cdot \mathbf{h}_{i-1} + \mathbf{b})
+    \mathbf{h_i} & = f(\textbf{W} \cdot \mathbf{h}_{i-1} + \mathbf{b})
 \end{align}
 
 The parameters of \acp{mlp} are updated using the \textit{backpropagation} algorithm. The algorithm aims to minimize the loss function, which describes the gap between model predictions and ground truth. The updates are gradual, updating the network parameters according to their gradients in the reverse order of layers.
+
+\paragraph{Recurrent Neural Network} The size of the input for \ac{mlp} is fixed. \Acp{rnn} allow us to process sequences of arbitrary length. In its basic form, the \ac{rnn} maintains a hidden state which gets updated for each unit in sequence.
+\begin{align}
+    \mathbf{h}_t = f(\mathbf{W}_h \mathbf{h}_{t-1} + \mathbf{W}_x \mathbf{x}_t + \mathbf{b})
+\end{align}
+In practice, \acp{rnn} have various shortcomings: repeated updates of the hidden state, which make it difficult to update using gradient-based methods, or inherently sequential processing, making it difficult to paralellize the models. For us, \acp{rnn} serve as a springboard towards the Transformer architecture described in \autoref{sec:lm-basics}.
 
 
 \subsection{Language Modeling}
@@ -65,12 +71,19 @@ based on the preceding n-1 tokens
 
 \paragraph{Neural \acp{lm}}
 
-\paragraph{Encoder-Decoder Models}
+\paragraph{Encoder-Decoder}
 
 \paragraph{Transformer Architecture}
 % \label{sec:transformer}
 \subsection{Pretrained Language Models}
 \label{sec:plms}
+
+\paragraph{Encoder Models}
+
+\paragraph{Encoder-Decoder Models}
+
+\paragraph{Decoder Models}
+
 \subsection{Large Language Models}
 \label{sec:llms}
 \section{Data-to-Text Generation}
