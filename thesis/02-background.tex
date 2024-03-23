@@ -112,12 +112,24 @@ Subword tokenization algorithms are the middle ground between the two. The goal 
 
 The algorithm that is frequently used for tokenization in neural \acp{lm} is \textbf{\ac{bpe}}. The \ac{bpe} algorithm starts with the vocabulary of individual bytes, iteratively merging the most frequent tokens and adding them to the vocabulary $V$ until we reach the target vocabulary size. For example, the expression ``Subword tokenization'' could be split into four subwords \texttt{ ['Sub', 'word', '▁token', 'ization']}, the ``\texttt{▁}'' being a special character denoting a preceding space.
 
-\paragraph{Language Model} Having a way to represent text, we can move on to processing and generating text. A useful formalism in that direction is a \textbf{language model}: a mathematical model that estimates a probability $P(T)$ of a sequence of tokens $T = (t_1, \ldots, t_n)$. Using chain rule, we can factorize the probability as a product of conditional probabilities:
+\paragraph{Language Modeling} Having a way to represent text, we can move on to processing and subsequently generating it. A useful formalism in that direction is a \textbf{language model}: a mathematical model that estimates a probability $P(T)$ of a sequence of tokens $T = (t_1, \ldots, t_m)$. For estimating the probability, we can factorize it into a product of conditional probabilities for each token using the chain rule:
 \begin{align}
     P(T) = \prod_{i=1}^m P(t_i|t_1, \hdots,t_{m-1}).
 \end{align}
+Estimating the probability of longer sequences according to this formula is infeasible, as the model would require too many parameters. An \textbf{\emph{n}-gram \ac{lm}} simplifies the product using the assumption that the probability of a token depends only on $n-1$ previous tokens:
+\begin{align}
+    P(T) = \prod_{i=1}^m P(t_i|t_{i-n+1}, \hdots,t_{i-1}).
+\end{align}
+The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for individual \emph{n}-grams by counting their occurences over a large text corpus. However, because of the simplifying assumption, they fail to capture long-term dependencies in the text.
 
-Such a model can be implemented in various ways. An \emph{n}-gram language model estimates the probability of
+\paragraph{Neural \acp{lm}} A neural \ac{lm} is a \acl{lm} that estimates the probabilities using a neural network. Denoting the parameters of the network by $\theta$:
+\begin{align}
+    P(T) = P_\theta(T).
+\end{align}
+In contrast with \emph{n}-gram \acp{lm}, the neural network can typically process the whole text, efficiently computing the probability estimates using its hidden states. This makes it suitable for capturing long-term dependencies.
+
+A neural network architecture which is suitable for this task is the \ac{rnn} (\autoref{sec:nns}).
+
 
 \paragraph{Encoder-Decoder Framework}
 
