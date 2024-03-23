@@ -2,9 +2,9 @@
 \chapter{Background}
 \label{chap:background}
 
-This chapter explains the \textbf{basic concepts} used throughout the thesis. First, we explain \textbf{neural \acp{lm}}: from the basic of neural networks (§\ref{sec:nns}) and language modeling (§\ref{sec:lm-basics}), up to pretrained (§\ref{sec:plms}) and large language models (§\ref{sec:llms}). Next, we move on to \textbf{\ac{d2t} generation}: covering rule-based (§\ref{sec:rule-d2t}) and neural-based systems (§\ref{sec:neural-d2t}), \ac{d2t} datasets (§\ref{sec:datasets}) and evaluation methods (§\ref{sec:evaluation}). We assume that the reader has certain expertise in related areas of \ac{nlp}, although not necessarily in \ac{nlg}. We aim to make the work self-contained by covering all the related concepts, although more detailed explanations are provided in the related work.
+This chapter explains the \textbf{basic concepts} used throughout the thesis. First, we explain \textbf{neural \acp{lm}}: from the basics of neural networks (§\ref{sec:nns}) and language modeling (§\ref{sec:lm-basics}), up to pretrained (§\ref{sec:plms}) and large language models (§\ref{sec:llms}). Then we move on to \textbf{\ac{d2t} generation}: covering rule-based (§\ref{sec:rule-d2t}) and neural-based systems (§\ref{sec:neural-d2t}), \ac{d2t} datasets (§\ref{sec:datasets}) and evaluation methods (§\ref{sec:evaluation}). We assume that the reader has certain expertise in related areas of \ac{nlp}, although not necessarily in \ac{nlg}. We aim to make the work self-contained by covering all the important concepts, pointing the interested reader to related work for more details.
 
-Besides explaining the basic concepts, the chapter serves also as an \textbf{overview of the state of the art} in the field. In particular, the later subsections (\Cref{sec:plms,sec:llms} for neural \acp{lm} and \Cref{sec:neural-d2t,sec:datasets,sec:evaluation} for \ac{d2t} generation) focus on providing pointers to related work and describing the datasets and models used for the experiments. As such, the chapter serves as a main reference for the related work: we will only briefly revisit the most relevant works in the respective chapters.
+Besides explaining the basic concepts, the chapter serves also as an \textbf{overview of the state of the art} in the field of interest. In particular, the later subsections (\Cref{sec:plms,sec:llms} for neural \acp{lm} and \Cref{sec:neural-d2t,sec:datasets,sec:evaluation} for \ac{d2t} generation) summarize related work and describe the datasets and models used for the experiments. As such, the chapter serves as the main point of reference; we will only briefly revisit the most relevant works in the respective chapters.
 
 
 \section{Neural Language Models}
@@ -21,7 +21,7 @@ Let's also assume that the $\mathbf{x} \rightarrow y$ mapping is not arbitrary (
 
 For learning the underlying pattern between $\mathbf{x}$ and $y$, we will use mathematical models designed to capture the pattern in their parameters. The idea is that the models estimate the parameters from a limited set of examples called the \textit{training data}:  $\mathcal{D_{\text{train}}} = \{(\mathbf{x}_1, y_1), \ldots, (\mathbf{x}_{n}, y_{n})\}$, and use the learned parameters to predict the outputs on the \textit{test data}: $\mathcal{D_{\text{test}}} = \{(\mathbf{x}_{n+1}, y_{n+1}), \ldots, (\mathbf{x}_{m}, y_{m})\}$.
 
-\paragraph{Perceptron Algorithm} One of the early mathematical models designed for predicting the outputs based on the inputs is the \emph{perceptron algorithm} \cite{rosenblatt1958perceptron}. In this case, we assume the output is binary: $y \in \{-1, 1\}$. The algorithm learns parameters $\textbf{w} = (w_1, \ldots, w_n) \in \mathbb{R^n}$ and $b \in \mathbb{R}$ describing a linear decision boundary, separating the data points $\mathbf{x_i}$ so that the points $\{\mathbf{x_i} | y_i = -1\}$ lay on one side of the boundary and the points $\{\mathbf{x_j} | y_j = 1\}$ on another. The algorithm proceeds as follows:
+\paragraph{Perceptron Algorithm} One of the early mathematical models designed for predicting the outputs based on the inputs is the \emph{perceptron algorithm} \cite{rosenblatt1958perceptron}. In this case, we assume the output is a binary class label: $y \in \{-1, 1\}$. The algorithm learns the parameters $\textbf{w} = (w_1, \ldots, w_n) \in \mathbb{R}^n$ and $b \in \mathbb{R}$ describing a linear decision boundary separating the data points according to their class label. The algorithm proceeds as follows:
 
 
 \begin{enumerate}
@@ -32,26 +32,26 @@ For learning the underlying pattern between $\mathbf{x}$ and $y$, we will use ma
               \textbf{w} & = \textbf{w} + (y_i - \hat{y}_i) \textbf{x}_i \\
               b          & = b + y_i - \hat{y}_i
           \end{align}
-    \item The process is repeated until convergence.
+    \item The step (2) is repeated until convergence.
 \end{enumerate}
 
-The perceptron algorithm is guaranteed to converge if there exists a hyperplane which separates the data belonging to one class from another \cite{novikoff1962convergence}.
+The perceptron algorithm is guaranteed to converge if there exists a hyperplane which separates the data belonging to one class from another. However, it cannot learn a non-linear decision boundary  \cite{novikoff1962convergence}.
 
-\paragraph{Multi-layer Perceptron} The perceptron cannot learn a non-linear decision boundary, which limits its capability for learning real-world patterns. To overcome this limitation, we can use a \textbf{\ac{mlp}}. This mathematical model---also known as a feed-forward neural network---is able to approximate any bounded continuous function \cite{hornik1989multilayer}.
+\paragraph{Multi-layer Perceptron} To overcome the fact that the perceptron is limited to linear decision boundaries, we can use a \textbf{\ac{mlp}}. This mathematical model---also known as a feed-forward neural network---is able to approximate any bounded continuous function \cite{hornik1989multilayer}.
 
-As the name suggests, \ac{mlp} uses multiple units resembling a perceptron called \textit{neurons}. Each neuron computes its output $o$ using the rule:
+As the name suggests, \ac{mlp} uses multiple perceptron-like units called \textit{neurons}. Analogically to the perceptron (\autoref{eq:perceptron1}), each neuron computes its output $o$ using the rule:
 \begin{align}
-    o & = f(\mathbf{w} \cdot \mathbf{x} + b)
+    o & = f(\mathbf{w} \cdot \mathbf{x} + b),
 \end{align}
 % \begin{itemize}
-where $f$ is the \textit{activation function}. Instead of signum used in perceptron (\autoref{eq:perceptron1}), \ac{mlp} uses differentiable non-linear functions. Nowadays, the most common activation functions are \acl{relu} (\acs{relu}; \citealp{nair2010rectified}) and its adapted version \acl{gelu} (\acs{gelu}; \citealp{hendrycks2016gaussian}).
+where $f$ is the \emph{activation function}. Instead of signum, \ac{mlp} uses differentiable non-linear functions. The most common activation functions nowadays are \acl{relu} (\acs{relu}; \citealp{nair2010rectified}) or its adapted version \acl{gelu} (\acs{gelu}; \citealp{hendrycks2016gaussian}).
 
-For efficiency, the neurons are organized in layers, which enables formulating the \ac{mlp} computations in terms of matrix multiplication. Each layer $i$ of \ac{mlp} is parametrized with a matrix $\mathbf{W} \in \mathbb{R}^{n\times m}$ and a vector of biases $\mathbf{b} \in \mathbb{R}^{m}$, performing the following computation:
+For efficiency, the neurons are organized in layers, which enables formulating the \ac{mlp} computations in terms of matrix multiplication. The $i$-th layer of \ac{mlp} is parametrized with a matrix $\mathbf{W}_i \in \mathbb{R}^{n\times m}$ and a vector of biases $\mathbf{b}_i \in \mathbb{R}^{m}$, performing the following computation:
 \begin{align}
-    \mathbf{h_i} & = f(\textbf{W} \cdot \mathbf{h}_{i-1} + \mathbf{b})
+    \mathbf{h}_i & = f(\mathbf{W}_i \cdot \mathbf{h}_{i-1} + \mathbf{b}_i).
 \end{align}
 
-The parameters of \acp{mlp} are updated using the \textit{backpropagation} algorithm. The algorithm aims to minimize the loss function, which describes the gap between model predictions and ground truth. The updates are gradual, updating the network parameters according to their gradients in the reverse order of layers.
+During training, we aim to minimize the \textit{loss function} describing the gap between the model predictions and the ground truth output. Since all the computations in \ac{mlp} are differentiable, we can use the chain rule to compute how each parameter in the network contributes to the loss. To minimize the loss, we use the \emph{backpropagation} algorithm, updating the network parameters in the reverse order of layers. The learning rate parameter $\alpha$ regulates the magnitude of the updates and influences the convergence of training.
 
 \paragraph{Recurrent Neural Network} The size of the input for \ac{mlp} is fixed. \Acp{rnn} allow us to process sequences of arbitrary length. In its basic form, the \ac{rnn} maintains a hidden state which gets updated for each unit in sequence.
 \begin{align}
