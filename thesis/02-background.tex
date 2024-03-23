@@ -51,13 +51,13 @@ For efficiency, the neurons are organized in layers, which enables formulating t
     \mathbf{h}_i & = f(\mathbf{W}_i \cdot \mathbf{h}_{i-1} + \mathbf{b}_i).
 \end{align}
 
-During training, we aim to minimize the \textit{loss function} describing the gap between the model predictions and the ground truth output. Since all the computations in \ac{mlp} are differentiable, we can use the chain rule to compute how each parameter in the network contributes to the loss. To minimize the loss, we use the \emph{backpropagation} algorithm, updating the network parameters in the reverse order of layers. The learning rate parameter $\alpha$ regulates the magnitude of the updates and influences the convergence of training.
+During training, we aim to minimize the \textit{loss function} describing the gap between the model predictions and the ground truth output. Since all the computations in \ac{mlp} are differentiable, we can use the chain rule to compute how each parameter in the network contributes to the loss. To minimize the loss, we use the \emph{backpropagation} algorithm, updating the network parameters in the reverse order of layers. The learning rate parameter $\alpha$ regulates the magnitude of the updates.
 
-\paragraph{Recurrent Neural Network} The size of the input for \ac{mlp} is fixed. \Acp{rnn} allow us to process sequences of arbitrary length. In its basic form, the \ac{rnn} maintains a hidden state which gets updated for each unit in sequence.
+\paragraph{Recurrent Neural Network} Unlike \acp{mlp}, where the size of the input $\mathbf{x}$ is fixed, \acp{rnn} allow us to process sequences of arbitrary length. In its vanilla form, the \ac{rnn} maintains a hidden state $\mathbf{h}$ which gets updated for each unit $\mathbf{x}_t$ in sequence using the matrices $\mathbf{W}_h$, $\mathbf{W}_t$, and the bias $\mathbf{b}$.
 \begin{align}
     \mathbf{h}_t = f(\mathbf{W}_h \mathbf{h}_{t-1} + \mathbf{W}_x \mathbf{x}_t + \mathbf{b})
 \end{align}
-In practice, \acp{rnn} have various shortcomings: repeated updates of the hidden state, which make it difficult to update using gradient-based methods, or inherently sequential processing, making it difficult to paralellize the models. For us, \acp{rnn} serve as a springboard towards the Transformer architecture described in \autoref{sec:lm-basics}.
+\acp{rnn} have various shortcomings, such as repeated updates of the hidden state, which make it difficult to update using gradient-based methods, or inherently sequential processing, making it difficult to paralellize the models. However, they will serve as a springboard towards the Transformer architecture described in \autoref{sec:lm-basics}.
 
 
 \subsection{Language Modeling}
