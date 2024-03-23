@@ -65,19 +65,50 @@ During training, we aim to minimize the \textit{loss function} describing the ga
 We will now look into how can we use neural networks to represent and process text.
 
 
-\paragraph{One-Hot Encoding} Until now, we have assumed that the input is a vector of real numbers. However, a text is a sequence of discrete units such as characters, words, or subwords. To convert these units---called \textit{tokens}---to numerical representation, we can define a \textit{vocabulary} $V$ which assigns an integer index $i \in \{0, 1, \ldots, |V|-1\}$ to each token.
+\paragraph{One-Hot Encoding} Until now, we have assumed that the input is a vector of real numbers. However, a text is a sequence of discrete units such as characters, words, or subwords. To convert these units---called \textit{tokens}---to a numerical representation, we can define a \textit{vocabulary} $V$ which assigns an integer index $i \in \{0, 1, \ldots, |V|-1\}$ to each token $t$.
 
 The naive way to represent each token would be using its integer value. However, this would misleadingly suggest linear dependence between tokens. A better way is to use the index $i$ for constructing a \textit{one-hot} vector $\mathbf{x} \in \{0,1\}^{|V|} $ for each token:
 \begin{align}
-    \mathbf{x}_j = \begin{cases}
+    \mathbf{x}[j] = \begin{cases}
         1 & \text{if } i = j, \\
         0 & \text{otherwise}.
     \end{cases}
 \end{align}
 
-While this representation is sound, it is still not very helpful -- it does not capture anything about the semantics of individual tokens and requires that the network learns to represent each token independently.
+While this representation is sound, it is sparse and not very helpful for the network. It does not capture the semantics of individual tokens and requires that the network learns to process each token independently.
 
-\paragraph{Word Embeddings}
+\paragraph{Word Embeddings} To get a more compact and useful representation of tokens, we may require that the vectors for tokens with a similar role are also close in the vector space. To construct these vectors, we can use the idea that tokens with similar roles also occur in a similar context.
+
+As proposed by \citet{mikolov2013distributed}, we can get these representations as the weights of an \ac{mlp} trained for a particular objective. The \ac{mlp} predicts the tokens in the neighborhood of each token (the \emph{skip-gram} objective) or vice versa, the token itself based on the tokens in its neighborhood (the \textit{continuous bag-of-words} objective), as shown in \autoref{fig:word2vec}.
+
+\begin{figure*}[h]
+    \centering
+
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/skipgram.pdf}
+            \caption{Skip-gram}
+            \label{fig:skipgram}
+        \end{subfigure}
+        \hspace{-20px}
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=0.75\textwidth]{img/cbow.pdf}
+            \caption{Continuous Bag-of-Words}
+            \label{fig:cbow}
+        \end{subfigure}
+    \end{subfigure}
+    \caption{The objectives that can be employed by the Word2Vec algorithm for learning token embeddings.}
+    \label{fig:word2vec}
+\end{figure*}
+
+As a result, we get an \textit{embedding matrix} $\mathbf{W}_e \in \mathbb{R}^{|V|\times d}$, which assigns each token $t \in V$ a $d$-dimensional \textit{embedding vector} $\mathbf{x} \in \mathbb{R}^{d}$.
+
+\paragraph{Tokenization} So far, we have implicitly assumed that we have a way of splitting the text into tokens. Both of the naive approaches---\textit{word-level} and \textit{character-level}---have their own shortcomings. Word-level tokenization will use independent embeddings for morphologically similar words, while character-level tokenization is computationally inefficient.
+
+Subword tokenization algorithms are the middle ground between the two. The goal is to split the text into smaller pieces called \emph{subwords}, so that frequently used words will get their own subword, while less frequent words will be split into multiple subwords.
 
 \paragraph{Neural \acp{lm}}
 
