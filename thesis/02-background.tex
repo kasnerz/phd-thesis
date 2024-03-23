@@ -51,9 +51,9 @@ For efficiency, the neurons are organized in layers, which enables formulating t
     \mathbf{h}_i & = f(\mathbf{W}_i \cdot \mathbf{h}_{i-1} + \mathbf{b}_i).
 \end{align}
 
-During training, we aim to minimize the \textit{loss function} describing the gap between the model predictions and the ground truth output. Since all the computations in \ac{mlp} are differentiable, we can use the chain rule to compute how each parameter in the network contributes to the loss. To minimize the loss, we use the \emph{backpropagation} algorithm, updating the network parameters in the reverse order of layers. The learning rate parameter $\alpha$ regulates the magnitude of the updates.
+During training, we aim to minimize the \textit{loss function} describing the gap between the model predictions and the ground truth output. Since all the computations in \ac{mlp} are differentiable, we can use the chain rule to compute how each parameter in the network contributes to the loss. To minimize the loss, we use the \emph{backpropagation} algorithm, updating the network parameters in the reverse order of layers. The magnitude of the updates is controlled by the learning rate parameter $\alpha$.
 
-\paragraph{Recurrent Neural Network} Unlike \acp{mlp}, where the size of the input $\mathbf{x}$ is fixed, \acp{rnn} allow us to process sequences of arbitrary length. In its vanilla form, the \ac{rnn} maintains a hidden state $\mathbf{h}$ which gets updated for each unit $\mathbf{x}_t$ in sequence using the matrices $\mathbf{W}_h$, $\mathbf{W}_t$, and the bias $\mathbf{b}$.
+\paragraph{Recurrent Neural Networks} Unlike \acp{mlp}, where the size of the input $\mathbf{x}$ is fixed, \acp{rnn} allow us to process sequences of arbitrary length. In its vanilla form, the \ac{rnn} maintains a hidden state $\mathbf{h}$ which gets updated for each unit $\mathbf{x}_t$ in sequence using the matrices $\mathbf{W}_h$, $\mathbf{W}_t$, and the bias $\mathbf{b}$.
 \begin{align}
     \mathbf{h}_t = f(\mathbf{W}_h \mathbf{h}_{t-1} + \mathbf{W}_x \mathbf{x}_t + \mathbf{b})
 \end{align}
@@ -62,16 +62,26 @@ During training, we aim to minimize the \textit{loss function} describing the ga
 
 \subsection{Language Modeling}
 \label{sec:lm-basics}
-We will now look at tools for working with sequences of discrete units (called \textit{tokens}), which will help us to to model and represent texts in natural language. One of the basic notions is an \emph{n}-gram: an n-tuple of consecutive tokens in a sequence.
+We will now look into how can we use neural networks to represent and process text.
 
-\paragraph{\emph{n}-gram Models} \emph{n}-gram models predict the a probability distribution over the next token in the sentence
-based on the preceding n-1 tokens
+
+\paragraph{One-Hot Encoding} Until now, we have assumed that the input is a vector of real numbers. However, a text is a sequence of discrete units such as characters, words, or subwords. To convert these units---called \textit{tokens}---to numerical representation, we can define a \textit{vocabulary} $V$ which assigns an integer index $i \in \{0, 1, \ldots, |V|-1\}$ to each token.
+
+The naive way to represent each token would be using its integer value. However, this would misleadingly suggest linear dependence between tokens. A better way is to use the index $i$ for constructing a \textit{one-hot} vector $\mathbf{x} \in \{0,1\}^{|V|} $ for each token:
+\begin{align}
+    \mathbf{x}_j = \begin{cases}
+        1 & \text{if } i = j, \\
+        0 & \text{otherwise}.
+    \end{cases}
+\end{align}
+
+While this representation is sound, it is still not very helpful -- it does not capture anything about the semantics of individual tokens and requires that the network learns to represent each token independently.
 
 \paragraph{Word Embeddings}
 
 \paragraph{Neural \acp{lm}}
 
-\paragraph{Encoder-Decoder}
+\paragraph{Encoder-Decoder Framework}
 
 \paragraph{Transformer Architecture}
 % \label{sec:transformer}
