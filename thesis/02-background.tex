@@ -15,48 +15,50 @@ In this section, we work our way towards neural \acp{lm}: the mathematical found
 \label{sec:nns}
 First, we need to build a tool for learning patterns from data\footnote{Until we get to \ac{d2t} generation in \autoref{sec:d2t}, we will use the word ``\textit{data}'' only in its abstract sense, as in ``any inputs we can apply our algorithms to''. We will use the term ``structured data'' whenever it is necessary to make the distinction.}. This tool---which for us will be the \textbf{neural networks}---will later help us with learning patterns about language from large-scale textual data, and in turn also with generating the language.
 
-Let's say our goal is to predict the real-number output $y \in \mathbb{R}$ for the given vector of real numbers $\mathbf{x} = (x_1, \ldots, x_n) \in \mathbb{R}^n$.
+Let's say our goal is to predict the real-number output $y \in \mathbb{R}$ for the given vector of real numbers $\mathbf{x} = (x_1, \ldots, x_d) \in \mathbb{R}^d$.
 % \footnote{We will follow the convention that vectors are denoted with boldface letters ($\mathbf{x}$), and real numbers with plain letters ($x$).} 
-Let's also assume that the $\mathbf{x} \rightarrow y$ mapping is not arbitrary (that would leave us with memorizing all the $(\mathbf{x},y)$ pairs), but follows some regularities and underlying patterns that can be learned. This assumption will be naturally satisfied if we consider $(\mathbf{x},y)$ to be representations of real-word data, e.g. documents and their labels.
+We assume that the $\mathbf{x} \rightarrow y$ mapping is not arbitrary (that would leave us with memorizing all the $(\mathbf{x},y)$ pairs), but follows some regularities and underlying patterns that can be learned. This assumption will be naturally satisfied if we consider $(\mathbf{x},y)$ to be representations of real-word data, e.g. documents and their labels.
 
-For learning the underlying pattern between $\mathbf{x}$ and $y$, we will use mathematical models designed to capture the pattern in their parameters. The idea is that the models estimate the parameters from a limited set of examples called the \textit{training data}:  $\mathcal{D_{\text{train}}} = \{(\mathbf{x}_1, y_1), \ldots, (\mathbf{x}_{n}, y_{n})\}$, and use the learned parameters to predict the outputs on the \textit{test data}: $\mathcal{D_{\text{test}}} = \{(\mathbf{x}_{n+1}, y_{n+1}), \ldots, (\mathbf{x}_{m}, y_{m})\}$.
+For learning the underlying pattern between $\mathbf{x}$ and $y$, we will use mathematical models designed to capture the pattern in their parameters. The idea is that the model estimates the parameters from a limited set of examples called the \textit{training data}:  $\mathcal{X_{\text{train}}} = \{(\mathbf{x}_1, y_1), \ldots, (\mathbf{x}_{k}, y_{k})\}$, and uses the learned parameters to predict the outputs on the \textit{test data}: $\mathcal{X_{\text{test}}} = \{(\mathbf{x}_{1}, y_{1}), \ldots, (\mathbf{x}_{\ell}, y_{\ell})\}$.
 
-\paragraph{Perceptron Algorithm} One of the early mathematical models designed for predicting the outputs based on the inputs is the \emph{perceptron algorithm} \cite{rosenblatt1958perceptron}. In this case, we assume the output is a binary class label: $y \in \{-1, 1\}$. The algorithm learns the parameters $\textbf{w} = (w_1, \ldots, w_n) \in \mathbb{R}^n$ and $b \in \mathbb{R}$ describing a linear decision boundary separating the data points according to their class label. The algorithm proceeds as follows:
+\paragraph{Perceptron Algorithm} One of the early mathematical models designed for predicting the outputs based on the inputs is the \emph{perceptron algorithm} (\citealp{rosenblatt1958perceptron}, \citealp[p.~192]{bishop2006pattern}). In this case, we assume the output is a binary class label: $y \in \{-1, 1\}$. The algorithm learns the parameters $\textbf{w} = (w_1, \ldots, w_d) \in \mathbb{R}^d$ and $b \in \mathbb{R}$ describing a linear decision boundary separating the data points according to their class label. The algorithm proceeds as follows:
 
 
 \begin{enumerate}
     \item The parameters $\textbf{w}$ and $b$ are initialized to small random values or zeros.
-    \item For each training example $(\mathbf{x}_i, y_i)$, the algorithm updates the weights and bias to adjust their current estimate towards the ground truth target:
+    \item For each training example $(\mathbf{x}, y)^{(i)}$, the algorithm updates the weights and bias to adjust their current estimate towards the ground truth target:
           \begin{align} \label{eq:perceptron1}
-              \hat{y}_i  & = \text{sign}(\textbf{w} \cdot x_i + b)       \\
-              \textbf{w} & = \textbf{w} + (y_i - \hat{y}_i) \textbf{x}_i \\
-              b          & = b + y_i - \hat{y}_i
+              \hat{y}_i  & = \text{sign}(\textbf{w} \cdot \mathbf{x} + b) \\
+              \textbf{w} & = \textbf{w} + (y - \hat{y}) \textbf{x}        \\
+              b          & = b + y - \hat{y}
           \end{align}
     \item The step (2) is repeated until convergence.
 \end{enumerate}
 
 The perceptron algorithm is guaranteed to converge if there exists a hyperplane which separates the data belonging to one class from another. However, it cannot learn a non-linear decision boundary  \cite{novikoff1962convergence}.
 
-\paragraph{Multi-layer Perceptron} To overcome the fact that the perceptron is limited to linear decision boundaries, we can use a \textbf{\ac{mlp}}. This mathematical model---also known as a feed-forward neural network---is able to approximate any bounded continuous function \cite{hornik1989multilayer}.
+\paragraph{Multi-layer Perceptron} To overcome the fact that the perceptron is limited to linear decision boundaries, we can use a \textbf{\acl{mlp} (\acs{mlp}}; \citealp[p.~227]{bishop2006pattern}, \citealp[p.~73]{surdeanu2024deep}). This mathematical model---also known as a feed-forward neural network---is able to approximate any bounded continuous function \cite{hornik1989multilayer}.
 
 As the name suggests, \ac{mlp} uses multiple perceptron-like units called \textit{neurons}. Analogically to the perceptron (\autoref{eq:perceptron1}), each neuron computes its output $o$ using the rule:
 \begin{align}
     o & = f(\mathbf{w} \cdot \mathbf{x} + b),
 \end{align}
 % \begin{itemize}
-where $f$ is the \emph{activation function}. Instead of signum, \ac{mlp} uses differentiable non-linear functions. The most common activation functions nowadays are \acl{relu} (\acs{relu}; \citealp{nair2010rectified}) or its adapted version \acl{gelu} (\acs{gelu}; \citealp{hendrycks2016gaussian}).
+where $f$ is the \emph{activation function}. Instead of signum, \ac{mlp} uses differentiable non-linear functions, most commonly nowadays \acl{relu} (\acs{relu}; \citealp{nair2010rectified}) or its adapted version \acl{gelu} (\acs{gelu}; \citealp{hendrycks2016gaussian}).
 
-For efficiency, the neurons are organized in layers, which enables formulating the \ac{mlp} computations in terms of matrix multiplication. The $i$-th layer of \ac{mlp} is parametrized with a matrix $\mathbf{W}_i \in \mathbb{R}^{n\times m}$ and a vector of biases $\mathbf{b}_i \in \mathbb{R}^{m}$, performing the following computation:
+For efficiency, the neurons are organized in layers, which enables formulating the \ac{mlp} computations in terms of matrix multiplication. The $i$-th layer of \ac{mlp} is parametrized with a matrix $\mathbf{W}_i \in \mathbb{R}^{n\times d}$ and a vector of biases $\mathbf{b}_i \in \mathbb{R}^{n}$, processing the \textit{hidden state} $\mathbf{h}_i \in \mathbb{R}^{d}$ (where we set $\textbf{h}_0 = \textbf{x}$):
 \begin{align}
     \mathbf{h}_i & = f(\mathbf{W}_i \cdot \mathbf{h}_{i-1} + \mathbf{b}_i).
 \end{align}
+During training, we aim to minimize the \textit{loss function} describing the gap between the model predictions and the ground truth output. Since all the computations in \ac{mlp} are differentiable, we can use the chain rule to compute how each parameter in the network contributes to the loss. To minimize the loss, we use the \emph{backpropagation} algorithm \cite{kelley1960gradient,rumelhart1986learning}, updating the network parameters in the reverse order of layers. The magnitude of the updates is controlled by the learning rate parameter $\alpha$.
 
-During training, we aim to minimize the \textit{loss function} describing the gap between the model predictions and the ground truth output. Since all the computations in \ac{mlp} are differentiable, we can use the chain rule to compute how each parameter in the network contributes to the loss. To minimize the loss, we use the \emph{backpropagation} algorithm, updating the network parameters in the reverse order of layers. The magnitude of the updates is controlled by the learning rate parameter $\alpha$.
-
-\paragraph{Recurrent Neural Networks} Unlike \acp{mlp}, where the size of the input $\mathbf{x}$ is fixed, \acp{rnn} allow us to process sequences of arbitrary length. In its vanilla form, the \ac{rnn} maintains a hidden state $\mathbf{h}$ which gets updated for each unit $\mathbf{x}_t$ in sequence using the matrices $\mathbf{W}_h$, $\mathbf{W}_t$, and the bias $\mathbf{b}$.
+\paragraph{Recurrent Neural Networks} Unlike \acp{mlp}, where the size of the input is fixed, \acp{rnn} allow us to process a sequence of inputs $\mathbf{X} = (\mathbf{x}_1, \ldots, \mathbf{x}_T)$. In its vanilla form, the \ac{rnn} maintains a hidden state $\mathbf{h} \in \mathbb{R}^d$ which gets updated for each element $\mathbf{x}_t$ using the matrices $\mathbf{W}_h$, $\mathbf{W}_x \in \mathbb{R}^{n\times d}$, and the bias $\mathbf{b} \in \mathbb{R}^{d}$:
 \begin{align}
-    \mathbf{h}_t = f(\mathbf{W}_h \mathbf{h}_{t-1} + \mathbf{W}_x \mathbf{x}_t + \mathbf{b})
+    \mathbf{h}_t = f(\mathbf{W}_h \mathbf{h}_{t-1} + \mathbf{W}_x \mathbf{x}_t + \mathbf{b}).
 \end{align}
+
+The hidden state $\mathbf{h}_0$ is initialized randomly. After the input is processed, $\mathbf{h}_T$ contains an encoded representation of the sequence.
+
 \acp{rnn} have various shortcomings, such as repeated updates of the hidden state, which make it difficult to update using gradient-based methods, or inherently sequential processing, making it difficult to paralellize the models. However, they will serve as a springboard towards the Transformer architecture described in \autoref{sec:lm-basics}.
 
 
@@ -120,24 +122,44 @@ Estimating the probability of longer sequences according to this formula is infe
 \begin{align}
     P(T) = \prod_{i=1}^m P(t_i|t_{i-n+1}, \hdots,t_{i-1}).
 \end{align}
-The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for individual \emph{n}-grams by counting their occurences over a large text corpus. However, because of the simplifying assumption, they fail to capture long-term dependencies in the text.
+The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for individual \emph{n}-grams by tabulating their occurences over a large text corpus. However, because of the simplifying assumption, the \emph{n}-gram \acp{lm} fail to capture long-term dependencies in the text.
 
-\paragraph{Neural \acp{lm}} A neural \ac{lm} is a \acl{lm} that estimates the probabilities using a neural network. Denoting the parameters of the network by $\theta$:
+\paragraph{Neural \acp{lm}} A neural \ac{lm} is a \acl{lm} that uses a neural network for estimating the text probability. Denoting the parameters of the network by $\theta$:
 \begin{align}
     P(T) = P_\theta(T).
 \end{align}
 In contrast with \emph{n}-gram \acp{lm}, the neural network can typically process the whole text, efficiently computing the probability estimates using its hidden states. This makes it suitable for capturing long-term dependencies.
 
-A neural network architecture which is suitable for this task is the \ac{rnn} (\autoref{sec:nns}).
-
 
 \paragraph{Encoder-Decoder Framework}
+We have described a \ac{rnn} (\autoref{sec:nns}) as a neural network that can process the sequence and \emph{encode} its representation in its hidden state.
+The idea behind the \textbf{encoder-decoder framework} \cite{sutskever2014sequence,cho2014learning} is that we can \emph{decode} a sentence using another \ac{rnn} using the hidden state as its initial state.
+
+Abstracting from the \ac{rnn} architecture, the general idea behind the encoder-decoder framework is the following:
+
+\begin{enumerate}
+    \item The \textbf{encoder} encodes the input sentence $X$ into a hidden state $h_n$
+    \item The \textbf{decoder} uses $h_n$ as its initial state $s_0$ and produces the translation $Y = y_1 \hdots y_m$ of the input sentence by repeatedly applying a transformation $D$ in each timestep $j\in(1,m)$:
+          \begin{align}
+              s_j, y_j = D(s_{j-1}, y_{j-1}).
+          \end{align}
+\end{enumerate}
+
+The workflow of an encoder-decoder architecture is depicted in Figure \ref{fig:encdec}. The encoder takes the input sentence and encodes it into a hidden state. In each timestep, the decoder takes the previous hidden state and the last output symbol, and computes the conditional probability distribution over the vocabulary. The symbol with the maximum probability is selected as the output symbol and used as the input for the next step. The first input symbol is a special token \texttt{<s>}  denoting the beginning of the sentence. When the decoder outputs a special token \texttt{<eos>} denoting the end of the sentence, the decoding is finished.
+
+\begin{figure}[ht]
+    \centering
+    %   \includegraphics[width=0.95\textwidth]{images/encdec}
+    \caption[Encoder-Decoder Model]{ \textit{Encoder} encodes the input sentence $X$ into a hidden state, \textit{decoder} uses the hidden state to decode the output sentence $Y$.  Source: \cite{s2s}.}
+    \label{fig:encdec}
+\end{figure}
+
 
 \paragraph{Transformer Architecture}
 \begin{figure*}[h]
     \centering
     \includegraphics[width=0.9\textwidth]{img/transformer.pdf}
-    \caption{The Transformer architecture. Adapted from \url{https://github.com/bbycroft/llm-viz/blob/main/src/llm/intro-image.svg}}
+    \caption{A variant of the Transformer architecture. Adapted from \href{https://github.com/bbycroft/llm-viz/blob/main/src/llm/intro-image.svg}{https://github.com/bbycroft/llm-viz}.}
     \label{fig:transformer}
 \end{figure*}
 
