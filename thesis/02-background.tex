@@ -52,7 +52,7 @@ For efficiency, the neurons are organized in layers, which enables formulating t
 \end{align}
 During training, we aim to minimize the \textit{loss function} describing the gap between the model predictions and the ground truth output. Since all the computations in \ac{mlp} are differentiable, we can use the chain rule to compute how each parameter in the network contributes to the loss. To minimize the loss, we use the \emph{backpropagation} algorithm \cite{kelley1960gradient,rumelhart1986learning}, updating the network parameters in the reverse order of layers. The magnitude of the updates is controlled by the learning rate parameter $\alpha$.
 
-\paragraph{Recurrent Neural Networks} Unlike \acp{mlp}, where the size of the input is fixed, \acp{rnn} allow us to process a sequence of inputs $\mathbf{X} = (\mathbf{x}_1, \ldots, \mathbf{x}_T)$. In its vanilla form, the \ac{rnn} maintains a hidden state $\mathbf{h} \in \mathbb{R}^d$ which gets updated for each element $\mathbf{x}_t$ using the matrices $\mathbf{W}_h$, $\mathbf{W}_x \in \mathbb{R}^{n\times d}$, and the bias $\mathbf{b} \in \mathbb{R}^{d}$:
+\paragraph{Recurrent Neural Networks} Unlike \acp{mlp}, where the size of the input is fixed, \acp{rnn} allow us to process a sequence of inputs $\mathbf{X} = (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ of arbitrary length. In its vanilla form, the \ac{rnn} maintains a hidden state $\mathbf{h} \in \mathbb{R}^d$ which gets updated for each element $\mathbf{x}_t$ using the matrices $\mathbf{W}_h$, $\mathbf{W}_x \in \mathbb{R}^{n\times d}$, and the bias $\mathbf{b} \in \mathbb{R}^{d}$:
 \begin{align}
     \mathbf{h}_t = f(\mathbf{W}_h \mathbf{h}_{t-1} + \mathbf{W}_x \mathbf{x}_t + \mathbf{b}).
 \end{align}
@@ -114,7 +114,7 @@ Subword tokenization algorithms are the middle ground between the two. The goal 
 
 The algorithm that is frequently used for tokenization in neural \acp{lm} is \textbf{\ac{bpe}}. The \ac{bpe} algorithm starts with the vocabulary of individual bytes, iteratively merging the most frequent tokens and adding them to the vocabulary $V$ until we reach the target vocabulary size. For example, the expression ``Subword tokenization'' could be split into four subwords \texttt{ ['Sub', 'word', '▁token', 'ization']}, the ``\texttt{▁}'' being a special character denoting a preceding space.
 
-\paragraph{Language Modeling} Having a way to represent text, we can move on to processing and subsequently generating it. A useful formalism in that direction is a \textbf{language model}: a mathematical model that estimates a probability $P(T)$ of a sequence of tokens $T = (t_1, \ldots, t_m)$. For estimating the probability, we can factorize it into a product of conditional probabilities for each token using the chain rule:
+\paragraph{Language Models} Having a way to represent text, we can move on to processing and subsequently generating it. A useful formalism in that direction is a \textbf{language model}: a mathematical model that estimates a probability $P(T)$ of a sequence of tokens $T = (t_1, \ldots, t_n)$. For estimating the probability, we can factorize it into a product of conditional probabilities for each token using the chain rule:
 \begin{align}
     P(T) = \prod_{i=1}^m P(t_i|t_1, \hdots,t_{m-1}).
 \end{align}
@@ -124,35 +124,30 @@ Estimating the probability of longer sequences according to this formula is infe
 \end{align}
 The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for individual \emph{n}-grams by tabulating their occurences over a large text corpus. However, because of the simplifying assumption, the \emph{n}-gram \acp{lm} fail to capture long-term dependencies in the text.
 
-\paragraph{Neural \acp{lm}} A neural \ac{lm} is a \acl{lm} that uses a neural network for estimating the text probability. Denoting the parameters of the network by $\theta$:
+\paragraph{Neural \acp{lm}} A neural \ac{lm} is a \acl{lm} that uses a neural network for estimating the text probability. Denoting the parameters of the network by $\theta$ and $\mathbf{X}$ as the sequence of embeddings corresponding to $T$:
 \begin{align}
-    P(T) = P_\theta(T).
+    P(T) = P_\theta(\mathbf{X}).
 \end{align}
 In contrast with \emph{n}-gram \acp{lm}, the neural network can typically process the whole text, efficiently computing the probability estimates using its hidden states. This makes it suitable for capturing long-term dependencies.
 
 
 \paragraph{Encoder-Decoder Framework}
 We have described a \ac{rnn} (\autoref{sec:nns}) as a neural network that can process the sequence and \emph{encode} its representation in its hidden state.
-The idea behind the \textbf{encoder-decoder framework} \cite{sutskever2014sequence,cho2014learning} is that we can \emph{decode} a sentence using another \ac{rnn} using the hidden state as its initial state.
-
-Abstracting from the \ac{rnn} architecture, the general idea behind the encoder-decoder framework is the following:
+The idea behind the \textbf{encoder-decoder framework} \cite{sutskever2014sequence,cho2014learning} is that we can \emph{decode} an output sequence $\mathbf{Y} = (\mathbf{y}_1, \ldots, \mathbf{y}_m)$ with another network using the hidden state of the encoder. With \acp{rnn}, the workflow is the following:
 
 \begin{enumerate}
-    \item The \textbf{encoder} encodes the input sentence $X$ into a hidden state $h_n$
-    \item The \textbf{decoder} uses $h_n$ as its initial state $s_0$ and produces the translation $Y = y_1 \hdots y_m$ of the input sentence by repeatedly applying a transformation $D$ in each timestep $j\in(1,m)$:
+    \item The \textbf{encoder} encodes the input sentence $\mathbf{X}$ into a hidden state $H_e$ by repeatedly applying a transformation $\mathcal{E}$ in each timestep $i\in(1,n)$:
           \begin{align}
-              s_j, y_j = D(s_{j-1}, y_{j-1}).
+              H_e^{(i)} = \mathcal{E}(H_e^{(i-1)}, \mathbf{x}_i).
+          \end{align}
+    \item The \textbf{decoder} uses $H_e^{(n)}$ as its initial state $H_d^{(0)}$ and produces the output sequence $\mathbf{Y}$ by repeatedly applying a transformation $\mathcal{D}$ in each timestep $j\in(1,m)$:
+          \begin{align}
+              H_d^{(j)}, \mathbf{y}_j = \mathcal{D}(H_d^{(j)}, \mathbf{y}_{j-1}).
           \end{align}
 \end{enumerate}
 
-The workflow of an encoder-decoder architecture is depicted in Figure \ref{fig:encdec}. The encoder takes the input sentence and encodes it into a hidden state. In each timestep, the decoder takes the previous hidden state and the last output symbol, and computes the conditional probability distribution over the vocabulary. The symbol with the maximum probability is selected as the output symbol and used as the input for the next step. The first input symbol is a special token \texttt{<s>}  denoting the beginning of the sentence. When the decoder outputs a special token \texttt{<eos>} denoting the end of the sentence, the decoding is finished.
+\paragraph{Attention Mechanism}
 
-\begin{figure}[ht]
-    \centering
-    %   \includegraphics[width=0.95\textwidth]{images/encdec}
-    \caption[Encoder-Decoder Model]{ \textit{Encoder} encodes the input sentence $X$ into a hidden state, \textit{decoder} uses the hidden state to decode the output sentence $Y$.  Source: \cite{s2s}.}
-    \label{fig:encdec}
-\end{figure}
 
 
 \paragraph{Transformer Architecture}
