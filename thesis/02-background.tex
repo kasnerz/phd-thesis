@@ -81,7 +81,7 @@ While this representation is sound, it is sparse and not very helpful for the ne
 
 \paragraph{Word Embeddings} To get a more compact and useful representation of tokens, we may require that the vectors for tokens with a similar role are also close in the vector space. To construct these vectors, we can use the idea that tokens with similar roles also occur in a similar context.
 
-As proposed by \citet{mikolov2013distributed}, we can get these representations as the weights of an \ac{mlp} trained for a particular objective. The \ac{mlp} predicts the tokens in the neighborhood of each token (the \emph{skip-gram} objective) or vice versa, the token itself based on the tokens in its neighborhood (the \textit{continuous bag-of-words} objective), as shown in \autoref{fig:word2vec}.
+As proposed by \citet{mikolov2013distributed}, we can get these representations as the weights of an \ac{mlp} trained for a particular objective. In the Word2Vec algorithm, the \ac{mlp} predicts the tokens in the neighborhood of each token (the \emph{skip-gram} objective) or vice versa, the token itself based on the tokens in its neighborhood (the \textit{continuous bag-of-words} objective), as shown in \autoref{fig:word2vec}.
 
 \begin{figure*}[h]
     \centering
@@ -106,7 +106,7 @@ As proposed by \citet{mikolov2013distributed}, we can get these representations 
     \label{fig:word2vec}
 \end{figure*}
 
-As a result, we get an \textit{embedding matrix} $\mathbf{W}_e \in \mathbb{R}^{|V|\times d}$, which assigns each token $t \in V$ a $d$-dimensional \textit{embedding vector} $\mathbf{x} \in \mathbb{R}^{d}$.
+The result is an \textit{embedding matrix} $\mathbf{W}_e \in \mathbb{R}^{|V|\times d}$, which assigns each token $t \in V$ a $d$-dimensional \textit{embedding vector} $\mathbf{x} \in \mathbb{R}^{d}$.
 
 \paragraph{Tokenization} So far, we have implicitly assumed that we have a way of splitting the text into tokens. Both of the naive approaches---\textit{word-level} and \textit{character-level}---have their own shortcomings. Word-level tokenization will use independent embeddings for morphologically similar words, while character-level tokenization is computationally inefficient.
 
@@ -133,20 +133,32 @@ In contrast with \emph{n}-gram \acp{lm}, the neural network can typically proces
 
 \paragraph{Encoder-Decoder Framework}
 We have described a \ac{rnn} (\autoref{sec:nns}) as a neural network that can process the sequence and \emph{encode} its representation in its hidden state.
-The idea behind the \textbf{encoder-decoder framework} \cite{sutskever2014sequence,cho2014learning} is that we can \emph{decode} an output sequence $\mathbf{Y} = (\mathbf{y}_1, \ldots, \mathbf{y}_m)$ with another network using the hidden state of the encoder. With \acp{rnn}, the workflow is the following:
+The idea behind the \textbf{encoder-decoder framework} \cite{sutskever2014sequence,cho2014learning} is that we can \emph{decode} an output sequence with another network using the hidden state of the encoder. With \acp{rnn}, the workflow is the following:
 
 \begin{enumerate}
-    \item The \textbf{encoder} encodes the input sentence $\mathbf{X}$ into a hidden state $H_e$ by repeatedly applying a transformation $\mathcal{E}$ in each timestep $i\in(1,n)$:
+    \item The \textbf{encoder} encodes the input sentence $\mathbf{X}= (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ into a hidden state $\mathbf{h}_e$ by repeatedly applying a transformation $\mathcal{E}$ in each timestep $i\in(1,n)$:
           \begin{align}
-              H_e^{(i)} = \mathcal{E}(H_e^{(i-1)}, \mathbf{x}_i).
+              \mathbf{h}_e^{(i)} = \mathcal{E}(\mathbf{h}_e^{(i-1)}, \mathbf{x}_i).
           \end{align}
-    \item The \textbf{decoder} uses $H_e^{(n)}$ as its initial state $H_d^{(0)}$ and produces the output sequence $\mathbf{Y}$ by repeatedly applying a transformation $\mathcal{D}$ in each timestep $j\in(1,m)$:
+    \item The \textbf{decoder} uses $\mathbf{h}_e^{(n)}$ as its initial state $\mathbf{h}_d^{(0)}$ and produces the output sequence  $\mathbf{Y} = (\mathbf{y}_1, \ldots, \mathbf{y}_m)$ by repeatedly applying a transformation $\mathcal{D}$ in each timestep $j\in(1,m)$, using a special \texttt{<BOS>} symbol as $\mathbf{y}_0$:
           \begin{align}
-              H_d^{(j)}, \mathbf{y}_j = \mathcal{D}(H_d^{(j)}, \mathbf{y}_{j-1}).
+              \mathbf{h}_d^{(j)}, \mathbf{y}_j = \mathcal{D}(\mathbf{h}_d^{(j-1)}, \mathbf{y}_{j-1}).
           \end{align}
 \end{enumerate}
 
-\paragraph{Attention Mechanism}
+\paragraph{Attention Mechanism} The hidden state has a fixed size, which limits the amount of information the network can capture about a sequence. The \textbf{attention mechanism} \cite{bahdanau2015neural} enables the decoder to dynamically extract the information from the encoded sequence. In each step $j$, the decoder computes the weighed average of the encoder hidden states $\{\mathbf{h}_e^{(0)}, \ldots, \mathbf{h}_e^{(n)}\}$ using the attention matrix $\mathbf{W}_a$:
+\begin{align}
+    \alpha_{ji} & = \operatorname{softmax}(\mathbf{h}_d^{(j)}\mathbf{W}_a \mathbf{h}_e^{(i)}).
+\end{align}
+
+The attention vector $\alpha_j$ is used to compute a context vector $c_j$ which is the weighted average of the hidden states of the encoder:
+\begin{align}
+    \mathbf{c}_j & = \sum_i \alpha_{ji} \mathbf{h}_e^{(i)}
+\end{align}
+The context vector is used as an additional input for the decoder:
+\begin{align}
+    \mathbf{h}_d^{(j)}, \mathbf{y}_j = \mathcal{D}(\mathbf{h}_d^{(j-1)}, \mathbf{y}_{j-1}, \mathbf{c}_j).
+\end{align}
 
 
 
