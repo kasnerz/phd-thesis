@@ -163,7 +163,15 @@ The context vector is used as an additional input for the decoder:
 
 
 
-\paragraph{Transformer Architecture} The Transformer architecture \cite{vaswani2017attention} is a neural network architecture for processing sequences that improves upon \acp{rnn} by enabling efficient parallelization. The architecture is shown in \autoref{fig:transformer}. In its core, the Transformer combines the attention mechanism with \acp{mlp}.
+\paragraph{Transformer Architecture} The \textbf{Transformer} \cite{vaswani2017attention} is a neural network architecture which gets rid of another limitation of \acp{rnn} -- the inherently sequential processing. The  parallelizability of the Transformer is achieved by replacing the hidden state of the \acp{rnn} with a sequence of layers using the \emph{self-attention} mechanism.
+
+For the input $\mathbf{X} \in \mathbb{R}^{n,d}$, the attention module for a queries $\mathbf{Q}, \mathbf{K}, \mathbf{V} \in \mathbb{R}^{n,d}$ is defined as:
+\begin{align}
+    \operatorname{Attn}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \operatorname{softmax}\Left\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d}}\Right\mathbf{V}
+\end{align}
+Enabling each token to attend to the entire sequence of tokens leads to efficient representations of tokens which can be computed independently of each other.
+
+As shown in \autoref{fig:transformer}, the original Transformer architecture follows the encoder-decoder framework. The encoder consists of $N_e$ layers, each layer consisting of a self-attention layer and an \ac{mlp}.
 
 \begin{figure*}[h]
     \centering
