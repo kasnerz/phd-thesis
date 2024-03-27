@@ -110,56 +110,55 @@ Generally, the idea of representing tokens with embedding vectors is employed in
 
 
 
-\paragraph{Tokenization} So far, we have implicitly assumed that we have a way of splitting the text into tokens. Both of the naive approaches---\textit{word-level} and \textit{character-level}---have their own shortcomings. Word-level tokenization will use independent embeddings for morphologically similar words, while character-level tokenization is computationally inefficient.
+\paragraph{Tokenization} We have also implicitly assumed that we have a way of splitting the text into tokens. Naively, we could split the text into words or characters. However, these approaches have their own shortcomings: word-level tokenization will not allow us to cluster together morphologically similar words, while character-level tokenization is computationally inefficient.
 
-Subword tokenization algorithms are the middle ground between the two. The goal is to split the text into smaller pieces called \emph{subwords}, so that frequently used words will get their own subword, while less frequent words will be split into multiple subwords.
+\textbf{Subword tokenization} algorithms are the middle ground between the two. The goal is to split the text into smaller pieces called \emph{subwords}, so that frequently used words will get their own subword, while less frequent words will be split into multiple subwords.
 
-The algorithm that is frequently used for tokenization in neural \acp{lm} is \textbf{\ac{bpe}}. The \ac{bpe} algorithm starts with the vocabulary of individual bytes, iteratively merging the most frequent tokens and adding them to the vocabulary $V$ until we reach the target vocabulary size. For example, the expression ``Subword tokenization'' could be split into four subwords \texttt{ ['Sub', 'word', '▁token', 'ization']}, the ``\texttt{▁}'' being a special character denoting a preceding space.
+The algorithm that is frequently used for tokenization in neural \acp{lm} is \textbf{\ac{bpe}} \TODO{cite}. The \ac{bpe} algorithm starts with the vocabulary of individual bytes, iteratively merging the most frequent tokens and adding them to the vocabulary $V$ until we reach the target vocabulary size. For example, the expression ``Subword tokenization'' could be split into four subwords \texttt{ ['Sub', 'word', '▁token', 'ization']}. The ``\texttt{▁}'' is a special character denoting a preceding space.
 
-\paragraph{Language Models} Having a way to represent text, we can move on to processing and subsequently generating it. A useful formalism in that direction is a \textbf{language model}: a mathematical model that estimates a probability $P(T)$ of a sequence of tokens $T = (t_1, \ldots, t_n)$. For estimating the probability, we can factorize it into a product of conditional probabilities for each token using the chain rule:
+\paragraph{Language Models} Having a way to represent text, we can move on to processing it. A useful formalism for text processing is a \textbf{language model}: a mathematical model that estimates a probability of a sequence of tokens $S = (s_1, \ldots, s_T)$. For estimating the probability, we can factorize it into a product of conditional probabilities for each token using the chain rule:
 \begin{align}
-    P(T) = \prod_{i=1}^m P(t_i|t_1, \hdots,t_{m-1}).
+    P(S) = \prod_{i=1}^T P(s_i|s_1, \hdots, s_{i-1}).
 \end{align}
 Estimating the probability of longer sequences according to this formula is infeasible, as the model would require too many parameters. An \textbf{\emph{n}-gram \ac{lm}} simplifies the product using the assumption that the probability of a token depends only on $n-1$ previous tokens:
 \begin{align}
-    P(T) = \prod_{i=1}^m P(t_i|t_{i-n+1}, \hdots,t_{i-1}).
+    P(S) = \prod_{i=1}^T P(s_i|s_{i-n+1}, \hdots,s_{i-1}).
 \end{align}
-The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for individual \emph{n}-grams by tabulating their occurences over a large text corpus. However, because of the simplifying assumption, the \emph{n}-gram \acp{lm} fail to capture long-term dependencies in the text.
+The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for individual \emph{n}-grams by tabulating their occurences in a text corpus. However, because of the limit on the length of the context for each token, the \emph{n}-gram \acp{lm} fail to capture long-term dependencies in the text.
 
-\paragraph{Neural \acp{lm}} A neural \ac{lm} is a \acl{lm} that uses a neural network for estimating the text probability. Denoting the parameters of the network by $\theta$ and $\mathbf{X}$ as the sequence of embeddings corresponding to $T$:
+\paragraph{Neural \acp{lm}} A neural \ac{lm} is a \acl{lm} that uses a neural network for estimating the text probability. Denoting the parameters of the network by $\theta$ and the sequence of embeddings corresponding to $S$ as $\mathbf{X} \in \mathbb{R}^{|V|\times T}$:
 \begin{align}
-    P(T) = P_\theta(\mathbf{X}).
+    P(S) = P_\theta(\mathbf{X}).
 \end{align}
-In contrast with \emph{n}-gram \acp{lm}, the neural network can typically process the whole text, efficiently computing the probability estimates using its hidden states. This makes it suitable for capturing long-term dependencies.
+In contrast with \emph{n}-gram \acp{lm}, neural \acp{lm} can process the whole text, efficiently storing the probability estimates in its parameters, which makes it suitable for capturing long-term dependencies.
 
 
 \paragraph{Encoder-Decoder Framework}
-We have described a \ac{rnn} (\autoref{sec:nns}) as a neural network that can process the sequence and \emph{encode} its representation in its hidden state.
-The idea behind the \textbf{encoder-decoder framework} \cite{sutskever2014sequence,cho2014learning} is that we can \emph{decode} an output sequence with another network using the hidden state of the encoder. With \acp{rnn}, the workflow is the following:
+We have described an \ac{rnn} (\autoref{sec:nns}) as a neural network that can process the sequence and \emph{encode} its representation in a sequence of hidden states. The idea behind the \textbf{encoder-decoder framework} \cite{sutskever2014sequence,cho2014learning} is that we can \emph{decode} an output sequence with another network using the last hidden state of the encoder as its initial state. With \acp{rnn}, the workflow is the following:
 
 \begin{enumerate}
-    \item The \textbf{encoder} encodes the input sentence $\mathbf{X}= (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ into a hidden state $\mathbf{h}_e$ by repeatedly applying a transformation $\mathcal{E}$ in each timestep $i\in(1,n)$:
+    \item The \textbf{encoder} encodes the input sentence $\mathbf{X}= (\mathbf{x}_1, \ldots, \mathbf{x}_T)$ into a hidden state $\mathbf{h}_e$ by repeatedly applying a transformation $\mathcal{E}$ in each timestep $t\in(1,T)$:
           \begin{align}
-              \mathbf{h}_e^{(i)} = \mathcal{E}(\mathbf{h}_e^{(i-1)}, \mathbf{x}_i).
+              \mathbf{h}_e^{(t)} = \mathcal{E}(\mathbf{h}_e^{(t-1)}, \mathbf{x}_t).
           \end{align}
-    \item The \textbf{decoder} uses $\mathbf{h}_e^{(n)}$ as its initial state $\mathbf{h}_d^{(0)}$ and produces the output sequence  $\mathbf{Y} = (\mathbf{y}_1, \ldots, \mathbf{y}_m)$ by repeatedly applying a transformation $\mathcal{D}$ in each timestep $j\in(1,m)$, using a special \texttt{<BOS>} symbol as $\mathbf{y}_0$:
+    \item The \textbf{decoder} uses $\mathbf{h}_e^{(T)}$ as its initial state $\mathbf{h}_d^{(0)}$ and produces the output sequence  $\mathbf{Y} = (\mathbf{y}_1, \ldots, \mathbf{y}_U)$ by repeatedly applying a transformation $\mathcal{D}$ in each timestep $u\in(1,U)$:
           \begin{align}
-              \mathbf{h}_d^{(j)}, \mathbf{y}_j = \mathcal{D}(\mathbf{h}_d^{(j-1)}, \mathbf{y}_{j-1}).
+              \mathbf{h}_d^{(u)}, \mathbf{y}_u = \mathcal{D}(\mathbf{h}_d^{(u-1)}, \mathbf{y}_{u-1}).
           \end{align}
 \end{enumerate}
 
-\paragraph{Attention Mechanism} The hidden state has a fixed size, which limits the amount of information the network can capture about a sequence. The \textbf{attention mechanism} \cite{bahdanau2015neural} enables the decoder to dynamically extract the information from the encoded sequence. In each step $j$, the decoder computes the weighed average of the encoder hidden states $\{\mathbf{h}_e^{(0)}, \ldots, \mathbf{h}_e^{(n)}\}$ using the attention matrix $\mathbf{W}_a$:
+\paragraph{Attention Mechanism} We have already mentioned that the hidden state of an \ac{rnn} has a fixed size, which limits the amount of information the network can capture about a sequence. The \textbf{attention mechanism} \cite{bahdanau2015neural} enables the decoder to extract the information dynamically from the encoded sequence. In each step $u$, the decoder computes the weighed average of the encoder hidden states $\{\mathbf{h}_e^{(0)}, \ldots, \mathbf{h}_e^{(T)}\}$ using the attention matrix $\mathbf{W}_a$:
 \begin{align}
-    \alpha_{ji} & = \operatorname{softmax}(\mathbf{h}_d^{(j)}\mathbf{W}_a \mathbf{h}_e^{(i)}).
+    \alpha_{ut} & = \operatorname{softmax}(\mathbf{h}_d^{(u)}\mathbf{W}_a \mathbf{h}_e^{(t)}).
 \end{align}
 
-The attention vector $\alpha_j$ is used to compute a context vector $c_j$ which is the weighted average of the hidden states of the encoder:
+The attention vector $\alpha_u$ is used to compute a context vector $c_u$ which is the weighted average of the hidden states of the encoder:
 \begin{align}
-    \mathbf{c}_j & = \sum_i \alpha_{ji} \mathbf{h}_e^{(i)}
+    \mathbf{c}_u & = \sum_i \alpha_{ut} \mathbf{h}_e^{(t)}
 \end{align}
 The context vector is used as an additional input for the decoder:
 \begin{align}
-    \mathbf{h}_d^{(j)}, \mathbf{y}_j = \mathcal{D}(\mathbf{h}_d^{(j-1)}, \mathbf{y}_{j-1}, \mathbf{c}_j).
+    \mathbf{h}_d^{(u)}, \mathbf{y}_u = \mathcal{D}(\mathbf{h}_d^{(u-1)}, \mathbf{y}_{u-1}, \mathbf{c}_u).
 \end{align}
 
 
