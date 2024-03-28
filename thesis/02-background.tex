@@ -64,7 +64,7 @@ The hidden state $\mathbf{h}^{(0)} \in \mathbb{R}^k$ is initialized randomly. Af
 
 \subsection{Language Modeling}
 \label{sec:lm-basics}
-We will now look into how can we use neural networks to represent and process text.
+We will now look into the basics of text representation and processing.
 
 
 \paragraph{One-Hot Encoding}
@@ -130,6 +130,8 @@ The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for indivi
 
 \subsection{Transformer Architecture}
 
+Here, we will pave our way towards the transformer architecture.
+
 \paragraph{Neural Language Model} A neural \ac{lm} is a \acl{lm} that estimates the text probability using a neural network. Denoting the parameters of the network by $\theta$ and the sequence of embeddings corresponding to $S$ as $\mathbf{X} \in \mathbb{R}^{|V|\times n}$:
 \begin{align}
     P(S) = P_\theta(\mathbf{X}).
@@ -151,14 +153,10 @@ We have described an \ac{rnn} (\autoref{sec:nns}) as a neural network that can p
           \end{align}
 \end{enumerate}
 
-\paragraph{Attention Mechanism} We have already mentioned that the hidden state of an \ac{rnn} has a fixed size, which limits the amount of information the network can capture about a sequence. The \emph{attention mechanism} \cite{bahdanau2015neural}, as used in \acp{rnn}, enables the decoder to extract the information dynamically from the encoded sequence. In each step $u$, the decoder computes the weighed average of the encoder hidden states $\{\mathbf{h}_e^{(0)}, \ldots, \mathbf{h}_e^{(n)}\}$ using the attention matrix $\mathbf{W}_a$:
+\paragraph{Attention Mechanism} We have already mentioned that the hidden state of an \ac{rnn} has a fixed size, which limits the amount of information the network can capture about a sequence. The \emph{attention mechanism} \cite{bahdanau2015neural} as used in \acp{rnn} enables the decoder to extract the information dynamically from the encoded sequence. In each step $j$, the decoder computes a context vector $c_j$ as the weighted sum of the hidden states of the encoder $\{\mathbf{h}_e^{(0)}, \ldots, \mathbf{h}_e^{(n)}\}$ using the attention matrix $\mathbf{W}_a$:
 \begin{align}
-    \alpha_{ji} & = \operatorname{softmax}(\mathbf{h}_d^{(j)}\mathbf{W}_a \mathbf{h}_e^{(i)}).
-\end{align}
-
-The attention vector $\alpha_j$ is used to compute a context vector $c_j$ which is the weighted average of the hidden states of the encoder:
-\begin{align}
-    \mathbf{c}_j & = \sum_i \alpha_{ji} \mathbf{h}_e^{(i)}
+    \alpha_{ji}  & = \operatorname{softmax}(\mathbf{h}_d^{(j)}\mathbf{W}_a \mathbf{h}_e^{(i)}), \\
+    \mathbf{c}_j & = \sum_i \alpha_{ji} \mathbf{h}_e^{(i)}.
 \end{align}
 The context vector is used as an additional input for the decoder:
 \begin{align}
@@ -166,7 +164,7 @@ The context vector is used as an additional input for the decoder:
 \end{align}
 
 
-\paragraph{Self-attention Mechanism} Self-attention \cite{cheng2016long} is a variant of the attention mechanism in which the source and the target sequence is identical. Here, we describe the variant introduced by \citet{vaswani2017attention}. For the input $\mathbf{X} \in \mathbb{R}^{n,d}$, the \emph{self-attention} produces the output $\mathbf{H} \in \mathbb{R}^{n,d}$ of the same size. For each token, the resulting vector $\mathbf{h}_i \in \mathbf{H}$ is a weighed combination of the value vectors corresponding to all the tokens in a sequence (including the token itself):
+\paragraph{Self-attention Mechanism} Self-attention \cite{cheng2016long,vaswani2017attention} is a variant of the attention mechanism in which the source and the target sequence is identical. For the input $\mathbf{X} \in \mathbb{R}^{n,d}$, the \emph{self-attention} produces the output $\mathbf{H} \in \mathbb{R}^{n,d}$ of the same size. For each token, the resulting vector $\mathbf{h}_i \in \mathbf{H}$ is a weighed combination of the value vectors corresponding to all the tokens in a sequence (including the token itself):
 \begin{align}
     \mathbf{h}_j = \sum_{i\in 1..n} \alpha_{ji} \mathbf{v}_i,
 \end{align}
@@ -187,19 +185,32 @@ The operations can be efficiently paralellized using matrix multiplication:
 \end{align}
 
 
-\paragraph{Transformer Architecture} The \emph{transformer}\footnote{Although \citet{vaswani2017attention} uses ``Transformer'' with a capital ``T'', the orthography is gradually shifting towards the variant with a lower-case ``t''. See, e.g., \citet[p.~215]{jurafsky2024}.} \cite{vaswani2017attention} is a neural network architecture which gets rid of another limitation of \acp{rnn} -- the sequential processing. The parallelizability is enabled by replacing the hidden state (which previously served for sharing information among tokens in a single sequence) with the self-attention mechanism.
+\paragraph{Transformer Architecture} The \emph{transformer}\footnote{Although \citet{vaswani2017attention} uses ``Transformer'' with a capital ``T'', the orthography is gradually shifting towards the variant with a lower-case ``t''. See, e.g., \citet[p.~215]{jurafsky2024}.} \cite{vaswani2017attention} is a neural network architecture which can process sequences efficiently in parallel. To achieve that, the transformer replaces the \ac{rnn} hidden state (which previously served for sharing information among tokens in a single sequence) with the self-attention mechanism applied over a series of layers.
+
+Specifically, each layer is composed of two sublayers: (a) the \emph{self-attention sublayer} and (b) the \emph{\ac{mlp} sublayer}. The original input $\mathbf{H}^{(i)}$ of the $i$-th sublayer is preserved in a so-called residual connection to which the output of the sublayer is added:
+\begin{align}
+    \mathbf{H}^{(i+1)} = \mathbf{H}^{(i)} + \operatorname{sublayer}(\mathbf{H}^{(i)}).
+\end{align}
+The sublayers serve a different purpose: while the self-attention sublayer enables sharing information among tokens, the \ac{mlp} sublayer computes element-wise operations over each token. The input (or output, depending on the architecture variant) of each sublayer is normalized using \emph{layer normalization} \cite{ba2016layer}.
+
+To get the input representation $\mathbf{H}^{(0)}$, we sum the token embeddings $\mathbf{X} \in \mathbb{R}^{n,d}$ with \emph{positional embeddings}. Positional embeddings encode the information about the position of individual tokens which would otherwise get lost in parallelized processing \cite{dufter2022position}.
 
 
-The self-attention mechanism is a part of the so-called transformer block, which is repeated over. The block also contains an \ac{mlp}, residual connections, and normalizing layers.
-
-As shown in \autoref{fig:transformer}, the original Transformer architecture follows the encoder-decoder framework. The encoder consists of $N_e$ layers, each layer consisting of a self-attention layer and an \ac{mlp}.
-
-\begin{figure*}[h]
+\begin{figure*}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/transformer.pdf}
     \caption{A variant of the Transformer architecture. Adapted from \href{https://github.com/bbycroft/llm-viz/blob/main/src/llm/intro-image.svg}{https://github.com/bbycroft/llm-viz}.}
     \label{fig:transformer}
 \end{figure*}
+
+
+As shown in \autoref{fig:transformer}, the original Transformer architecture follows the encoder-decoder framework. The encoder consists of $N_e$ layers, the decoder of $N_d$ layers. The decoder layers have the following differences:
+\begin{itemize}
+    \item Each layer contains another sublayer called the \emph{encoder-decoder attention}. In contrast to the self-attention mechanism, the \emph{keys} and \emph{values} come from the last layer of the encoder (analogically to the original attention mechanism), enabling the decoder to attend to the encoded sequence.
+    \item The self-attention is \emph{masked} so that each token can collect information only from the preceding tokens. This is to preserve the temporal casuality during left-to-right text generation (described next), in which the following tokens are not yet decoded.
+\end{itemize}
+
+\paragraph{Text Generation}
 
 
 \subsection{Pretrained Language Models}
