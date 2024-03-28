@@ -37,7 +37,7 @@ For learning the underlying pattern between $\mathbf{x}$ and $y$, we will use ma
 
 The perceptron algorithm is guaranteed to converge if there exists a hyperplane which separates the data belonging to one class from another, otherwise it will not converge \cite{novikoff1962convergence}.
 
-\paragraph{Multi-layer Perceptron} To overcome the fact that the perceptron is limited to linear decision boundaries, we can use a \textbf{\acl{mlp} (\acs{mlp}}; \citealp[p.~227]{bishop2006pattern}). This mathematical model---also known as a feed-forward neural network---is able to approximate any bounded continuous function \cite{hornik1989multilayer}.
+\paragraph{Multi-layer Perceptron} To overcome the fact that the perceptron is limited to linear decision boundaries, we can use a \textbf{\acl{mlp} (\acs{mlp}}; \citealp[p.~164]{goodfellow2016deep}). This mathematical model---also known as a feed-forward neural network---is able to approximate any bounded continuous function \cite{hornik1989multilayer}.
 
 As the name suggests, \ac{mlp} uses multiple perceptron-like units called \textit{neurons}. Analogically to the perceptron (\autoref{eq:perceptron1}), each neuron computes its output $o$ using the rule:
 \begin{align}
@@ -52,14 +52,14 @@ For efficiency, the neurons are organized in layers, which enables formulating t
 \end{align}
 During training, we aim to minimize the \textit{loss function} describing the gap between the model predictions and the ground truth output. Since all the computations in \ac{mlp} are differentiable, we can use the chain rule to compute how each parameter in the network contributes to the loss. To minimize the loss, we use the \emph{backpropagation} algorithm \cite{kelley1960gradient,rumelhart1986learning}, updating the network parameters in the reverse order of layers. The magnitude of the updates is controlled by the learning rate parameter $\alpha$.
 
-\paragraph{Recurrent Neural Networks} Unlike \acp{mlp}, where the size of the input is fixed, \acp{rnn} allow us to process a sequence of inputs $\mathbf{X} = (\mathbf{x}_1, \ldots, \mathbf{x}_T)$ of arbitrary length. In its vanilla form, the \ac{rnn} computes a sequence of hidden states $\mathbf{H} = (\mathbf{h}^{(0)}, \ldots, \mathbf{h}^{(T)})$ by applying the matrices $\mathbf{W}_h$, $\mathbf{W}_x \in \mathbb{R}^{n\times k}$, and the bias $\mathbf{b} \in \mathbb{R}^{k}$:
+\paragraph{Recurrent Neural Networks} Unlike \acp{mlp}, where the size of the input is fixed, \acp{rnn} allow us to process a sequence of inputs $\mathbf{X} = (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ of arbitrary length. In its vanilla form, the \ac{rnn} computes a sequence of hidden states $\mathbf{H} = (\mathbf{h}^{(0)}, \ldots, \mathbf{h}^{(n)})$ by repeatedly applying the matrices $\mathbf{W}_h$, $\mathbf{W}_x \in \mathbb{R}^{n\times k}$, and the bias $\mathbf{b} \in \mathbb{R}^{k}$ \cite[p.~367]{goodfellow2016deep}:
 \begin{align}
-    \mathbf{h}^{(t)} = f(\mathbf{W}_h \mathbf{h}^{(t-1)} + \mathbf{W}_x \mathbf{x}_t + \mathbf{b}).
+    \mathbf{h}^{(i)} = f(\mathbf{W}_h \mathbf{h}^{(i-1)} + \mathbf{W}_x \mathbf{x}_i + \mathbf{b}).
 \end{align}
 
-The hidden state $\mathbf{h}^{(0)} \in \mathbb{R}^k$ is initialized randomly. After the input is processed, $\mathbf{h}^{(T)}$ contains an encoded representation of the sequence.
+The hidden state $\mathbf{h}^{(0)} \in \mathbb{R}^k$ is initialized randomly. After the input is processed, $\mathbf{H}$ contains an encoded representation of the sequence.
 
-\acp{rnn} have various shortcomings, including the limited dimensionality of the hidden state and inherently sequential processing. However, they will serve as a stepping stone towards the Transformer architecture described in \autoref{sec:lm-basics}.
+\acp{rnn} have various shortcomings, including the limited dimensionality of the hidden state and need for sequential processing. However, they will serve as a stepping stone towards the transformer architecture described in \autoref{sec:lm-basics}.
 
 
 \subsection{Language Modeling}
@@ -67,7 +67,9 @@ The hidden state $\mathbf{h}^{(0)} \in \mathbb{R}^k$ is initialized randomly. Af
 We will now look into how can we use neural networks to represent and process text.
 
 
-\paragraph{One-Hot Encoding} Until now, we have assumed that the input to a network is a vector of real numbers. However, a text is a sequence of discrete units such as characters, words, or subwords. To convert these units---called \textit{tokens}---to a numerical representation, we can define a \textit{vocabulary} $V$ which assigns an integer index $i \in \{0, \ldots, |V|-1\}$ to each token.
+\paragraph{One-Hot Encoding}
+% Until now, we have assumed that the input to a network is a vector of real numbers. However, a
+A text is a sequence of discrete units such as characters, words, or subwords. To convert these units---called \textit{tokens}---to a numerical representation, we can define a \textit{vocabulary} $V$ which assigns an integer index $i \in \{0, \ldots, |V|-1\}$ to each token.
 
 The naive way to represent each token would be using its integer value. However, this would misleadingly suggest linear dependence between tokens. A better way is to use the index $i$ for constructing a \textit{one-hot} vector $\mathbf{x} \in \{0,1\}^{|V|} $ for each token:
 \begin{align}
@@ -77,13 +79,13 @@ The naive way to represent each token would be using its integer value. However,
     \end{cases}
 \end{align}
 
-While this representation is sound, it is quite sparse and does not capture the semantics of individual tokens, requiring that the network learns to represent each token independently.
+While this representation is sound, it is quite sparse and does not capture the semantics of individual tokens, which puts high requirements on the representional capacity of the network.
 
-\paragraph{Word Embeddings} To get a more useful representation of tokens, we may require that tokens with similar meaning are also close in the vector space. Using the distributional theory of meaning \TODO{(Harris, 1954; Firth, 1957)}, we can use the idea that tokens with similar roles also tend to occur in a similar context.
+\paragraph{Word Embeddings} To get a more useful representation of tokens, we may require that tokens with similar meaning are also close in the vector space. Using the distributional theory of meaning \cite{harris1954distributional,firth1957synopsis}, we can use the idea that tokens with similar roles also tend to occur in a similar context.
 
-This idea is used in the Word2Vec algorithm \cite{mikolov2013distributed}, which extracts the token representations as the weights of an \ac{mlp} trained either for predicting the tokens in the neighborhood of each token (the \emph{skip-gram} objective) or vice versa, the token itself based on the tokens in its neighborhood (the \emph{continuous bag-of-words} objective). The output of the algorithm is an \textit{embedding matrix} $\mathbf{W}_e \in \mathbb{R}^{|V|\times d}$, which assigns each token a $d$-dimensional \textit{embedding vector} $\mathbf{x} \in \mathbb{R}^{d}$. The objectives are illustrated in \autoref{fig:word2vec}.
+This idea is used in the Word2Vec algorithm \cite{mikolov2013distributed}. The algorithm extracts the token representations as the weights of an \ac{mlp} trained either for predicting the tokens in the neighborhood of each token (the \emph{skip-gram} objective) or vice versa, the token itself based on the tokens in its neighborhood (the \emph{continuous bag-of-words} objective). The output of the algorithm is an \textit{embedding matrix} $\mathbf{W}_e \in \mathbb{R}^{|V|\times d}$, which assigns each token a $d$-dimensional \textit{embedding vector} $\mathbf{x} \in \mathbb{R}^{d}$. The objectives are illustrated in \autoref{fig:word2vec}.
 
-Generally, the idea of representing tokens with embedding vectors is employed in neural \acp{lm} described later in this section, where the embedding matrix is the input layer of the model. However, the embedding matrix in neural \acp{lm} is not trained with the aforementioned algorithm, but joinly with the rest of the network.
+The idea of representing tokens with embedding vectors is employed in neural \acp{lm} described later in this section, even though the embedding matrix is not trained with the aforementioned algorithm, but joinly with the rest of the network.
 
 \begin{figure*}[ht]
     \centering
@@ -104,7 +106,7 @@ Generally, the idea of representing tokens with embedding vectors is employed in
             \label{fig:cbow}
         \end{subfigure}
     \end{subfigure}
-    \caption{The objectives employed by the Word2Vec algorithm \cite{mikolov2013distributed} for learning token embeddings. The algorithm uses a context window of size $k=5$. In the (a) \emph{skip-gram} algorithm, we sum the embeddings of $k-1$ surrounding tokens and predict the original token. In the (b) \emph{continuous bag-of-words} algorithm, we use the original token for predicting the $k-1$ surrounding tokens.}
+    \caption{The objectives employed by the Word2Vec algorithm \cite{mikolov2013distributed}. In this case, the algorithm uses a context window of size $k=5$. In the (a) \emph{skip-gram} algorithm, we sum the embeddings of $k-1$ surrounding tokens and predict the original token. In the (b) \emph{continuous bag-of-words} algorithm, we use the original token for predicting the $k-1$ surrounding tokens.}
     \label{fig:word2vec}
 \end{figure*}
 
@@ -112,21 +114,23 @@ Generally, the idea of representing tokens with embedding vectors is employed in
 
 \paragraph{Tokenization} We have also implicitly assumed that we have a way of splitting the text into tokens. Naively, we could split the text into words or characters. However, these approaches have their own shortcomings: word-level tokenization will not allow us to cluster together morphologically similar words, while character-level tokenization is computationally inefficient.
 
-\textbf{Subword tokenization} algorithms are the middle ground between the two. The goal is to split the text into smaller pieces called \emph{subwords}, so that frequently used words will get their own subword, while less frequent words will be split into multiple subwords.
+\emph{Subword tokenization}  is the middle ground between the two. The goal is to split the text into smaller pieces called \emph{subwords}, so that frequently used words will get their own subword, while less frequent words will be split into multiple subwords.
 
-The algorithm that is frequently used for tokenization in neural \acp{lm} is \textbf{\ac{bpe}} \TODO{cite}. The \ac{bpe} algorithm starts with the vocabulary of individual bytes, iteratively merging the most frequent tokens and adding them to the vocabulary $V$ until we reach the target vocabulary size. For example, the expression ``Subword tokenization'' could be split into four subwords \texttt{ ['Sub', 'word', '▁token', 'ization']}. The ``\texttt{▁}'' is a special character denoting a preceding space.
+The subword tokenization algorithm that is frequently used in neural \acp{lm} is \emph{\ac{bpe}} \cite{sennrich2016neural}. The \ac{bpe} algorithm starts with the vocabulary of individual bytes, iteratively merging the most frequent tokens and adding them to the vocabulary $V$ until we reach the target vocabulary size. For example, the expression ``Subword tokenization'' could be split into four subwords \texttt{ ['Sub', 'word', '▁token', 'ization']}. The ``\texttt{▁}'' is a special character denoting a preceding space.
 
-\paragraph{Language Models} Having a way to represent text, we can move on to processing it. A useful formalism for text processing is a \textbf{language model}: a mathematical model that estimates a probability of a sequence of tokens $S = (s_1, \ldots, s_T)$. For estimating the probability, we can factorize it into a product of conditional probabilities for each token using the chain rule:
+\paragraph{Language Models} Having a way to represent text, we can move on to processing it. A useful formalism for text processing is a \emph{language model}: a mathematical model that estimates a probability of a sequence of tokens $S = (s_1, \ldots, s_n)$. For estimating the probability, we can factorize it into a product of conditional probabilities for each token using the chain rule:
 \begin{align}
-    P(S) = \prod_{i=1}^T P(s_i|s_1, \hdots, s_{i-1}).
+    P(S) = \prod_{i=1}^n P(s_i|s_1, \hdots, s_{i-1}).
 \end{align}
-Estimating the probability of longer sequences according to this formula is infeasible, as the model would require too many parameters. An \textbf{\emph{n}-gram \ac{lm}} simplifies the product using the assumption that the probability of a token depends only on $n-1$ previous tokens:
+Estimating the probability of longer sequences according to this formula is infeasible, as the model would require too many parameters. An \emph{\emph{n}-gram \ac{lm}} (parametrized by an integer \emph{N}) simplifies the product using the assumption that the probability of a token depends only on $N-1$ previous tokens:
 \begin{align}
-    P(S) = \prod_{i=1}^T P(s_i|s_{i-n+1}, \hdots,s_{i-1}).
+    P(S) = \prod_{i=1}^T P(s_i|s_{i-N+1}, \hdots,s_{i-1}).
 \end{align}
 The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for individual \emph{n}-grams by tabulating their occurences in a text corpus. However, because of the limit on the length of the context for each token, the \emph{n}-gram \acp{lm} fail to capture long-term dependencies in the text.
 
-\paragraph{Neural \acp{lm}} A neural \ac{lm} is a \acl{lm} that uses a neural network for estimating the text probability. Denoting the parameters of the network by $\theta$ and the sequence of embeddings corresponding to $S$ as $\mathbf{X} \in \mathbb{R}^{|V|\times T}$:
+\subsection{Transformer Architecture}
+
+\paragraph{Neural Language Model} A neural \ac{lm} is a \acl{lm} that estimates the text probability using a neural network. Denoting the parameters of the network by $\theta$ and the sequence of embeddings corresponding to $S$ as $\mathbf{X} \in \mathbb{R}^{|V|\times n}$:
 \begin{align}
     P(S) = P_\theta(\mathbf{X}).
 \end{align}
@@ -134,42 +138,59 @@ In contrast with \emph{n}-gram \acp{lm}, neural \acp{lm} can process the whole t
 
 
 \paragraph{Encoder-Decoder Framework}
-We have described an \ac{rnn} (\autoref{sec:nns}) as a neural network that can process the sequence and \emph{encode} its representation in a sequence of hidden states. The idea behind the \textbf{encoder-decoder framework} \cite{sutskever2014sequence,cho2014learning} is that we can \emph{decode} an output sequence with another network using the last hidden state of the encoder as its initial state. With \acp{rnn}, the workflow is the following:
+We have described an \ac{rnn} (\autoref{sec:nns}) as a neural network that can process the sequence and \emph{encode} its representation in a sequence of hidden states. The idea behind the \emph{encoder-decoder framework} \cite{sutskever2014sequence,cho2014learning} is that we can \emph{decode} an output sequence with another network using the last hidden state of the encoder as its initial state. With \acp{rnn}, the workflow is the following:
 
 \begin{enumerate}
-    \item The \textbf{encoder} encodes the input sentence $\mathbf{X}= (\mathbf{x}_1, \ldots, \mathbf{x}_T)$ into a hidden state $\mathbf{h}_e$ by repeatedly applying a transformation $\mathcal{E}$ in each timestep $t\in(1,T)$:
+    \item The \textbf{encoder} encodes the input sentence $\mathbf{X}= (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ into a hidden state $\mathbf{h}_e$ by repeatedly applying a transformation $\mathcal{E}$ in each timestep $t\in(1,n)$:
           \begin{align}
-              \mathbf{h}_e^{(t)} = \mathcal{E}(\mathbf{h}_e^{(t-1)}, \mathbf{x}_t).
+              \mathbf{h}_e^{(i)} = \mathcal{E}(\mathbf{h}_e^{(i-1)}, \mathbf{x}_i).
           \end{align}
-    \item The \textbf{decoder} uses $\mathbf{h}_e^{(T)}$ as its initial state $\mathbf{h}_d^{(0)}$ and produces the output sequence  $\mathbf{Y} = (\mathbf{y}_1, \ldots, \mathbf{y}_U)$ by repeatedly applying a transformation $\mathcal{D}$ in each timestep $u\in(1,U)$:
+    \item The \textbf{decoder} uses $\mathbf{h}_e^{(n)}$ as its initial state $\mathbf{h}_d^{(0)}$ and produces the output sequence  $\mathbf{Y} = (\mathbf{y}_1, \ldots, \mathbf{y}_m)$ by repeatedly applying a transformation $\mathcal{D}$ in each timestep $j\in(1,m)$:
           \begin{align}
-              \mathbf{h}_d^{(u)}, \mathbf{y}_u = \mathcal{D}(\mathbf{h}_d^{(u-1)}, \mathbf{y}_{u-1}).
+              \mathbf{h}_d^{(j)}, \mathbf{y}_j = \mathcal{D}(\mathbf{h}_d^{(j-1)}, \mathbf{y}_{j-1}).
           \end{align}
 \end{enumerate}
 
-\paragraph{Attention Mechanism} We have already mentioned that the hidden state of an \ac{rnn} has a fixed size, which limits the amount of information the network can capture about a sequence. The \textbf{attention mechanism} \cite{bahdanau2015neural} enables the decoder to extract the information dynamically from the encoded sequence. In each step $u$, the decoder computes the weighed average of the encoder hidden states $\{\mathbf{h}_e^{(0)}, \ldots, \mathbf{h}_e^{(T)}\}$ using the attention matrix $\mathbf{W}_a$:
+\paragraph{Attention Mechanism} We have already mentioned that the hidden state of an \ac{rnn} has a fixed size, which limits the amount of information the network can capture about a sequence. The \emph{attention mechanism} \cite{bahdanau2015neural}, as used in \acp{rnn}, enables the decoder to extract the information dynamically from the encoded sequence. In each step $u$, the decoder computes the weighed average of the encoder hidden states $\{\mathbf{h}_e^{(0)}, \ldots, \mathbf{h}_e^{(n)}\}$ using the attention matrix $\mathbf{W}_a$:
 \begin{align}
-    \alpha_{ut} & = \operatorname{softmax}(\mathbf{h}_d^{(u)}\mathbf{W}_a \mathbf{h}_e^{(t)}).
+    \alpha_{ji} & = \operatorname{softmax}(\mathbf{h}_d^{(j)}\mathbf{W}_a \mathbf{h}_e^{(i)}).
 \end{align}
 
-The attention vector $\alpha_u$ is used to compute a context vector $c_u$ which is the weighted average of the hidden states of the encoder:
+The attention vector $\alpha_j$ is used to compute a context vector $c_j$ which is the weighted average of the hidden states of the encoder:
 \begin{align}
-    \mathbf{c}_u & = \sum_i \alpha_{ut} \mathbf{h}_e^{(t)}
+    \mathbf{c}_j & = \sum_i \alpha_{ji} \mathbf{h}_e^{(i)}
 \end{align}
 The context vector is used as an additional input for the decoder:
 \begin{align}
-    \mathbf{h}_d^{(u)}, \mathbf{y}_u = \mathcal{D}(\mathbf{h}_d^{(u-1)}, \mathbf{y}_{u-1}, \mathbf{c}_u).
+    \mathbf{h}_d^{(j)}, \mathbf{y}_j = \mathcal{D}(\mathbf{h}_d^{(j-1)}, \mathbf{y}_{j-1}, \mathbf{c}_j).
 \end{align}
 
 
-
-\paragraph{Transformer Architecture} The \textbf{Transformer} \cite{vaswani2017attention} is a neural network architecture which gets rid of another limitation of \acp{rnn} -- the inherently sequential processing. The  parallelizability of the Transformer is achieved by replacing the hidden state of the \acp{rnn} with a sequence of layers using the \emph{self-attention} mechanism.
-
-For the input $\mathbf{X} \in \mathbb{R}^{n,d}$, the attention module for a queries $\mathbf{Q}, \mathbf{K}, \mathbf{V} \in \mathbb{R}^{n,d}$ is defined as:
+\paragraph{Self-attention Mechanism} Self-attention \cite{cheng2016long} is a variant of the attention mechanism in which the source and the target sequence is identical. Here, we describe the variant introduced by \citet{vaswani2017attention}. For the input $\mathbf{X} \in \mathbb{R}^{n,d}$, the \emph{self-attention} produces the output $\mathbf{H} \in \mathbb{R}^{n,d}$ of the same size. For each token, the resulting vector $\mathbf{h}_i \in \mathbf{H}$ is a weighed combination of the value vectors corresponding to all the tokens in a sequence (including the token itself):
 \begin{align}
-    \operatorname{Attn}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \operatorname{softmax}\Left\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d}}\Right\mathbf{V}
+    \mathbf{h}_j = \sum_{i\in 1..n} \alpha_{ji} \mathbf{v}_i,
 \end{align}
-Enabling each token to attend to the entire sequence of tokens leads to efficient representations of tokens which can be computed independently of each other.
+where the \emph{value vector} of each token is computed using a trainable \emph{value matrix} $\mathbf{W_v} \in \mathbb{R}^{n,d}$:
+\begin{align}
+    \mathbf{v}_i = \mathbf{x}_i \mathbf{W_v}.
+\end{align}
+To get the attention weights $\alpha_{ij}$, we first compute \textit{query} and \textit{key} vectors for each token using trainable matrices $\mathbf{W_q}$ and $\mathbf{W_k} \in \mathbb{R}^{n,d}$. Each weight is then a normalized dot product of the corresponding vectors:
+\begin{align}
+    \mathbf{q}_i & = \mathbf{x}_i \mathbf{W_q}                                                      \\
+    \mathbf{k}_i & = \mathbf{x}_i \mathbf{W_k}                                                      \\
+    \alpha_{ij}  & = \operatorname{softmax}\biggl(\frac{\mathbf{q}_i\mathbf{k}_j}{\sqrt{d}}\biggr).
+\end{align}
+The operations can be efficiently paralellized using matrix multiplication:
+\begin{align}
+    \mathbf{Q}                                             = \mathbf{X}\mathbf{W_q},\quad\mathbf{K} & = \mathbf{X}\mathbf{W_k},\quad\mathbf{V} = \mathbf{X}\mathbf{W_v}                           \\
+    \operatorname{Attn}(\mathbf{Q}, \mathbf{K}, \mathbf{V})                                         & = \operatorname{softmax}\biggl(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d}}\biggr)\mathbf{V}.
+\end{align}
+
+
+\paragraph{Transformer Architecture} The \emph{transformer}\footnote{Although \citet{vaswani2017attention} uses ``Transformer'' with a capital ``T'', the orthography is gradually shifting towards the variant with a lower-case ``t''. See, e.g., \citet[p.~215]{jurafsky2024}.} \cite{vaswani2017attention} is a neural network architecture which gets rid of another limitation of \acp{rnn} -- the sequential processing. The parallelizability is enabled by replacing the hidden state (which previously served for sharing information among tokens in a single sequence) with the self-attention mechanism.
+
+
+The self-attention mechanism is a part of the so-called transformer block, which is repeated over. The block also contains an \ac{mlp}, residual connections, and normalizing layers.
 
 As shown in \autoref{fig:transformer}, the original Transformer architecture follows the encoder-decoder framework. The encoder consists of $N_e$ layers, each layer consisting of a self-attention layer and an \ac{mlp}.
 
