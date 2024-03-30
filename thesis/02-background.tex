@@ -52,19 +52,18 @@ For efficiency, the neurons are organized in layers, which enables formulating t
 \end{align}
 During training, we aim to minimize the \textit{loss function} describing the gap between the model predictions and the ground truth output. Since all the computations in \ac{mlp} are differentiable, we can use the chain rule to compute how each parameter in the network contributes to the loss. To minimize the loss, we use the \emph{backpropagation} algorithm \cite{kelley1960gradient,rumelhart1986learning}, updating the network parameters in the reverse order of layers. The magnitude of the updates is controlled by the learning rate parameter $\alpha$.
 
-\paragraph{Recurrent Neural Networks} Unlike \acp{mlp}, where the size of the input is fixed, \acp{rnn} allow us to process a sequence of inputs $\mathbf{X} = (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ of arbitrary length. In its vanilla form, the \ac{rnn} computes a sequence of hidden states $\mathbf{H} = (\mathbf{h}^{(0)}, \ldots, \mathbf{h}^{(n)})$ by repeatedly applying the matrices $\mathbf{W}_h$, $\mathbf{W}_x \in \mathbb{R}^{n\times k}$, and the bias $\mathbf{b} \in \mathbb{R}^{k}$ \cite[p.~367]{goodfellow2016deep}:
+\paragraph{Recurrent Neural Networks} Unlike \acp{mlp}, where the size of the input is fixed, \acp{rnn} allow us to process a sequence of inputs $\mathbf{X} = (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ of arbitrary length. Generally, an \ac{rnn} computes a sequence of hidden states $\mathbf{H} = (\mathbf{h}^{(0)}, \ldots, \mathbf{h}^{(n)})$ by repeatedly applying a function $f$ parametrized by the parameters of the network $\boldsymbol{\theta}$, the current input $\mathbf{x}_i$, and the previous hidden state $\mathbf{h}^{(i-1)}$ \cite[p.~367]{goodfellow2016deep}:
 \begin{align}
-    \mathbf{h}^{(i)} = f(\mathbf{W}_h \mathbf{h}^{(i-1)} + \mathbf{W}_x \mathbf{x}_i + \mathbf{b}).
+    \mathbf{h}^{(i)} = f(\boldsymbol{\theta}, \mathbf{h}^{(i-1)}, \mathbf{x}_i).
 \end{align}
+The hidden state $\mathbf{h}^{(0)} \in \mathbb{R}^k$ is initialized randomly. After the input is processed, $\mathbf{H}$ contains an encoded representation of the sequence. The exact implementation of the function $f$ may vary, but is generally implemented as a series of matrix multiplications and non-linear functions.
 
-The hidden state $\mathbf{h}^{(0)} \in \mathbb{R}^k$ is initialized randomly. After the input is processed, $\mathbf{H}$ contains an encoded representation of the sequence.
-
-\acp{rnn} have various shortcomings, including the limited dimensionality of the hidden state and need for sequential processing. However, they will serve as a stepping stone towards the transformer architecture described in \autoref{sec:lm-basics}.
+Although \acp{rnn} are suitable for text processing and turned out to be have various successes in \ac{nlp} applications \TODO{cite}, they also have various shortcomings, including the limited dimensionality of the hidden state and limited possibilities of parallelization. However, they will serve as a stepping stone towards the transformer architecture described in \autoref{sec:lm-basics}.
 
 
-\subsection{Language Modeling}
+\subsection{Text Representation}
 \label{sec:lm-basics}
-We will now look into the basics of text representation and processing.
+We will now look into the basics of text representation in neural networks.
 
 
 \paragraph{One-Hot Encoding}
@@ -118,7 +117,11 @@ The idea of representing tokens with embedding vectors is employed in neural \ac
 
 The subword tokenization algorithm that is frequently used in neural \acp{lm} is \emph{\ac{bpe}} \cite{sennrich2016neural}. The \ac{bpe} algorithm starts with the vocabulary of individual bytes, iteratively merging the most frequent tokens and adding them to the vocabulary $V$ until we reach the target vocabulary size. For example, the expression ``Subword tokenization'' could be split into four subwords \texttt{ ['Sub', 'word', '▁token', 'ization']}. The ``\texttt{▁}'' is a special character denoting a preceding space.
 
-\paragraph{Language Models} Having a way to represent text, we can move on to processing it. A useful formalism for text processing is a \emph{language model}: a mathematical model that estimates a probability of a sequence of tokens $S = (s_1, \ldots, s_n)$. For estimating the probability, we can factorize it into a product of conditional probabilities for each token using the chain rule:
+
+\subsection{Language Modeling}
+Having a way to represent text, we can move on to processing it. Here, we will explain the notion of \emph{language modeling}.
+
+\paragraph{Language Models} A useful formalism for text processing is a \emph{language model}: a mathematical model that estimates a probability of a sequence of tokens $S = (s_1, \ldots, s_n)$. For estimating the probability, we can factorize it into a product of conditional probabilities for each token using the chain rule:
 \begin{align}
     P(S) = \prod_{i=1}^n P(s_i|s_1, \hdots, s_{i-1}).
 \end{align}
@@ -128,9 +131,8 @@ Estimating the probability of longer sequences according to this formula is infe
 \end{align}
 The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for individual \emph{n}-grams by tabulating their occurences in a text corpus. However, because of the limit on the length of the context for each token, the \emph{n}-gram \acp{lm} fail to capture long-term dependencies in the text.
 
-\subsection{Transformer Architecture}
 
-Here, we will pave our way towards the transformer architecture.
+
 
 \paragraph{Neural Language Model} A neural \ac{lm} is a \acl{lm} that estimates the text probability using a neural network. Denoting the parameters of the network by $\theta$ and the sequence of embeddings corresponding to $S$ as $\mathbf{X} \in \mathbb{R}^{|V|\times n}$:
 \begin{align}
@@ -138,6 +140,9 @@ Here, we will pave our way towards the transformer architecture.
 \end{align}
 In contrast with \emph{n}-gram \acp{lm}, neural \acp{lm} can process the whole text, efficiently storing the probability estimates in its parameters, which makes it suitable for capturing long-term dependencies.
 
+\subsection{Transformer Architecture}
+
+Here, we will pave our way towards the transformer architecture, which is a core neural architecture used for \ac{nlp} nowadays.
 
 \paragraph{Encoder-Decoder Framework}
 We have described an \ac{rnn} (\autoref{sec:nns}) as a neural network that can process the sequence and \emph{encode} its representation in a sequence of hidden states. The idea behind the \emph{encoder-decoder framework} \cite{sutskever2014sequence,cho2014learning} is that we can \emph{decode} an output sequence with another network using the last hidden state of the encoder as its initial state. With \acp{rnn}, the workflow is the following:
@@ -294,6 +299,9 @@ Scaling the models in terms of the number of parameters and the size of the trai
 
 \section{Data-to-Text Generation}
 \label{sec:d2t}
+
+
+
 \subsection{Rule-based Approaches}
 \label{sec:rule-d2t}
 \subsection{Neural Approaches}
