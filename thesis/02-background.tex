@@ -37,14 +37,14 @@ For learning the underlying pattern between $\mathbf{x}$ and $y$, we will use ma
 
 The perceptron algorithm is guaranteed to converge if there exists a hyperplane which separates the data belonging to one class from another, otherwise it will not converge \cite{novikoff1962convergence}.
 
-\paragraph{Multi-layer Perceptron} To overcome the fact that the perceptron is limited to linear decision boundaries, we can use a \textbf{\acl{mlp} (\acs{mlp}}; \citealp[p.~164]{goodfellow2016deep}). This mathematical model---also known as a feed-forward neural network---is able to approximate any bounded continuous function \cite{hornik1989multilayer}.
+\paragraph{Multi-layer Perceptron} To overcome the fact that the perceptron is limited to linear decision boundaries, we can use a \textbf{\acl{mlp} (\acs{mlp}\glsunset{mlp}}; \citealp[p.~164]{goodfellow2016deep}). This mathematical model---also known as a feed-forward neural network---is able to approximate any bounded continuous function \cite{hornik1989multilayer}.
 
 As the name suggests, \ac{mlp} uses multiple perceptron-like units called \textit{neurons}. Analogically to the perceptron (\autoref{eq:perceptron1}), each neuron computes its output $o$ using the rule:
 \begin{align}
     o & = f(\mathbf{x}^\top \mathbf{w}  + b),
 \end{align}
 % \begin{itemize}
-where $f: \mathbb{R} \rightarrow \mathbb{R}$ is the \emph{activation function}. Instead of signum, \ac{mlp} uses differentiable non-linear functions, most commonly nowadays \acl{relu} (\acs{relu}; \citealp{nair2010rectified}) or its adapted version \acl{gelu} (\acs{gelu}; \citealp{hendrycks2016gaussian}).
+where $f: \mathbb{R} \rightarrow \mathbb{R}$ is the \emph{activation function}. Instead of signum, \ac{mlp} uses differentiable non-linear functions, most commonly nowadays \acl{relu} (\acs{relu}\glsunset{relu}; \citealp{nair2010rectified}) or its adapted version \acl{gelu} (\acs{gelu}\glsunset{gelu}; \citealp{hendrycks2016gaussian}).
 
 For efficiency, the neurons are organized in layers, which enables formulating the \ac{mlp} computations in terms of matrix multiplication. The $i$-th layer of \ac{mlp} is parametrized with a matrix $\mathbf{W}_i \in \mathbb{R}^{d\times n}$ and a vector of biases $\mathbf{b}_i \in \mathbb{R}^{n}$, processing the \textit{hidden state} $\mathbf{h}_{i-1} \in \mathbb{R}^{d}$ (where we set $\textbf{h}_0 = \textbf{x}$):
 \begin{align}
@@ -213,7 +213,7 @@ For each token in the sequence, we train the model to maximize the log probabili
 \begin{align}
     \operatorname{loss}_i = -\log P_\theta(y_i|y_1, \hdots, y_{i-1}).
 \end{align}
-Training the transformer model is \emph{self-supervised}: each token in the training sequence serves as the ground-truth ``\emph{label}'' that the model aims to predict. We train the model on \emph{batches} of data, using an optimization algorithm such as \acl{sgd} (\acs{sgd}; \citealp[p.~275]{goodfellow2016deep}) or Adam \cite{kingma2014adam}. The batch size $b$ and the learning rate $\alpha$ are the training hyperparameters.
+Training the transformer model is \emph{self-supervised}: each token in the training sequence serves as the ground-truth ``\emph{label}'' that the model aims to predict. We train the model on \emph{batches} of data, using an optimization algorithm such as \acl{sgd} (\acs{sgd}\glsunset{sgd}; \citealp[p.~275]{goodfellow2016deep}) or Adam \cite{kingma2014adam}. The batch size $b$ and the learning rate $\alpha$ are the training hyperparameters.
 
 As shown in \autoref{fig:transformer}, the original Transformer architecture follows the encoder-decoder framework. The encoder layers follow an aforementioned scheme, while the decoder layers have the following differences:
 \begin{itemize}
@@ -291,7 +291,7 @@ It turns out that training a transformer model from scratch is mostly not practi
 
 \subsection{Large Language Models}
 \label{sec:llms}
-Scaling the models in terms of the number of parameters and the size of the training data has turned out to lead to constant improvements \cite{kaplan2020scaling}. Larger models were shown to exhibit unprecedented capabilities in terms of language fluency, language understanding, and reasoning skills, giving name to a specific category of \emph{\acp{llm}}. \Acp{llm} are generally larger than 1B parameters and based on the transformer decoder architecture.
+Scaling the models in terms of the number of parameters and the size of the training data has turned out to lead to constant improvements \cite{kaplan2020scaling}. Larger models were shown to exhibit unprecedented capabilities in terms of language fluency, language understanding, and reasoning skills \cite{wei2022emergent,bubeck2023sparks}, giving name to a specific category of \emph{\aclp{llm} (\acsp{llm}\glsunset{llm};} \citealp{brown2020language,zhao2023survey}). \Acp{llm} are generally larger than 1B parameters and based on the transformer decoder architecture.
 
 \paragraph{Instruction Tuning} The key to strong cross-task of \acp{llm} is instruction tuning: finetuning on a large dataset of tasks formulated using natural language instructions, such as \textit{``Answer this question: \{question\}''} or \textit{``Translate this sentence: \{sentence\}''} \cite{sanh2021multitask,ouyang2022training}. The instruction-tuned models can be then easily \emph{prompted} to perform a task of choice, even if they were not directly trained for the task. If the model is given a limited set of input-output examples in the prompt, we talk about \emph{few-shot prompting}; if the model is given no examples, we talk about \emph{zero-shot prompting}.
 
