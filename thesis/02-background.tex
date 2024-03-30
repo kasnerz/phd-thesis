@@ -187,44 +187,44 @@ The operations can be efficiently paralellized using matrix multiplication:
 
 \paragraph{Transformer Architecture} The \emph{transformer}\footnote{Although \citet{vaswani2017attention} uses ``Transformer'' with a capital ``T'', the orthography is gradually shifting towards the variant with a lower-case ``t''. See, e.g., \citet[p.~215]{jurafsky2024}.} \cite{vaswani2017attention} is a neural network architecture which can process sequences efficiently in parallel. To achieve that, the transformer replaces the \ac{rnn} hidden state (which previously served for sharing information among tokens in a single sequence) with the self-attention mechanism applied over a series of layers.
 
-Specifically, each layer is composed of two sublayers: (a) the \emph{self-attention layer} and (b) the \emph{\ac{mlp} layer}. The original input $\mathbf{H}^{(i)}$ of the $i$-th sublayer resides in a so-called residual connection to which the output of the sublayer is added:
+Specifically, each layer is composed of two sublayers: (a) the \emph{self-attention layer} and (b) the \emph{\ac{mlp} layer}. The output of the $i$-th sublayer is added to its original input $\mathbf{H}^{(i)}$ in a so-called residual connection:
 \begin{align}
     \mathbf{H}^{(i+1)} = \mathbf{H}^{(i)} + \operatorname{sublayer}(\mathbf{H}^{(i)}).
 \end{align}
-The sublayers serve a different purpose: while the self-attention layer enables sharing information among tokens, the \ac{mlp} layer computes element-wise operations over each token. The input (or output, depending on the architecture variant) of each sublayer is normalized using \emph{layer normalization} \cite{ba2016layer}.
+The sublayers serve a different purpose: while the \ac{mlp} layer computes element-wise operations over each token, the self-attention layer enables sharing information among tokens. The sublayer input (or output, depending on the architecture variant) is normalized using \emph{layer normalization} \cite{ba2016layer}.
 
-To get the input representation $\mathbf{H}^{(0)}$, we sum the token embeddings $\mathbf{X} \in \mathbb{R}^{n,d}$ with \emph{positional embeddings}. Positional embeddings encode the information about the position of individual tokens which would otherwise get lost in parallelized processing. There are multiple variants of positional embeddings; see \citet{dufter2022position} for an overview.
+To get the input representation $\mathbf{H}^{(0)}$, we sum the token embeddings $\mathbf{X} \in \mathbb{R}^{n,d}$ with \emph{positional embeddings}. Positional embeddings encode the information about the absolute or relative position of individual tokens which would otherwise get lost in parallelized processing. See \citet{dufter2022position} for an overview of positional embedding variants.
 
 
 \begin{figure*}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/transformer.pdf}
-    \caption{An encoder-decoder variant of the Transformer architecture. Adapted from \href{https://github.com/bbycroft/llm-viz/blob/main/src/llm/intro-image.svg}{https://github.com/bbycroft/llm-viz}.}
+    \caption{An encoder-decoder variant of the Transformer architecture. The encoder has $N_{e}$ layers, each consisting of a self-attention and MLP sublayer. The decoder has $N_{d}$ layers with masked self-attention and encoder-decoder attention, again followed by an MLP sublayer. The input to each sublayer is normalized using layer norm. After the last decoder layer, the output probabilities are computed using a linear projection and softmax. The figure is adapted from \href{https://github.com/bbycroft/llm-viz/blob/main/src/llm/intro-image.svg}{https://github.com/bbycroft/llm-viz}.}
     \label{fig:transformer}
 \end{figure*}
 
 
-As shown in \autoref{fig:transformer}, the original Transformer architecture follows the encoder-decoder framework. The encoder consists of $N_e$ layers, the decoder of $N_d$ layers. The decoder layers have the following differences:
+For each token in the sequence, we train the model to maximize the log probability (i.e., minimize the negative log probability) of the ground truth token $y_i$ given the previous sequence of tokens in the sequence:
+\begin{align}
+    \operatorname{loss}_i = -\log P_\theta(y_i|y_1, \hdots, y_{i-1}).
+\end{align}
+Training the transformer model is \emph{self-supervised}: each token in the training sequence serves as the ground-truth ``\emph{label}'' that the model aims to predict. We train the model on \emph{batches} of data, using an optimization algorithm such as \acl{sgd} (\acs{sgd}; \citealp[p.~275]{goodfellow2016deep}) or Adam \cite{kingma2014adam}. The batch size $b$ and the learning rate $\alpha$ are the training hyperparameters.
+
+As shown in \autoref{fig:transformer}, the original Transformer architecture follows the encoder-decoder framework. The encoder layers follow an aforementioned scheme, while the decoder layers have the following differences:
 \begin{itemize}
-    \item Each layer contains another sublayer called the \emph{encoder-decoder attention}. In contrast to the self-attention mechanism, the \emph{keys} and \emph{values} come from the last layer of the encoder, enabling the decoder to attend to the encoded sequence (analogically to the original attention mechanism).
-    \item The self-attention is \emph{masked} so that each token can collect information only from the preceding tokens. This is to preserve the temporal casuality during left-to-right text generation, in which the following tokens are not yet decoded.
+    \item Each layer contains another sublayer called the \emph{encoder-decoder attention}. In contrast to the self-attention mechanism, the \emph{keys} and \emph{values} come from the last layer of the encoder, enabling the decoder to attend to the encoded sequence.
+    \item The self-attention is \emph{masked} so that each token can collect information only from the preceding tokens, which is necessary to enable text generation using left-to-right autoregressive decoding.
 \end{itemize}
 After the last decoder layer, the hidden states are projected into a matrix of size $\mathbb{R}^{|V|\times n}$ and normalized using softmax, producing a probability distribution over the vocabulary for each input token.
 
-In each step, we train the model maximize the log probability (i.e., minimize the negative log probability) of the ground truth token $y_i$ given the previous sequence of tokens:
-\begin{align}
-    \operatorname{loss}_i = -\log P_\theta(y_i|y_1, \hdots, y_{i-1})
-\end{align}
-
-\paragraph{Text Generation} The prevalent approach for text generation with transformer models is using \textit{autoregressive left-to-right decoding}. The decoding process starts by feeding a special \texttt{<s>} token into the decoder and then iteratively selecting the \emph{i}-th token based on the probability distribution for the \emph{i}-th position. The procedure is outlined in Algorithm \ref{alg:decoding}.
+\paragraph{Text Generation} As we mentioned, we can use \textit{left-to-right autoregressive decoding} for generating text. The decoding process starts by feeding a special \texttt{<s>} (beginning of sequence) token into the decoder and then iteratively selecting the \emph{i}-th token based on the probability distribution for the \emph{i}-th position, until the  \texttt{</s>} (end of sequence) token is decoded. The procedure is outlined in Algorithm \ref{alg:decoding}.
 \begin{algorithm}[ht]
     \begin{algorithmic}[1]
-        \State Initialize:
-        \Statex{  $Y= \texttt{<s>}, y_t = \texttt{<s>}$ \Comment{Output sequence, current token}}
-        \While{$y_t \neq \texttt{</s>}$}
-        \State Predict next token probability distribution: $p(y_t | Y)$
-        \State Sample next token: $t \sim p(y_t | Y)$
-        \State Update output sequence: $Y = Y \cup y_t'$
+        \State{Initialize: $Y= \texttt{<s>}, t = \texttt{<s>}$ \Comment{Output sequence, current token}}
+        \While{$t \neq \texttt{</s>}$}
+        \State Predict next token probability distribution: $p(t | Y)$
+        \State Sample next token: $t \sim p(t | Y)$ \label{alg:dec:sample}
+        \State Update output sequence: $Y = Y \cup t$
         \EndWhile
         \State Return $Y$
     \end{algorithmic}
@@ -232,23 +232,51 @@ In each step, we train the model maximize the log probability (i.e., minimize th
     \label{alg:decoding}
 \end{algorithm}
 
-\noindent The step of sampling the next token can be realized in multiple ways:
+\noindent The sampling step (line \ref{alg:dec:sample}) can be realized in multiple ways:
 \begin{itemize}
     \item \textbf{Greedy decoding}: Select the most probable token.
-    \item \textbf{Beam search}: Extend the $k$ most probable sequences from the previous step with the next tokens, keep the $k$ most probable sequences for the next step.
     \item \textbf{Top-$k$ sampling}: Sample the next token from the $k$ most probable tokens.
-    \item \textbf{Top-$p$ sampling} \cite{holtzman2019curious}: Sample the next token from the tokens with cumulative probability $p$.
+    \item \textbf{Top-$p$ (nucleus) sampling} \cite{holtzman2019curious}: Sample the next token from the tokens with cumulative probability $p$.
+    \item \textbf{Beam search}: Extend the $k$ most probable sequences from the previous step with the next tokens, keep the $k$ most probable sequences for the next step.
 \end{itemize}
-While the greedy decoding and beam search are used to decode more probable sentences, the sampling algorithms are used for decoding more creative outputs.
+While the greedy decoding and beam search are used to decode more probable sentences, the sampling algorithms are used for decoding more creative outputs. The algorithms can be also combined together.
 
 \subsection{Pretrained Language Models}
 \label{sec:plms}
-Having a generic way to learn patterns from data is only a part of the equation: we also need the data itself. The
-\paragraph{Encoder Models}
+It turns out that training a transformer model from scratch is mostly not practical: it requires non-trivial computational resources, large-scale data sources, and extensive training time. The workflow that gradually established after the introduction of the transformer architecture is thus following: the models are first \emph{pretrained} using a generic objective on large-scale data, and then \emph{finetuned} for downstream tasks on a task-specific dataset.
 
-\paragraph{Encoder-Decoder Models}
 
-\paragraph{Decoder Models}
+\paragraph{Model types} Depending on the downstream task, different variants of the transformer architecture may be used (see \autoref{tab:pretrained_models} for an overview):
+
+\begin{itemize}
+    \item \textbf{Encoder models} -- The models use only the \emph{encoder} part of the transformer architecture. These models are trained using the \emph{\ac{mlm} objective}: predicting tokens on the masked positions in the sequence. The output of these models is a contextualized representation of the input sequence, which can be used for tasks such as sequence classification, sequence tagging, or computing sequence similarity.
+    \item \textbf{Encoder-decoder models} -- The models use the original \emph{encoder-decoder} architecture. These models are usually trained using a variant of denoising objective: predicting the original sequence from its corrupted version. The models are mostly used for sequence-to-sequence tasks, such as machine translation, question answering or summarization.
+    \item \textbf{Decoder models} -- The models use only the \emph{decoder} part of the transformer architecture. These models are trained using the \emph{causal language modeling objective}: predicting the next token in a sequence. The models are suitable for unconditional text generation, but they can also used for the same tasks as the encoder-decoder models, using the input sequence as the ``pre-generated'' output prefix.
+\end{itemize}
+
+\begin{table}[ht]
+    \small
+    \centering
+    \begin{tabular}{lp{2.5cm}ll}
+        \toprule
+        \textbf{Type}            & \textbf{Pretraining Objective} & \textbf{Model}                                       & \textbf{\# Parameters}                       \\
+        \midrule
+        \multirow{2}{*}{Encoder} & \multirow{2}{*}{MLM}           & BERT \cite{devlinBERTPretrainingDeep2019}            & 110M (\texttt{base}), 340M (\texttt{large})  \\
+                                 &                                & RoBERTa \cite{liuRoBERTaRobustlyOptimized2019}       & 125M (\texttt{base}), 355M (\texttt{large})  \\
+        \midrule
+        \multirow{2}{*}{Enc-Dec} & \multirow{2}{*}{Denoising}     & BART \cite{lewisBARTDenoisingSequencetoSequence2019} & 406M (\texttt{large})                        \\
+                                 &                                & mBART \cite{liuMultilingualDenoisingPretraining2020} & 880M (\texttt{large})                        \\
+                                 &                                & T5 \cite{raffelExploringLimitsTransfer2019}          & 220M (\texttt{small}), 770M (\texttt{large}) \\
+        \midrule
+        Decoder                  & Causal LM                      & GPT-2 \cite{radfordLanguageModelsAre2019}            & 117M (\texttt{small}), 774M (\texttt{large}) \\
+        \bottomrule
+    \end{tabular}
+    \caption{Types of pretrained models}
+    \label{tab:pretrained_models}
+\end{table}
+
+\paragraph{Finetuning} By \emph{finetuning} a model we mean additional training of a pretrained model on a task-specific dataset. Finetuning is more cost- and data-efficient than training a model from scratch, but is typically used only for a single task, since repeated model update can lead to erasing previous knowledge, also known as ``catastrophic forgetting'' \cite{mccloskey1989catastrophic,kirkpatrick2017overcoming}.
+
 
 \subsection{Large Language Models}
 \label{sec:llms}
