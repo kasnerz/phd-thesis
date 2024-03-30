@@ -291,16 +291,20 @@ It turns out that training a transformer model from scratch is mostly not practi
 
 \subsection{Large Language Models}
 \label{sec:llms}
-Scaling the models in terms of the number of parameters and the size of the training data has turned out to lead to constant improvements \cite{kaplan2020scaling}. Larger models were shown to exhibit unprecedented capabilities in terms of language fluency, language understanding, and reasoning skills \cite{wei2022emergent,bubeck2023sparks}, giving name to a specific category of \emph{\aclp{llm} (\acsp{llm}\glsunset{llm};} \citealp{brown2020language,zhao2023survey}). \Acp{llm} are generally larger than 1B parameters and based on the transformer decoder architecture.
+Scaling the models in terms of the number of parameters and the size of the training data has turned out to further improve the performance of the models \cite{kaplan2020scaling,hoffmann2022training}. Larger models were shown to exhibit unprecedented capabilities in terms of language fluency, language understanding, and reasoning skills \cite{wei2022emergent,bubeck2023sparks}, giving name to a specific category of \emph{\aclp{llm} (\acsp{llm}\glsunset{llm};} \citealp{brown2020language,zhao2023survey}). \Acp{llm} are generally larger than 1B parameters and based on the transformer decoder architecture. For many \ac{nlp} tasks, \acp{llm} have comparable or better performance than previous task-specific approaches.
 
-\paragraph{Instruction Tuning} The key to strong cross-task of \acp{llm} is instruction tuning: finetuning on a large dataset of tasks formulated using natural language instructions, such as \textit{``Answer this question: \{question\}''} or \textit{``Translate this sentence: \{sentence\}''} \cite{sanh2021multitask,ouyang2022training}. The instruction-tuned models can be then easily \emph{prompted} to perform a task of choice, even if they were not directly trained for the task. If the model is given a limited set of input-output examples in the prompt, we talk about \emph{few-shot prompting}; if the model is given no examples, we talk about \emph{zero-shot prompting}.
+\paragraph{In-context Learning} The general knowledge of \acp{llm} can be leveraged for performing on novel tasks without the need for finetuning on task-specific data. Instead, the task can be formulated in a natural language prefix (commonly called a \emph{prompt}), and the model completes the task by causal language modeling. This ability is known as \emph{in-context learning} \cite{brown2020language,dong2022survey}. If the model is given a limited set of input-output examples in the prompt, we talk about \emph{few-shot prompting}; if the model is given no examples, we talk about \emph{zero-shot prompting}.
+
+\paragraph{Instruction Tuning} The key to strong cross-task of \acp{llm} is instruction tuning: finetuning on a large dataset of tasks formulated using natural language instructions, such as \textit{``Answer this question: \{question\}''} or \textit{``Translate this sentence: \{sentence\}''} \cite{sanh2021multitask,ouyang2022training}. The instruction-tuned models can be then easily \emph{prompted} to perform a task of choice, even if they were not directly trained for the task.
 
 
 
 \section{Data-to-Text Generation}
 \label{sec:d2t}
+In this section, we will provide background for the task of \ac{d2t} generation. After presenting the basic set of \ac{d2t} tasks (\autoref{sec:d2t-tasks}), we will discuss the rule-based (\autoref{sec:rule-d2t}) and neural (\autoref{sec:neural-d2t}) \ac{d2t} generation systems, and describe the datasets used throughout this work (\autoref{sec:datasets}). Lastly, we will present the evaluation metrics used in \ac{d2t} generation (\autoref{sec:evaluation}).
 
-
+\subsection{Tasks in Data-to-Text Generation}
+\label{sec:d2t-tasks}
 
 \subsection{Rule-based Approaches}
 \label{sec:rule-d2t}
