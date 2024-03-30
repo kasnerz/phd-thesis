@@ -232,7 +232,7 @@ After the last decoder layer, the hidden states are projected into a matrix of s
     \label{alg:decoding}
 \end{algorithm}
 
-\noindent The sampling step (line \ref{alg:dec:sample}) can be realized in multiple ways:
+\noindent The sampling step (line \ref{alg:dec:sample}) can be realized in various ways, including:
 \begin{itemize}
     \item \textbf{Greedy decoding}: Select the most probable token.
     \item \textbf{Top-$k$ sampling}: Sample the next token from the $k$ most probable tokens.
@@ -255,31 +255,43 @@ It turns out that training a transformer model from scratch is mostly not practi
 \end{itemize}
 
 \begin{table}[ht]
-    \small
+    \footnotesize
     \centering
-    \begin{tabular}{lp{2.5cm}ll}
+    \begin{tabular}{lp{4.5cm}ll}
         \toprule
-        \textbf{Type}            & \textbf{Pretraining Objective} & \textbf{Model}                                       & \textbf{\# Parameters}                       \\
+        \textbf{Type}            & \textbf{Pretraining Objective}            & \textbf{Model}                                       & \textbf{\# Parameters} \\
         \midrule
-        \multirow{2}{*}{Encoder} & \multirow{2}{*}{MLM}           & BERT \cite{devlinBERTPretrainingDeep2019}            & 110M (\texttt{base}), 340M (\texttt{large})  \\
-                                 &                                & RoBERTa \cite{liuRoBERTaRobustlyOptimized2019}       & 125M (\texttt{base}), 355M (\texttt{large})  \\
+        \multirow{2}{*}{Encoder} & \multirow{2}{*}{Masked Language Modeling} & BERT \cite{devlinBERTPretrainingDeep2019}            & 110M-340M              \\
+                                 &                                           & RoBERTa \cite{liuRoBERTaRobustlyOptimized2019}       & 125M-355M              \\
+                                 &                                           & \textsc{LaserTagger} \cite{malmi2019lasertagger}     &                        \\
         \midrule
-        \multirow{2}{*}{Enc-Dec} & \multirow{2}{*}{Denoising}     & BART \cite{lewisBARTDenoisingSequencetoSequence2019} & 406M (\texttt{large})                        \\
-                                 &                                & mBART \cite{liuMultilingualDenoisingPretraining2020} & 880M (\texttt{large})                        \\
-                                 &                                & T5 \cite{raffelExploringLimitsTransfer2019}          & 220M (\texttt{small}), 770M (\texttt{large}) \\
+        \multirow{2}{*}{Enc-Dec} & \multirow{2}{*}{Text Denoising}           & BART \cite{lewisBARTDenoisingSequencetoSequence2019} & 139M-406M              \\
+                                 &                                           & mBART \cite{liuMultilingualDenoisingPretraining2020} & 880M                   \\
+                                 &                                           & T5 \cite{raffelExploringLimitsTransfer2019}          & 220M-11B               \\
         \midrule
-        Decoder                  & Causal LM                      & GPT-2 \cite{radfordLanguageModelsAre2019}            & 117M (\texttt{small}), 774M (\texttt{large}) \\
+        Decoder                  & Causal Language Modeling                  & GPT-2 \cite{radfordLanguageModelsAre2019}            & 117M-1.5B              \\
+                                 &                                           & Llama2 \cite{touvronLlamaOpenFoundation2023}         & 7B-70B                 \\
+                                 &                                           & Mistral \cite{jiangMistral7B2023}                    & 7B-70B                 \\
+                                 &                                           & Zephyr \cite{tunstallZephyrDirectDistillation2023}   & 7B-70B                 \\
         \bottomrule
     \end{tabular}
-    \caption{Types of pretrained models}
+    \caption{Types of transformer architectures, along with specific models used in this work. The number of parameters may vary based on the model variant.}
     \label{tab:pretrained_models}
 \end{table}
 
 \paragraph{Finetuning} By \emph{finetuning} a model we mean additional training of a pretrained model on a task-specific dataset. Finetuning is more cost- and data-efficient than training a model from scratch, but is typically used only for a single task, since repeated model update can lead to erasing previous knowledge, also known as ``catastrophic forgetting'' \cite{mccloskey1989catastrophic,kirkpatrick2017overcoming}.
 
 
+\paragraph{Few-shot and Zero-shot Settings} If the training data available to the model is very limited (no more than \textasciitilde 100 examples), we talk about a \emph{few-shot} setting. By taking it to the extreme, we arrive to a \emph{zero-shot} setting, in which we use a model on the task for which it has not been trained for. Making the models work in these settings is crucial for using the models in low-resource scenarios.
+
 \subsection{Large Language Models}
 \label{sec:llms}
+Scaling the models in terms of the number of parameters and the size of the training data has turned out to lead to constant improvements \cite{kaplan2020scaling}. Larger models were shown to exhibit unprecedented capabilities in terms of language fluency, language understanding, and reasoning skills, giving name to a specific category of \emph{\acp{llm}}. \Acp{llm} are generally larger than 1B parameters and based on the transformer decoder architecture.
+
+\paragraph{Instruction Tuning} The key to strong cross-task of \acp{llm} is instruction tuning: finetuning on a large dataset of tasks formulated using natural language instructions, such as \textit{``Answer this question: \{question\}''} or \textit{``Translate this sentence: \{sentence\}''} \cite{sanh2021multitask,ouyang2022training}. The instruction-tuned models can be then easily \emph{prompted} to perform a task of choice, even if they were not directly trained for the task. If the model is given a limited set of input-output examples in the prompt, we talk about \emph{few-shot prompting}; if the model is given no examples, we talk about \emph{zero-shot prompting}.
+
+
+
 \section{Data-to-Text Generation}
 \label{sec:d2t}
 \subsection{Rule-based Approaches}
