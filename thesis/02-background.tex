@@ -295,7 +295,7 @@ Scaling the models in terms of the number of parameters and the size of the trai
 
 \paragraph{In-context Learning} The general knowledge of \acp{llm} can be leveraged for performing on novel tasks without the need for finetuning on task-specific data. Instead, the task can be formulated in a natural language prefix (commonly called a \emph{prompt}), and the model completes the task by causal language modeling. This ability is known as \emph{in-context learning} \cite{brown2020language,dong2022survey}. If the model is given a limited set of input-output examples in the prompt, we talk about \emph{few-shot prompting}; if the model is given no examples, we talk about \emph{zero-shot prompting}.
 
-\paragraph{Instruction Tuning} The key to strong cross-task of \acp{llm} is instruction tuning: finetuning on a large dataset of tasks formulated using natural language instructions, such as \textit{``Answer this question: \{question\}''} or \textit{``Translate this sentence: \{sentence\}''} \cite{sanh2021multitask,ouyang2022training}. The instruction-tuned models can be then easily \emph{prompted} to perform a task of choice, even if they were not directly trained for the task.
+\paragraph{Instruction Tuning} The key to strong cross-task of \acp{llm} is instruction tuning: finetuning on a large dataset of tasks formulated using natural language instructions, such as \textit{``Answer this question: \{question\}''} or \textit{``Translate this sentence: \{sentence\}''} \cite{sanh2021multitask,ouyang2022training}. The instruction-tuned models can be then easily \emph{prompted} to perform a task of choice, even if   they were not directly trained for the task.
 
 
 
@@ -303,8 +303,32 @@ Scaling the models in terms of the number of parameters and the size of the trai
 \label{sec:d2t}
 In this section, we will provide background for the task of \ac{d2t} generation. After presenting the basic set of \ac{d2t} tasks (\autoref{sec:d2t-tasks}), we will discuss the rule-based (\autoref{sec:rule-d2t}) and neural (\autoref{sec:neural-d2t}) \ac{d2t} generation systems, and describe the datasets used throughout this work (\autoref{sec:datasets}). Lastly, we will present the evaluation metrics used in \ac{d2t} generation (\autoref{sec:evaluation}).
 
-\subsection{Tasks}
+\subsection{Applications}
 \label{sec:d2t-tasks}
+
+\ac{d2t} generation is a catch-all term for tasks which require \emph{mapping structured data to natural language}. The structured data can take various forms: tabular databases, graphs and knowledge bases, time-series, or charts \cite{gattSurveyStateArt2018,sharmaInnovationsNeuralDatatotext2022}. The form of the input structured data usually defines a \emph{dataset} and the related \emph{modeling approaches}, independently on their practical applications (cf. \autoref{sec:datasets}).
+% which in turn creates a certain split between \ac{d2t} generation systems and their applications.
+
+The practical applications of \ac{d2t} generation include:
+
+\begin{itemize}
+    \item \textbf{Automated Journalism}: Augmenting (or in simple cases, even replacing) human journalists for writing data-based reports, including:
+          \begin{itemize}
+              \item \textbf{News reports}
+              \item \textbf{Sport reports}: Generating game summaries for sports where rich data capturing the game is available, such as basketball \cite{wiseman2017challenges,thomson2020sportsett}, baseball \cite{puduppullyDatatotextGenerationEntity2019} or soccer \cite{van2017pass}.
+              \item \textbf{Financial reports}: Supporting financial decisions by generating comments on stock prices \cite{murakami2017learning,aoki2018generating} or summaries of financial documents \cite{chapman2022towards}.
+              \item \textbf{Weather reports}
+          \end{itemize}
+    \item \textbf{Business Intelligence Reports}: Providing decision support in business reports along with data summaries and visualizations (mostly commercial companies such as \href{https://www.arria.com}{Arria}, \href{https://infosentience.com}{InfoSentience}, or \href{https://www.vphrase.com}{vPhrase}; see \citealp{daleNavigatingTextGeneration2023} for a recent overview),
+    \item \textbf{Chart Captioning}: Generation captions\footnote{In contrast to image captioning \cite{stefanini2022show}, here the systems can rely on the underlying data in textual form (although the approaches can be hybrid, see e.g. \citealp{kantharaj2022chart}).} for charts or graphs, e.g., for assistive technologies (such as screen readers), document indexing, or simplifying decision support \cite{demirGeneratingTextualSummaries2008,demirSummarizingInformationGraphics2012,obeidCharttoTextGeneratingNatural2020,kantharaj2022chart}.
+    \item \textbf{Healthcare Reports}: Providing information about patients to clinicians,.
+    \item \textbf{Product Descriptions}: Automating generating product descriptions in e-commerce, either domain-specific approaches for products such as laptops and TVs \cite{wen2015toward,wen2016multi}, or general-domain approaches for big e-commerce platforms \cite{shaoControllableDiverseText2021,kotoCanPretrainedLanguage2022}.
+\end{itemize}
+
+\subsection{D2T Generation Pipeline}
+Until recently, these tasks could not be realized in end-to-end fashion. Typically, the systems decomposed the tasks into a pipeline of approximately six subtasks \cite{reiterBuildingAppliedNatural1997}:
+
+
 
 \subsection{Rule-based Approaches}
 \label{sec:rule-d2t}
