@@ -141,7 +141,7 @@ The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for indivi
 In contrast with \emph{n}-gram \acp{lm}, neural \acp{lm} can process the whole text, efficiently storing the probability estimates in its parameters, which makes it suitable for capturing long-term dependencies.
 
 \subsection{Transformer Architecture}
-
+\label{sec:transformer}
 Here, we will pave our way towards the transformer architecture, which is a core neural architecture used for \ac{nlp} nowadays.
 
 \paragraph{Encoder-Decoder Framework}
@@ -301,7 +301,7 @@ Scaling the models in terms of the number of parameters and the size of the trai
 
 \section{Data-to-Text Generation}
 \label{sec:d2t}
-In this section, we will provide background for the task of \ac{d2t} generation. After presenting the \ac{d2t} applications (\autoref{sec:d2t-tasks}) and the subtasks in the \ac{d2t} generation pipeline, we will discuss the rule-based (\autoref{sec:rule-d2t}), statistical (\autoref{stat-d2t}), and neural (\autoref{sec:neural-d2t}) \ac{d2t} generation systems. Finally, we will describe the datasets used throughout this work (\autoref{sec:datasets}) and present the evaluation metrics used in \ac{d2t} generation (\autoref{sec:evaluation}).
+In this section, we will provide background for the task of \ac{d2t} generation. After presenting the \ac{d2t} applications (\autoref{sec:d2t-tasks}) and the subtasks in the \ac{d2t} generation pipeline, we will discuss the rule-based (\autoref{sec:rule-d2t}), statistical (\autoref{sec:stat-d2t}), and neural (\autoref{sec:neural-d2t}) \ac{d2t} generation systems. Finally, we will describe the datasets (\autoref{sec:datasets}) and evaluation metrics (\autoref{sec:evaluation}) for \ac{d2t} generation used throughout this work.
 
 \subsection{Applications}
 \label{sec:d2t-tasks}
@@ -378,9 +378,9 @@ For the earlier stages of the \ac{d2t} generation pipeline, various unsupervised
 \label{sec:neural-d2t}
 Naturally extending the work on statistical \ac{d2t} generation, neural networks (see \autoref{sec:nns}) began replacing other data-driven approaches around the year 2015. With their renewed capabilities, mostly due to advances in hardware \cite{hooker2021hardware} and capabilities of learning from large data \cite{lecun2015deep}, they enabled not only building more powerful modules for the \ac{d2t} generation pipeline, but also replacing the pipeline entirely with end-to-end models.
 
-The field of neural \ac{d2t} generation is broad, as it has been gaining a lot of interest in the recent years, with works covering many deep learning-related concepts \cite{sharmaInnovationsNeuralDatatotext2022, lin2023survey}. Here, we will mainly focus on concepts and model architectures related to this thesis. We will further describe works related to individual datasets in \autoref{sec:datasets}.
+The field of neural \ac{d2t} generation is broad, as it has been gaining a lot of interest in the recent years, with works covering many deep learning-related concepts \cite{sharmaInnovationsNeuralDatatotext2022, lin2023survey}. Here, we will mainly focus on concepts and model architectures related to this thesis, and we will further describe works related to individual datasets in \autoref{sec:datasets}.
 
-\paragraph{End-to-End D2T Generation}
+\paragraph{Sequence-to-Sequence D2T Generation} A general idea in end-to-end \ac{d2t} generation is to use a neural \ac{seq2seq} model for transforming the structured data into text. To get an input sequence suitable for the neural model, the structured data needs to be linearized as a sequence of tokens, potentially with special tokens used as a separator for preserving the original structure of data. An example is presented in \TODO{figure}. The typical architecture for this task is the encoder-decoder framework described in \autoref{sec:transformer}.
 
 \paragraph{RNN-based Approaches}
 
