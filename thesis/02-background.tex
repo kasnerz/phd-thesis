@@ -374,10 +374,20 @@ This idea is not mutually exclusive with rule-based and grammar-based approaches
 
 For the earlier stages of the \ac{d2t} generation pipeline, various unsupervised machine learning methods were used. \citet{duboue2003statistical} proposed to use a clustering-based method for content selection, estimating the relative important of each cluster for the final text. \citet{barzilay2004catching} then modelled the content structure using Hidden Markov Models \cite{baum1966statistical}, learning the structure from unannotated documents. Learning latent variables can be used for learning alignment between the text and the data, which in turn helps with text segmentation and structuring \cite{liang2009learning}.
 
-
-
 \subsection{Neural Approaches}
 \label{sec:neural-d2t}
+Naturally extending the work on statistical \ac{d2t} generation, neural networks (see \autoref{sec:nns}) began replacing other data-driven approaches around the year 2015. With their renewed capabilities, mostly due to advances in hardware \cite{hooker2021hardware} and capabilities of learning from large data \cite{lecun2015deep}, they enabled not only building more powerful modules for the \ac{d2t} generation pipeline, but also replacing the pipeline entirely with end-to-end models.
+
+The field of neural \ac{d2t} generation is broad, as it has been gaining a lot of interest in the recent years, with works covering many deep learning-related concepts \cite{sharmaInnovationsNeuralDatatotext2022, lin2023survey}. Here, we will mainly focus on concepts and model architectures related to this thesis. We will further describe works related to individual datasets in \autoref{sec:datasets}.
+
+\paragraph{End-to-End D2T Generation}
+
+\paragraph{RNN-based Approaches}
+
+\paragraph{Transformer-based Approaches}
+
+\paragraph{D2T Generation with Pretrained Models}
+
 \subsection{Datasets}
 \label{sec:datasets}
 \subsection{Evaluation Metrics}
