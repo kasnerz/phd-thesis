@@ -380,7 +380,11 @@ Naturally extending the work on statistical \ac{d2t} generation, neural networks
 
 The field of neural \ac{d2t} generation is broad, as it has been gaining a lot of interest in the recent years, with works covering many deep learning-related concepts \cite{sharmaInnovationsNeuralDatatotext2022, lin2023survey}. Here, we will mainly focus on concepts and model architectures related to this thesis, and we will further describe works related to individual datasets in \autoref{sec:datasets}.
 
-\paragraph{Sequence-to-Sequence D2T Generation} A general idea in end-to-end \ac{d2t} generation is to use a neural \ac{seq2seq} model for transforming the structured data into text. To get an input sequence suitable for the neural model, the structured data needs to be linearized as a sequence of tokens, potentially with special tokens used as a separator for preserving the original structure of data. An example is presented in \TODO{figure}. The typical architecture for this task is the encoder-decoder framework described in \autoref{sec:transformer}.
+
+\paragraph{Data Linearization}
+\paragraph{Delexicalization}
+
+\paragraph{Sequence-to-Sequence Generation} A general idea in end-to-end \ac{d2t} generation is to use a neural \ac{seq2seq} model for transforming the structured data into text. To get an input sequence suitable for the neural model, the structured data needs to be linearized as a sequence of tokens, potentially with special tokens used as a separator for preserving the original structure of data. An example is presented in \TODO{figure}. The typical architecture for this task is the encoder-decoder framework described in \autoref{sec:transformer}.
 
 \paragraph{RNN-based Approaches}
 
