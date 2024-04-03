@@ -301,71 +301,78 @@ Scaling the models in terms of the number of parameters and the size of the trai
 
 \section{Data-to-Text Generation}
 \label{sec:d2t}
-In this section, we will provide background for the task of \ac{d2t} generation. After presenting the \ac{d2t} applications (\autoref{sec:d2t-tasks}) and the subtasks in the \ac{d2t} generation pipeline, we will discuss the rule-based (\autoref{sec:rule-d2t}), statistical (\autoref{stat-d2t}), and neural (\autoref{sec:neural-d2t}) \ac{d2t} generation systems, and describe the datasets used throughout this work (\autoref{sec:datasets}). Lastly, we will present the evaluation metrics used in \ac{d2t} generation (\autoref{sec:evaluation}).
+In this section, we will provide background for the task of \ac{d2t} generation. After presenting the \ac{d2t} applications (\autoref{sec:d2t-tasks}) and the subtasks in the \ac{d2t} generation pipeline, we will discuss the rule-based (\autoref{sec:rule-d2t}), statistical (\autoref{stat-d2t}), and neural (\autoref{sec:neural-d2t}) \ac{d2t} generation systems. Finally, we will describe the datasets used throughout this work (\autoref{sec:datasets}) and present the evaluation metrics used in \ac{d2t} generation (\autoref{sec:evaluation}).
 
 \subsection{Applications}
 \label{sec:d2t-tasks}
 
-\ac{d2t} generation is a catch-all term for tasks which require \emph{mapping structured data to natural language}. The structured data can take various forms: tabular databases, graphs and knowledge bases, time-series, or charts \cite{gattSurveyStateArt2018,sharmaInnovationsNeuralDatatotext2022}. The form of the input structured data is usually the defining feature of the \emph{dataset} and the related \emph{modeling approaches} (cf. \autoref{sec:datasets}). Practical applications, on the other hand, may combine multiple data formats and approaches.
+\ac{d2t} generation is a catch-all term for tasks which require \emph{mapping structured data to natural language}. The structured data can take various forms: tabular databases, graphs and knowledge bases, time-series, or charts \cite{gattSurveyStateArt2018,sharmaInnovationsNeuralDatatotext2022}. The \emph{form} of the input structured data is usually the defining feature of the \emph{dataset} (together with the related modeling approaches). Practical applications, on the other hand, may combine multiple data formats and approaches.
 
 Here is a brief overview of applications of \ac{d2t} generation:
 
 \begin{itemize}
     \item \textbf{Automated Journalism}: Augmenting (or in simple cases, even replacing) human journalists for writing data-based reports, including:
           \begin{itemize}
-              \item \textbf{News reports}: Automating news writing in various domains, such as election results \cite{leppanen2017data}, incidents \cite{vanderleeCACAPODatasetMultilingual2020}, earthquakes \cite{oremus2014first}, or wildlife tracking \cite{siddharthan2012blogging,ponnamperuma2013tag2blog}.
-              \item \textbf{Sport reports}: Generating game summaries for sports with rich data capturing the course of the game, such as basketball \cite{wiseman2017challenges,thomson2020sportsett}, baseball \cite{puduppullyDatatotextGenerationEntity2019} or soccer \cite{van2017pass}.
+              \item \textbf{News reports}: Automating news writing, e.g., for election results \cite{leppanen2017data}, incidents \cite{vanderleeCACAPODatasetMultilingual2020}, earthquakes \cite{oremus2014first}, or wildlife tracking \cite{siddharthan2012blogging,ponnamperuma2013tag2blog}.
+              \item \textbf{Sport reports}: Generating game summaries for sports such as basketball \cite{wiseman2017challenges,thomson2020sportsett}, baseball \cite{puduppullyDatatotextGenerationEntity2019}, or soccer \cite{van2017pass}.
               \item \textbf{Financial reports}: Supporting financial decisions by generating comments on stock prices \cite{murakami2017learning,aoki2018generating} or summaries of financial documents \cite{chapman2022towards}.
               \item \textbf{Weather reports}: Generating weather forecasts and weather-related reports \cite{goldberg1994using,belz2005corpus,belz2008automatic,angeli-etal-2010-simple,balakrishnan2019constrained}.
           \end{itemize}
     \item \textbf{Business Intelligence Reports}: Providing decision support in business reports alongside data summaries and visualizations (mostly commercial companies such as \href{https://www.arria.com}{Arria}, \href{https://infosentience.com}{InfoSentience}, or \href{https://www.vphrase.com}{vPhrase}; see \citealp{daleNavigatingTextGeneration2023} for a recent overview),
-    \item \textbf{Chart Captioning}: Generating captions\footnote{In contrast to image captioning \cite{stefanini2022show}, here the systems can rely on the underlying data in textual form (although the approaches can be hybrid, see e.g. \citealp{kantharaj2022chart}).} for charts or graphs, e.g., for assistive technologies (such as screen readers), document indexing, or simplifying decision support \cite{demirGeneratingTextualSummaries2008,demirSummarizingInformationGraphics2012,obeidCharttoTextGeneratingNatural2020,kantharaj2022chart}.
-    \item \textbf{Healthcare Summaries}: Providing  clinical data summaries about patients to clinicians \cite{portet2009automatic,scott2013data}, or vice versa, providing information to patients for behavioral change \cite{reiter2003lessons} or nutritional counseling \cite{balloccu-reiter-2022-comparing}.
-    \item \textbf{Product Descriptions}: Automating generating product descriptions in e-commerce, either domain-specific approaches for products such as laptops and TVs \cite{wen2015toward,wen2016multi}, or general-domain approaches for big e-commerce platforms \cite{shaoControllableDiverseText2021,kotoCanPretrainedLanguage2022}.
+    \item \textbf{Chart Captioning}: Generating captions\footnote{In contrast to image captioning \cite{stefanini2022show}, here the systems can rely on the underlying data in textual form (although the approaches can be hybrid, see e.g. \citealp{kantharaj2022chart}).} for charts or graphs, e.g., for assistive technologies, document indexing, or simplifying decision support \cite{demirGeneratingTextualSummaries2008,demirSummarizingInformationGraphics2012,obeidCharttoTextGeneratingNatural2020,kantharaj2022chart}.
+    \item \textbf{Healthcare Summaries}: Providing  clinical data summaries about patients to clinicians \cite{portet2009automatic,scott2013data}, or vice versa, providing medical information to patients, e.g., for behavioral change \cite{reiter2003lessons} or nutritional counseling \cite{balloccu-reiter-2022-comparing}.
+    \item \textbf{Product Descriptions}: Automating generating product descriptions in specific domains such as for laptops and TVs \cite{wen2015toward,wen2016multi}, or general-domain approaches for big e-commerce platforms \cite{shaoControllableDiverseText2021,kotoCanPretrainedLanguage2022}.
 \end{itemize}
 
 \subsection{D2T Generation Pipeline}
 \label{sec:d2t-pipeline}
-Until recently, these tasks could not be realized in end-to-end fashion. Typically, the systems decomposed the tasks into a pipeline of approximately 4-6 subtasks.\footnote{Some tasks may be further subdivided, which can generate up to 10 subtasks as in \citet{milleModD2TMultilayerDataset2023}.}, starting with structured data and finishing with the text in natural language \cite{reiterBuildingAppliedNatural1997,reiterArchitectureDatatoTextSystems2007,gattSurveyStateArt2018} Here we selected five representative subtasks illustrated in \TODO{figure}:
+Until recently, \ac{d2t} generation could not be realized in end-to-end fashion. Typically, the systems decomposed the task into of approximately 4-6 subtasks\footnote{Some tasks may be further subdivided, which can generate up to 10 subtasks as in \citet{milleModD2TMultilayerDataset2023}.} \cite{reiterBuildingAppliedNatural1997,reiterArchitectureDatatoTextSystems2007,gattSurveyStateArt2018}. Here we selected five representative subtasks illustrated in \TODO{figure}:
 
 \begin{enumerate}
     \item \textbf{Content Determination}: Deciding which facts from the structured data
           to include in the text.
     \item \textbf{Document Planning}: Determining the order of the
-          facts, dividing them into paragraphs.
+          facts, dividing the facts into paragraphs.
     \item \textbf{Sentence Planning}: Aggregating the facts into
           sentences.
     \item \textbf{Lexicalisation}: Transforming the facts to text segments.
     \item \textbf{Surface Realisation}: Combining the text segments into a well-formed text in natural language.
 \end{enumerate}
 
-Decomposing \ac{d2t} generation into subproblems---where each module tackles a simple task---helps to modularize the system. Since each module has a specific and well-defined function, it makes the system as a whole more explainable. Modularization also enables realizing each part of the system using a different approach, from rule-based and grammar-based approaches up to neural models.
+Decomposing \ac{d2t} generation into subproblems---where each module tackles a simple task---helps to modularize the system. Since each module has a specific and well-defined function, it makes the system as a whole more explainable. Modularization also enables realizing each part of the system using a different approach (see \Cref{sec:rule-d2t,sec:stat-d2t,sec:neural-d2t}).
 
-The subtasks are typically executed in a \emph{pipeline}, meaning the output from one module serves as the input to another. The pipeline-based approach can lead to error accumulation, propagating errors to downstream modules. Despite these issues, the pipeline approach remains a cornerstone approach for grammar-based surface realization systems such as FORGe \cite{milleFORGeWebNLG20172017,mille2019teaching} and it is employed in software frameworks such as SimpleNLG \cite{gatt2009simplenlg}. It also brings benefits to neural-based systems \cite{ferreiraNeuralDatatotextGeneration2019}, as we will explore in \autoref{sec:pipeline}.
+The subtasks are typically executed in a \emph{pipeline}, meaning the input is sequentially processed by individual modules. The pipeline-based approach can lead to error accumulation, propagating errors to downstream modules. Despite these issues, the pipeline approach remain widely used in practice
+%  a cornerstone approach for grammar-based surface realization systems such as  and it is employed in software frameworks such as SimpleNLG \cite{gatt2009simplenlg}. 
+and also brings benefits to neural-based systems \cite{ferreiraNeuralDatatotextGeneration2019}, as we will explore in \autoref{sec:pipeline}.
 
 
 \subsection{Rule-based Approaches}
 \label{sec:rule-d2t}
 
-By \emph{rule-based approaches} for \ac{d2t} generation, we mean approaches which require manual construction of rules or grammars for tackling the task. It is useful to view these approaches through the lens of the \ac{d2t} generation pipeline (\autoref{sec:d2t-pipeline}) as a way to built module for individual subtasks. Rule-based approaches, especially in combination with other approaches, are still in use in various forms until today \cite{gattSurveyStateArt2018,daleNaturalLanguageGeneration2020,daleNavigatingTextGeneration2023}.
+By \emph{rule-based approaches} for \ac{d2t} generation, we mean approaches which require manual construction of rules or grammars for tackling the task, as opposed to data-driven approaches. It is useful to view these approaches through the lens of the \ac{d2t} generation pipeline (\autoref{sec:d2t-pipeline}) as a way to built module for individual subtasks. Rule-based approaches, especially in combination with other approaches, are still in use in various forms today \cite{gattSurveyStateArt2018,daleNaturalLanguageGeneration2020,daleNavigatingTextGeneration2023}.
 
-\paragraph{Lexicalization and Surface Realization} Rule-based systems are often characterised by \emph{templates}: pre-written text snippets which are enriched with values from the data. Templates can range from simple fill-in-the-blank approaches (such as \textit{``The temperature will be \{temp\} degrees''}) to more sophisticated templates using a templating language \cite{reiter2016nlg,gatt2009simplenlg}.  Hand-written rules are used not only for selecting the templates, but also combining them and filling the placeholders with values (which can be non-trivial in languages with rich morphology). The resulting rule-based system is usually tied to the specific task and domain and cannot handle more complex cases, but can be way to generate sufficient outputs with reasonable development time and costs \cite{vanderleeAutomatedLearningTemplates2018}.
 
-For handling more complex cases of lexicalization and surface realization, earlier works commonly employed grammar-based approaches.
+\paragraph{Content Selection and Text Planning} The rules for the earlier stages of the \ac{d2t} generation pipeline are typically domain-specific, relying on the judment of domain experts. In the content selection step, heuristics can be used for extracting important information from the data, e.g., \textit{``if a pattern is detected in the signal, include it in the report''} \cite{portet2009automatic}. Various factors can influence the decision, including target length of the goal summary, the problem at hand, or the target audience \cite{gkatzia2016content}. In the text planing step, discourse strategies are designed for satisfying the desired communicative goals such as \emph{define}, \emph{compare}, or \emph{describe}, which emerge from domain-specific schemata \cite{mckeown1985discourse}. The resulting rules are typically in the form \textit{``if a player scores two consecutive goals, describe these in the same sentence''}  \cite{gattSurveyStateArt2018}.
+
+
+\paragraph{Template-based Lexicalization} Simpler rule-based approaches for lexicalization and surface realization are characterised by \emph{templates}: pre-written text snippets which are ``glued'' together and filled with values from the data. Templates can range from simple fill-in-the-blank approaches (such as \textit{``The temperature will be \{temp\} degrees''}) to more sophisticated templates using a templating language \cite{reiter2016nlg,gatt2009simplenlg}.  Hand-written rules are used not only for selecting the templates, but also combining them and filling the placeholders with values (where the latter can be non-trivial in languages with rich morphology). The resulting rule-based system is usually tied to the specific task and domain and cannot handle more complex cases, but can be way to generate sufficient outputs with reasonable development time and costs \cite{vanderleeAutomatedLearningTemplates2018}.
+
+
+\paragraph{Grammar-based Lexicalization} For handling more complex cases, we can use grammar-based approaches. Even though a \emph{grammar} is technically also a set of rules, it describes the production rules for the whole sentence without relying on templates.
 % \footnote{Even though a \emph{grammar} is technically also a set of rules, here we mention it separately since it is a generic approach which can describe the production rules for the whole sentence without relying on templates.} 
-Grammar-based approaches are rooted in linguistic theories such as systemic grammars \cite{halliday1985systemic,matthiessen1991lexico} or meaning-text theory \cite{mel1988dependency,goldberg1994using,milleModD2TMultilayerDataset2023}. The grammar-based systems can be built using off-the-shelf realisers such as FUF/SURGE \cite{elhadad1997surge} or KPML \cite{bateman1997enabling}. These approaches are more general-purpose than rule-based approaches, but require considerable amount of manual effort into building the systems, tend to require very detailed
+Grammar-based approaches are rooted in linguistic theories such as systemic grammars \cite{halliday1985systemic,matthiessen1991lexico} or meaning-text theory \cite{mel1988dependency,goldberg1994using,milleModD2TMultilayerDataset2023}, and typically rely on off-the-shelf realizers such as FUF/SURGE \cite{elhadad1997surge} or KPML \cite{bateman1997enabling}. Grammar-based approaches are more general-purpose than rule-based approaches, but require considerable amount of manual effort into building the systems, tend to require very detailed
 input, and often need additional rules for choosing among related options \cite{gattSurveyStateArt2018}.
-
-
-\paragraph{Content Selection and Text Planning} Outside of lexicalization and surface realization, rule-based approaches can be also used in earlier stages of the \ac{d2t} generation pipeline. In the content selection step, domain-specific heuristics can be used for extracting important information from the data, e.g., \textit{``if a spike is over a certain threshold, include it in the report''} \cite{portet2009automatic,gkatzia2016content}. In the text planing step, various schemata can be used for determining an appropriate discourse structure, e.g., \textit{``if a player
-    scores two consecutive goals, describe these in the same sentence''} \cite{mckeown1985discourse,gattSurveyStateArt2018} .
-
+% FORGe \cite{milleFORGeWebNLG20172017,mille2019teaching}
 
 
 \subsection{Statistical Approaches}
-\label{stat-d2t}
+\label{sec:stat-d2t}
 
-% The term \emph{data-driven} encompasses approaches built on statistics or classical machine learning methods for building the models on large text corpora\footnote{Again, please note that data-driven approaches are not mutually exclusive with }.
+Statistical \ac{d2t} generation overlaps with classical machine learning methods, and these approaches are therefore better described as \emph{pre-neural data-driven} approaches. The idea of statistical approaches is to \emph{estimate the parameters} for a particular task using statistics of a text corpus.
+
+This idea is not mutually exclusive with rule-based and grammar-based approaches. In fact, the first statistical approaches used statistics for re-ranking the lexical realization outputs generated from a grammar-based system \cite{bangalore2000corpus,langkilde2000forest,ratnaparkhi2000trainable}, or even integrated the statistical information directly at the level of generation decisions \cite{belz2008automatic}. Fully data-driven approaches then still relied on grammatical rules, only the rules were derived from treebanks: for example the approach of \citet{white2007towards} relied on a Combinatory Categorial Grammar \cite{steedman2001syntactic} derived from the Penn Treebank \cite{hockenmaier2007ccgbank}. Oftentimes, the particular approach was hybrid, combining a set of hand-written rules or grammars together with statistical models \cite{konstas2012concept,gardent2017statistical}.
+
+For the earlier stages of the \ac{d2t} generation pipeline, various unsupervised machine learning methods were used. \citet{duboue2003statistical} proposed to use a clustering-based method for content selection, estimating the relative important of each cluster for the final text. \citet{barzilay2004catching} then modelled the content structure using Hidden Markov Models \cite{baum1966statistical}, learning the structure from unannotated documents. Learning latent variables can be used for learning alignment between the text and the data, which in turn helps with text segmentation and structuring \cite{liang2009learning}.
 
 
 
