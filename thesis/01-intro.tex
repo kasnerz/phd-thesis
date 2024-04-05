@@ -9,7 +9,7 @@ We can scrutinize the data with appropriate tools, provided we have sufficient d
 The question has been on the table since the dawn of computing. The first trials of producing natural language with a computer date back to the audacious attempts of \emph{translating} between English and Russian in the 1950s \cite{sheridan1955research}, which stirred a lot of excitement. \emph{Generating} English text was percieved as a simpler task, especially after the work of \citet{chomsky1957syntactic} provided the framework for generating sentences using grammar rules. Although in the 1960s, people slowly began to ponder on its difficulties---\citet{yngve1961random} notes there is \emph{``surprisingly wide linguistic diversity''} when constructing grammar rules for the first ten sentences of a children's book---system descriptions started to appear in journals and conference proceedings of computational linguistics \cite{woolley-1969-automatic,meehan-1975-using,mcdonald-1975-framework,wang-1980-computational}. The report on the state of the art in text generation in 1982 states:
 
 \begin{pquotation}{\citealp{mann-1982-text}}
-  [In five years], the resulting system can be expected to create acceptable, effective texts, limited by quality considerations to be about one page in length.
+    [In five years], the resulting system can be expected to create acceptable, effective texts, limited by quality considerations to be about one page in length.
 \end{pquotation}
 % The seminal work of \citet{winograd1971procedures} on SHRDLU, a system able to manipulate a block world according to user instructions, only glosses over presenting the state of the world to the user:
 % \begin{pquotation}{\citealp[p.384]{winograd1971procedures}}
@@ -50,11 +50,13 @@ The side goal of the thesis is then to \textit{understand}: understand the data 
 To make the goals more tangible, we split them into the following research questions, which we address further on in the thesis:
 
 \begin{description}
-  \item[RQ1\label{rq:1}] \textbf{In which scenarios are \acp{lm} useful for \ac{d2t} generation?} First, it is crucial to identify the strong sides of \acp{lm} and get an intuition of where the models can make the most impact. How far can we get with \ac{lm}-only baselines? And are there outcomes that we can get with \acp{lm} that are better than previous approaches?
-  \item[RQ2\label{rq:2}] \textbf{How to efficiently process the structured data with \acp{lm}?} With structured data, we need to deal with the fact that \acp{lm} were pre-trained on modeling plain text only. To efficiently leverage the knowledge in \acp{lm}---especially in low-resource settings---we need to find the way to transform the data into a suitable input format while keeping its structure (along with other information in the data) intact.
-  \item[RQ3\label{rq:3}] \textbf{How to make \ac{lm}-based systems more controllable?} A neural component introduced in the \ac{d2t} generation system will inevitably make the system less controllable. The question is if we can minimize these issues by building systems out of smaller and simpler components, training the models for more predictable tasks, or producing intermediate outputs that can be manually examined.
-  \item[RQ4\label{rq:4}] \textbf{How to evaluate the outputs of \ac{d2t} generation systems?} Evaluating generated text is a difficult problem, which gets even harder as the quality of the texts starts to approach the human level. Since human evaluation is costly and time-consuming, we study how to build automatic metrics that can be used for system development and evaluation. Particularly, we focus on the most pressing issue in \ac{d2t} generation: semantic accuracy of the generated texts with respect to the input data.
-  \item[RQ5\label{rq:5}] \textbf{How do neural \ac{d2t} generation systems behave?} Understanding the abilities and limitations of the systems is crucial for further progress in the field. How does the format of the data influence the outputs of the models? Are \acp{lm} robust enough to replace rule-based approaches? And what are the most important problems to tackle in neural-based \ac{d2t} systems?
+    \item[RQ1\label{rq:1}] \textbf{In which scenarios are \acp{lm} useful for \ac{d2t} generation?} First, it is crucial to identify the strong sides of \acp{lm} and get an intuition of where the models can make the most impact. How far can we get with \ac{lm}-only baselines? And are there outcomes that we can get with \acp{lm} that are better than previous approaches?
+    \item[RQ2\label{rq:2}] \textbf{How to efficiently process the structured data with \acp{lm}?} With structured data, we need to deal with the fact that \acp{lm} were pre-trained on modeling plain text only. To efficiently leverage the knowledge in \acp{lm}---especially in low-resource settings---we need to find the way to transform the data into a suitable input format while keeping its structure (along with other information in the data) intact.
+    \item[RQ3\label{rq:3}] \textbf{How to make \ac{lm}-based systems more controllable?} A neural component introduced in the \ac{d2t} generation system will inevitably make the system less controllable. The question is if we can minimize these issues by building systems out of smaller and simpler components, training the models for more predictable tasks, or producing intermediate outputs that can be manually examined.
+    \item[RQ4\label{rq:4}] \textbf{How to evaluate the outputs of \ac{d2t} generation systems?} Evaluating generated text is a difficult problem, which gets even harder as the quality of the texts starts to approach the human level. Since human evaluation is costly and time-consuming, we study how to build automatic metrics that can be used for system development and evaluation. Particularly, we focus on the most pressing issue in \ac{d2t} generation: semantic accuracy of the generated texts with respect to the input data.
+    \item[RQ5\label{rq:5}] \textbf{Do \ac{d2t} generation systems generalize to unseen domains and datasets?} \ac{d2t} generation systems are often evaluated on a limited subset of domains and datasets. Investigating how the models perform on unseen domains, multiple datasets, and real-world data would give us better picture of the limitations of the current approaches.
+
+        % Understanding the abilities and limitations of the systems is crucial for further progress in the field. How does the format of the data influence the outputs of the models? Are \acp{lm} robust enough to replace rule-based approaches? And what are the most important problems to tackle in neural-based \ac{d2t} systems?
 \end{description}
 
 
@@ -67,11 +69,11 @@ The following are our main contributions, following the research questions outli
 % \setlist[description]{labelindent=\parindent, leftmargin=0em}
 
 \begin{description}[leftmargin=\widthof{\textbf{Ad RQ1\ \ }}]
-  \item[Ad \ref{rq:1}] We show that  with a very \textbf{simple \ac{lm}-based finetuned baseline}, we can achieve strong results on a shared task of generating texts from a knowledge graph (\autoref{sec:finetuning}). We also point out the advantages and limitations of open \acp{llm} on \ac{d2t} generation in zero-shot settings (\autoref{sec:prompting}).
-  \item[Ad \ref{rq:2}] We show how to \textbf{transform the data to intermediate text-like input} suitable for \acp{lm} using handcrafted or automatically extracted templates (\Cref{sec:iterative,sec:pipeline,sec:sem-acc}), rule-based \ac{nlg} methods (\autoref{sec:eval-token}), and specialized \acp{lm} (\autoref{sec:describing}). We show that these methods can serve as a basis both for competitive neural-based \ac{d2t} generation systems and for novel \ac{lm}-based evaluation metrics.
-  \item[Ad \ref{rq:3}] We show how we can limit \acp{lm} to the task of improving text fluency and use these \acp{lm} for building \textbf{more controllable \ac{d2t} generation systems} with an iterative approach (\autoref{sec:iterative}) and modular architecture (\autoref{sec:pipeline}). We show that these systems open up a new way of thinking about neural-based \ac{lm} with a different set of trade-offs than rule-based or end-to-end systems.
-  \item[Ad \ref{rq:4}] We develop \textbf{\ac{lm}-based automatic metrics} for evaluating outputs of \ac{d2t} generation systems on the level of data item mentions (\autoref{sec:sem-acc}) and output tokens (\autoref{sec:eval-token}). We show that the metrics achieve strong correlations with human judgment in comparison with other metrics.
-  \item[Ad \ref{rq:5}] We build a \textbf{tool for visualizing} the structured data and model outputs and show how we can unify the format of multiple \ac{d2t} generation dataset for easier processing (\autoref{sec:tabgenie}). Using novel datasets, we also \textbf{study the behaviors of \acp{lm}} across multiple \ac{d2t} tasks, data formats, and domains and evaluate their semantic accuracy (\Cref{sec:prompting,sec:describing}).
+    \item[Ad \ref{rq:1}] We show that  with a very \textbf{simple \ac{lm}-based finetuned baseline}, we can achieve strong results on a shared task of generating texts from a knowledge graph (\autoref{sec:finetuning}). We also point out the advantages and limitations of open \acp{llm} on \ac{d2t} generation in zero-shot settings (\autoref{sec:prompting}).
+    \item[Ad \ref{rq:2}] We show how to \textbf{transform the data to intermediate text-like input} suitable for \acp{lm} using handcrafted or automatically extracted templates (\Cref{sec:iterative,sec:pipeline,sec:sem-acc}), rule-based \ac{nlg} methods (\autoref{sec:eval-token}), and specialized \acp{lm} (\autoref{sec:describing}). We show that these methods can serve as a basis both for competitive neural-based \ac{d2t} generation systems and for novel \ac{lm}-based evaluation metrics.
+    \item[Ad \ref{rq:3}] We show how we can limit \acp{lm} to the task of improving text fluency and use these \acp{lm} for building \textbf{more controllable \ac{d2t} generation systems} with an iterative approach (\autoref{sec:iterative}) and modular architecture (\autoref{sec:pipeline}). We show that these systems open up a new way of thinking about neural-based \ac{lm} with a different set of trade-offs than rule-based or end-to-end systems.
+    \item[Ad \ref{rq:4}] We develop \textbf{\ac{lm}-based automatic metrics} for evaluating outputs of \ac{d2t} generation systems on the level of data item mentions (\autoref{sec:sem-acc}) and output tokens (\autoref{sec:eval-token}). We show that the metrics achieve strong correlations with human judgment in comparison with other metrics.
+    \item[Ad \ref{rq:5}] We \textbf{unify the format} of multiple \ac{d2t} generation datasets for easier processing and visualization (\autoref{sec:tabgenie}). Using novel datasets, we also \textbf{evaluate the output quality and semantic accuracy} of \acp{lm} across multiple \ac{d2t} tasks, data formats, and domains (\Cref{sec:prompting,sec:describing}).
 \end{description}
 
 
@@ -79,29 +81,33 @@ The following are our main contributions, following the research questions outli
 \section{Thesis Overview}
 \label{sec:overview}
 
-The thesis is organized into the background chapter (\autoref{chap:background}), the content chapters (\Cref{chap:low-res,chap:evaluation,chap:tabgenie,chap:investigating}), and the concluding chapter (\autoref{chap:conclusions}). The \Cref{chap:low-res,chap:evaluation,chap:tabgenie,chap:investigating}, which describe our contributions, are outlined in \autoref{tab:overview}.
+The thesis is organized into the background chapter (\autoref{chap:background}), the content chapters (\Cref{chap:low-res,chap:evaluation,chap:tabgenie,chap:investigating}), and the concluding chapter (\autoref{chap:conclusions}).
+
+The \Cref{chap:low-res,chap:evaluation,chap:tabgenie,chap:investigating}, which describe our contributions, are outlined in \autoref{tab:overview}. In \autoref{chap:low-res}, we describe our work on improving \ac{d2t} generation in low-resource scenarios. In \autoref{chap:evaluation}, we describe our work on evaluating the semantic accuracy of \ac{d2t} generation. In \autoref{chap:tabgenie}, we describe \textsc{TabGenie}, our toolkit for processing and visualization of \ac{d2t} generation datasets. Finally, in \autoref{chap:investigating}, we describe our experiments with cross-domain performance of pretrained and large \acp{lm} on \ac{d2t} generation.
+
+
 
 \paragraph{Publications} The thesis includes the content of eight publications written by the author of the thesis. Except for the paper \citet{dusekEvaluatingSemanticAccuracy2020}, where the experimental part was done by the author's supervisor, the author of the thesis was the main author of all the publications and executed major part of the work.\footnote{The contributions for publications with multiple authors are detailed in the respective chapters.} The publications---except for the most recent paper \citet{kasnerReferenceBasedMetricsAnalyzing2024}---were published at top-tier \ac{nlp} conferences ACL, EACL and INLG.
 
 \begin{table*}[t]
-  \small
-  \begin{tabular}{p{0.7cm}p{8.3cm}p{4cm}}
-    \toprule
-    \textbf{Sec.}         & \textbf{Topic}                                      & \textbf{Publication}                             \\ \midrule
-    \multicolumn{3}{l}{\textbf{\autoref{chap:low-res}: Low-Resource Data-to-Text Generation}}                                      \\
-    §\ref{sec:finetuning} & \ac{d2t} generation with a finetuned \ac{lm}        & \citet{kasnerTrainHardFinetune2020}              \\
-    §\ref{sec:iterative}  & \ac{d2t} generation with an editing  \ac{lm}        & \citet{kasnerDatatoTextGenerationIterative2020}  \\
-    §\ref{sec:pipeline}   & \ac{d2t} generation with a pipeline of \acp{lm}     & \citet{kasner2022neural}                         \\ \cdashlinelr{1-3}
-    \multicolumn{3}{l}{\textbf{\autoref{chap:evaluation}: Evaluating Generated Texts}}                                             \\
-    §\ref{sec:sem-acc}    & Evaluating \ac{d2t} with natural language inference & \citet{dusekEvaluatingSemanticAccuracy2020}      \\
-    §\ref{sec:eval-token} & Evaluating token-level accuracy of complex \ac{d2t} & \citet{kasnerTextinContextTokenLevelError2021}   \\ \cdashlinelr{1-3}
-    \multicolumn{3}{l}{\textbf{\autoref{chap:tabgenie}: Data Processing and Visualization}}                                        \\
-    §\ref{sec:tabgenie}   & \textsc{TabGenie} toolkit for \ac{d2t} datasets     & \citet{kasnerTabGenieToolkitTabletoText2023}     \\ \cdashlinelr{1-3}
-    \multicolumn{3}{l}{\textbf{\autoref{chap:investigating}: Investigating Model Capabilities}}                                    \\
-    §\ref{sec:describing} & Describing triples in a knowledge graph             & \citet{kasnerMindLabelsDescribing2022}           \\
-    §\ref{sec:prompting}  & \ac{d2t} generation with open \acp{llm}             & \citet{kasnerReferenceBasedMetricsAnalyzing2024} \\\bottomrule
-  \end{tabular}
+    \small
+    \begin{tabular}{p{0.7cm}p{8.3cm}p{4cm}}
+        \toprule
+        \textbf{Sec.}         & \textbf{Topic}                                      & \textbf{Publication}                             \\ \midrule
+        \multicolumn{3}{l}{\textbf{\autoref{chap:low-res}: Low-Resource Data-to-Text Generation}}                                      \\
+        §\ref{sec:finetuning} & \ac{d2t} generation with a finetuned \ac{lm}        & \citet{kasnerTrainHardFinetune2020}              \\
+        §\ref{sec:iterative}  & \ac{d2t} generation with an editing  \ac{lm}        & \citet{kasnerDatatoTextGenerationIterative2020}  \\
+        §\ref{sec:pipeline}   & \ac{d2t} generation with a pipeline of \acp{lm}     & \citet{kasner2022neural}                         \\ \cdashlinelr{1-3}
+        \multicolumn{3}{l}{\textbf{\autoref{chap:evaluation}: Evaluating Generated Texts}}                                             \\
+        §\ref{sec:sem-acc}    & Evaluating \ac{d2t} with natural language inference & \citet{dusekEvaluatingSemanticAccuracy2020}      \\
+        §\ref{sec:eval-token} & Evaluating token-level accuracy of complex \ac{d2t} & \citet{kasnerTextinContextTokenLevelError2021}   \\ \cdashlinelr{1-3}
+        \multicolumn{3}{l}{\textbf{\autoref{chap:tabgenie}: Data Processing and Visualization}}                                        \\
+        §\ref{sec:tabgenie}   & \textsc{TabGenie} toolkit for \ac{d2t} datasets     & \citet{kasnerTabGenieToolkitTabletoText2023}     \\ \cdashlinelr{1-3}
+        \multicolumn{3}{l}{\textbf{\autoref{chap:investigating}: Investigating Model Capabilities}}                                    \\
+        §\ref{sec:describing} & Describing triples in a knowledge graph             & \citet{kasnerMindLabelsDescribing2022}           \\
+        §\ref{sec:prompting}  & \ac{d2t} generation with open \acp{llm}             & \citet{kasnerReferenceBasedMetricsAnalyzing2024} \\\bottomrule
+    \end{tabular}
 
-  \caption{Overview of the thesis.}
-  \label{tab:overview}
+    \caption{Overview of the thesis.}
+    \label{tab:overview}
 \end{table*}
