@@ -376,20 +376,25 @@ For the earlier stages of the \ac{d2t} generation pipeline, various unsupervised
 
 \subsection{Neural Approaches}
 \label{sec:neural-d2t}
-Naturally extending the work on statistical \ac{d2t} generation, neural networks (see \autoref{sec:nns}) began replacing other data-driven approaches around the year 2015. With their renewed capabilities, mostly due to advances in hardware \cite{hooker2021hardware} and capabilities of learning from large data \cite{lecun2015deep}, they enabled not only building more powerful modules for the \ac{d2t} generation pipeline, but also replacing the pipeline entirely with end-to-end models.
+Naturally extending the work on statistical \ac{d2t} generation, neural networks (see \autoref{sec:nns}) began replacing other data-driven approaches around 2015. With their renewed capabilities, mostly due to advances in hardware \cite{hooker2021hardware} and capabilities of learning from large data \cite{lecun2015deep}, they enabled not only building more powerful modules for the \ac{d2t} generation pipeline, but also replacing the pipeline entirely with end-to-end models.
 
 The field of neural \ac{d2t} generation is broad, as it has been gaining a lot of interest in the recent years, with works covering many deep learning-related concepts \cite{sharmaInnovationsNeuralDatatotext2022, lin2023survey}. Here, we will mainly focus on concepts and model architectures related to this thesis, and we will further describe works related to individual datasets in \autoref{sec:datasets}.
 
 
-\paragraph{Data Linearization} To get an input sequence suitable for the neural model, the structured data needs to be linearized as a sequence of tokens. To preserve the original structure of data, a common practice is to use special tokens serving as delimiters \cite{yang2020improving,hoyle2021promoting,xieUnifiedSKGUnifyingMultiTasking2022}. An example is presented in \TODO{figure}. Alternatively, special embeddings can be used which are summed with the positional and token embeddings \cite{wang2021tuta,yangTableFormerRobustTransformer2022}.
+\paragraph{Data Linearization} To get an input sequence suitable for the neural model, the structured data needs to be linearized as a sequence of tokens. To preserve the original structure of data, a common practice is to use special tokens serving as delimiters, as depicted in \TODO{figure} \cite{yang2020improving,hoyle2021promoting,xieUnifiedSKGUnifyingMultiTasking2022}. Alternatively, special embeddings can be used which are summed with the positional and token embeddings \cite{wang2021tuta,yangTableFormerRobustTransformer2022}.
 
-\paragraph{Delexicalization}
+\paragraph{Delexicalization} replacing entities with placeholders and filling them in the post-processing step \cite{oh2000stochastic,mairesse2010phrase,wen2015semantically}. This approach was shown useful for languages with rich morphology, where the entities can be filled using a separate language model \cite{duvsek2019neural}.
 
-\paragraph{Sequence-to-Sequence Generation} A general idea in end-to-end \ac{d2t} generation is to use a neural \ac{seq2seq} model for transforming the structured data into text.  The typical architecture for this task is the encoder-decoder framework described in \autoref{sec:transformer}.
+\paragraph{Sequence-to-Sequence Generation} Generating text from data in the end-to-end fashion, i.e., without intermediate steps, is enabled by neural \ac{seq2seq} models. \Ac{seq2seq} models are designed for transforming variable-length input sequences into variable-length output sequences \cite{cho2014learning,sutskever2014sequence}. The typical \ac{seq2seq} architecture is the encoder-decoder framework described in \autoref{sec:transformer}. In the case of \ac{d2t} generation, the input sequence is the linearized version of structured data and the output sequence is the target text.
 
-\paragraph{RNN-based Approaches}
+\paragraph{RNN-based Approaches} The original seq2seq approaches designed for machine translation \cite{cho2014learning,sutskever2014sequence} were soon adopted for other \ac{nlg} tasks. Using structured representation of the dialogue act as the input, \citet{wen2015semantically} use \acp{rnn} to generate the response in a dialogue system. On a similar task, \citet{dusekSequencetoSequenceGenerationSpoken2016} show that it is better to generate output strings with a \ac{rnn}-based system directly instead of combining the model with a separate surface realization system. For generating weather reports, \citet{mei2016talk} use \acp{rnn} to also address the content selection step, identifying salient data records using the attention mechanism.
 
-\paragraph{Transformer-based Approaches}
+An important addition to the \ac{rnn}-based approaches was the \emph{copy mechanism} \cite{gu2016incorporating,seeGetPointSummarization2017}. The copy mechanism emerged as a way to mitigate the data scarcity, where a particular entity or value may appear only rarely in the training data, or not at all. With the copy mechanism, the model can generate tokens by directly copying them from the output instead of generating it.
+
+
+\acp{rnn} were still used even after the introduction of the transformer model (\autoref{sec:transformer}), since they tended to work better in the low-resource settings. \citet{freitagUnsupervisedNaturalLanguage2018} experimented with using text denoising as an objective pretraining an \ac{rnn}-based system for \ac{d2t} generation. For adapting an \ac{rnn}-based model to other domains, \citet{wen2020recurrent} proposed \emph{data counterfeiting}, replacing delexicalized slots with slots from another domain. To reduce hallucinations, \citet{rebuffel2021controlling} the decoder considers content, hallucination and fluency scores via 3 RNNs, hidden states are summed
+
+
 
 \paragraph{Pretrained Models}
 
