@@ -79,6 +79,27 @@
 \usepackage{subcaption} % sub figures in a fiture
 \usepackage{standalone} % include standoalone tikz images
 \usepackage{bibentry}
+\usepackage{nameref}
+
+\makeatletter
+\let\orgdescriptionlabel\descriptionlabel
+\renewcommand*{\descriptionlabel}[1]{%
+  \let\orglabel\label
+  \let\label\@gobble
+  \phantomsection
+  \protected@edef\@currentlabel{#1\unskip}%
+  %\edef\@currentlabelname{#1}%
+  \let\label\orglabel
+  \orgdescriptionlabel{#1}%
+}
+\makeatother
+
+% \makeatletter
+% \def\namedlabel#1#2{\begingroup
+%    \def\@currentlabel{#2}%
+%    \label{#1}\endgroup
+% }
+% \makeatother
 
 \def\ZK#1{{\color{green!60!black!100}ZK: \it #1}}
 \def\ZKdel#1{{\color{green!60!black!100}ZKdel: {\sout{#1}}}}
