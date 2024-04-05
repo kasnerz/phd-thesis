@@ -25,14 +25,14 @@ For learning the underlying pattern between $\mathbf{x}$ and $y$, we will use ma
 
 
 \begin{enumerate}
-  \item The parameters $\textbf{w}$ and $b$ are initialized to small random values or zeros.
-  \item For each training example $(\mathbf{x}_i, y_i)$, the algorithm updates the weights and bias to adjust their current estimate towards the ground truth target:
-        \begin{align} \label{eq:perceptron1}
-          \hat{y}_i  & = \text{sign}(\textbf{w} \cdot \mathbf{x} + b) \\
-          \textbf{w} & = \textbf{w} + (y - \hat{y}) \textbf{x}        \\
-          b          & = b + y - \hat{y}
-        \end{align}
-  \item The step (2) is repeated until convergence.
+    \item The parameters $\textbf{w}$ and $b$ are initialized to small random values or zeros.
+    \item For each training example $(\mathbf{x}_i, y_i)$, the algorithm updates the weights and bias to adjust their current estimate towards the ground truth target:
+          \begin{align} \label{eq:perceptron1}
+              \hat{y}_i  & = \text{sign}(\textbf{w} \cdot \mathbf{x} + b) \\
+              \textbf{w} & = \textbf{w} + (y - \hat{y}) \textbf{x}        \\
+              b          & = b + y - \hat{y}
+          \end{align}
+    \item The step (2) is repeated until convergence.
 \end{enumerate}
 
 The perceptron algorithm is guaranteed to converge if there exists a hyperplane which separates the data belonging to one class from another, otherwise it will not converge \cite{novikoff1962convergence}.
@@ -41,20 +41,20 @@ The perceptron algorithm is guaranteed to converge if there exists a hyperplane 
 
 As the name suggests, \ac{mlp} uses multiple perceptron-like units called \textit{neurons}. Analogically to the perceptron (\autoref{eq:perceptron1}), each neuron computes its output $o$ using the rule:
 \begin{align}
-  o & = f(\mathbf{x}^\top \mathbf{w}  + b),
+    o & = f(\mathbf{x}^\top \mathbf{w}  + b),
 \end{align}
 % \begin{itemize}
 where $f: \mathbb{R} \rightarrow \mathbb{R}$ is the \emph{activation function}. Instead of signum, \ac{mlp} uses differentiable non-linear functions, most commonly nowadays \acl{relu} (\acs{relu}\glsunset{relu}; \citealp{nair2010rectified}) or its adapted version \acl{gelu} (\acs{gelu}\glsunset{gelu}; \citealp{hendrycks2016gaussian}).
 
 For efficiency, the neurons are organized in layers, which enables formulating the \ac{mlp} computations in terms of matrix multiplication. The $i$-th layer of \ac{mlp} is parametrized with a matrix $\mathbf{W}_i \in \mathbb{R}^{d\times n}$ and a vector of biases $\mathbf{b}_i \in \mathbb{R}^{n}$, processing the \textit{hidden state} $\mathbf{h}_{i-1} \in \mathbb{R}^{d}$ (where we set $\textbf{h}_0 = \textbf{x}$):
 \begin{align}
-  \mathbf{h}_i & = f(\mathbf{h}_{i-1} \mathbf{W}_i + \mathbf{b}_i).
+    \mathbf{h}_i & = f(\mathbf{h}_{i-1} \mathbf{W}_i + \mathbf{b}_i).
 \end{align}
 During training, we aim to minimize the \textit{loss function} describing the gap between the model predictions and the ground truth output. Since all the computations in \ac{mlp} are differentiable, we can use the chain rule to compute how each parameter in the network contributes to the loss. To minimize the loss, we use the \emph{backpropagation} algorithm \cite{kelley1960gradient,rumelhart1986learning}, updating the network parameters in the reverse order of layers. The magnitude of the updates is controlled by the learning rate parameter $\alpha$.
 
 \paragraph{Recurrent Neural Networks} Unlike \acp{mlp}, where the size of the input is fixed, \acp{rnn} allow us to process a sequence of inputs $\mathbf{X} = (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ of arbitrary length. Generally, an \ac{rnn} computes a sequence of hidden states $\mathbf{H} = (\mathbf{h}^{(0)}, \ldots, \mathbf{h}^{(n)})$ by repeatedly applying a function $f$ parametrized by the parameters of the network $\boldsymbol{\theta}$, the current input $\mathbf{x}_i$, and the previous hidden state $\mathbf{h}^{(i-1)}$ \cite[p.~367]{goodfellow2016deep}:
 \begin{align}
-  \mathbf{h}^{(i)} = f(\boldsymbol{\theta}, \mathbf{h}^{(i-1)}, \mathbf{x}_i).
+    \mathbf{h}^{(i)} = f(\boldsymbol{\theta}, \mathbf{h}^{(i-1)}, \mathbf{x}_i).
 \end{align}
 The hidden state $\mathbf{h}^{(0)} \in \mathbb{R}^k$ is initialized randomly. After the input is processed, $\mathbf{H}$ contains an encoded representation of the sequence. The exact implementation of the function $f$ may vary, but is generally implemented as a series of matrix multiplications and non-linear functions.
 
@@ -72,10 +72,10 @@ A text is a sequence of discrete units such as characters, words, or subwords. T
 
 The naive way to represent each token would be using its integer value. However, this would misleadingly suggest linear dependence between tokens. A better way is to use the index $i$ for constructing a \textit{one-hot} vector $\mathbf{x} \in \{0,1\}^{|V|} $ for each token:
 \begin{align}
-  x_j = \begin{cases}
-    1 & \text{if } i = j, \\
-    0 & \text{otherwise}.
-  \end{cases}
+    x_j = \begin{cases}
+        1 & \text{if } i = j, \\
+        0 & \text{otherwise}.
+    \end{cases}
 \end{align}
 
 While this representation is sound, it is quite sparse and does not capture the semantics of individual tokens, which puts high requirements on the representional capacity of the network.
@@ -87,26 +87,26 @@ This idea is used in the Word2Vec algorithm \cite{mikolov2013distributed}. The a
 The idea of representing tokens with embedding vectors is employed in neural \acp{lm} described later in this section, even though the embedding matrix is not trained with the aforementioned algorithm, but joinly with the rest of the network.
 
 \begin{figure*}[ht]
-  \centering
-
-  \begin{subfigure}{\textwidth}
     \centering
-    \begin{subfigure}{0.45\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{img/skipgram.pdf}
-      \caption{Skip-gram}
-      \label{fig:skipgram}
+
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/skipgram.pdf}
+            \caption{Skip-gram}
+            \label{fig:skipgram}
+        \end{subfigure}
+        \hspace{-20px}
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=0.75\textwidth]{img/cbow.pdf}
+            \caption{Continuous Bag-of-Words}
+            \label{fig:cbow}
+        \end{subfigure}
     \end{subfigure}
-    \hspace{-20px}
-    \begin{subfigure}{0.45\textwidth}
-      \centering
-      \includegraphics[width=0.75\textwidth]{img/cbow.pdf}
-      \caption{Continuous Bag-of-Words}
-      \label{fig:cbow}
-    \end{subfigure}
-  \end{subfigure}
-  \caption{The objectives employed by the Word2Vec algorithm \cite{mikolov2013distributed}. In this case, the algorithm uses a context window of size $k=5$. In the (a) \emph{skip-gram} algorithm, we sum the embeddings of $k-1$ surrounding tokens and predict the original token. In the (b) \emph{continuous bag-of-words} algorithm, we use the original token for predicting the $k-1$ surrounding tokens.}
-  \label{fig:word2vec}
+    \caption{The objectives employed by the Word2Vec algorithm \cite{mikolov2013distributed}. In this case, the algorithm uses a context window of size $k=5$. In the (a) \emph{skip-gram} algorithm, we sum the embeddings of $k-1$ surrounding tokens and predict the original token. In the (b) \emph{continuous bag-of-words} algorithm, we use the original token for predicting the $k-1$ surrounding tokens.}
+    \label{fig:word2vec}
 \end{figure*}
 
 
@@ -123,11 +123,11 @@ Having a way to represent text, we can move on to processing it. Here, we will e
 
 \paragraph{Language Models} A useful formalism for text processing is a \emph{language model}: a mathematical model that estimates a probability of a sequence of tokens $S = (s_1, \ldots, s_n)$. For estimating the probability, we can factorize it into a product of conditional probabilities for each token using the chain rule:
 \begin{align}
-  P(S) = \prod_{i=1}^n P(s_i|s_1, \hdots, s_{i-1}).
+    P(S) = \prod_{i=1}^n P(s_i|s_1, \hdots, s_{i-1}).
 \end{align}
 Estimating the probability of longer sequences according to this formula is infeasible, as the model would require too many parameters. An \emph{\emph{n}-gram \ac{lm}} (parametrized by an integer \emph{N}) simplifies the product using the assumption that the probability of a token depends only on $N-1$ previous tokens:
 \begin{align}
-  P(S) = \prod_{i=1}^T P(s_i|s_{i-N+1}, \hdots,s_{i-1}).
+    P(S) = \prod_{i=1}^T P(s_i|s_{i-N+1}, \hdots,s_{i-1}).
 \end{align}
 The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for individual \emph{n}-grams by tabulating their occurences in a text corpus. However, because of the limit on the length of the context for each token, the \emph{n}-gram \acp{lm} fail to capture long-term dependencies in the text.
 
@@ -136,7 +136,7 @@ The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for indivi
 
 \paragraph{Neural Language Model} A neural \ac{lm} is a \acl{lm} that estimates the text probability using a neural network. Denoting the parameters of the network by $\theta$ and the sequence of embeddings corresponding to $S$ as $\mathbf{X} \in \mathbb{R}^{|V|\times n}$:
 \begin{align}
-  P(S) = P_\theta(\mathbf{X}).
+    P(S) = P_\theta(\mathbf{X}).
 \end{align}
 In contrast with \emph{n}-gram \acp{lm}, neural \acp{lm} can process the whole text, efficiently storing the probability estimates in its parameters, which makes it suitable for capturing long-term dependencies.
 
@@ -148,45 +148,45 @@ Here, we will pave our way towards the transformer architecture, which is a core
 We have described an \ac{rnn} (\autoref{sec:nns}) as a neural network that can process the sequence and \emph{encode} its representation in a sequence of hidden states. The idea behind the \emph{encoder-decoder framework} \cite{sutskever2014sequence,cho2014learning} is that we can \emph{decode} an output sequence with another network using the last hidden state of the encoder as its initial state. With \acp{rnn}, the workflow is the following:
 
 \begin{enumerate}
-  \item The \textbf{encoder} encodes the sentence of input embeddings $\mathbf{X}= (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ into a hidden state $\mathbf{h}_e$ by repeatedly applying a transformation $\mathcal{E}$ in each timestep $t\in(1,n)$:
-        \begin{align}
-          \mathbf{h}_e^{(i)} = \mathcal{E}(\mathbf{h}_e^{(i-1)}, \mathbf{x}_i).
-        \end{align}
-  \item The \textbf{decoder} uses $\mathbf{h}_e^{(n)}$ as its initial state $\mathbf{h}_d^{(0)}$ and produces the sequence of output tokens  $Y = (y_1, \ldots, y_m)$ by repeatedly applying a transformation $\mathcal{D}$ in each timestep $j\in(1,m)$:
-        \begin{align}
-          \mathbf{h}_d^{(j)}, y_j = \mathcal{D}(\mathbf{h}_d^{(j-1)}, y_{j-1}).
-        \end{align}
+    \item The \textbf{encoder} encodes the sentence of input embeddings $\mathbf{X}= (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ into a hidden state $\mathbf{h}_e$ by repeatedly applying a transformation $\mathcal{E}$ in each timestep $t\in(1,n)$:
+          \begin{align}
+              \mathbf{h}_e^{(i)} = \mathcal{E}(\mathbf{h}_e^{(i-1)}, \mathbf{x}_i).
+          \end{align}
+    \item The \textbf{decoder} uses $\mathbf{h}_e^{(n)}$ as its initial state $\mathbf{h}_d^{(0)}$ and produces the sequence of output tokens  $Y = (y_1, \ldots, y_m)$ by repeatedly applying a transformation $\mathcal{D}$ in each timestep $j\in(1,m)$:
+          \begin{align}
+              \mathbf{h}_d^{(j)}, y_j = \mathcal{D}(\mathbf{h}_d^{(j-1)}, y_{j-1}).
+          \end{align}
 \end{enumerate}
 
 \paragraph{Attention Mechanism} We have already mentioned that the hidden state of an \ac{rnn} has a fixed size, which limits the amount of information the network can capture about a sequence. The \emph{attention mechanism} \cite{bahdanau2015neural} as used in \acp{rnn} enables the decoder to extract the information dynamically from the encoded sequence. In each step $j$, the decoder computes a context vector $c_j$ as the weighted sum of the hidden states of the encoder $\{\mathbf{h}_e^{(0)}, \ldots, \mathbf{h}_e^{(n)}\}$ using the attention matrix $\mathbf{W}_a$:
 \begin{align}
-  \alpha_{ji}  & = \operatorname{softmax}(\mathbf{h}_d^{(j)}\mathbf{W}_a \mathbf{h}_e^{(i)}), \\
-  \mathbf{c}_j & = \sum_i \alpha_{ji} \mathbf{h}_e^{(i)}.
+    \alpha_{ji}  & = \operatorname{softmax}(\mathbf{h}_d^{(j)}\mathbf{W}_a \mathbf{h}_e^{(i)}), \\
+    \mathbf{c}_j & = \sum_i \alpha_{ji} \mathbf{h}_e^{(i)}.
 \end{align}
 The context vector is used as an additional input for the decoder:
 \begin{align}
-  \mathbf{h}_d^{(j)}, y_j = \mathcal{D}(\mathbf{h}_d^{(j-1)}, y_{j-1}, \mathbf{c}_j).
+    \mathbf{h}_d^{(j)}, y_j = \mathcal{D}(\mathbf{h}_d^{(j-1)}, y_{j-1}, \mathbf{c}_j).
 \end{align}
 
 
 \paragraph{Self-attention Mechanism} Self-attention \cite{cheng2016long,vaswani2017attention} is a variant of the attention mechanism in which the source and the target sequence is identical. For the input $\mathbf{X} \in \mathbb{R}^{n,d}$, the \emph{self-attention} produces the output $\mathbf{H} \in \mathbb{R}^{n,d}$ of the same size. For each token, the resulting vector $\mathbf{h}_i \in \mathbf{H}$ is a weighed combination of the value vectors corresponding to all the tokens in a sequence (including the token itself):
 \begin{align}
-  \mathbf{h}_j = \sum_{i\in 1..n} \alpha_{ji} \mathbf{v}_i,
+    \mathbf{h}_j = \sum_{i\in 1..n} \alpha_{ji} \mathbf{v}_i,
 \end{align}
 where the \emph{value vector} of each token is computed using a trainable \emph{value matrix} $\mathbf{W_v} \in \mathbb{R}^{n,d}$:
 \begin{align}
-  \mathbf{v}_i = \mathbf{x}_i \mathbf{W_v}.
+    \mathbf{v}_i = \mathbf{x}_i \mathbf{W_v}.
 \end{align}
 To get the attention weights $\alpha_{ij}$, we first compute \textit{query} and \textit{key} vectors for each token using trainable matrices $\mathbf{W_q}$ and $\mathbf{W_k} \in \mathbb{R}^{n,d}$. Each weight is then a normalized dot product of the corresponding vectors:
 \begin{align}
-  \mathbf{q}_i & = \mathbf{x}_i \mathbf{W_q}                                                      \\
-  \mathbf{k}_i & = \mathbf{x}_i \mathbf{W_k}                                                      \\
-  \alpha_{ij}  & = \operatorname{softmax}\biggl(\frac{\mathbf{q}_i\mathbf{k}_j}{\sqrt{d}}\biggr).
+    \mathbf{q}_i & = \mathbf{x}_i \mathbf{W_q}                                                      \\
+    \mathbf{k}_i & = \mathbf{x}_i \mathbf{W_k}                                                      \\
+    \alpha_{ij}  & = \operatorname{softmax}\biggl(\frac{\mathbf{q}_i\mathbf{k}_j}{\sqrt{d}}\biggr).
 \end{align}
 The operations can be efficiently paralellized using matrix multiplication:
 \begin{align}
-  \mathbf{Q}                                             = \mathbf{X}\mathbf{W_q},\quad\mathbf{K} & = \mathbf{X}\mathbf{W_k},\quad\mathbf{V} = \mathbf{X}\mathbf{W_v}                           \\
-  \operatorname{Attn}(\mathbf{Q}, \mathbf{K}, \mathbf{V})                                         & = \operatorname{softmax}\biggl(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d}}\biggr)\mathbf{V}.
+    \mathbf{Q}                                             = \mathbf{X}\mathbf{W_q},\quad\mathbf{K} & = \mathbf{X}\mathbf{W_k},\quad\mathbf{V} = \mathbf{X}\mathbf{W_v}                           \\
+    \operatorname{Attn}(\mathbf{Q}, \mathbf{K}, \mathbf{V})                                         & = \operatorname{softmax}\biggl(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d}}\biggr)\mathbf{V}.
 \end{align}
 
 
@@ -194,7 +194,7 @@ The operations can be efficiently paralellized using matrix multiplication:
 
 Specifically, each layer is composed of two sublayers: (a) the \emph{self-attention layer} and (b) the \emph{\ac{mlp} layer}. The output of the $i$-th sublayer is added to its original input $\mathbf{H}^{(i)}$ in a so-called residual connection:
 \begin{align}
-  \mathbf{H}^{(i+1)} = \mathbf{H}^{(i)} + \operatorname{sublayer}(\mathbf{H}^{(i)}).
+    \mathbf{H}^{(i+1)} = \mathbf{H}^{(i)} + \operatorname{sublayer}(\mathbf{H}^{(i)}).
 \end{align}
 The sublayers serve a different purpose: while the \ac{mlp} layer computes element-wise operations over each token, the self-attention layer enables sharing information among tokens. The sublayer input (or output, depending on the architecture variant) is normalized using \emph{layer normalization} \cite{ba2016layer}.
 
@@ -202,47 +202,47 @@ To get the input representation $\mathbf{H}^{(0)}$, we sum the token embeddings 
 
 
 \begin{figure*}[ht]
-  \centering
-  \includegraphics[width=0.9\textwidth]{img/transformer.pdf}
-  \caption{An encoder-decoder variant of the Transformer architecture. The encoder has $N_{e}$ layers, each consisting of a self-attention and MLP sublayer. The decoder has $N_{d}$ layers with masked self-attention and encoder-decoder attention, again followed by an MLP sublayer. The input to each sublayer is normalized using layer norm. After the last decoder layer, the output probabilities are computed using a linear projection and softmax. The figure is adapted from \href{https://github.com/bbycroft/llm-viz/blob/main/src/llm/intro-image.svg}{https://github.com/bbycroft/llm-viz}.}
-  \label{fig:transformer}
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/transformer.pdf}
+    \caption{An encoder-decoder variant of the Transformer architecture. The encoder has $N_{e}$ layers, each consisting of a self-attention and MLP sublayer. The decoder has $N_{d}$ layers with masked self-attention and encoder-decoder attention, again followed by an MLP sublayer. The input to each sublayer is normalized using layer norm. After the last decoder layer, the output probabilities are computed using a linear projection and softmax. The figure is adapted from \href{https://github.com/bbycroft/llm-viz/blob/main/src/llm/intro-image.svg}{https://github.com/bbycroft/llm-viz}.}
+    \label{fig:transformer}
 \end{figure*}
 
 
 For each token in the sequence, we train the model to maximize the log probability (i.e., minimize the negative log probability) of the ground truth token $y_i$ given the previous sequence of tokens in the sequence:
 \begin{align}
-  \operatorname{loss}_i = -\log P_\theta(y_i|y_1, \hdots, y_{i-1}).
+    \operatorname{loss}_i = -\log P_\theta(y_i|y_1, \hdots, y_{i-1}).
 \end{align}
 Training the transformer model is \emph{self-supervised}: each token in the training sequence serves as the ground-truth ``\emph{label}'' that the model aims to predict. We train the model on \emph{batches} of data, using an optimization algorithm such as \acl{sgd} (\acs{sgd}\glsunset{sgd}; \citealp[p.~275]{goodfellow2016deep}) or Adam \cite{kingma2014adam}. The batch size $b$ and the learning rate $\alpha$ are the training hyperparameters.
 
 As shown in \autoref{fig:transformer}, the original Transformer architecture follows the encoder-decoder framework. The encoder layers follow an aforementioned scheme, while the decoder layers have the following differences:
 \begin{itemize}
-  \item Each layer contains another sublayer called the \emph{encoder-decoder attention}. In contrast to the self-attention mechanism, the \emph{keys} and \emph{values} come from the last layer of the encoder, enabling the decoder to attend to the encoded sequence.
-  \item The self-attention is \emph{masked} so that each token can collect information only from the preceding tokens, which is necessary to enable text generation using left-to-right autoregressive decoding.
+    \item Each layer contains another sublayer called the \emph{encoder-decoder attention}. In contrast to the self-attention mechanism, the \emph{keys} and \emph{values} come from the last layer of the encoder, enabling the decoder to attend to the encoded sequence.
+    \item The self-attention is \emph{masked} so that each token can collect information only from the preceding tokens, which is necessary to enable text generation using left-to-right autoregressive decoding.
 \end{itemize}
 After the last decoder layer, the hidden states are projected into a matrix of size $\mathbb{R}^{|V|\times n}$ and normalized using softmax, producing a probability distribution over the vocabulary for each input token.
 
 \paragraph{Text Generation} As we mentioned, we can use \textit{left-to-right autoregressive decoding} for generating text. The decoding process starts by feeding a special \texttt{<s>} (beginning of sequence) token into the decoder and then iteratively selecting the \emph{i}-th token based on the probability distribution for the \emph{i}-th position, until the  \texttt{</s>} (end of sequence) token is decoded. The procedure is outlined in Algorithm \ref{alg:decoding}.
 \begin{algorithm}[ht]
-  \begin{algorithmic}[1]
-    \State{Initialize: $Y= \texttt{<s>}, t = \texttt{<s>}$ \Comment{Output sequence, current token}}
-    \While{$t \neq \texttt{</s>}$}
-    \State Predict next token probability distribution: $p(t | Y)$
-    \State Sample next token: $t \sim p(t | Y)$ \label{alg:dec:sample}
-    \State Update output sequence: $Y = Y \cup t$
-    \EndWhile
-    \State Return $Y$
-  \end{algorithmic}
-  \caption{Autoregressive decoding}
-  \label{alg:decoding}
+    \begin{algorithmic}[1]
+        \State{Initialize: $Y= \texttt{<s>}, t = \texttt{<s>}$ \Comment{Output sequence, current token}}
+        \While{$t \neq \texttt{</s>}$}
+        \State Predict next token probability distribution: $p(t | Y)$
+        \State Sample next token: $t \sim p(t | Y)$ \label{alg:dec:sample}
+        \State Update output sequence: $Y = Y \cup t$
+        \EndWhile
+        \State Return $Y$
+    \end{algorithmic}
+    \caption{Autoregressive decoding}
+    \label{alg:decoding}
 \end{algorithm}
 
 \noindent The sampling step (line \ref{alg:dec:sample}) can be realized in various ways, including:
 \begin{itemize}
-  \item \textbf{Greedy decoding}: Select the most probable token.
-  \item \textbf{Top-$k$ sampling}: Sample the next token from the $k$ most probable tokens.
-  \item \textbf{Top-$p$ (nucleus) sampling} \cite{holtzman2019curious}: Sample the next token from the tokens with cumulative probability $p$.
-  \item \textbf{Beam search}: Extend the $k$ most probable sequences from the previous step with the next tokens, keep the $k$ most probable sequences for the next step.
+    \item \textbf{Greedy decoding}: Select the most probable token.
+    \item \textbf{Top-$k$ sampling}: Sample the next token from the $k$ most probable tokens.
+    \item \textbf{Top-$p$ (nucleus) sampling} \cite{holtzman2019curious}: Sample the next token from the tokens with cumulative probability $p$.
+    \item \textbf{Beam search}: Extend the $k$ most probable sequences from the previous step with the next tokens, keep the $k$ most probable sequences for the next step.
 \end{itemize}
 While the greedy decoding and beam search are used to decode more probable sentences, the sampling algorithms are used for decoding more creative outputs. The algorithms can be also combined together.
 
@@ -254,34 +254,34 @@ It turns out that training a transformer model from scratch is mostly not practi
 \paragraph{Model types} Depending on the downstream task, different variants of the transformer architecture may be used (see \autoref{tab:pretrained_models} for an overview):
 
 \begin{itemize}
-  \item \textbf{Encoder models} -- The models use only the \emph{encoder} part of the transformer architecture. These models are trained using the \emph{\ac{mlm} objective}: predicting tokens on the masked positions in the sequence. The output of these models is a contextualized representation of the input sequence, which can be used for tasks such as sequence classification, sequence tagging, or computing sequence similarity.
-  \item \textbf{Encoder-decoder models} -- The models use the original \emph{encoder-decoder} architecture. These models are usually trained using a variant of denoising objective: predicting the original sequence from its corrupted version. The models are mostly used for sequence-to-sequence tasks, such as machine translation, question answering or summarization.
-  \item \textbf{Decoder models} -- The models use only the \emph{decoder} part of the transformer architecture. These models are trained using the \emph{causal language modeling objective}: predicting the next token in a sequence. The models are suitable for unconditional text generation, but they can also used for the same tasks as the encoder-decoder models, using the input sequence as the ``pre-generated'' output prefix.
+    \item \textbf{Encoder models} -- The models use only the \emph{encoder} part of the transformer architecture. These models are trained using the \emph{\ac{mlm} objective}: predicting tokens on the masked positions in the sequence. The output of these models is a contextualized representation of the input sequence, which can be used for tasks such as sequence classification, sequence tagging, or computing sequence similarity.
+    \item \textbf{Encoder-decoder models} -- The models use the original \emph{encoder-decoder} architecture. These models are usually trained using a variant of denoising objective: predicting the original sequence from its corrupted version. The models are mostly used for sequence-to-sequence tasks, such as machine translation, question answering or summarization.
+    \item \textbf{Decoder models} -- The models use only the \emph{decoder} part of the transformer architecture. These models are trained using the \emph{causal language modeling objective}: predicting the next token in a sequence. The models are suitable for unconditional text generation, but they can also used for the same tasks as the encoder-decoder models, using the input sequence as the ``pre-generated'' output prefix.
 \end{itemize}
 
 \begin{table}[t]
-  \footnotesize
-  \centering
-  \begin{tabular}{lp{4.5cm}ll}
-    \toprule
-    \textbf{Type}            & \textbf{Pretraining Objective}            & \textbf{Model}                                       & \textbf{\# Parameters} \\
-    \midrule
-    \multirow{2}{*}{Encoder} & \multirow{2}{*}{Masked Language Modeling} & BERT \cite{devlinBERTPretrainingDeep2019}            & 110M-340M              \\
-                             &                                           & RoBERTa \cite{liuRoBERTaRobustlyOptimized2019}       & 125M-355M              \\
-                             &                                           & \textsc{LaserTagger} \cite{malmi2019lasertagger}     &                        \\
-    \midrule
-    \multirow{2}{*}{Enc-Dec} & \multirow{2}{*}{Text Denoising}           & BART \cite{lewisBARTDenoisingSequencetoSequence2019} & 139M-406M              \\
-                             &                                           & mBART \cite{liuMultilingualDenoisingPretraining2020} & 880M                   \\
-                             &                                           & T5 \cite{raffelExploringLimitsTransfer2019}          & 220M-11B               \\
-    \midrule
-    Decoder                  & Causal Language Modeling                  & GPT-2 \cite{radfordLanguageModelsAre2019}            & 117M-1.5B              \\
-                             &                                           & Llama2 \cite{touvronLlamaOpenFoundation2023}         & 7B-70B                 \\
-                             &                                           & Mistral \cite{jiangMistral7B2023}                    & 7B-70B                 \\
-                             &                                           & Zephyr \cite{tunstallZephyrDirectDistillation2023}   & 7B-70B                 \\
-    \bottomrule
-  \end{tabular}
-  \caption{Types of transformer architectures, along with specific models used in this work. The number of parameters may vary based on the model variant.}
-  \label{tab:pretrained_models}
+    \footnotesize
+    \centering
+    \begin{tabular}{lp{4.5cm}ll}
+        \toprule
+        \textbf{Type}            & \textbf{Pretraining Objective}            & \textbf{Model}                                       & \textbf{\# Parameters} \\
+        \midrule
+        \multirow{2}{*}{Encoder} & \multirow{2}{*}{Masked Language Modeling} & BERT \cite{devlinBERTPretrainingDeep2019}            & 110M-340M              \\
+                                 &                                           & RoBERTa \cite{liuRoBERTaRobustlyOptimized2019}       & 125M-355M              \\
+                                 &                                           & \textsc{LaserTagger} \cite{malmi2019lasertagger}     &                        \\
+        \midrule
+        \multirow{2}{*}{Enc-Dec} & \multirow{2}{*}{Text Denoising}           & BART \cite{lewisBARTDenoisingSequencetoSequence2019} & 139M-406M              \\
+                                 &                                           & mBART \cite{liuMultilingualDenoisingPretraining2020} & 880M                   \\
+                                 &                                           & T5 \cite{raffelExploringLimitsTransfer2019}          & 220M-11B               \\
+        \midrule
+        Decoder                  & Causal Language Modeling                  & GPT-2 \cite{radfordLanguageModelsAre2019}            & 117M-1.5B              \\
+                                 &                                           & Llama2 \cite{touvronLlamaOpenFoundation2023}         & 7B-70B                 \\
+                                 &                                           & Mistral \cite{jiangMistral7B2023}                    & 7B-70B                 \\
+                                 &                                           & Zephyr \cite{tunstallZephyrDirectDistillation2023}   & 7B-70B                 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Types of transformer architectures, along with specific models used in this work. The number of parameters may vary based on the model variant.}
+    \label{tab:pretrained_models}
 \end{table}
 
 \paragraph{Finetuning} By \emph{finetuning} a model we mean additional training of a pretrained model on a task-specific dataset. Finetuning is more cost- and data-efficient than training a model from scratch, but is typically used only for a single task, since repeated model update can lead to erasing previous knowledge, also known as ``catastrophic forgetting'' \cite{mccloskey1989catastrophic,kirkpatrick2017overcoming}.
@@ -311,17 +311,17 @@ In this section, we will provide background for the task of \ac{d2t} generation.
 Here is a brief overview of applications of \ac{d2t} generation:
 
 \begin{itemize}
-  \item \textbf{Automated Journalism}: Augmenting (or in simple cases, even replacing) human journalists for writing data-based reports, including:
-        \begin{itemize}
-          \item \textbf{News reports}: Automating news writing, e.g., for election results \cite{leppanen2017data}, incidents \cite{vanderleeCACAPODatasetMultilingual2020}, earthquakes \cite{oremus2014first}, or wildlife tracking \cite{siddharthan2012blogging,ponnamperuma2013tag2blog}.
-          \item \textbf{Sport reports}: Generating game summaries for sports such as basketball \cite{wiseman2017challenges,thomson2020sportsett}, baseball \cite{puduppullyDatatotextGenerationEntity2019}, or soccer \cite{van2017pass}.
-          \item \textbf{Financial reports}: Supporting financial decisions by generating comments on stock prices \cite{murakami2017learning,aoki2018generating} or summaries of financial documents \cite{chapman2022towards}.
-          \item \textbf{Weather reports}: Generating weather forecasts and weather-related reports \cite{goldberg1994using,belz2005corpus,belz2008automatic,angeli-etal-2010-simple,balakrishnan2019constrained}.
-        \end{itemize}
-  \item \textbf{Business Intelligence Reports}: Providing decision support in business reports alongside data summaries and visualizations (mostly commercial companies such as \href{https://www.arria.com}{Arria}, \href{https://infosentience.com}{InfoSentience}, or \href{https://www.vphrase.com}{vPhrase}; see \citealp{daleNavigatingTextGeneration2023} for a recent overview),
-  \item \textbf{Chart Captioning}: Generating captions\footnote{In contrast to image captioning \cite{stefanini2022show}, here the systems can rely on the underlying data in textual form (although the approaches can be hybrid, see e.g. \citealp{kantharaj2022chart}).} for charts or graphs, e.g., for assistive technologies, document indexing, or simplifying decision support \cite{demirGeneratingTextualSummaries2008,demirSummarizingInformationGraphics2012,obeidCharttoTextGeneratingNatural2020,kantharaj2022chart}.
-  \item \textbf{Healthcare Summaries}: Providing  clinical data summaries about patients to clinicians \cite{portet2009automatic,scott2013data}, or vice versa, providing medical information to patients, e.g., for behavioral change \cite{reiter2003lessons} or nutritional counseling \cite{balloccu-reiter-2022-comparing}.
-  \item \textbf{Product Descriptions}: Automating generating product descriptions in specific domains such as for laptops and TVs \cite{wen2015toward,wen2016multi}, or general-domain approaches for big e-commerce platforms \cite{shaoControllableDiverseText2021,kotoCanPretrainedLanguage2022}.
+    \item \textbf{Automated Journalism}: Augmenting (or in simple cases, even replacing) human journalists for writing data-based reports, including:
+          \begin{itemize}
+              \item \textbf{News reports}: Automating news writing, e.g., for election results \cite{leppanen2017data}, incidents \cite{vanderleeCACAPODatasetMultilingual2020}, earthquakes \cite{oremus2014first}, or wildlife tracking \cite{siddharthan2012blogging,ponnamperuma2013tag2blog}.
+              \item \textbf{Sport reports}: Generating game summaries for sports such as basketball \cite{wiseman2017challenges,thomson2020sportsett}, baseball \cite{puduppullyDatatotextGenerationEntity2019}, or soccer \cite{van2017pass}.
+              \item \textbf{Financial reports}: Supporting financial decisions by generating comments on stock prices \cite{murakami2017learning,aoki2018generating} or summaries of financial documents \cite{chapman2022towards}.
+              \item \textbf{Weather reports}: Generating weather forecasts and weather-related reports \cite{goldberg1994using,belz2005corpus,belz2008automatic,angeli-etal-2010-simple,balakrishnan2019constrained}.
+          \end{itemize}
+    \item \textbf{Business Intelligence Reports}: Providing decision support in business reports alongside data summaries and visualizations (mostly commercial companies such as \href{https://www.arria.com}{Arria}, \href{https://infosentience.com}{InfoSentience}, or \href{https://www.vphrase.com}{vPhrase}; see \citealp{daleNavigatingTextGeneration2023} for a recent overview),
+    \item \textbf{Chart Captioning}: Generating captions\footnote{In contrast to image captioning \cite{stefanini2022show}, here the systems can rely on the underlying data in textual form (although the approaches can be hybrid, see e.g. \citealp{kantharaj2022chart}).} for charts or graphs, e.g., for assistive technologies, document indexing, or simplifying decision support \cite{demirGeneratingTextualSummaries2008,demirSummarizingInformationGraphics2012,obeidCharttoTextGeneratingNatural2020,kantharaj2022chart}.
+    \item \textbf{Healthcare Summaries}: Providing  clinical data summaries about patients to clinicians \cite{portet2009automatic,scott2013data}, or vice versa, providing medical information to patients, e.g., for behavioral change \cite{reiter2003lessons} or nutritional counseling \cite{balloccu-reiter-2022-comparing}.
+    \item \textbf{Product Descriptions}: Automating generating product descriptions in specific domains such as for laptops and TVs \cite{wen2015toward,wen2016multi}, or general-domain approaches for big e-commerce platforms \cite{shaoControllableDiverseText2021,kotoCanPretrainedLanguage2022}.
 \end{itemize}
 
 \subsection{D2T Generation Pipeline}
@@ -329,14 +329,14 @@ Here is a brief overview of applications of \ac{d2t} generation:
 Until recently, \ac{d2t} generation could not be realized in end-to-end fashion. Typically, the systems decomposed the task into of approximately 4-6 subtasks\footnote{Some tasks may be further subdivided, which can generate up to 10 subtasks as in \citet{milleModD2TMultilayerDataset2023}.} \cite{reiterBuildingAppliedNatural1997,reiterArchitectureDatatoTextSystems2007,gattSurveyStateArt2018}. Here we selected five representative subtasks illustrated in \TODO{figure}:
 
 \begin{enumerate}
-  \item \textbf{Content Determination}: Deciding which facts from the structured data
-        to include in the text.
-  \item \textbf{Document Planning}: Determining the order of the
-        facts, dividing the facts into paragraphs.
-  \item \textbf{Sentence Planning}: Aggregating the facts into
-        sentences.
-  \item \textbf{Lexicalisation}: Transforming the facts to text segments.
-  \item \textbf{Surface Realisation}: Combining the text segments into a well-formed text in natural language.
+    \item \textbf{Content Determination}: Deciding which facts from the structured data
+          to include in the text.
+    \item \textbf{Document Planning}: Determining the order of the
+          facts, dividing the facts into paragraphs.
+    \item \textbf{Sentence Planning}: Aggregating the facts into
+          sentences.
+    \item \textbf{Lexicalisation}: Transforming the facts to text segments.
+    \item \textbf{Surface Realisation}: Combining the text segments into a well-formed text in natural language.
 \end{enumerate}
 
 Decomposing \ac{d2t} generation into subproblems---where each module tackles a simple task---helps to modularize the system. Since each module has a specific and well-defined function, it makes the system as a whole more explainable. Modularization also enables realizing each part of the system using a different approach (see \Cref{sec:rule-d2t,sec:stat-d2t,sec:neural-d2t}).
@@ -381,10 +381,11 @@ Naturally extending the work on statistical \ac{d2t} generation, neural networks
 The field of neural \ac{d2t} generation is broad, as it has been gaining a lot of interest in the recent years, with works covering many deep learning-related concepts \cite{sharmaInnovationsNeuralDatatotext2022, lin2023survey}. Here, we will mainly focus on concepts and model architectures related to this thesis, and we will further describe works related to individual datasets in \autoref{sec:datasets}.
 
 
-\paragraph{Data Linearization}
+\paragraph{Data Linearization} To get an input sequence suitable for the neural model, the structured data needs to be linearized as a sequence of tokens. To preserve the original structure of data, a common practice is to use special tokens serving as delimiters \cite{yang2020improving,hoyle2021promoting,xieUnifiedSKGUnifyingMultiTasking2022}. An example is presented in \TODO{figure}. Alternatively, special embeddings can be used which are summed with the positional and token embeddings \cite{wang2021tuta,yangTableFormerRobustTransformer2022}.
+
 \paragraph{Delexicalization}
 
-\paragraph{Sequence-to-Sequence Generation} A general idea in end-to-end \ac{d2t} generation is to use a neural \ac{seq2seq} model for transforming the structured data into text. To get an input sequence suitable for the neural model, the structured data needs to be linearized as a sequence of tokens, potentially with special tokens used as a separator for preserving the original structure of data. An example is presented in \TODO{figure}. The typical architecture for this task is the encoder-decoder framework described in \autoref{sec:transformer}.
+\paragraph{Sequence-to-Sequence Generation} A general idea in end-to-end \ac{d2t} generation is to use a neural \ac{seq2seq} model for transforming the structured data into text.  The typical architecture for this task is the encoder-decoder framework described in \autoref{sec:transformer}.
 
 \paragraph{RNN-based Approaches}
 
