@@ -293,7 +293,7 @@ Although pretraining a model requires significant computational resources, \acp{
     \centering
     \includegraphics{img/objectives.pdf}
 
-    \caption{A scheme of the common objectives used by pretrained models: 1)  language modeling (decoder-only), 2) masked language modeling (encoder-only), 3) denoising (encoder-decoder). The special symbol $\bullet$ (beginning of a sentence) is used to bootstrap the decoding process.}\label{fig:objectives}
+    \caption{A scheme of the common objectives used by pretrained models: 1) masked language modeling (encoder-only), 2) text denoising (encoder-decoder), 3)  causal language modeling (decoder-only). The special symbol \texttt{<s>} (beginning of a sentence) is used to bootstrap the decoding process.}\label{fig:objectives}
 
 \end{figure}
 
@@ -428,7 +428,7 @@ Improving \ac{plm}-based \ac{d2t} generation revolves around (1) finding suitabl
 \subsection{Datasets}
 \label{sec:datasets}
 
-In this section, we describe the \ac{d2t} generation datasets, with a strong focus on the datasets used later on in the thesis. We do not describe our custom datasets presented in \cite{kasnerMindLabelsDescribing2022} and \cite{kasnerReferenceBasedMetricsAnalyzing2024}; these are described in their respective sections in \autoref{chap:investigating}.
+In this section, we describe the \ac{d2t} generation datasets, with a strong focus on the datasets used later on in the thesis. We do not describe our custom datasets presented in \citet{kasnerMindLabelsDescribing2022} and \citet{kasnerReferenceBasedMetricsAnalyzing2024}; these are described in their respective sections in \autoref{chap:investigating}.
 
 \begin{table*}[t]
     \centering\footnotesize
