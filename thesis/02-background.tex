@@ -332,7 +332,7 @@ Here is a brief overview of applications of \ac{d2t} generation:
               \item \textbf{Weather reports}: Generating weather forecasts and weather-related reports \cite{goldberg1994using,belz2005corpus,belz2008automatic,angeli-etal-2010-simple,balakrishnan2019constrained}.
           \end{itemize}
     \item \textbf{Business Intelligence Reports}: Providing decision support in business reports alongside data summaries and visualizations (mostly commercial companies such as \href{https://www.arria.com}{Arria}, \href{https://infosentience.com}{InfoSentience}, or \href{https://www.vphrase.com}{vPhrase}; see \citealp{daleNavigatingTextGeneration2023} for a recent overview),
-    \item \textbf{Chart Captioning}: Generating captions\footnote{In contrast to image captioning \cite{stefanini2022show}, here the systems can rely on the underlying data in textual form (although the approaches can be hybrid, see e.g. \citealp{kantharaj2022chart}).} for charts or graphs, e.g., for assistive technologies, document indexing, or simplifying decision support \cite{demirGeneratingTextualSummaries2008,demirSummarizingInformationGraphics2012,obeidCharttoTextGeneratingNatural2020,kantharaj2022chart}.
+    \item \textbf{Chart Captioning}: Generating captions\footnote{In contrast to image captioning \cite{stefanini2022show}, here the systems can rely on the underlying data in textual form (although the approaches can be hybrid, see e.g. \citealp{kantharajCharttoTextLargeScaleBenchmark2022}).} for charts or graphs, e.g., for assistive technologies, document indexing, or simplifying decision support \cite{demirGeneratingTextualSummaries2008,demirSummarizingInformationGraphics2012,obeidCharttoTextGeneratingNatural2020,kantharaj2022chart}.
     \item \textbf{Healthcare Summaries}: Providing  clinical data summaries about patients to clinicians \cite{portet2009automatic,scott2013data}, or vice versa, providing medical information to patients, e.g., for behavioral change \cite{reiter2003lessons} or nutritional counseling \cite{balloccu-reiter-2022-comparing}.
     \item \textbf{Product Descriptions}: Automating generating product descriptions in specific domains such as for laptops and TVs \cite{wen2015toward,wen2016multi}, or general-domain approaches for big e-commerce platforms \cite{shaoControllableDiverseText2021,kotoCanPretrainedLanguage2022}.
 \end{itemize}
@@ -411,7 +411,7 @@ An important addition to the \ac{rnn}-based approaches was the \emph{copy mechan
 Various shared tasks and comparisons \cite{gardentWebNLGChallengeGenerating2017,dusekEvaluatingStateoftheartEndtoEnd2020,ferreiraNeuralDatatotextGeneration2019} showed that RNN-based approaches were generally competitive with rule-based approaches. The RNNs produce more fluent text, while the pipeline-based approaches made less semantic errors.
 
 
-\paragraph{PLM-based Approaches} Using a transformer model for \ac{d2t} generation became practical with the arrival of \acp{plm} (see \autoref{sec:plms}). For example, the 2020 WebNLG+ shared task \cite{ferreira2020BilingualBiDirectional2020}, with the goal of generating text from graph-structured triples (see \autoref{sec:datasets}), was dominated by systems based on pretrained encoder-decoder transformer models (\citealp{yang2020improving,agarwalMachineTranslationAided2020,kasnerTrainHardFinetune2020}; see \autoref{sec:plms}).
+\paragraph{PLM-based Approaches} Using a transformer model for \ac{d2t} generation became practical with the arrival of \acp{plm} (see \autoref{sec:plms}). For example, the 2020 WebNLG+ shared task \cite{ferreira20202020}, with the goal of generating text from graph-structured triples (see \autoref{sec:datasets}), was dominated by systems based on pretrained encoder-decoder transformer models (\citealp{yang2020improving,agarwalMachineTranslationAided2020,kasnerTrainHardFinetune2020}; see \autoref{sec:plms}).
 
 The general knowledge of language, along with the learned ability to copy tokens from the input, made it possible to get rid of both \emph{delexicalization} and \emph{copy mechanism}, while having the model handle rare entities not present in the task-specific training data. Transformer-based pretrained models are also able to produce outputs with considerably better fluency than \ac{rnn}-based models. On top of that, the variants of \acp{plm} pretrained on multilingual corpora are able to handle outputs in a variety of languages \cite{liuMultilingualDenoisingPretraining2020,xueMT5MassivelyMultilingual2021}.
 
@@ -431,36 +431,56 @@ Improving \ac{plm}-based \ac{d2t} generation revolves around (1) finding suitabl
 In this section, we describe the \ac{d2t} generation datasets, with a strong focus on the datasets used later on in the thesis. We do not describe our custom datasets presented in \citet{kasnerMindLabelsDescribing2022} and \citet{kasnerReferenceBasedMetricsAnalyzing2024}; these are described in their respective sections in \autoref{chap:investigating}.
 
 \begin{table*}[t]
-    \centering\footnotesize
-    \begin{tabular}{@{}llrrr@{}}
+    \centering\small
+    \begin{tabular}{@{}lllr@{}}
         \toprule
-        \multirow{2}{*}{\textbf{Dataset}}                                                                  & \multirow{2}{*}{\textbf{Data Type}} & \multicolumn{3}{c}{\textbf{Number of examples}}                                \\  \cmidrule(lr){3-5}
-                                                                                                           &                                     & \textbf{train}                                  & \textbf{dev} & \textbf{test} \\\midrule
-        CACAPO \cite{vanderleeCACAPODatasetMultilingual2020}                                               & Key-value                           & 15,290                                          & 1,831        & 3,028         \\
-        DART \cite{nan2021dart}                                                                            & Graph                               & 62,659                                          & 2,768        & 5,097         \\
-        \textbf{E2E} \cite{dusekSemanticNoiseMatters2019,dusekEvaluatingStateoftheartEndtoEnd2020}         & Key-value                           & 33,525                                          & 1,484        & 1,847         \\
-        EventNarrative \cite{colas2021eventnarrative}                                                      & Graph                               & 179,544                                         & 22,442       & 22,442        \\
-        HiTab \cite{chengHiTabHierarchicalTable2021}                                                       & Table w/hl                          & 7,417                                           & 1,671        & 1,584         \\
-        Chart-To-Text \cite{kantharajCharttoTextLargeScaleBenchmark2022}                                   & Chart                               & 24,368                                          & 5,221        & 5,222         \\
-        Logic2Text \cite{chenLogic2TextHighFidelityNatural2020}                                            & Table w/hl                          & 8,566                                           & 1,095        & 1,092         \\
-        LogicNLG \cite{chenLogicalNaturalLanguage2020}                                                     & Table                               & 28,450                                          & 4,260        & 4,305         \\
-        NumericNLG \cite{suadaaTabletoTextGenerationNumerical2021}                                         & Table                               & 1,084                                           & 136          & 135           \\
-        SciGen \cite{moosaviLearningReasonText2021}                                                        & Table                               & 13,607                                          & 3,452        & 492           \\
-        \textbf{SportSett:Basketball} \cite{thomson2020sportsett}                                          & Table                               & 3,690                                           & 1,230        & 1,230         \\
-        ToTTo \cite{parikhToTToControlledTableToText2020}                                                  & Table w/hl                          & 121,153                                         & 7,700        & 7,700         \\
-        \textbf{WebNLG} \cite{gardentWebNLGChallengeGenerating2017,ferreira2020BilingualBiDirectional2020} & Graph                               & 35,425                                          & 1,666        & 1,778         \\
-        WikiBio \cite{lebretNeuralTextGeneration2016}                                                      & Key-value                           & 582,659                                         & 72,831       & 72,831        \\
-        WikiSQL \cite{zhong2017seq2sql}                                                                    & Table + SQL                         & 56,355                                          & 8,421        & 15,878        \\
-        WikiTableText \cite{bao2018table}                                                                  & Key-value                           & 10,000                                          & 1,318        & 2,000         \\
+        \textbf{Dataset}                                                                           & \textbf{Data Format} & \textbf{Domain} & \textbf{\# Ex.} \\  \midrule
+        CACAPO \cite{vanderleeCACAPODatasetMultilingual2020}                                       & Key-value            & Multi-domain    & 20149           \\
+        DART \cite{nan2021dart}                                                                    & RDF triples          & Wikipedia       & 70524           \\
+        \textbf{E2E} \cite{dusekSemanticNoiseMatters2019,dusekEvaluatingStateoftheartEndtoEnd2020} & Key-value            & Restaurants     & 36856           \\
+        EventNarrative \cite{colas2021eventnarrative}                                              & RDF triples          & Events          & 224428          \\
+        HiTab \cite{chengHiTabHierarchicalTable2021}                                               & Table w/hl           & Statistics      & 10672           \\
+        Chart-To-Text \cite{kantharajCharttoTextLargeScaleBenchmark2022}                           & Table                & Statistics      & 34811           \\
+        Logic2Text \cite{chenLogic2TextHighFidelityNatural2020}                                    & Table w/hl           & Wikipedia       & 10753           \\
+        LogicNLG \cite{chenLogicalNaturalLanguage2020}                                             & Table                & Wikipedia       & 37015           \\
+        NumericNLG \cite{suadaaTabletoTextGenerationNumerical2021}                                 & Table                & Science         & 1355            \\
+        SciGen \cite{moosaviLearningReasonText2021}                                                & Table                & Science         & 17551           \\
+        \textbf{Rotowire} \cite{wiseman2017challenges}                                             & Table                & Basketball      & 6150            \\
+        ToTTo \cite{parikhToTToControlledTableToText2020}                                          & Table w/hl           & Wikipedia       & 136553          \\
+        \textbf{WebNLG} \cite{gardentWebNLGChallengeGenerating2017}                                & RDF triples          & DBPedia         & 38869           \\
+        WikiBio \cite{lebretNeuralTextGeneration2016}                                              & Key-value            & Biographies     & 728321          \\
+        WikiSQL \cite{zhong2017seq2sql}                                                            & Table + SQL          & Wikipedia       & 80654           \\
+        WikiTableText \cite{bao2018table}                                                          & Key-value            & Wikipedia       & 13318           \\
         \bottomrule
     \end{tabular}
-    \caption{The list of external \ac{d2t} datasets used in this work. Boldface denotes the datasets which are used extensively for our experiments, the rest of the datasets was used in \autoref{sec:tabgenie}. Glossary of data types: \textit{Key-value}: key-value pairs, \textit{Graph}: subject-predicate-object triples, \textit{Table}: tabular data (\textit{w/hl}: with highlighted cells), \textit{Chart}: chart data, \textit{SQL}: strings with SQL queries.}
+    \caption{The list of external \ac{d2t} datasets used in this work. The datasets are included in the \textsc{TabGenie} framework (\autoref{sec:tabgenie}), the datasets in \textbf{boldface} are also used in other experiments. Glossary of data types: \textit{Key-value}: key-value pairs, \textit{Graph}: subject-predicate-object triples, \textit{Table}: tabular data (\textit{w/hl}: with highlighted cells), \textit{Chart}: chart data, \textit{SQL}: strings with SQL queries.}
     \label{tab:datasets}.
 \end{table*}
 
-\paragraph{Data Formats}
-\paragraph{WebNLG}
-\paragraph{E2E}
+\paragraph{Data Formats} Structured data come in a variety of formats. The most common formats are:
+
+\begin{itemize}
+    \item \textbf{Key-value pairs}: Each input is a set of tuples $(k, v)$, where $k$ is a key (also called a slot), which is typically a text string, and $v$ is a value, which can be a text string, and number, or a combination of these.
+    \item \textbf{RDF triples\footnote{Resource Description Framework; see \url{https://www.w3.org/TR/PR-rdf-syntax/}.}}: Each input is a set of triples $(s, p, o)$, where $s$ is a \emph{subject},  $p$ is a \emph{predicate}, and $o$ is an \textit{object}. A subject is usually an entity (person, object, or place), an object is either also an entity, or a generic text string or a number. A predicate expresses the relation between the subject and the object. This formalism can be also used to describe a \emph{directed graph} (e.g., a knowledge graph), where $s$ and $o$ are nodes and $p$ is a directed edge between these nodes.
+    \item \textbf{Table}: Each input is structured as a \textit{table}. In its basic version, a table is a two-dimensional matrix with $m$ columns and $n$ rows, which together define a grid of $m \times n$ cells. The cell can be either a heading (for the respective row or column), or contain a textual or numerical value. Generally, a table can contain merged cells, nested headings, or multiple disjoint table regions.
+\end{itemize}
+
+As we show in \autoref{chap:tabgenie}, all of the aforementioned formats can be unified in a tabular format with minimal information loss. In \autoref{sec:prompting}, we also show how to handle data in the JSON format.\footnote{JavaScript Object Notation; see \url{https://www.json.org}.}
+
+\paragraph{Domains}
+
+\paragraph{Selected Datasets}
+
+\begin{itemize}
+    \item \textbf{WebNLG}: The WebNLG dataset \cite{gardentCreatingTrainingCorpora2017,gardentWebNLGChallengeGenerating2017} contains graph-structured RDF triples from DBPedia \cite{auer2007dbpedia} and their crowdsourced descriptions.  The WebNLG Challenge \cite{gardentCreatingTrainingCorpora2017,ferreira20202020} is a shared task on RDF-to-text generation, which evaluates the systems on the WebNLG dataset.
+
+
+    \item \textbf{E2E}: The E2E dataset \cite{dusekEvaluatingStateoftheartEndtoEnd2020} contains restaurant descriptions in the form of attribute-value pairs and corresponding human-written recommendations. The name of the dataset is derived from the E2E Challenge, a shared task that focused on evaluating end-to-end NLG systems. \citet{dusekSemanticNoiseMatters2019} show that the original version of the dataset contains semantic noise (incorrect or missing facts in the crowdsourced descriptions) and present a cleaned version of the dataset, which we use for our experiments.
+
+
+    \item \textbf{Rotowire}: Rotowire \cite{wiseman2017challenges} is a dataset with tabular statistics of basketball games and their corresponding textual summaries, in which only a relevant subset of the input data should be verbalized. Together with the above-average length of the target summaries, this aspect makes the dataset particularly challenging for NLG systems.
+\end{itemize}
+
 
 
 \subsection{Evaluation Metrics}
