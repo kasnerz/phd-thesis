@@ -289,6 +289,14 @@ Although pretraining a model requires significant computational resources, \acp{
     \label{tab:pretrained_models}
 \end{table}
 
+\begin{figure}[t]
+    \centering
+    \includegraphics{img/objectives.pdf}
+
+    \caption{A scheme of the common objectives used by pretrained models: 1)  language modeling (decoder-only), 2) masked language modeling (encoder-only), 3) denoising (encoder-decoder). The special symbol $\bullet$ (beginning of a sentence) is used to bootstrap the decoding process.}\label{fig:objectives}
+
+\end{figure}
+
 \paragraph{Finetuning} By \emph{finetuning} a model we mean additional training of a pretrained model on a task-specific dataset. Finetuning is more cost- and data-efficient than training a model from scratch, but is typically used only for a single task, since repeated model update can lead to erasing previous knowledge, also known as ``catastrophic forgetting'' \cite{mccloskey1989catastrophic,kirkpatrick2017overcoming}.
 
 
@@ -420,6 +428,8 @@ Improving \ac{plm}-based \ac{d2t} generation revolves around (1) finding suitabl
 \subsection{Datasets}
 \label{sec:datasets}
 
+In this section, we describe the \ac{d2t} generation datasets, with a strong focus on the datasets used later on in the thesis. We do not describe our custom datasets presented in \cite{kasnerMindLabelsDescribing2022} and \cite{kasnerReferenceBasedMetricsAnalyzing2024}; these are described in their respective sections in \autoref{chap:investigating}.
+
 \begin{table*}[t]
     \centering\footnotesize
     \begin{tabular}{@{}llrrr@{}}
@@ -447,6 +457,11 @@ Improving \ac{plm}-based \ac{d2t} generation revolves around (1) finding suitabl
     \caption{The list of external \ac{d2t} datasets used in this work. Boldface denotes the datasets which are used extensively for our experiments, the rest of the datasets was used in \autoref{sec:tabgenie}. Glossary of data types: \textit{Key-value}: key-value pairs, \textit{Graph}: subject-predicate-object triples, \textit{Table}: tabular data (\textit{w/hl}: with highlighted cells), \textit{Chart}: chart data, \textit{SQL}: strings with SQL queries.}
     \label{tab:datasets}.
 \end{table*}
+
+\paragraph{Data Formats}
+\paragraph{WebNLG}
+\paragraph{E2E}
+
 
 \subsection{Evaluation Metrics}
 \label{sec:evaluation}
