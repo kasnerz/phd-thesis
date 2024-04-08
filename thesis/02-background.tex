@@ -121,23 +121,26 @@ The subword tokenization algorithm that is frequently used in neural \acp{lm} is
 \subsection{Language Modeling}
 Having a way to represent text, we can move on to processing it. Here, we will explain the notion of \emph{language modeling}.
 
-\paragraph{Language Models} A useful formalism for text processing is a \emph{language model}: a mathematical model that estimates a probability of a sequence of tokens $S = (s_1, \ldots, s_n)$. For estimating the probability, we can factorize it into a product of conditional probabilities for each token using the chain rule:
+\paragraph{Language Models} A useful formalism for text processing is a \emph{language model}: a mathematical model that estimates a probability of a sequence of tokens $X = (x_1, \ldots, x_n)$. For estimating the probability, we can factorize it into a product of conditional probabilities for each token using the chain rule:
 \begin{align}
-    P(S) = \prod_{i=1}^n P(s_i|s_1, \hdots, s_{i-1}).
+    P(X) = \prod_{i=1}^n P(x_i|x_1, \hdots, x_{i-1}).
 \end{align}
 Estimating the probability of longer sequences according to this formula is infeasible, as the model would require too many parameters. An \emph{\emph{n}-gram \ac{lm}} (parametrized by an integer \emph{N}) simplifies the product using the assumption that the probability of a token depends only on $N-1$ previous tokens:
 \begin{align}
-    P(S) = \prod_{i=1}^T P(s_i|s_{i-N+1}, \hdots,s_{i-1}).
+    P(X) = \prod_{i=1}^T P(x_i|x_{i-N+1}, \hdots,x_{i-1}).
 \end{align}
 The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for individual \emph{n}-grams by tabulating their occurences in a text corpus. However, because of the limit on the length of the context for each token, the \emph{n}-gram \acp{lm} fail to capture long-term dependencies in the text.
 
 
 
 
-\paragraph{Neural Language Model} A neural \ac{lm} is a \acl{lm} that estimates the text probability using a neural network. Denoting the parameters of the network by $\theta$ and the sequence of embeddings corresponding to $S$ as $\mathbf{X} \in \mathbb{R}^{|V|\times n}$:
+\paragraph{Neural Language Model} A neural \ac{lm} is a \acl{lm} that estimates the text probability using a neural network. Denoting the parameters of the network by $\theta$, the probability of the sequence is given by the model probability distribution $P_\theta(X)$.
+
+To learn $P_\theta(X)$, we minimize the cross-entropy between the model distribution $P_\theta$ and the empirical distribution of sequences in the corpus $P$:
 \begin{align}
-    P(S) = P_\theta(\mathbf{X}).
+    H(P,P_\theta) = \mathbb{E}_P(-\log P_\theta) = -\sum_{\mathbf{x}\in C}p(X)\log p_{\theta}(X).
 \end{align}
+
 In contrast with \emph{n}-gram \acp{lm}, neural \acp{lm} can process the whole text, efficiently storing the probability estimates in its parameters, which makes it suitable for capturing long-term dependencies.
 
 \subsection{Transformer Architecture}
@@ -209,11 +212,11 @@ To get the input representation $\mathbf{H}^{(0)}$, we sum the token embeddings 
 \end{figure*}
 
 
-For each token in the sequence, we train the model to maximize the log probability (i.e., minimize the negative log probability) of the ground truth token $y_i$ given the previous sequence of tokens in the sequence:
+Training the transformer model is \emph{self-supervised}: each token in the training sequence serves as the ground-truth ``\emph{label}'' that the model aims to predict. For each token in the sequence, we train the model to maximize the log probability (i.e., minimize the negative log probability) of the ground truth token $x_i$ given the previous sequence of tokens in the sequence:
 \begin{align}
-    \operatorname{loss}_i = -\log P_\theta(y_i|y_1, \hdots, y_{i-1}).
+    \operatorname{loss}_i = -\log P_\theta(x_i|x_1, \hdots, x_{i-1}).
 \end{align}
-Training the transformer model is \emph{self-supervised}: each token in the training sequence serves as the ground-truth ``\emph{label}'' that the model aims to predict. We train the model on \emph{batches} of data, using an optimization algorithm such as \acl{sgd} (\acs{sgd}\glsunset{sgd}; \citealp[p.~275]{goodfellow2016deep}) or Adam \cite{kingma2014adam}. The batch size $b$ and the learning rate $\alpha$ are the training hyperparameters.
+We train the model on \emph{batches} of data, using an optimization algorithm such as \acl{sgd} (\acs{sgd}\glsunset{sgd}; \citealp[p.~275]{goodfellow2016deep}) or Adam \cite{kingma2014adam}. The batch size $b$ and the learning rate $\alpha$ are the training hyperparameters.
 
 As shown in \autoref{fig:transformer}, the original Transformer architecture follows the encoder-decoder framework. The encoder layers follow an aforementioned scheme, while the decoder layers have the following differences:
 \begin{itemize}
@@ -225,11 +228,11 @@ After the last decoder layer, the hidden states are projected into a matrix of s
 \paragraph{Text Generation} As we mentioned, we can use \textit{left-to-right autoregressive decoding} for generating text. The decoding process starts by feeding a special \texttt{<s>} (beginning of sequence) token into the decoder and then iteratively selecting the \emph{i}-th token based on the probability distribution for the \emph{i}-th position, until the  \texttt{</s>} (end of sequence) token is decoded. The procedure is outlined in Algorithm \ref{alg:decoding}.
 \begin{algorithm}[ht]
     \begin{algorithmic}[1]
-        \State{Initialize: $Y= \texttt{<s>}, t = \texttt{<s>}$ \Comment{Output sequence, current token}}
-        \While{$t \neq \texttt{</s>}$}
-        \State Predict next token probability distribution: $p(t | Y)$
-        \State Sample next token: $t \sim p(t | Y)$ \label{alg:dec:sample}
-        \State Update output sequence: $Y = Y \cup t$
+        \State{Initialize: $Y= \texttt{<s>}, y = \texttt{<s>}$ \Comment{Output sequence, current token}}
+        \While{$y \neq \texttt{</s>}$}
+        \State Predict next token probability distribution: $p(y | Y)$
+        \State Sample next token: $t \sim p(y | Y)$ \label{alg:dec:sample}
+        \State Update output sequence: $Y = Y \cup y$
         \EndWhile
         \State Return $Y$
     \end{algorithmic}
@@ -239,7 +242,7 @@ After the last decoder layer, the hidden states are projected into a matrix of s
 
 \noindent The sampling step (line \ref{alg:dec:sample}) can be realized in various ways, including:
 \begin{itemize}
-    \item \textbf{Greedy decoding}: Select the most probable token.
+    \item \textbf{Greedy decoding}: Select the most probable token: $y_i = \argmax{y \in V} p_\theta(y|\mathbf{y}_{<i}).$
     \item \textbf{Top-$k$ sampling}: Sample the next token from the $k$ most probable tokens.
     \item \textbf{Top-$p$ (nucleus) sampling} \cite{holtzman2019curious}: Sample the next token from the tokens with cumulative probability $p$.
     \item \textbf{Beam search}: Extend the $k$ most probable sequences from the previous step with the next tokens, keep the $k$ most probable sequences for the next step.
@@ -248,10 +251,12 @@ While the greedy decoding and beam search are used to decode more probable sente
 
 \subsection{Pretrained Language Models}
 \label{sec:plms}
-It turns out that training a transformer model from scratch is mostly not practical: it requires non-trivial computational resources, large-scale data sources, and extensive training time. The workflow that gradually established after the introduction of the transformer architecture is thus following: the models are first \emph{pretrained} using a generic objective on large-scale data, and then \emph{finetuned} for downstream tasks on a task-specific dataset.
+It turns out that training a transformer model from scratch is mostly not practical: it requires non-trivial computational resources, large-scale data sources, and extensive training time. The workflow that gradually established after the introduction of the transformer architecture is thus following: the models are first \emph{pretrained} using a generic objective on large-scale data, such as The Pile \cite{gao2020pile} or C4 \cite{raffelExploringLimitsTransfer2019}, and then \emph{finetuned} for downstream tasks on a task-specific dataset.
+
+Although pretraining a model requires significant computational resources, \acp{plm} can be then made available for futher finetuning, which is more cost- and data- efficient.
 
 
-\paragraph{Model types} Depending on the downstream task, different variants of the transformer architecture may be used (see \autoref{tab:pretrained_models} for an overview):
+\paragraph{Model types} Depending on the downstream task, different variants of the transformer architecture may be used for training a \ac{plm} (see \autoref{tab:pretrained_models} for an overview):
 
 \begin{itemize}
     \item \textbf{Encoder models} -- The models use only the \emph{encoder} part of the transformer architecture. These models are trained using the \emph{\ac{mlm} objective}: predicting tokens on the masked positions in the sequence. The output of these models is a contextualized representation of the input sequence, which can be used for tasks such as sequence classification, sequence tagging, or computing sequence similarity.
@@ -291,11 +296,11 @@ It turns out that training a transformer model from scratch is mostly not practi
 
 \subsection{Large Language Models}
 \label{sec:llms}
-Scaling the models in terms of the number of parameters and the size of the training data has turned out to further improve the performance of the models \cite{kaplan2020scaling,hoffmann2022training}. Larger models were shown to exhibit unprecedented capabilities in terms of language fluency, language understanding, and reasoning skills \cite{wei2022emergent,bubeck2023sparks}, giving name to a specific category of \emph{\aclp{llm} (\acsp{llm}\glsunset{llm};} \citealp{brown2020language,zhao2023survey}). \Acp{llm} are generally larger than 1B parameters and based on the transformer decoder architecture. For many \ac{nlp} tasks, \acp{llm} have comparable or better performance than previous task-specific approaches.
+Scaling the models in terms of the number of parameters and the size of the training data has turned out to further improve the performance of the models \cite{kaplan2020scaling,hoffmann2022training}. Larger models were shown to exhibit unprecedented capabilities in terms of language fluency, language understanding, and reasoning skills \cite{wei2022emergent,bubeck2023sparks}, giving name to a specific category of \emph{\aclp{llm} (\acsp{llm}\glsunset{llm};} \citealp{brown2020language,zhao2023survey}). \Acp{llm} are commonly larger than 1B parameters and based on the transformer decoder architecture. For many \ac{nlp} tasks, \acp{llm} have comparable or better performance than previous task-specific approaches.
 
 \paragraph{In-context Learning} The general knowledge of \acp{llm} can be leveraged for performing on novel tasks without the need for finetuning on task-specific data. Instead, the task can be formulated in a natural language prefix (commonly called a \emph{prompt}), and the model completes the task by causal language modeling. This ability is known as \emph{in-context learning} \cite{brown2020language,dong2022survey}. If the model is given a limited set of input-output examples in the prompt, we talk about \emph{few-shot prompting}; if the model is given no examples, we talk about \emph{zero-shot prompting}.
 
-\paragraph{Instruction Tuning} The key to strong cross-task of \acp{llm} is instruction tuning: finetuning on a large dataset of tasks formulated using natural language instructions, such as \textit{``Answer this question: \{question\}''} or \textit{``Translate this sentence: \{sentence\}''} \cite{sanh2021multitask,ouyang2022training}. The instruction-tuned models can be then easily \emph{prompted} to perform a task of choice, even if   they were not directly trained for the task.
+\paragraph{Instruction Tuning} The key to strong cross-task of \acp{llm} is instruction tuning: finetuning on a large dataset of tasks formulated using natural language instructions, such as \textit{``Answer this question: \{question\}''} or \textit{``Translate this sentence: \{sentence\}''} \cite{sanh2021multitask,ouyang2022training}. The instruction-tuned models can be then easily \emph{prompted} to perform a task of choice in natural language, even if   they were not directly trained for the task.
 
 
 
@@ -381,24 +386,67 @@ Naturally extending the work on statistical \ac{d2t} generation, neural networks
 The field of neural \ac{d2t} generation is broad, as it has been gaining a lot of interest in the recent years, with works covering many deep learning-related concepts \cite{sharmaInnovationsNeuralDatatotext2022, lin2023survey}. Here, we will mainly focus on concepts and model architectures related to this thesis, and we will further describe works related to individual datasets in \autoref{sec:datasets}.
 
 
-\paragraph{Data Linearization} To get an input sequence suitable for the neural model, the structured data needs to be linearized as a sequence of tokens. To preserve the original structure of data, a common practice is to use special tokens serving as delimiters, as depicted in \TODO{figure} \cite{yang2020improving,hoyle2021promoting,xieUnifiedSKGUnifyingMultiTasking2022}. Alternatively, special embeddings can be used which are summed with the positional and token embeddings \cite{wang2021tuta,yangTableFormerRobustTransformer2022}.
+\paragraph{Linearization} For getting an input sequence suitable for the neural model, the structured data needs to be linearized as a sequence of tokens. To preserve the original structure of data, a common practice is to use special tokens serving as delimiters, as depicted in \TODO{figure}. Linearization can be very effective \cite{yang2020improving,hoyle2021promoting,xieUnifiedSKGUnifyingMultiTasking2022}, beating specialized encodings designed to process the particular structure \cite{marcheggianiDeepGraphConvolutional2018,koncel-kedziorskiTextGenerationKnowledge2019}.
 
-\paragraph{Delexicalization} replacing entities with placeholders and filling them in the post-processing step \cite{oh2000stochastic,mairesse2010phrase,wen2015semantically}. This approach was shown useful for languages with rich morphology, where the entities can be filled using a separate language model \cite{duvsek2019neural}.
+An alternative to linearization is to use special embeddings for the structural elements (e.g., for table rows and columns), which are summed with the positional and token embeddings \cite{wang2021tuta,yangTableFormerRobustTransformer2022}. Since the embeddings need to be learned, the approach is more suitable for high-resource tasks.
+
+\paragraph{Delexicalization} In many cases, a particular data value may appear only few or zero times in the training data. The data scarcity makes it difficult for the model to learn how to work with the value. Delexicalization is the process of replacing entities with placeholders, essentially working with the fill-in-the-blank templates \cite{oh2000stochastic,mairesse2010phrase,wen2015semantically,dusekSequencetoSequenceGenerationSpoken2016}.  The blanks are filled later in the post-processing step. This approach was shown useful even for languages with rich morphology, where the values can be filled using a separate language model \cite{duvsek2019neural}.
 
 \paragraph{Sequence-to-Sequence Generation} Generating text from data in the end-to-end fashion, i.e., without intermediate steps, is enabled by neural \ac{seq2seq} models. \Ac{seq2seq} models are designed for transforming variable-length input sequences into variable-length output sequences \cite{cho2014learning,sutskever2014sequence}. The typical \ac{seq2seq} architecture is the encoder-decoder framework described in \autoref{sec:transformer}. In the case of \ac{d2t} generation, the input sequence is the linearized version of structured data and the output sequence is the target text.
 
 \paragraph{RNN-based Approaches} The original seq2seq approaches designed for machine translation \cite{cho2014learning,sutskever2014sequence} were soon adopted for other \ac{nlg} tasks. Using structured representation of the dialogue act as the input, \citet{wen2015semantically} use \acp{rnn} to generate the response in a dialogue system. On a similar task, \citet{dusekSequencetoSequenceGenerationSpoken2016} show that it is better to generate output strings with a \ac{rnn}-based system directly instead of combining the model with a separate surface realization system. For generating weather reports, \citet{mei2016talk} use \acp{rnn} to also address the content selection step, identifying salient data records using the attention mechanism.
 
-An important addition to the \ac{rnn}-based approaches was the \emph{copy mechanism} \cite{gu2016incorporating,seeGetPointSummarization2017}. The copy mechanism emerged as a way to mitigate the data scarcity, where a particular entity or value may appear only rarely in the training data, or not at all. With the copy mechanism, the model can generate tokens by directly copying them from the output instead of generating it.
+An important addition to the \ac{rnn}-based approaches was the \emph{copy mechanism} \cite{gu2016incorporating,seeGetPointSummarization2017}. The mechanism allows the model to copy tokens directly from the input. As used by \citet{gehrmannEndtoEndContentPlan2018}, it serves as an alternative to delexicalization, delegating the job of filling the entities to the model and making the process learnable.
+
+\acp{rnn} were still used even after the introduction of the transformer model (\autoref{sec:transformer}), since they tended to work better in the low-resource settings. \citet{freitagUnsupervisedNaturalLanguage2018} experimented with using text denoising as an objective pretraining an \ac{rnn}-based system for \ac{d2t} generation. For adapting an \ac{rnn}-based model to other domains, \citet{wen2020recurrent} proposed \emph{data counterfeiting}, i.e., replacing delexicalized slots with slots from another domain. To reduce hallucinations, \citet{rebuffel2021controlling} the decoder considers content, hallucination and fluency scores via 3 RNNs, hidden states are summed
+
+Various shared tasks and comparisons \cite{gardentWebNLGChallengeGenerating2017,dusekEvaluatingStateoftheartEndtoEnd2020,ferreiraNeuralDatatotextGeneration2019} showed that RNN-based approaches were generally competitive with rule-based approaches. The RNNs produce more fluent text, while the pipeline-based approaches made less semantic errors.
 
 
-\acp{rnn} were still used even after the introduction of the transformer model (\autoref{sec:transformer}), since they tended to work better in the low-resource settings. \citet{freitagUnsupervisedNaturalLanguage2018} experimented with using text denoising as an objective pretraining an \ac{rnn}-based system for \ac{d2t} generation. For adapting an \ac{rnn}-based model to other domains, \citet{wen2020recurrent} proposed \emph{data counterfeiting}, replacing delexicalized slots with slots from another domain. To reduce hallucinations, \citet{rebuffel2021controlling} the decoder considers content, hallucination and fluency scores via 3 RNNs, hidden states are summed
+\paragraph{PLM-based Approaches} Using a transformer model for \ac{d2t} generation became practical with the arrival of \acp{plm} (see \autoref{sec:plms}). For example, the 2020 WebNLG+ shared task \cite{ferreira2020BilingualBiDirectional2020}, with the goal of generating text from graph-structured triples (see \autoref{sec:datasets}), was dominated by systems based on pretrained encoder-decoder transformer models (\citealp{yang2020improving,agarwalMachineTranslationAided2020,kasnerTrainHardFinetune2020}; see \autoref{sec:plms}).
 
+The general knowledge of language, along with the learned ability to copy tokens from the input, made it possible to get rid of both \emph{delexicalization} and \emph{copy mechanism}, while having the model handle rare entities not present in the task-specific training data. Transformer-based pretrained models are also able to produce outputs with considerably better fluency than \ac{rnn}-based models. On top of that, the variants of \acp{plm} pretrained on multilingual corpora are able to handle outputs in a variety of languages \cite{liuMultilingualDenoisingPretraining2020,xueMT5MassivelyMultilingual2021}.
 
+Due to the aforementioned advantages, \ac{plm}-based approaches excel in low-resource settings, which is a default setup for many \ac{d2t} generation tasks. Following \citet{chenFewShotNLGPreTrained2019}, other works adopted PLMs for few-shot or zero-shot D2T generation. The models are generally finetuned on the domain-specific data for few-shot generation \cite{changNeuralDatatoTextGeneration2021,suFewShotTabletoTextGeneration2021}, or on the related domains for zero-shot generation \cite{kasner2022neural,kasnerMindLabelsDescribing2022}.
 
-\paragraph{Pretrained Models}
+Improving \ac{plm}-based \ac{d2t} generation revolves around (1) finding suitable \emph{data representations}, and (2) ensuring the \emph{semantic accuracy} of the outputs. The data representations are closely related to the particular datasets, which we discuss in \autoref{sec:datasets}, while the semantic accuracy is related to the evaluation metrics, which we discuss in \autoref{sec:evaluation}. \ac{plm}-based \ac{d2t} generation is also discussed in detail in the recent surveys of \citet{sharmaInnovationsNeuralDatatotext2022} and \citet{lin2023survey}, to which we refer for more details.
+
+\paragraph{LLM-based Approaches} At the time of writing, using \acp{llm} for \ac{d2t} generation is still in its naissance. The works that compared zero-shot or few-shot \ac{llm} prompting with finetuned \acp{plm} on existing datasets have found that the \acp{llm} rank behind state-of-the-art finetuned models on automatic metrics \cite{axelssonUsingLargeLanguage2023,yuanEvaluatingGenerativeModels2023}. We have shown that \acp{llm} can be employed for zero-shot generation of data in standard data formats, the main issue still being semantical accuracy of the outputs \cite{kasnerReferenceBasedMetricsAnalyzing2024}. However, there are yet no large-scale comparisons or attempts of finetuning \acp{llm} for \ac{d2t} generation.
+
+% There are multiple factors which complicate benchmarking \acp{llm} on \ac{d2t} generation. Using closed \acp{llm}, which are accessible only through an API \cite{openai2023gpt4,chatgpt}, makes the work non-reproducible. Evaluation is also complicated with potential data contamination: the fact that any existing benchmark (including its test set) may have been included in the pretraining data of \acp{llm} \cite{golchin2023time,aiyappa-etal-2023-trust,balloccu2024leak}.
+
+% On the other hand, \acp{llm} hold the promise of further simplifying data processing, enabling .
 
 \subsection{Datasets}
 \label{sec:datasets}
+
+\begin{table*}[t]
+    \centering\footnotesize
+    \begin{tabular}{@{}llrrr@{}}
+        \toprule
+        \multirow{2}{*}{\textbf{Dataset}}                                                                  & \multirow{2}{*}{\textbf{Data Type}} & \multicolumn{3}{c}{\textbf{Number of examples}}                                \\  \cmidrule(lr){3-5}
+                                                                                                           &                                     & \textbf{train}                                  & \textbf{dev} & \textbf{test} \\\midrule
+        CACAPO \cite{vanderleeCACAPODatasetMultilingual2020}                                               & Key-value                           & 15,290                                          & 1,831        & 3,028         \\
+        DART \cite{nan2021dart}                                                                            & Graph                               & 62,659                                          & 2,768        & 5,097         \\
+        \textbf{E2E} \cite{dusekSemanticNoiseMatters2019,dusekEvaluatingStateoftheartEndtoEnd2020}         & Key-value                           & 33,525                                          & 1,484        & 1,847         \\
+        EventNarrative \cite{colas2021eventnarrative}                                                      & Graph                               & 179,544                                         & 22,442       & 22,442        \\
+        HiTab \cite{chengHiTabHierarchicalTable2021}                                                       & Table w/hl                          & 7,417                                           & 1,671        & 1,584         \\
+        Chart-To-Text \cite{kantharajCharttoTextLargeScaleBenchmark2022}                                   & Chart                               & 24,368                                          & 5,221        & 5,222         \\
+        Logic2Text \cite{chenLogic2TextHighFidelityNatural2020}                                            & Table w/hl                          & 8,566                                           & 1,095        & 1,092         \\
+        LogicNLG \cite{chenLogicalNaturalLanguage2020}                                                     & Table                               & 28,450                                          & 4,260        & 4,305         \\
+        NumericNLG \cite{suadaaTabletoTextGenerationNumerical2021}                                         & Table                               & 1,084                                           & 136          & 135           \\
+        SciGen \cite{moosaviLearningReasonText2021}                                                        & Table                               & 13,607                                          & 3,452        & 492           \\
+        \textbf{SportSett:Basketball} \cite{thomson2020sportsett}                                          & Table                               & 3,690                                           & 1,230        & 1,230         \\
+        ToTTo \cite{parikhToTToControlledTableToText2020}                                                  & Table w/hl                          & 121,153                                         & 7,700        & 7,700         \\
+        \textbf{WebNLG} \cite{gardentWebNLGChallengeGenerating2017,ferreira2020BilingualBiDirectional2020} & Graph                               & 35,425                                          & 1,666        & 1,778         \\
+        WikiBio \cite{lebretNeuralTextGeneration2016}                                                      & Key-value                           & 582,659                                         & 72,831       & 72,831        \\
+        WikiSQL \cite{zhong2017seq2sql}                                                                    & Table + SQL                         & 56,355                                          & 8,421        & 15,878        \\
+        WikiTableText \cite{bao2018table}                                                                  & Key-value                           & 10,000                                          & 1,318        & 2,000         \\
+        \bottomrule
+    \end{tabular}
+    \caption{The list of external \ac{d2t} datasets used in this work. Boldface denotes the datasets which are used extensively for our experiments, the rest of the datasets was used in \autoref{sec:tabgenie}. Glossary of data types: \textit{Key-value}: key-value pairs, \textit{Graph}: subject-predicate-object triples, \textit{Table}: tabular data (\textit{w/hl}: with highlighted cells), \textit{Chart}: chart data, \textit{SQL}: strings with SQL queries.}
+    \label{tab:datasets}.
+\end{table*}
+
 \subsection{Evaluation Metrics}
 \label{sec:evaluation}
