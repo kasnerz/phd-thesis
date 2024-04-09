@@ -331,8 +331,8 @@ Here is a brief overview of applications of \ac{d2t} generation:
               \item \textbf{Financial reports}: Supporting financial decisions by generating comments on stock prices \cite{murakami2017learning,aoki2018generating} or summaries of financial documents \cite{chapman2022towards}.
               \item \textbf{Weather reports}: Generating weather forecasts and weather-related reports \cite{goldberg1994using,belz2005corpus,belz2008automatic,angeli-etal-2010-simple,balakrishnan2019constrained}.
           \end{itemize}
-    \item \textbf{Business Intelligence Reports}: Providing decision support in business reports alongside data summaries and visualizations (mostly commercial companies such as \href{https://www.arria.com}{Arria}, \href{https://infosentience.com}{InfoSentience}, or \href{https://www.vphrase.com}{vPhrase}; see \citealp{daleNavigatingTextGeneration2023} for a recent overview),
-    \item \textbf{Chart Captioning}: Generating captions\footnote{In contrast to image captioning \cite{stefanini2022show}, here the systems can rely on the underlying data in textual form (although the approaches can be hybrid, see e.g. \citealp{kantharajCharttoTextLargeScaleBenchmark2022}).} for charts or graphs, e.g., for assistive technologies, document indexing, or simplifying decision support \cite{demirGeneratingTextualSummaries2008,demirSummarizingInformationGraphics2012,obeidCharttoTextGeneratingNatural2020,kantharaj2022chart}.
+    \item \textbf{Business Intelligence Reports}: Providing decision support in business reports alongside data summaries and visualizations (mostly commercial companies such as \href{https://www.arria.com}{Arria}, \href{https://infosentience.com}{InfoSentience}, or \href{https://www.vphrase.com}{vPhrase}; also \citealp{perlitzDiversityEnhancedTabletoText2022}; see \citealp{daleNavigatingTextGeneration2023} for a recent overview),
+    \item \textbf{Chart Captioning}: Generating captions\footnote{In contrast to image captioning \cite{stefanini2022show}, here the systems can rely on the underlying data in textual form (although the approaches can be hybrid, see e.g. \citealp{kantharajCharttoTextLargeScaleBenchmark2022}).} for charts or graphs, e.g., for assistive technologies, document indexing, or simplifying decision support \cite{demirGeneratingTextualSummaries2008,demirSummarizingInformationGraphics2012,obeidCharttoTextGeneratingNatural2020,kantharajCharttoTextLargeScaleBenchmark2022}.
     \item \textbf{Healthcare Summaries}: Providing  clinical data summaries about patients to clinicians \cite{portet2009automatic,scott2013data}, or vice versa, providing medical information to patients, e.g., for behavioral change \cite{reiter2003lessons} or nutritional counseling \cite{balloccu-reiter-2022-comparing}.
     \item \textbf{Product Descriptions}: Automating generating product descriptions in specific domains such as for laptops and TVs \cite{wen2015toward,wen2016multi}, or general-domain approaches for big e-commerce platforms \cite{shaoControllableDiverseText2021,kotoCanPretrainedLanguage2022}.
 \end{itemize}
@@ -428,46 +428,48 @@ Improving \ac{plm}-based \ac{d2t} generation revolves around (1) finding suitabl
 \subsection{Datasets}
 \label{sec:datasets}
 
-In this section, we describe the \ac{d2t} generation datasets, with a strong focus on the datasets used later on in the thesis. We do not describe our custom datasets presented in \citet{kasnerMindLabelsDescribing2022} and \citet{kasnerReferenceBasedMetricsAnalyzing2024}; these are described in their respective sections in \autoref{chap:investigating}.
+In this section, we outline the format and structure of \ac{d2t} generation datasets, focusing on the datasets used later on in the thesis. See \autoref{tab:datasets} for an overview. We do not describe our novel datasets presented in \citet{kasnerMindLabelsDescribing2022} and \citet{kasnerReferenceBasedMetricsAnalyzing2024}; these are described in their respective sections in \autoref{chap:investigating}.
 
 \begin{table*}[t]
     \centering\small
     \begin{tabular}{@{}lllr@{}}
         \toprule
-        \textbf{Dataset}                                                                           & \textbf{Data Format} & \textbf{Domain} & \textbf{\# Ex.} \\  \midrule
-        CACAPO \cite{vanderleeCACAPODatasetMultilingual2020}                                       & Key-value            & Multi-domain    & 20149           \\
-        DART \cite{nan2021dart}                                                                    & RDF triples          & Wikipedia       & 70524           \\
-        \textbf{E2E} \cite{dusekSemanticNoiseMatters2019,dusekEvaluatingStateoftheartEndtoEnd2020} & Key-value            & Restaurants     & 36856           \\
-        EventNarrative \cite{colas2021eventnarrative}                                              & RDF triples          & Events          & 224428          \\
-        HiTab \cite{chengHiTabHierarchicalTable2021}                                               & Table w/hl           & Statistics      & 10672           \\
-        Chart-To-Text \cite{kantharajCharttoTextLargeScaleBenchmark2022}                           & Table                & Statistics      & 34811           \\
-        Logic2Text \cite{chenLogic2TextHighFidelityNatural2020}                                    & Table w/hl           & Wikipedia       & 10753           \\
-        LogicNLG \cite{chenLogicalNaturalLanguage2020}                                             & Table                & Wikipedia       & 37015           \\
-        NumericNLG \cite{suadaaTabletoTextGenerationNumerical2021}                                 & Table                & Science         & 1355            \\
-        SciGen \cite{moosaviLearningReasonText2021}                                                & Table                & Science         & 17551           \\
-        \textbf{Rotowire} \cite{wiseman2017challenges}                                             & Table                & Basketball      & 6150            \\
-        ToTTo \cite{parikhToTToControlledTableToText2020}                                          & Table w/hl           & Wikipedia       & 136553          \\
-        \textbf{WebNLG} \cite{gardentWebNLGChallengeGenerating2017}                                & RDF triples          & DBPedia         & 38869           \\
-        WikiBio \cite{lebretNeuralTextGeneration2016}                                              & Key-value            & Biographies     & 728321          \\
-        WikiSQL \cite{zhong2017seq2sql}                                                            & Table + SQL          & Wikipedia       & 80654           \\
-        WikiTableText \cite{bao2018table}                                                          & Key-value            & Wikipedia       & 13318           \\
+        \textbf{Dataset}                                                                           & \textbf{Data Format} & \textbf{Domain(s)}         & \textbf{\# Ex.} \\  \midrule
+        CACAPO \cite{vanderleeCACAPODatasetMultilingual2020}                                       & Key-value            & News$^\blacklozenge$       & 20149           \\
+        DART \cite{nan2021dart}                                                                    & RDF triples          & Wikipedia$^\lozenge$       & 70524           \\
+        \textbf{E2E} \cite{dusekSemanticNoiseMatters2019,dusekEvaluatingStateoftheartEndtoEnd2020} & Key-value            & Restaurants                & 36856           \\
+        EventNarrative \cite{colas2021eventnarrative}                                              & RDF triples          & Events$^\lozenge$          & 224428          \\
+        HiTab \cite{chengHiTabHierarchicalTable2021}                                               & Table w/hl           & Statistics$^\blacklozenge$ & 10672           \\
+        Chart-To-Text \cite{kantharajCharttoTextLargeScaleBenchmark2022}                           & Table                & Statistics$^\blacklozenge$ & 34811           \\
+        Logic2Text \cite{chenLogic2TextHighFidelityNatural2020}                                    & Table w/hl           & Wikipedia$^\lozenge$       & 10753           \\
+        LogicNLG \cite{chenLogicalNaturalLanguage2020}                                             & Table                & Wikipedia$^\lozenge$       & 37015           \\
+        NumericNLG \cite{suadaaTabletoTextGenerationNumerical2021}                                 & Table                & Science$^\lozenge$         & 1355            \\
+        SciGen \cite{moosaviLearningReasonText2021}                                                & Table                & Science$^\lozenge$         & 17551           \\
+        \textbf{Rotowire} \cite{wiseman2017challenges}                                             & Table                & Basketball                 & 6150            \\
+        ToTTo \cite{parikhToTToControlledTableToText2020}                                          & Table w/hl           & Wikipedia$^\lozenge$       & 136553          \\
+        \textbf{WebNLG} \cite{gardentWebNLGChallengeGenerating2017}                                & RDF triples          & DBPedia$^\blacklozenge$    & 38869           \\
+        WikiBio \cite{lebretNeuralTextGeneration2016}                                              & Key-value            & Biographies$^\lozenge$     & 728321          \\
+        WikiSQL \cite{zhong2017seq2sql}                                                            & Table + SQL          & Wikipedia$^\lozenge$       & 80654           \\
+        WikiTableText \cite{bao2018table}                                                          & Key-value            & Wikipedia$^\lozenge$       & 13318           \\
         \bottomrule
     \end{tabular}
-    \caption{The list of external \ac{d2t} datasets used in this work. The datasets are included in the \textsc{TabGenie} framework (\autoref{sec:tabgenie}), the datasets in \textbf{boldface} are also used in other experiments. Glossary of data types: \textit{Key-value}: key-value pairs, \textit{Graph}: subject-predicate-object triples, \textit{Table}: tabular data (\textit{w/hl}: with highlighted cells), \textit{Chart}: chart data, \textit{SQL}: strings with SQL queries.}
+    \caption{The list of external \ac{d2t} datasets used in this work. The datasets are included in the \textsc{TabGenie} framework (\autoref{sec:tabgenie}), the datasets in \textbf{boldface} are also used in other experiments. Glossary of data types: \textit{Key-value}: key-value pairs, \textit{Graph}: subject-predicate-object triples, \textit{Table}: tabular data (\textit{w/hl}: with highlighted cells), \textit{Chart}: chart data, \textit{SQL}: strings with SQL queries. $\blacklozenge$ indicates that the dataset covers multiple specific domains; $\lozenge$ indicates that the dataset is open-domain.}
     \label{tab:datasets}.
 \end{table*}
 
-\paragraph{Data Formats} Structured data come in a variety of formats. The most common formats are:
+\paragraph{Data Formats} Structured data come in several common formats with minor variations. The most common formats are:
 
 \begin{itemize}
     \item \textbf{Key-value pairs}: Each input is a set of tuples $(k, v)$, where $k$ is a key (also called a slot), which is typically a text string, and $v$ is a value, which can be a text string, and number, or a combination of these.
     \item \textbf{RDF triples\footnote{Resource Description Framework; see \url{https://www.w3.org/TR/PR-rdf-syntax/}.}}: Each input is a set of triples $(s, p, o)$, where $s$ is a \emph{subject},  $p$ is a \emph{predicate}, and $o$ is an \textit{object}. A subject is usually an entity (person, object, or place), an object is either also an entity, or a generic text string or a number. A predicate expresses the relation between the subject and the object. This formalism can be also used to describe a \emph{directed graph} (e.g., a knowledge graph), where $s$ and $o$ are nodes and $p$ is a directed edge between these nodes.
-    \item \textbf{Table}: Each input is structured as a \textit{table}. In its basic version, a table is a two-dimensional matrix with $m$ columns and $n$ rows, which together define a grid of $m \times n$ cells. The cell can be either a heading (for the respective row or column), or contain a textual or numerical value. Generally, a table can contain merged cells, nested headings, or multiple disjoint table regions.
+    \item \textbf{Table}: Each input is structured as a \textit{table}, i.e., a two-dimensional cell matrix of $m$ columns and $n$ rows. Cells can be divided between headings (containing a ``key'' for the respective row or column), or contain a textual or numerical value. A subset of cells may be \emph{highlighted } -- in that case, the output text should describe only that particular subset of cells. A generalized version of a table may also contain merged cells, nested headings, or multiple disjoint table regions.
 \end{itemize}
 
 As we show in \autoref{chap:tabgenie}, all of the aforementioned formats can be unified in a tabular format with minimal information loss. In \autoref{sec:prompting}, we also show how to handle data in the JSON format.\footnote{JavaScript Object Notation; see \url{https://www.json.org}.}
 
-\paragraph{Domains}
+\paragraph{Domains} The notion of a \emph{domain} is usually understood in \ac{d2t} generation under the \href{https://dictionary.cambridge.org/dictionary/english/domain}{Cambridge Dictionary} definition ``an area of interest''. However, the term may be slippery: while \citet{wen2016multi} consider the domains so related as \emph{TVs} and \emph{laptops} as distinct, \citet{lin2023survey} considers the tables from ACL Anthology papers \cite{suadaaTabletoTextGenerationNumerical2021} as domain-specific.
+
+Most commonly, the term \emph{multi-domain} is used if the content of two subsets of data comes from a different distributions, so that a model train on one subset does not straighforwardly generalize to another (see, e.g., \citealp{vanderleeCACAPODatasetMultilingual2020,budzianowskiMultiWOZLargeScaleMultiDomain2020,rastogiScalableMultiDomainConversational2020}). If the topic of the dataset is unrestricted, or if it is based on a large-scale data source such as Wikipedia, the datasets is then considered \emph{open-domain} (see, e.g., \citealp{nan2021dart,chenLogicalNaturalLanguage2020,kann2022open}).
 
 \paragraph{Selected Datasets}
 
