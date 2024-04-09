@@ -365,7 +365,7 @@ and also brings benefits to neural-based systems \cite{ferreiraNeuralDatatotextG
 By \emph{rule-based approaches} for \ac{d2t} generation, we mean approaches which require manual construction of rules or grammars for tackling the task, as opposed to data-driven approaches. It is useful to view these approaches through the lens of the \ac{d2t} generation pipeline (\autoref{sec:d2t-pipeline}) as a way to built module for individual subtasks. Rule-based approaches, especially in combination with other approaches, are still in use in various forms today \cite{gattSurveyStateArt2018,daleNaturalLanguageGeneration2020,daleNavigatingTextGeneration2023}.
 
 
-\paragraph{Content Selection and Text Planning} The rules for the earlier stages of the \ac{d2t} generation pipeline are typically domain-specific, relying on the judment of domain experts. In the content selection step, heuristics can be used for extracting important information from the data, e.g., \textit{``if a pattern is detected in the signal, include it in the report''} \cite{portet2009automatic}. Various factors can influence the decision, including target length of the goal summary, the problem at hand, or the target audience \cite{gkatzia2016content}. In the text planing step, discourse strategies are designed for satisfying the desired communicative goals such as \emph{define}, \emph{compare}, or \emph{describe}, which emerge from domain-specific schemata \cite{mckeown1985text}. The resulting rules are typically in the form \textit{``if a player scores two consecutive goals, describe these in the same sentence''}  \cite{gattSurveyStateArt2018}.
+\paragraph{Content Selection and Text Planning} The rules for the earlier stages of the \ac{d2t} generation pipeline are typically domain-specific, relying on the judment of domain experts. In the content selection step, heuristics can be used for extracting important information from the data, e.g., \textit{``if a pattern is detected in the signal, include it in the report''} \cite{portet2009automatic}. Various factors can influence the decision, including target length of the goal summary, the problem at hand, or the target audience \cite{gkatziaContentSelectionDatatoText2016}. In the text planing step, discourse strategies are designed for satisfying the desired communicative goals such as \emph{define}, \emph{compare}, or \emph{describe}, which emerge from domain-specific schemata \cite{mckeown1985text}. The resulting rules are typically in the form \textit{``if a player scores two consecutive goals, describe these in the same sentence''}  \cite{gattSurveyStateArt2018}.
 
 
 \paragraph{Template-based Lexicalization} Simpler rule-based approaches for lexicalization and surface realization are characterised by \emph{templates}: pre-written text snippets which are ``glued'' together and filled with values from the data. Templates can range from simple fill-in-the-blank approaches (such as \textit{``The temperature will be \{temp\} degrees''}) to more sophisticated templates using a templating language \cite{reiter2016nlg,gatt2009simplenlg}.  Hand-written rules are used not only for selecting the templates, but also combining them and filling the placeholders with values (where the latter can be non-trivial in languages with rich morphology). The resulting rule-based system is usually tied to the specific task and domain and cannot handle more complex cases, but can be way to generate sufficient outputs with reasonable development time and costs \cite{vanderleeAutomatedLearningTemplates2018}.
@@ -497,3 +497,26 @@ Most commonly, the term \emph{multi-domain} is used if the content of two subset
 
 \subsection{Evaluation Metrics}
 \label{sec:evaluation}
+
+The most common evaluation measures for \ac{d2t} generation are \emph{intrinsic}, i.e., focusing on evaluating certain aspects of the quality of the system and its outputs \cite{gkatzia2015snapshot,celikyilmazEvaluationTextGeneration2021}.\footnote{As opposed to \emph{extrinsic} measures, which evaluate the impact of the system in the external environment \cite{celikyilmazEvaluationTextGeneration2021}. While \emph{extrinsic} metrics could give us better picture of the real-world impact, they are not suitable for early research stages due to high demands on the system quality, and they are also less suitable for evaluating individual subtasks \cite{van2019best}.} On a high-level, we can group the evaluation measures between \emph{automatic metrics} and \emph{human evaluation}.
+
+\paragraph{Lexical Similarity}
+
+\begin{itemize}
+    \item \textbf{BLEU}:
+    \item \textbf{ROUGE}:
+    \item \textbf{METEOR}:
+    \item \textbf{NIST}:
+\end{itemize}
+\paragraph{Semantic Similarity}
+\begin{itemize}
+    \item \textbf{BLEURT}:
+    \item \textbf{BERTScore}:
+    \item \textbf{NUBIA}:
+\end{itemize}
+
+\paragraph{Semantic Accuracy}
+
+\paragraph{Other Aspects}
+
+\paragraph{Human Evaluation}
