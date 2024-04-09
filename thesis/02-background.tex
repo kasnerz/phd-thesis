@@ -498,15 +498,18 @@ Most commonly, the term \emph{multi-domain} is used if the content of two subset
 \subsection{Evaluation Metrics}
 \label{sec:evaluation}
 
-The most common evaluation measures for \ac{d2t} generation are \emph{intrinsic}, i.e., focusing on evaluating certain aspects of the quality of the system and its outputs \cite{gkatzia2015snapshot,celikyilmazEvaluationTextGeneration2021}.\footnote{As opposed to \emph{extrinsic} measures, which evaluate the impact of the system in the external environment \cite{celikyilmazEvaluationTextGeneration2021}. While \emph{extrinsic} metrics could give us better picture of the real-world impact, they are not suitable for early research stages due to high demands on the system quality, and they are also less suitable for evaluating individual subtasks \cite{van2019best}.} On a high-level, we can group the evaluation measures between \emph{automatic metrics} and \emph{human evaluation}. The automatic metrics can be further divided between the metrics measuring \emph{lexical similarity}, \emph{semantic similarity}, and \emph{semantic accuracy}.
+The most common evaluation measures for \ac{d2t} generation are \emph{intrinsic}, i.e., focusing on evaluating certain aspects of the quality of the system and its outputs \cite{gkatzia2015snapshot,celikyilmazEvaluationTextGeneration2021}.\footnote{As opposed to \emph{extrinsic} measures, which evaluate the impact of the system in the external environment \cite{celikyilmazEvaluationTextGeneration2021}. While \emph{extrinsic} metrics could give us better picture of the real-world impact, they are not suitable for early research stages due to high demands on the system quality, and they are also less suitable for evaluating individual subtasks \cite{van2019best}.} On a high-level, we can group the evaluation measures between \emph{automatic metrics} and \emph{human evaluation}. The automatic metrics, which are used in this work, can be further divided between the metrics measuring \emph{lexical similarity}, \emph{semantic similarity}, \emph{semantic accuracy}, \emph{text fluency}, and \emph{text diversity}. Human evalution can focus on similar aspects, but is rarely standardized and usually task-specific \cite{belzDisentanglingPropertiesHuman2020}.
 
-\paragraph{Lexical Similarity}
+From another point of view, we can group evaluation metrics between \emph{reference-based} and \emph{referenceless}. With reference-based metrics, an implicit assumption is that the closer the generated text is to the respective human-written reference text, the better. By definition, \emph{lexical similarity} and \emph{semantic similarity} metrics are reference-based. Referenceless metrics can be more varied: they either judge the quality of the text with respect to the input data (mostly semantic accuracy), or the quality of the text alone (such as text fluency, text diversity, or reading level).
+
+\paragraph{Lexical Similarity} The lexical similarity metrics measure the similarity between the generated and reference text by computing their word-level overlap. The metrics are fast, easy to compute, and serve a reasonable proxy for system comparison, which is why they have been used for decades in various \ac{nlp} areas \cite{celikyilmazEvaluationTextGeneration2021}. However, there is a recent upsurge of works arguing against using these metrics, mostly because for high quality outputs, the correlations with human judgements are low or negative, and the metrics fail to capture fine-grained phenomena \cite{mathurTangledBLEUReevaluating2020,kocmiShipNotShip2021,gehrmannRepairingCrackedFoundation2022}. As a general rule, lexical similarity metrics (which can still be useful, e.g., for comparison with prior work) should be accompanied by other metrics.
 
 \begin{itemize}
-    \item \textbf{BLEU}:
-    \item \textbf{ROUGE}:
-    \item \textbf{METEOR}:
-    \item \textbf{NIST}:
+    \item \textbf{BLEU} \cite{papineni2002bleu} is a metric which focuses on presision, that is, how much of the generated text is present in the reference text. The metric is computed as a geometric mean of the n-gram precisions, with a brevity penalty to penalize shorter outputs. BLEU has been originally used for evaluating machine translation, but since then it has become commonplace in \ac{nlp}.
+    \item \textbf{ROUGE} \cite{lin-2004-rouge} is a set of metrics which focus on recall, that is, how much of the information in the reference is preserved in the generated text. ROUGE has been originally designed for evaluating automatic summarization. ROUGE includes several variants, such as ROUGE-L, which measures the longest matching word sequence, and ROUGE-{1/2/3/4}, which measures the overlap on the respective n-grams. As found recently by \citet{gruskyRogueScores2023}, the metric has been oftentimes used incorrectly in the scientific literature.
+    \item \textbf{METEOR} \cite{banerjee-lavie-2005-meteor} is a metric which computes the harmonic mean of the unigram precision and recall, balancing these two aspects. METEOR also considers stemming and synonym matching to address the problems of text variability. It has been shown to produce better correlations with human judgements than BLEU \cite{agarwal2008meteor}, but is more complex and more computationally expensive to compute.
+    \item \textbf{NIST} \cite{martin2000nist} is a metric which focuses on precision similarly to BLEU. It assigns lower weights to less common n-grams, which are considered less informative.
+          % \item \textbf{CIDEr} \cite{vedantam2015cider} is a metric originally designed for evaluating image captions. It considers n-gram overlap, word frequency, and the informativeness of the generated caption compared to the reference captions. While not typically used for text summarization or machine translation evaluation, it can be adapted for these tasks as well.
 \end{itemize}
 \paragraph{Semantic Similarity}
 \begin{itemize}
@@ -516,5 +519,8 @@ The most common evaluation measures for \ac{d2t} generation are \emph{intrinsic}
 \end{itemize}
 
 \paragraph{Semantic Accuracy}
+
+\paragraph{Text Fluency} perplexity
+\paragraph{Text Diversity}
 
 \paragraph{Human Evaluation}
