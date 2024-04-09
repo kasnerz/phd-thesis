@@ -434,26 +434,26 @@ In this section, we outline the format and structure of \ac{d2t} generation data
     \centering\small
     \begin{tabular}{@{}lllr@{}}
         \toprule
-        \textbf{Dataset}                                                                           & \textbf{Data Format} & \textbf{Domain(s)}         & \textbf{\# Ex.} \\  \midrule
-        CACAPO \cite{vanderleeCACAPODatasetMultilingual2020}                                       & Key-value            & News$^\blacklozenge$       & 20149           \\
-        DART \cite{nan2021dart}                                                                    & RDF triples          & Wikipedia$^\lozenge$       & 70524           \\
-        \textbf{E2E} \cite{dusekSemanticNoiseMatters2019,dusekEvaluatingStateoftheartEndtoEnd2020} & Key-value            & Restaurants                & 36856           \\
-        EventNarrative \cite{colas2021eventnarrative}                                              & RDF triples          & Events$^\lozenge$          & 224428          \\
-        HiTab \cite{chengHiTabHierarchicalTable2021}                                               & Table w/hl           & Statistics$^\blacklozenge$ & 10672           \\
-        Chart-To-Text \cite{kantharajCharttoTextLargeScaleBenchmark2022}                           & Table                & Statistics$^\blacklozenge$ & 34811           \\
-        Logic2Text \cite{chenLogic2TextHighFidelityNatural2020}                                    & Table w/hl           & Wikipedia$^\lozenge$       & 10753           \\
-        LogicNLG \cite{chenLogicalNaturalLanguage2020}                                             & Table                & Wikipedia$^\lozenge$       & 37015           \\
-        NumericNLG \cite{suadaaTabletoTextGenerationNumerical2021}                                 & Table                & Science$^\lozenge$         & 1355            \\
-        SciGen \cite{moosaviLearningReasonText2021}                                                & Table                & Science$^\lozenge$         & 17551           \\
-        \textbf{Rotowire} \cite{wiseman2017challenges}                                             & Table                & Basketball                 & 6150            \\
-        ToTTo \cite{parikhToTToControlledTableToText2020}                                          & Table w/hl           & Wikipedia$^\lozenge$       & 136553          \\
-        \textbf{WebNLG} \cite{gardentWebNLGChallengeGenerating2017}                                & RDF triples          & DBPedia$^\blacklozenge$    & 38869           \\
-        WikiBio \cite{lebretNeuralTextGeneration2016}                                              & Key-value            & Biographies$^\lozenge$     & 728321          \\
-        WikiSQL \cite{zhong2017seq2sql}                                                            & Table + SQL          & Wikipedia$^\lozenge$       & 80654           \\
-        WikiTableText \cite{bao2018table}                                                          & Key-value            & Wikipedia$^\lozenge$       & 13318           \\
+        \textbf{Dataset}                                                                           & \textbf{Data Format} & \textbf{Domain(s)}      & \textbf{\# Ex.} \\  \midrule
+        CACAPO \cite{vanderleeCACAPODatasetMultilingual2020}                                       & Key-value            & News$^\blacklozenge$    & 20,149          \\
+        DART \cite{nan2021dart}                                                                    & RDF triples          & Wikipedia$^\lozenge$    & 70,524          \\
+        \textbf{E2E} \cite{dusekSemanticNoiseMatters2019,dusekEvaluatingStateoftheartEndtoEnd2020} & Key-value            & Restaurants             & 36,856          \\
+        EventNarrative \cite{colas2021eventnarrative}                                              & RDF triples          & Events$^\lozenge$       & 224,428         \\
+        HiTab \cite{chengHiTabHierarchicalTable2021}                                               & Table w/hl           & Statistics$^\lozenge$   & 10,672          \\
+        Chart-To-Text \cite{kantharajCharttoTextLargeScaleBenchmark2022}                           & Table                & Statistics$^\lozenge$   & 34,811          \\
+        Logic2Text \cite{chenLogic2TextHighFidelityNatural2020}                                    & Table w/hl           & Wikipedia$^\lozenge$    & 10,753          \\
+        LogicNLG \cite{chenLogicalNaturalLanguage2020}                                             & Table                & Wikipedia$^\lozenge$    & 37,015          \\
+        NumericNLG \cite{suadaaTabletoTextGenerationNumerical2021}                                 & Table                & Science$^\lozenge$      & 1,355           \\
+        SciGen \cite{moosaviLearningReasonText2021}                                                & Table                & Science$^\lozenge$      & 17,551          \\
+        \textbf{Rotowire} \cite{wiseman2017challenges}                                             & Table                & Basketball              & 6,150           \\
+        ToTTo \cite{parikhToTToControlledTableToText2020}                                          & Table w/hl           & Wikipedia$^\lozenge$    & 136,553         \\
+        \textbf{WebNLG} \cite{gardentWebNLGChallengeGenerating2017}                                & RDF triples          & DBPedia$^\blacklozenge$ & 42,873          \\
+        WikiBio \cite{lebretNeuralTextGeneration2016}                                              & Key-value            & Biographies$^\lozenge$  & 728,321         \\
+        WikiSQL \cite{zhong2017seq2sql}                                                            & Table + SQL          & Wikipedia$^\lozenge$    & 80,654          \\
+        WikiTableText \cite{bao2018table}                                                          & Key-value            & Wikipedia$^\lozenge$    & 13,318          \\
         \bottomrule
     \end{tabular}
-    \caption{The list of external \ac{d2t} datasets used in this work. The datasets are included in the \textsc{TabGenie} framework (\autoref{sec:tabgenie}), the datasets in \textbf{boldface} are also used in other experiments. Glossary of data types: \textit{Key-value}: key-value pairs, \textit{Graph}: subject-predicate-object triples, \textit{Table}: tabular data (\textit{w/hl}: with highlighted cells), \textit{Chart}: chart data, \textit{SQL}: strings with SQL queries. $\blacklozenge$ indicates that the dataset covers multiple specific domains; $\lozenge$ indicates that the dataset is open-domain.}
+    \caption{The list of \ac{d2t} datasets used in this work. The datasets are included in the \textsc{TabGenie} framework (\autoref{sec:tabgenie}), the datasets in \textbf{boldface} are also used in other experiments. Glossary of data types: \textit{Key-value}: key-value pairs, \textit{Graph}: subject-predicate-object triples, \textit{Table}: tabular data (\textit{w/hl}: with highlighted cells), \textit{Chart}: chart data, \textit{SQL}: strings with SQL queries. $\blacklozenge$ indicates that the dataset is multi-domain; $\lozenge$ indicates that the dataset is open-domain.}
     \label{tab:datasets}.
 \end{table*}
 
@@ -469,18 +469,28 @@ As we show in \autoref{chap:tabgenie}, all of the aforementioned formats can be 
 
 \paragraph{Domains} The notion of a \emph{domain} is usually understood in \ac{d2t} generation under the \href{https://dictionary.cambridge.org/dictionary/english/domain}{Cambridge Dictionary} definition ``an area of interest''. However, the term may be slippery: while \citet{wen2016multi} consider the domains so related as \emph{TVs} and \emph{laptops} as distinct, \citet{lin2023survey} considers the tables from ACL Anthology papers \cite{suadaaTabletoTextGenerationNumerical2021} as domain-specific.
 
-Most commonly, the term \emph{multi-domain} is used if the content of two subsets of data comes from a different distributions, so that a model train on one subset does not straighforwardly generalize to another (see, e.g., \citealp{vanderleeCACAPODatasetMultilingual2020,budzianowskiMultiWOZLargeScaleMultiDomain2020,rastogiScalableMultiDomainConversational2020}). If the topic of the dataset is unrestricted, or if it is based on a large-scale data source such as Wikipedia, the datasets is then considered \emph{open-domain} (see, e.g., \citealp{nan2021dart,chenLogicalNaturalLanguage2020,kann2022open}).
+Most commonly, the term \emph{multi-domain} is used if the content of two subsets of data comes from a different distributions, so that a model train on one subset does not straighforwardly generalize to another (see, e.g., \citealp{vanderleeCACAPODatasetMultilingual2020,budzianowskiMultiWOZLargeScaleMultiDomain2020,rastogiScalableMultiDomainConversational2020}). If the topic of the dataset is unrestricted, or if it is based on a large-scale data source such as Wikipedia, the datasets is then considered \emph{open-domain} (see, e.g., \citealp{chenLogicalNaturalLanguage2020,nan2021dart,kann2022open}).
 
-\paragraph{Selected Datasets}
+\paragraph{Datasets} The following datasets are the most relevant for the thesis:
 
 \begin{itemize}
-    \item \textbf{WebNLG}: The WebNLG dataset \cite{gardentCreatingTrainingCorpora2017,gardentWebNLGChallengeGenerating2017} contains graph-structured RDF triples from DBPedia \cite{auer2007dbpedia} and their crowdsourced descriptions.  The WebNLG Challenge \cite{gardentCreatingTrainingCorpora2017,ferreira20202020} is a shared task on RDF-to-text generation, which evaluates the systems on the WebNLG dataset.
+    \item \textbf{WebNLG}: The WebNLG dataset \cite{gardentCreatingTrainingCorpora2017,gardentWebNLGChallengeGenerating2017} contains RDF triples from DBPedia \cite{auer2007dbpedia} and their crowdsourced descriptions. Each example consists of 1-7 triples, together forming a subgraph in the DBPedia knowledge graph. The target text should describe all the entities and the relations between them. The original WebNLG dataset \cite{gardentCreatingTrainingCorpora2017} contains 15 domains, out of which 5 are \emph{unseen}, i.e., included only in the test set (Athlete, Artist, MeanOfTransportation, CelestialBody, Politician). The dataset has been iteratively fixed, annotated for intermediate subtasks, and enriched with semi-automated German translations \cite{castroferreiraEnrichingWebNLGCorpus2018}. The version 3.0 \cite{ferreira20202020} contains one additional domain and automatic translations to Russian.
+          \begin{itemize}
+              \item
+                    The dataset has been used in a series of shared tasks called \emph{WebNLG Challenge} \cite{gardentWebNLGChallengeGenerating2017,shimorinaWebNLGChallengeHuman2019,ferreira20202020,cripwell2023WebNLGShared2023}, out of which we participated in the 2020 edition (\citealp{ferreira20202020}; see \autoref{sec:finetuning}). We also used the dataset in the experiments on low-resource \ac{d2t} generation (\Cref{sec:iterative,sec:pipeline}), evaluation (\autoref{sec:sem-acc}), data processing (\autoref{sec:tabgenie}), and out-of-domain generalization (\autoref{sec:describing}).
+          \end{itemize}
 
+    \item \textbf{E2E}: The E2E dataset \cite{dusekEvaluatingStateoftheartEndtoEnd2020} contains restaurant descriptions in the form of key-value pairs (3-8 items per example) and corresponding human-written restaurant recommendations. The name of the dataset is derived from the E2E Challenge, a shared task that focused on evaluating end-to-end \ac{d2t} generation systems. Since original version of the dataset contained semantic noise (incorrect or missing facts in the crowdsourced descriptions), we use the cleaned version from \citet{dusekSemanticNoiseMatters2019} as the default version for our experiments.
+          \begin{itemize}
+              \item
+                    Similarly to WebNLG, we used the dataset in the experiments on low-resource \ac{d2t} generation (\Cref{sec:iterative,sec:pipeline}), evaluation (\autoref{sec:sem-acc}), and data processing (\autoref{sec:tabgenie}).
+          \end{itemize}
 
-    \item \textbf{E2E}: The E2E dataset \cite{dusekEvaluatingStateoftheartEndtoEnd2020} contains restaurant descriptions in the form of attribute-value pairs and corresponding human-written recommendations. The name of the dataset is derived from the E2E Challenge, a shared task that focused on evaluating end-to-end NLG systems. \citet{dusekSemanticNoiseMatters2019} show that the original version of the dataset contains semantic noise (incorrect or missing facts in the crowdsourced descriptions) and present a cleaned version of the dataset, which we use for our experiments.
-
-
-    \item \textbf{Rotowire}: Rotowire \cite{wiseman2017challenges} is a dataset with tabular statistics of basketball games and their corresponding textual summaries, in which only a relevant subset of the input data should be verbalized. Together with the above-average length of the target summaries, this aspect makes the dataset particularly challenging for NLG systems.
+    \item \textbf{Rotowire}: Rotowire \cite{wiseman2017challenges} is a dataset with tabular statistics of basketball games and their corresponding game summaries. The target text contains only a subset of the input data (not highlighted a priori), so the systems need to model \emph{content selection} as well. Together with the above-average length of the target summaries, this aspect makes the dataset particularly challenging for \ac{d2t} generation systems.
+          \begin{itemize}
+              \item
+                    We used the outputs from the neural systems on this dataset for building a token-level evaluation metric (\autoref{sec:eval-token}), and we included its updated version SportSett:Basketball \cite{thomson2020sportsett} in our data processing toolkit (\autoref{sec:tabgenie}).
+          \end{itemize}
 \end{itemize}
 
 
