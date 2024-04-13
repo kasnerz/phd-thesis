@@ -51,19 +51,17 @@ We train a separate version of mBART for each language: $\text{mBART}_{\text{en}
 \begin{table*}[t]
     \footnotesize
     \centering
-    \begin{tabular}{@{}lp{11.5cm}@{}}
-        \textbf{input}         & \texttt{Piotr\_Hallmann | weight | 70.308 }  $\blacktriangleright$ \texttt{ Piotr\_Hallmann | birthDate | 1987-08-25} \\
-        \textbf{output [en]}   & Born on August 25th 1987, Piotr Hallmann has a weight of 70.308.                                                      \\
+    \begin{tabular}{@{}lp{11.7cm}@{}}
+        \textbf{input}    & \texttt{Piotr\_Hallmann | weight | 70.308}  $\blacktriangleright$ \texttt{ Piotr\_Hallmann | birthDate | 1987-08-25} \\
+        \textbf{out (en)} & Born on August 25th 1987, Piotr Hallmann has a weight of 70.308.                                                     \\
         \midrule
-        \textbf{input}         & \texttt{Ciudad\_Ayala | populationMetro | 1777539}                                                                    \\
-        \textbf{output [en]}   & The population metro of Ciudad Ayala is 1777539.                                                                      \\
+        \textbf{in}       & \texttt{Ciudad\_Ayala | populationMetro | 1777539}                                                                   \\
+        \textbf{out (en)} & The population metro of Ciudad Ayala is 1777539.                                                                     \\
         \midrule
-        \textbf{input}         & \texttt{Bakewell\_tart | ingredient | Frangipane}                                                                     \\
-        \textbf{output [ru]}   & \begin{otherlanguage*}{russian}
-            {\fontfamily{lh}\selectfont Франжипан - один из ингредиентов тарта Бейквелл.}
-        \end{otherlanguage*}                                                                                             \\[0.1cm]
-        \textbf{transcription} & Franzhipan - odin iz ingredientov tarta Bejkvell.                                                                     \\
-        \textbf{translation}   & Frangipane is one of the ingredients of the Bakewell tart.                                                            \\
+        \textbf{in}       & \texttt{Bakewell\_tart | ingredient | Frangipane}                                                                    \\
+        \textbf{out (ru)} & Франжипан - один из ингредиентов тарта Бейквелл.                                                                     \\[0.1cm]
+        \textbf{transcr.} & Franzhipan - odin iz ingredientov tarta Bejkvell.                                                                    \\
+        \textbf{transl.}  & Frangipane is one of the ingredients of the Bakewell tart.                                                           \\
     \end{tabular}
     \caption{Example outputs from the mBART model(s) finetuned for RDF-to-text generation. (1) The model can work with unseen entities, dates and numbers. (2) The model is quite robust to unseen properties, such as \texttt{populationMetro}. However, the surface form of the property deviates too much from its meaning and the sentence is incorrect. (3) The model trained on Russian targets can use English data to form sentences in Russian, transcribing the entities to Cyrillic.}
     \label{tab:mbart:examples}
@@ -80,7 +78,7 @@ The results for Russian are shown in \autoref{tab:mbart:results-ru}. There were 
 
 The challenge organizers ran a human evaluation campain, where annotators were asked to rate the texts for data coverage, relevance, correctness, text structure and fluency.  Each criterion has been rated with a number in the range from 0 (completely disagree) to 100 (completely agree). The scores were clustered into groups (1-5; 1 being the best) among which there are no statistically significant differences according to the Wilcoxon rank-sum test \citep{wilcoxon1992individual}.
 
-Our systems placed in the top clusters (1 or 2) for both English and Russian. For English, our system ranks first for all the categories in \textit{seen domains}, and first or second in \textit{unseen entities} and \textit{unseen domains}. In total, our English system achieved rank 1 for relevance, correctness and text structure, and rank 2 for data coverage and fluency. For Russian, our system ranks second for correctness and first in all other categories.
+Our systems placed in the top clusters (1 or 2) for both English and Russian. For English, our $\text{mBART}_{\text{en}}$ system ranks first for all the categories in \textit{seen domains}, and first or second in \textit{unseen entities} and \textit{unseen domains}. In total, our English system achieved rank 1 for relevance, correctness and text structure, and rank 2 for data coverage and fluency. For Russian, our $\text{mBART}_{\text{ru}}$ system ranks second for correctness and first in all other categories.
 
 
 \begin{table*}[t]
@@ -96,7 +94,7 @@ Our systems placed in the top clusters (1 or 2) for both English and Russian. Fo
         \multirow{2}{*}{Unseen Ent.} & Ours     & 51.23                        & (4)                            & 0.406                          & (8)                               & 0.687                          & (7)  & 0.959 & (8)  & 0.63 & (8)  \\
                                      & Baseline & 40.22                        & (17)                           & 0.384                          & (15)                              & 0.648                          & (15) & 0.949 & (13) & 0.55 & (12) \\\bottomrule
     \end{tabular}
-    \caption{Results of our approach on English (all data, seen categories, unseen categories, unseen entities), compared to the baseline. The numbers in brackets show the rank of each model (out of 35 submissions) with respect to the given metric.}
+    \caption{Results of $\text{mBART}_{\text{en}}$ (all data, seen categories, unseen categories, unseen entities), compared to the baseline. The numbers in brackets show the rank of each model (out of 35 submissions) with respect to the given metric.}
     \label{tab:mbart:results-en}
 \end{table*}
 \begin{table*}[t]
@@ -106,7 +104,7 @@ Our systems placed in the top clusters (1 or 2) for both English and Russian. Fo
         Ours     & 52.93                        & (1)                            & 0.672                          & (2)                               & 0.677 & (2)  & 0.909 & (1)  \\
         Baseline & 23.53                        & (12)                           & 0.461                          & (12)                              & 0.511 & (12) & 0.836 & (12) \\\bottomrule
     \end{tabular}
-    \caption{Results of our approach on Russian data, compared to the baseline. The numbers in brackets show the rank of each model (out of 12 submissions) if ordered by the given metric.}
+    \caption{Results of $\text{mBART}_{\text{ru}}$, compared to the baseline. The numbers in brackets show the rank of each model (out of 12 submissions) if ordered by the given metric.}
     \label{tab:mbart:results-ru}
 \end{table*}
 
