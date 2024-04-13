@@ -14,11 +14,11 @@ In \Cref{sec:iterative,sec:pipeline}, we present approaches which can generate t
 % \label{sec:low-res-mot}
 \section{Finetuning LMs}
 \label{sec:finetuning}
-This section is based on the article \emph{Train Hard, Finetune Easy: Multilingual Denoising for RDF-to-Text Generation} \cite{kasnerTrainHardFinetune2020}. We introduce a simple approach of finetuning a multi-lingual \ac{plm} on linearized data for generating knowledge graph descriptions. In the WebNLG+ Shared Task, our model placed in the first third of the leaderboard for English and first or second for Russian on automatic metrics, and it made it into the best or second-best system cluster on human evaluation.
+This section is based on the article \emph{Train Hard, Finetune Easy: Multilingual Denoising for RDF-to-Text Generation} \cite{kasnerTrainHardFinetune2020}. We introduce a simple approach of finetuning a multi-lingual \ac{plm} on linearized data for generating knowledge graph descriptions. In the WebNLG+ Shared Task, our model placed in the first third of the leaderboard for English and first or second for Russian on automatic metrics, and in the best or second-best system cluster on human evaluation.
 
 \subsection{WebNLG+ Shared Task}
 \label{sec:webnlgp}
-The WebNLG Challenge 2020\footnote{\url{https://synalp.gitlabpages.inria.fr/webnlg-challenge/challenge_2020/}} (WebNLG+; \citealp{ferreira20202020}) was the second edition of the shared task in graph-to-text generation. The task was based on the WebNLG dataset, which contains subgraphs from DBpedia---each subgraph described by a set of RDF triples---accompanied with their crowdsourced text descriptions (see \autoref{sec:datasets}). On top of the original challenge \cite{gardentWebNLGChallengeGenerating2017}, WebNLG+ included a separate track of generating texts in Russian, in which we also participated.
+The WebNLG Challenge 2020\footnote{\url{https://synalp.gitlabpages.inria.fr/webnlg-challenge/challenge_2020/}} (WebNLG+; \citealp{ferreira20202020}) was the second edition of the shared task in graph-to-text generation. The task was based on the WebNLG dataset, which contains subgraphs from the DBpedia knowledge graph---each subgraph described by a set of RDF triples---accompanied with their crowdsourced text descriptions (see \autoref{sec:datasets}). On top of the original challenge \cite{gardentWebNLGChallengeGenerating2017}, WebNLG+ included a separate track of generating texts in Russian, in which we also participated.
 
 
 \subsection{Problem Formulation}
@@ -47,32 +47,6 @@ We train a separate version of mBART for each language: $\text{mBART}_{\text{en}
 
 
 \subsection{Results}
-We report on WebNLG automatic and human evaluation results, as well as our own error analysis.
-
-\paragraph{Automatic Metrics}
-The results of our approach for English are shown in \autoref{tab:mbart:results-en}, comparing to the baseline.\footnote{See \url{https://gerbil-nlg.dice-research.org/gerbil/webnlg2020results} for full results.} We can see that our approach comfortably beats the baseline in all metrics and places in the first third of the submissions. While it does lose performance on unseen categories, the drop is not as dramatic as for many other competing approaches.
-
-The results for Russian are shown in \autoref{tab:mbart:results-ru}. There were fewer submissions for Russian, and our system not only beats the baseline by a large margin (as did all competing submissions), but it is able to rank first in 2 metrics out of 4 (BLEU, BERTScore) and second in the remaining ones.
-
-\paragraph{Human Evaluation}
-
-The challenge organizers ran a human evaluation campain,\footnote{See \url{https://beng.dice-research.org/gerbil/webnlg2020resultshumaneval} for full results.} where annotators were asked to ratefive aspects of the output texts: data coverage, relevance, correctness, text structure and fluency.  Each criterion has been rated with a number in the range from "0" (completely disagree) to "100" (completely agree). The scores were clustered into groups (1-5; 1 being the best) among which there are no statistically significant differences according to the Wilcoxon rank-sum test \citep{wilcoxon1992individual}.
-
-Our systems placed in the top clusters (1 or 2) for both English and Russian. For English, our system ranks first for all the categories in \textit{seen domains}, and first or second in \textit{unseen entities} and \textit{unseen domains}. In total, our English system achieved rank 1 for relevance, correctness and text structure, and rank 2 for data coverage and fluency. For Russian, our system ranks second for correctness and first in all other categories.
-
-\paragraph{Manual Analysis}
-To better understand the nature of errors made by our system, we manually inspected a sample of 50 outputs in each language.\footnote{While one of the authors has some knowledge of Russian, it is nowhere near a native level. Automatic back-translation to English was used in a few cases to facilitate understanding.} We found factual errors in 12 English outputs, mostly concentrated along the unseen categories (\emph{Scientist}, \emph{Movie}, \emph{Musical Record}). The model tends to describe musical works and movies in terms of written works (“written”, “published” etc.), i.e., the closest seen category. There are also several swaps in roles of the entities (e.g., “is to southeast” instead of “has to its southeast”, “follows” instead of “is followed by” etc.). In a few cases, the model hallucinates a relation not specified in the data (e.g., “born on January 1, 1934 in Istanbul” when a date of birth and current residence is given, not the birthplace) or is not able to infer background knowledge not given on the input (it talks about a dead person in the present tense).
-The swaps in roles and hallucinated relations also occured in Russian; in addition, we found a hallucinated (correct) airport name and a few forgotten ingredients for a dish from a long list. Factual errors in Russian were less frequent (9 sentences), which is expected as there are no unseen categories. Moreover, the system shows an impressive performance at translating entity names from the English RDF into Russian.
-
-We further found 10 outputs with suboptimal phrasing in English and 9 in Russian, where the model did not connect properties of the same type in a coordination (e.g., two musical genres for a record) or gave numbers without proper  units (e.g., “runtime of 89.0” or “area of 250493000000.0”).
-
-\paragraph{Discussion}
-Our solution benefits from the denoising skills of the pre-trained mBART model, which to a certain extent combines all the tasks of the micro-planning pipeline (lexicalization, aggregation, surface realization, referring expression generation, sentence segmentation). Finetuning on task-specific data then mostly helps to specify the task at hand. Moreover, multilingual pre-training allows us to use a single architecture for both English and Russian.
-
-That being said, we note the RDF-to-text task is far from solved. The performance of our model is noticeably lower on categories unseen in training, and it is prone to swapping relations of entities or hallucinating relations. Even though the longest examples in the WebNLG dataset fit into the model, the length of the input sequence is still limited and the model does not generalize for inputs of arbitrary size.
-%The output text may also not be fully supported by the source, which---even though we have not noticed such cases---makes our approach suitable only for cases where using unreliable background knowledge is not detrimental for the output quality. 
-Moreover, English and Russian are coincidentally the two most represented languages in the mBART pre-training corpora (ca. 300 GB of data each) and the performance of our model would probably be lower with low-resource languages.
-
 
 \begin{table*}[t]
     \footnotesize
@@ -95,6 +69,20 @@ Moreover, English and Russian are coincidentally the two most represented langua
     \label{tab:mbart:examples}
 \end{table*}
 
+We report on WebNLG automatic and human evaluation results, as well as our own error analysis.
+
+\paragraph{Automatic Metrics}
+The results of our approach for English are shown in \autoref{tab:mbart:results-en}, comparing to the baseline.\footnote{See \url{https://gerbil-nlg.dice-research.org/gerbil/webnlg2020results} for full results.} We can see that our approach beats the baseline in all metrics and places in the first third of the submissions. While it does lose performance on unseen categories, the drop is not as dramatic as for many other competing approaches.
+
+The results for Russian are shown in \autoref{tab:mbart:results-ru}. There were fewer submissions for Russian, and our system not only beats the baseline by a large margin (as did all competing submissions), but it is able to rank first in 2 metrics out of 4 (BLEU, BERTScore) and second in the remaining ones.
+
+\paragraph{Human Evaluation}
+
+The challenge organizers ran a human evaluation campain, where annotators were asked to rate the texts for data coverage, relevance, correctness, text structure and fluency.  Each criterion has been rated with a number in the range from 0 (completely disagree) to 100 (completely agree). The scores were clustered into groups (1-5; 1 being the best) among which there are no statistically significant differences according to the Wilcoxon rank-sum test \citep{wilcoxon1992individual}.
+
+Our systems placed in the top clusters (1 or 2) for both English and Russian. For English, our system ranks first for all the categories in \textit{seen domains}, and first or second in \textit{unseen entities} and \textit{unseen domains}. In total, our English system achieved rank 1 for relevance, correctness and text structure, and rank 2 for data coverage and fluency. For Russian, our system ranks second for correctness and first in all other categories.
+
+
 \begin{table*}[t]
     \footnotesize\centering
     \begin{tabular}{llcccccccccc}\toprule
@@ -111,17 +99,32 @@ Moreover, English and Russian are coincidentally the two most represented langua
     \caption{Results of our approach on English (all data, seen categories, unseen categories, unseen entities), compared to the baseline. The numbers in brackets show the rank of each model (out of 35 submissions) with respect to the given metric.}
     \label{tab:mbart:results-en}
 \end{table*}
-
 \begin{table*}[t]
-    \small\centering
+    \footnotesize\centering
     \begin{tabular}{llcccccccc}\toprule
-                 & \multicolumn{2}{c}{\bf BLEU} & \multicolumn{2}{c}{\bf BERTScore}                                              \\\midrule
-        Ours     & 52.93                        & (1)                               & 0.672 & (2)  & 0.677 & (2)  & 0.909 & (1)  \\
-        Baseline & 23.53                        & (12)                              & 0.461 & (12) & 0.511 & (12) & 0.836 & (12) \\\bottomrule
+                 & \multicolumn{2}{c}{\bf BLEU} & \multicolumn{2}{c}{\bf METEOR} & \multicolumn{2}{c}{\bf ChrF++} & \multicolumn{2}{c}{\bf BERTScore}                               \\\midrule
+        Ours     & 52.93                        & (1)                            & 0.672                          & (2)                               & 0.677 & (2)  & 0.909 & (1)  \\
+        Baseline & 23.53                        & (12)                           & 0.461                          & (12)                              & 0.511 & (12) & 0.836 & (12) \\\bottomrule
     \end{tabular}
     \caption{Results of our approach on Russian data, compared to the baseline. The numbers in brackets show the rank of each model (out of 12 submissions) if ordered by the given metric.}
     \label{tab:mbart:results-ru}
 \end{table*}
+
+\paragraph{Manual Analysis}
+To better understand the nature of errors made by our system, we manually inspected a sample of 50 outputs in each language.\footnote{Automatic back-translation to English was used to facilitate understanding of Russian.} We found factual errors in 12 English outputs, mostly concentrated along the unseen categories (\emph{Scientist}, \emph{Movie}, \emph{Musical Record}). The model tends to describe musical works and movies in terms of written works (“written”, “published” etc.), i.e., the closest seen category. There are also several swaps in roles of the entities (e.g., “is to southeast” instead of “has to its southeast”, “follows” instead of “is followed by” etc.).
+
+In a few cases, the model hallucinates a relation not specified in the data (e.g., “born on January 1, 1934 in Istanbul” when a date of birth and current residence is given, not the birthplace) or is not able to infer background knowledge not given on the input (it talks about a dead person in the present tense).
+% The swaps in roles and hallucinated relations also occured in Russian; in addition, we found a hallucinated (correct) airport name and a few forgotten ingredients for a dish from a long list. 
+Factual errors in Russian were less frequent (9 sentences), which is expected as there are no unseen categories. Moreover, the system shows an impressive performance at translating entity names from the English RDF into Russian.
+
+We further found 10 outputs with suboptimal phrasing in English and 9 in Russian, where the model did not connect properties of the same type in a coordination (e.g., two musical genres for a record) or gave numbers without proper  units (e.g., “runtime of 89.0” or “area of 250493000000.0”).
+
+\paragraph{Discussion}
+Our solution benefits from the denoising skills of the pre-trained mBART model, which to a certain extent combines all the tasks of the micro-planning pipeline (lexicalization, aggregation, surface realization, referring expression generation, sentence segmentation). Finetuning on task-specific data then mostly helps to specify the task at hand. Moreover, multilingual pre-training allows us to use a single architecture for both English and Russian.
+
+That being said, we note the RDF-to-text task is far from solved. The performance of our model is noticeably lower on categories unseen in training, and it is prone to swapping relations of entities or hallucinating relations. Even though the longest examples in the WebNLG dataset fit into the model, the length of the input sequence is still limited and the model does not generalize for inputs of arbitrary size.
+%The output text may also not be fully supported by the source, which---even though we have not noticed such cases---makes our approach suitable only for cases where using unreliable background knowledge is not detrimental for the output quality. 
+Moreover, English and Russian are the two most represented languages in the mBART pre-training corpora (ca. 300 GB of data each) and the performance of our model would probably be lower with low-resource languages.
 
 
 
