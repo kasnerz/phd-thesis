@@ -1,49 +1,129 @@
 \chapter{Low-Resource Data-to-Text Generation}
 \label{chap:low-res}
+
+
+In this chapter, we introduce three approaches for low-resource \ac{d2t} generation based on \acp{plm}. By \emph{low-resource}, we mean using as little data as possible for generating fluent and accurate text. We develop approaches that leverage the general-domain pretraining of \acp{plm} in order to generate texts in domains with thousands, hundreds, or even zero training examples.
+
+The data we focus on are RDF triples from factual knowledge graphs and meaning representations in dialogue systems. The main feature of these kinds of data is that we always want to verbalize the whole input. For larger data, we would need a separate content selection component, but our approaches are generalizable to other kinds of data which fulfill this requirement.
+
+The simplest setting, presented in \autoref{sec:finetuning}, consists of finetuning a pretrained transformer encoder-decoder model. For finetuning the model, we need approximately thousands of in-domain examples. We show that this baseline is powerful, achieving non-trivial results on a shared task for generating knowledge graph descriptions. On top of that, we show that this approach generalizes to other languages than English, namely Russian.
+
+In \Cref{sec:iterative,sec:pipeline}, we present approaches which can generate texts with even more limited amount of in-domain training examples. A general idea is to use a \ac{plm} only as a tool for improving text fluency \emph{regardless of the content}, and delegating (possibly crude and basic, but factually correct) verbalization of the content to other, simpler tools. \autoref{sec:iterative} shows an approach using a text-editing model trained on iteratively fusing simple templates, which has a limited vocabulary focused on sentence fusion. The limited vocabulary and training objective pushes the model towards generating factually correct sentences. In \autoref{sec:pipeline}, we also add an ordering and aggregation step for generating more fluent texts. For each of these steps, we can train a \ac{plm} on general-domain operations, reducing the need for in-domain examples to zero.
+
 % \section{Motivation}
 % \label{sec:low-res-mot}
 \section{Finetuning LMs}
 \label{sec:finetuning}
-
+This section is based on the article \emph{Train Hard, Finetune Easy: Multilingual Denoising for RDF-to-Text Generation} \cite{kasnerTrainHardFinetune2020}. We introduce a simple approach of finetuning a multi-lingual \ac{plm} on linearized data for generating knowledge graph descriptions. In the WebNLG+ Shared Task, our model placed in the first third of the leaderboard for English and first or second for Russian on automatic metrics, and it made it into the best or second-best system cluster on human evaluation.
 
 \subsection{WebNLG+ Shared Task}
 \label{sec:webnlgp}
-The WebNLG Challenge 2020 \cite{ferreira2020BilingualBiDirectional2020}\footnote{\url{https://webnlg-challenge.loria.fr/challenge_2020/}} was the second edition of the shared task in mapping structured data to text. The structured data contains sets of RDF triples extracted from DBpedia\footnote{\url{https://www.dbpedia.org}} accompanied with verbalizations which were crowdsourced from human annotators.
-
-The original challenge \citep{gardentWebNLGChallengeGenerating2017,gardent} included 10 domains in the training data: \textit{Airport, Astronaut, Building, City, ComicsCharacter, Food, Monument, SportsTeam, University}, and \textit{WrittenWork}. Each set of triples included several verbalizations to promote lexical variability. %The dataset from the challenge was released to promote the research on data-to-text generation.
-WebNLG 2020 includes several extensions:
-\begin{itemize}
-    \item[(1)] It is \textit{bilingual}: in addition to original English data, a new portion of the dataset with Russian lexicalizations is provided, giving rise to a new task of generating text in Russian.
-    \item[(2)] It is \textit{bidirectional}: in addition to RDF-to-text generation, the challenge also includes a task on text-to-RDF semantic parsing. %, where the goal is to parse the lexicalizations to RDF triples both in English and Russian. 
-        (We did not participate in this task.)
-    \item[(3)] It includes 6 \textit{new categories}: 5 unseen categories from WebNLG Challenge 2017 (\textit{Athlete, Artist, CelestialBody, MeanOfTransportation, Politician}) and 1 new category (\textit{Company}).
-\end{itemize}
+The WebNLG Challenge 2020\footnote{\url{https://synalp.gitlabpages.inria.fr/webnlg-challenge/challenge_2020/}} (WebNLG+; \citealp{ferreira20202020}) was the second edition of the shared task in graph-to-text generation. The task was based on the WebNLG dataset, which contains subgraphs from DBpedia---each subgraph described by a set of RDF triples---accompanied with their crowdsourced text descriptions (see \autoref{sec:datasets}). On top of the original challenge \cite{gardentWebNLGChallengeGenerating2017}, WebNLG+ included a separate track of generating texts in Russian, in which we also participated.
 
 
-
-
-\subsection{Our Submission}
+\subsection{Problem Formulation}
 \label{sec:mbart}
-We formulate the RDF-to-text task as \textit{text denoising} and train mBART to solve the task individually for each language (see Figure \ref{fig:mbart}).
-We use the provided XML WebNLG data reader\footnote{\url{https://gitlab.com/webnlg/corpus-reader}} to load and linearize the triples. For each triple, we use the \texttt{flat\_triple()} method which converts each triple into the following format:
-$$
-    \texttt{subject $\vert$ property $\vert$ object}
-$$
-Note that the constituents of the triple (subject, predicate, object) are only marked positionally, without any extra tags. We use a token not present in the training data (“$\blacktriangleright$”) for delimiting individual triples to avoid extending the model vocabulary. We linearize the triples in their default order.
+Our input is a set of RDF triples $x \in X$, where $x = (s, p, o)$. Each triple describes the relation $p$ between the entities $s$ and $o$ in the knowledge graph.\footnote{A star-shaped graph with an entity in the middle is the most common, but the shape can be arbitrary in general.} Our target output $Y = (y_1, \ldots, y_n)$ is sequence of tokens $y_i$, which is a fluent and semantically accurate natural language description of $X$.
 
-Similarly to \citet{freitag_unsupervised_2018}, we observe that in English, linearized triples can be seen as a noisy version of the output text, where:
-\begin{itemize}[parsep=0pt,itemsep=1pt,topsep=1pt]
-    \setlength\itemsep{0.1cm}
-    \item subjects and objects are copied verbatim,
-    \item predicates are shortened or reworded,
-    \item function words are deleted,
-    \item order of the entities is shuffled.
-\end{itemize}
-mBART's pretraining objective is different from this, but we hypothesize that it is similar enough to be relevant for our task.
-For denoising Russian, our intuition stems from mBART's successful application in machine translation \citep{liu2020multilingual}.
 
-We finetune the pre-trained \texttt{mbart.CC25}\footnote{\url{https://github.com/pytorch/fairseq/tree/master/examples/mbart}} model from the \textsc{fairseq} toolkit \citep{ott2019fairseq}.
-We follow the example instructions for finetuning the model, changing only the \texttt{total\_updates} to 10,000 to reflect the smaller size of our data.  We show the capabilities of our model in Table~\ref{tab:examples}.
+We formulate the task as \emph{sequence-to-sequence} generation. First, we linearize the input sequence in the default order. We select two arbitrary separator tokens: one to delimit the contituents of the triple and another to delimit individual triples. Using the linearized sequence as an input and the target text, we finetune a pretrained encoder-decoder model using the cross-entropy objective (see \autoref{sec:transformer}). We use the finetuned model to generate the target texts using autoregressive decoding (see Algorithm~\ref{alg:decoding}).
+
+% 
+
+
+\subsection{Implementation}
+\paragraph{Data Preprocessing} We use the provided XML WebNLG data reader\footnote{\url{https://gitlab.com/webnlg/corpus-reader}} to load and linearize the triples. For each triple, we use the \texttt{flat\_triple()} method which converts each triple into the ``\texttt{s $\vert$ p $\vert$ o}'' string (i.e., using a pipe (``$\vert$'') as a separator). We use a token not present in the training data for delimiting individual triples to avoid extending the model vocabulary.\footnote{Our choice of the separators is arbitrary and relies on finetuning the model. Works such as or  show that the choice of separators is not important. Also note that the constituents of the triple are only marked positionally, without any extra tags.} We linearize the triples in their default order. For the input to the model, the data is tokenized using SentencePiece tokenizer \citep{kudo2018sentencepiece} trained on the training dataset, using a vocabulary of 250,000 subword tokens.
+
+\paragraph{Model}
+We finetune mBART \cite{liuMultilingualDenoisingPretraining2020}, a multilingual \ac{plm} based on BART, a transformer model pretrained on text denoising (see \autoref{sec:plms}).  In pretraining, the noise function of mBART replaces text spans of arbitrary length with a mask token (35\% of the words in each instance) and permutes the order of sentences. The model uses 12 layers for the encoder and 12 layers for the decoder ($\sim$680M parameters)  mBART is pretrained on the large-scale CC25 corpus extracted from Common Crawl, which contains data in 25 languages \citep{wenzek2020ccnet}.
+
+
+
+\paragraph{Training} We finetune the pre-trained \texttt{mbart.CC25}\footnote{\url{https://github.com/pytorch/fairseq/tree/master/examples/mbart}} model from the \textsc{fairseq} toolkit \citep{ott2019fairseq}. We use the default parameters for finetuning the model, changing only the \texttt{total\_updates} to 10,000 to reflect the smaller size of our data:
+
+
+
+We train a separate version of mBART for each language: $\text{mBART}_{\text{en}}$ on English inputs and English outputs, and $\text{mBART}_{\text{ru}}$ on English inputs and Russian outputs.
+
+
+\subsection{Results}
+We report on WebNLG automatic and human evaluation results, as well as our own error analysis.
+
+\paragraph{Automatic Metrics}
+The results of our approach for English are shown in \autoref{tab:mbart:results-en}, comparing to the baseline.\footnote{See \url{https://gerbil-nlg.dice-research.org/gerbil/webnlg2020results} for full results.} We can see that our approach comfortably beats the baseline in all metrics and places in the first third of the submissions. While it does lose performance on unseen categories, the drop is not as dramatic as for many other competing approaches.
+
+The results for Russian are shown in \autoref{tab:mbart:results-ru}. There were fewer submissions for Russian, and our system not only beats the baseline by a large margin (as did all competing submissions), but it is able to rank first in 2 metrics out of 4 (BLEU, BERTScore) and second in the remaining ones.
+
+\paragraph{Human Evaluation}
+
+The challenge organizers ran a human evaluation campain,\footnote{See \url{https://beng.dice-research.org/gerbil/webnlg2020resultshumaneval} for full results.} where annotators were asked to ratefive aspects of the output texts: data coverage, relevance, correctness, text structure and fluency.  Each criterion has been rated with a number in the range from "0" (completely disagree) to "100" (completely agree). The scores were clustered into groups (1-5; 1 being the best) among which there are no statistically significant differences according to the Wilcoxon rank-sum test \citep{wilcoxon1992individual}.
+
+Our systems placed in the top clusters (1 or 2) for both English and Russian. For English, our system ranks first for all the categories in \textit{seen domains}, and first or second in \textit{unseen entities} and \textit{unseen domains}. In total, our English system achieved rank 1 for relevance, correctness and text structure, and rank 2 for data coverage and fluency. For Russian, our system ranks second for correctness and first in all other categories.
+
+\paragraph{Manual Analysis}
+To better understand the nature of errors made by our system, we manually inspected a sample of 50 outputs in each language.\footnote{While one of the authors has some knowledge of Russian, it is nowhere near a native level. Automatic back-translation to English was used in a few cases to facilitate understanding.} We found factual errors in 12 English outputs, mostly concentrated along the unseen categories (\emph{Scientist}, \emph{Movie}, \emph{Musical Record}). The model tends to describe musical works and movies in terms of written works (“written”, “published” etc.), i.e., the closest seen category. There are also several swaps in roles of the entities (e.g., “is to southeast” instead of “has to its southeast”, “follows” instead of “is followed by” etc.). In a few cases, the model hallucinates a relation not specified in the data (e.g., “born on January 1, 1934 in Istanbul” when a date of birth and current residence is given, not the birthplace) or is not able to infer background knowledge not given on the input (it talks about a dead person in the present tense).
+The swaps in roles and hallucinated relations also occured in Russian; in addition, we found a hallucinated (correct) airport name and a few forgotten ingredients for a dish from a long list. Factual errors in Russian were less frequent (9 sentences), which is expected as there are no unseen categories. Moreover, the system shows an impressive performance at translating entity names from the English RDF into Russian.
+
+We further found 10 outputs with suboptimal phrasing in English and 9 in Russian, where the model did not connect properties of the same type in a coordination (e.g., two musical genres for a record) or gave numbers without proper  units (e.g., “runtime of 89.0” or “area of 250493000000.0”).
+
+\paragraph{Discussion}
+Our solution benefits from the denoising skills of the pre-trained mBART model, which to a certain extent combines all the tasks of the micro-planning pipeline (lexicalization, aggregation, surface realization, referring expression generation, sentence segmentation). Finetuning on task-specific data then mostly helps to specify the task at hand. Moreover, multilingual pre-training allows us to use a single architecture for both English and Russian.
+
+That being said, we note the RDF-to-text task is far from solved. The performance of our model is noticeably lower on categories unseen in training, and it is prone to swapping relations of entities or hallucinating relations. Even though the longest examples in the WebNLG dataset fit into the model, the length of the input sequence is still limited and the model does not generalize for inputs of arbitrary size.
+%The output text may also not be fully supported by the source, which---even though we have not noticed such cases---makes our approach suitable only for cases where using unreliable background knowledge is not detrimental for the output quality. 
+Moreover, English and Russian are coincidentally the two most represented languages in the mBART pre-training corpora (ca. 300 GB of data each) and the performance of our model would probably be lower with low-resource languages.
+
+
+\begin{table*}[t]
+    \footnotesize
+    \centering
+    \begin{tabular}{@{}lp{11.5cm}@{}}
+        \textbf{input}         & \texttt{Piotr\_Hallmann | weight | 70.308 }  $\blacktriangleright$ \texttt{ Piotr\_Hallmann | birthDate | 1987-08-25} \\
+        \textbf{output [en]}   & Born on August 25th 1987, Piotr Hallmann has a weight of 70.308.                                                      \\
+        \midrule
+        \textbf{input}         & \texttt{Ciudad\_Ayala | populationMetro | 1777539}                                                                    \\
+        \textbf{output [en]}   & The population metro of Ciudad Ayala is 1777539.                                                                      \\
+        \midrule
+        \textbf{input}         & \texttt{Bakewell\_tart | ingredient | Frangipane}                                                                     \\
+        \textbf{output [ru]}   & \begin{otherlanguage*}{russian}
+            {\fontfamily{lh}\selectfont Франжипан - один из ингредиентов тарта Бейквелл.}
+        \end{otherlanguage*}                                                                                             \\[0.1cm]
+        \textbf{transcription} & Franzhipan - odin iz ingredientov tarta Bejkvell.                                                                     \\
+        \textbf{translation}   & Frangipane is one of the ingredients of the Bakewell tart.                                                            \\
+    \end{tabular}
+    \caption{Example outputs from the mBART model(s) finetuned for RDF-to-text generation. (1) The model can work with unseen entities, dates and numbers. (2) The model is quite robust to unseen properties, such as \texttt{populationMetro}. However, the surface form of the property deviates too much from its meaning and the sentence is incorrect. (3) The model trained on Russian targets can use English data to form sentences in Russian, transcribing the entities to Cyrillic.}
+    \label{tab:mbart:examples}
+\end{table*}
+
+\begin{table*}[t]
+    \footnotesize\centering
+    \begin{tabular}{llcccccccccc}\toprule
+                                     &          & \multicolumn{2}{c}{\bf BLEU} & \multicolumn{2}{c}{\bf METEOR} & \multicolumn{2}{c}{\bf ChrF++} & \multicolumn{2}{c}{\bf BERTScore} & \multicolumn{2}{c}{\bf BLEURT}                                     \\\midrule
+        \multirow{2}{*}{All}         & Ours     & 50.34                        & (10)                           & 0.398                          & (8)                               & 0.666                          & (8)  & 0.951 & (8)  & 0.57 & (8)  \\
+                                     & Baseline & 40.57                        & (14)                           & 0.373                          & (15)                              & 0.621                          & (15) & 0.943 & (14) & 0.47 & (12) \\\midrule
+        \multirow{2}{*}{Seen Cat.}   & Ours     & 59.13                        & (10)                           & 0.422                          & (10)                              & 0.712                          & (9)  & 0.960 & (9)  & 0.58 & (14) \\
+                                     & Baseline & 42.95                        & (31)                           & 0.387                          & (27)                              & 0.650                          & (28) & 0.943 & (31) & 0.41 & (31) \\\midrule
+        \multirow{2}{*}{Unseen Cat.} & Ours     & 42.24                        & (10)                           & 0.375                          & (13)                              & 0.617                          & (10) & 0.943 & (11) & 0.52 & (10) \\
+                                     & Baseline & 37.56                        & (12)                           & 0.357                          & (15)                              & 0.584                          & (15) & 0.940 & (12) & 0.44 & (12) \\\midrule
+        \multirow{2}{*}{Unseen Ent.} & Ours     & 51.23                        & (4)                            & 0.406                          & (8)                               & 0.687                          & (7)  & 0.959 & (8)  & 0.63 & (8)  \\
+                                     & Baseline & 40.22                        & (17)                           & 0.384                          & (15)                              & 0.648                          & (15) & 0.949 & (13) & 0.55 & (12) \\\bottomrule
+    \end{tabular}
+    \caption{Results of our approach on English (all data, seen categories, unseen categories, unseen entities), compared to the baseline. The numbers in brackets show the rank of each model (out of 35 submissions) with respect to the given metric.}
+    \label{tab:mbart:results-en}
+\end{table*}
+
+\begin{table*}[t]
+    \small\centering
+    \begin{tabular}{llcccccccc}\toprule
+                 & \multicolumn{2}{c}{\bf BLEU} & \multicolumn{2}{c}{\bf BERTScore}                                              \\\midrule
+        Ours     & 52.93                        & (1)                               & 0.672 & (2)  & 0.677 & (2)  & 0.909 & (1)  \\
+        Baseline & 23.53                        & (12)                              & 0.461 & (12) & 0.511 & (12) & 0.836 & (12) \\\bottomrule
+    \end{tabular}
+    \caption{Results of our approach on Russian data, compared to the baseline. The numbers in brackets show the rank of each model (out of 12 submissions) if ordered by the given metric.}
+    \label{tab:mbart:results-ru}
+\end{table*}
+
+
 
 
 
