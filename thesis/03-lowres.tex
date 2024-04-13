@@ -39,11 +39,8 @@ We finetune mBART \cite{liuMultilingualDenoisingPretraining2020}, a multilingual
 
 
 
-\paragraph{Training} We finetune the pre-trained \texttt{mbart.CC25}\footnote{\url{https://github.com/pytorch/fairseq/tree/master/examples/mbart}} model from the \textsc{fairseq} toolkit \citep{ott2019fairseq}. We use the default parameters for finetuning the model, changing only the \texttt{total\_updates} to 10,000 to reflect the smaller size of our data:
+\paragraph{Training} We train a separate version of mBART for each language: $\text{mBART}_{\text{en}}$ on English inputs and English outputs, and $\text{mBART}_{\text{ru}}$ on English inputs and Russian outputs. We finetune the pre-trained \texttt{mbart.CC25}\footnote{\url{https://github.com/pytorch/fairseq/tree/master/examples/mbart}} model from the \textsc{fairseq} toolkit \citep{ott2019fairseq}. We use the default parameters\footnote{\url{https://github.com/facebookresearch/fairseq/tree/main/examples/mbart}} for finetuning the model. We use dropout 0.3, attention dropout 0.1, and 1024 tokens per batch.  We set the initial learning rate to 0.0003 and use polynomial decay with 2500 warmup steps. We train the model using the Adam optimizer \cite{kingma2014adam} with $\beta_1=0.9, \beta_2=0.98$ and $\varepsilon=1e-06$. The only non-default parameter is the total number of updates from 40k to 10k to reflect the smaller size of our data.
 
-
-
-We train a separate version of mBART for each language: $\text{mBART}_{\text{en}}$ on English inputs and English outputs, and $\text{mBART}_{\text{ru}}$ on English inputs and Russian outputs.
 
 
 \subsection{Results}
