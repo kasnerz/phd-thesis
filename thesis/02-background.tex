@@ -339,10 +339,12 @@ Here is a brief overview of applications of \ac{d2t} generation:
 
 \subsection{D2T Generation Pipeline}
 \label{sec:d2t-pipeline}
-Until recently, \ac{d2t} generation could not be realized in end-to-end fashion. Typically, the systems decomposed the task into of approximately 4-6 subtasks\footnote{Some tasks may be further subdivided, which can generate up to 10 subtasks as in \citet{milleModD2TMultilayerDataset2023}.} \cite{reiterBuildingAppliedNatural1997,reiterArchitectureDatatoTextSystems2007,gattSurveyStateArt2018}. Here we selected five representative subtasks illustrated in \TODO{figure}:
+
+
+Until recently, \ac{d2t} generation could not be realized in end-to-end fashion. Typically, the systems decomposed the task into of approximately 4-6 subtasks\footnote{Some tasks may be further subdivided, which can generate up to 10 subtasks as in \citet{milleModD2TMultilayerDataset2023}.} \cite{reiterBuildingAppliedNatural1997,reiterArchitectureDatatoTextSystems2007,gattSurveyStateArt2018}. Here we selected five representative subtasks illustrated in \autoref{fig:pipeline}:
 
 \begin{enumerate}
-    \item \textbf{Content Determination}: Deciding which facts from the structured data
+    \item \textbf{Content Selection}: Deciding which facts from the structured data
           to include in the text.
     \item \textbf{Document Planning}: Determining the order of the
           facts, dividing the facts into paragraphs.
@@ -351,6 +353,16 @@ Until recently, \ac{d2t} generation could not be realized in end-to-end fashion.
     \item \textbf{Lexicalisation}: Transforming the facts to text segments.
     \item \textbf{Surface Realisation}: Combining the text segments into a well-formed text in natural language.
 \end{enumerate}
+
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{img/pipeline.pdf}
+
+    \caption{TODO}\label{fig:pipeline}
+
+\end{figure*}
+
 
 Decomposing \ac{d2t} generation into subproblems---where each module tackles a simple task---helps to modularize the system. Since each module has a specific and well-defined function, it makes the system as a whole more explainable. Modularization also enables realizing each part of the system using a different approach (see \Cref{sec:rule-d2t,sec:stat-d2t,sec:neural-d2t}).
 
