@@ -23,7 +23,7 @@ The WebNLG Challenge 2020\footnote{\url{https://synalp.gitlabpages.inria.fr/webn
 
 \subsection{Problem Formulation}
 \label{sec:mbart}
-Our input is a set of RDF triples $x \in X$, where $x = (s, p, o)$. Each triple describes the relation $p$ between the entities $s$ and $o$ in the knowledge graph.\footnote{A star-shaped graph with an entity in the middle is the most common, but the shape can be arbitrary in general.} Our target output $Y = (y_1, \ldots, y_n)$ is sequence of tokens $y_i$, which is a fluent and semantically accurate natural language description of $X$.
+Our input is a set of RDF triples $x \in X$, where $x = (s, p, o)$. Each triple describes the relation $p$ between the entities $s$ and $o$ in the knowledge graph.Our target output $Y = (y_1, \ldots, y_n)$ is sequence of tokens $y_i$, which is a fluent and semantically accurate natural language description of $X$.
 
 
 We formulate the task as \emph{sequence-to-sequence} generation. First, we linearize the input sequence in the default order. We select two arbitrary separator tokens: one to delimit the contituents of the triple and another to delimit individual triples. Using the linearized sequence as an input and the target text, we finetune a pretrained encoder-decoder model using the cross-entropy objective (see \autoref{sec:transformer}). We use the finetuned model to generate the target texts using autoregressive decoding (see Algorithm~\ref{alg:decoding}).
@@ -48,17 +48,17 @@ We finetune mBART \cite{liuMultilingualDenoisingPretraining2020}, a multilingual
 \begin{table*}[t]
     \footnotesize
     \centering
-    \begin{tabular}{@{}lp{11.7cm}@{}}
-        \textbf{input}    & \texttt{Piotr\_Hallmann | weight | 70.308}  $\blacktriangleright$ \texttt{ Piotr\_Hallmann | birthDate | 1987-08-25} \\
-        \textbf{out (en)} & Born on August 25th 1987, Piotr Hallmann has a weight of 70.308.                                                     \\
+    \begin{tabular}{@{}lp{12.7cm}@{}}
+        \textbf{input}    & \texttt{Piotr\_Hallmann | weight | 70.308 }  $\blacktriangleright$ \texttt{ Piotr\_Hallmann | birthDate | 1987-08-25} \\
+        \textbf{out (en)} & Born on August 25th 1987, Piotr Hallmann has a weight of 70.308.                                                      \\
         \midrule
-        \textbf{in}       & \texttt{Ciudad\_Ayala | populationMetro | 1777539}                                                                   \\
-        \textbf{out (en)} & The population metro of Ciudad Ayala is 1777539.                                                                     \\
+        \textbf{in}       & \texttt{Ciudad\_Ayala | populationMetro | 1777539}                                                                    \\
+        \textbf{out (en)} & The population metro of Ciudad Ayala is 1777539.                                                                      \\
         \midrule
-        \textbf{in}       & \texttt{Bakewell\_tart | ingredient | Frangipane}                                                                    \\
-        \textbf{out (ru)} & Франжипан - один из ингредиентов тарта Бейквелл.                                                                     \\[0.1cm]
-        \textbf{transcr.} & Franzhipan - odin iz ingredientov tarta Bejkvell.                                                                    \\
-        \textbf{transl.}  & Frangipane is one of the ingredients of the Bakewell tart.                                                           \\
+        \textbf{in}       & \texttt{Bakewell\_tart | ingredient | Frangipane}                                                                     \\
+        \textbf{out (ru)} & Франжипан - один из ингредиентов тарта Бейквелл.                                                                      \\[0.1cm]
+        \textbf{transcr.} & Franzhipan - odin iz ingredientov tarta Bejkvell.                                                                     \\
+        \textbf{transl.}  & Frangipane is one of the ingredients of the Bakewell tart.                                                            \\
     \end{tabular}
     \caption{Example outputs from the mBART model(s) finetuned for RDF-to-text generation. (1) The model can work with unseen entities, dates and numbers. (2) The model is quite robust to unseen properties, such as \texttt{populationMetro}. However, the surface form of the property deviates too much from its meaning and the sentence is incorrect. (3) The model trained on Russian targets can use English data to form sentences in Russian, transcribing the entities to Cyrillic.}
     \label{tab:mbart:examples}
