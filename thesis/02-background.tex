@@ -289,13 +289,13 @@ Although pretraining a model requires significant computational resources, \acp{
     \label{tab:pretrained_models}
 \end{table}
 
-\begin{figure}[t]
+\begin{figure*}[t]
     \centering
-    \includegraphics{img/objectives.pdf}
+    \includegraphics[width=0.9\textwidth]{img/objectives.pdf}
 
     \caption{A scheme of the common objectives used by pretrained models: 1) masked language modeling (encoder-only), 2) text denoising (encoder-decoder), 3)  causal language modeling (decoder-only). The special symbol \texttt{<s>} (beginning of a sentence) is used to bootstrap the decoding process.}\label{fig:objectives}
 
-\end{figure}
+\end{figure*}
 
 \paragraph{Finetuning} By \emph{finetuning} a model we mean additional training of a pretrained model on a task-specific dataset. Finetuning is more cost- and data-efficient than training a model from scratch, but is typically used only for a single task, since repeated model update can lead to erasing previous knowledge, also known as ``catastrophic forgetting'' \cite{mccloskey1989catastrophic,kirkpatrick2017overcoming}.
 

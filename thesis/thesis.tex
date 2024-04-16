@@ -67,6 +67,7 @@
 \usepackage{quoting,xparse}
 \usepackage{tikz}
 \usepackage{cleveref}
+\usepackage{pbox}
 % oxford comma
 \newcommand{\creflastconjunction}{, and\nobreakspace}
 
@@ -84,6 +85,27 @@
 \usepackage{standalone} % include standoalone tikz images
 \usepackage{bibentry}
 \usepackage{nameref}
+\usepackage{tcolorbox}
+
+\makeatletter % This line is needed for environment definitions
+\newtcolorbox{refbox}{%
+  fontupper=\small,
+  fontlower=\small,
+  arc=2pt,
+  left=0.5cm,
+  right=0.5cm,
+  top=0.2cm,
+  bottom=0.2cm,
+  colupper=black!90!white,
+  collower=black!90!white,
+  colback=gray!2!white,
+  colframe=gray!80,
+  bottomrule=0.02cm,
+  rightrule=0.03cm,
+  leftrule=0.02cm,
+  toprule=0.02cm
+}
+\makeatother % This line closes the environment definition
 
 \makeatletter
 \let\orgdescriptionlabel\descriptionlabel
@@ -121,6 +143,9 @@
 \renewcommand{\subsubsectionautorefname}{Section}
 
 
+\newcommand{\redund}[1]{{\color{black!30!red!100}\underline{#1}}}
+\newcommand{\greenund}[1]{{\color{black!40!green!100}\underline{#1}}}
+\newcommand{\blueund}[1]{{\color{black!30!blue!100}\underline{#1}}}
 
 \definecolor{mydarkblue}{rgb}{0,0.08,0.45}
 \hypersetup{ %
