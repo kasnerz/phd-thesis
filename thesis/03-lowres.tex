@@ -12,7 +12,7 @@ In \Cref{sec:iterative,sec:pipeline}, we then present approaches which can gener
 
 % \section{Motivation}
 % \label{sec:low-res-mot}
-\section{Finetuning LMs}
+\section{Finetuning PLMs}
 \label{sec:finetuning}
 
 \begin{refbox}
@@ -135,7 +135,7 @@ The performance of our model is also noticeably lower on categories unseen in tr
 
 
 
-\section{Iterative Template Fusion with Text-Editing LMs}
+\section{Iterative Template Fusion}
 \label{sec:iterative}
 
 \begin{refbox}
@@ -247,12 +247,10 @@ In each of the following steps $i=(1, \ldots, T-1)$, we lexicalize the triple $x
 
 
 \subsection{Experiments}
-As a \emph{baseline}, we generate the best templates according to \textsc{LMScorer} without applying the sentence fusion (i.e., always using the fallback).
-
-For the \emph{sentence fusion} experiments, we use \textsc{LaserTagger} with the autoregressive decoder with a beam of size 10. We use all reference lexicalizations and the vocabulary size $V=100$, following our preliminary experiments. We finetune the model for 10,000 updates with batch size 32 and learning rate $2 \times 10^{-5}$.
+\paragraph{Base Experiments} As a \emph{baseline}, we generate the best templates according to \textsc{LMScorer} without applying the sentence fusion (i.e., always using the fallback). For the \emph{sentence fusion} experiments, we use \textsc{LaserTagger} with the autoregressive decoder with a beam of size 10. We use all reference lexicalizations and the vocabulary size $V=100$, following our preliminary experiments. We finetune the model for 10,000 updates with batch size 32 and learning rate $2 \times 10^{-5}$.
 For the beam filtering heuristic, we check for the presence of entities by simple string matching in WebNLG; for the E2E dataset, we use a set of regular expressions from \citet{dusekSemanticNoiseMatters2019}. We process the triples in their default order.
 
-Additionally, we conduct a \textit{zero-shot domain adaptation} experiment. We train the sentence fusion model with the same setup, but instead of the in-domain datasets, we use a subset of the balanced-Wikipedia portion of the \textsc{DiscoFuse} dataset \cite{geva-etal-2019-discofuse}. In particular, we use the discourse types which frequently occur in our datasets, filtering the discourse types which are not relevant for our use-case. See Supplementary for the full listing of the selected types.
+\paragraph{Zero-shot Experiment} Additionally, we conduct a \textit{zero-shot} experiment. We train the sentence fusion model with the same setup, but instead of the in-domain datasets, we use a subset of the balanced-Wikipedia portion of the \textsc{DiscoFuse} dataset \cite{geva-etal-2019-discofuse}. In particular, we use the discourse types which frequently occur in our datasets, filtering the discourse types which are not relevant for our use-case.
 
 
 % \vspace{-3mm}
@@ -283,24 +281,66 @@ The higher number of fallbacks in the E2E dataset can be explained by a higher l
 \paragraph{Domain Independence} The zero-shot model trained on \textsc{DiscoFuse} is able to correctly pronominalize or delete repeated entities and join the sentences with conjunctives, e.g.\ \textit{William Anders was born in British Hong Kong\underline{, and was} a member of the crew of Apollo 8}. While the model makes only a limited use of sentence fusion, it makes the output more fluent while keeping strong guarantees of the output accuracy.
 
 \subsection{Discussion}
-Building a high-quality sentence fusion model, which lies at the core of our approach, remains a challenge \cite{lebanoff2020learning}. Our simple extractive approach relying on existing D2T datasets may not produce sufficient amount of clean data. On the other hand, the phenomena covered in the \textsc{DiscoFuse} dataset are too narrow for the fully general sentence fusion. We believe that training the sentence fusion model on a larger and more diverse sentence fusion dataset, built e.g. in an unsupervised fashion \cite{lebanoff-etal-2019-scoring}, is a way to improve the robustness of our approach.
+% Building a high-quality sentence fusion model, which lies at the core of our approach, remains a challenge \cite{lebanoff2020learning}. Our simple extractive approach relying on existing D2T datasets may not produce sufficient amount of clean data. On the other hand, the phenomena covered in the \textsc{DiscoFuse} dataset are too narrow for the fully general sentence fusion. We believe that training the sentence fusion model on a larger and more diverse sentence fusion dataset, built e.g. in an unsupervised fashion \cite{lebanoff-etal-2019-scoring}, is a way to improve the robustness of our approach.
 
-Fluency of the output sentences may be also improved by allowing more flexibility for the order of entities, either by including an ordering step in the pipeline \citep{moryossef2019astep}, or by using a text-editing model that is capable of explicit reordering of words in the sentence \cite{mallinson2020felix}. Splitting the data into smaller batches (i.e. setting an upper bound for the number of sentences fused together) could also help to improve the consistency of results with a higher number of data items.
+% Fluency of the output sentences may be also improved by allowing more flexibility for the order of entities, either by including an ordering step in the pipeline \citep{moryossef2019astep}, or by using a text-editing model that is capable of explicit reordering of words in the sentence \cite{mallinson2020felix}. Splitting the data into smaller batches (i.e. setting an upper bound for the number of sentences fused together) could also help to improve the consistency of results with a higher number of data items.
 
-Our string matching heuristic is quite crude and may lead to a high number of fallbacks. Introducing a more precise heuristic, such as a semantic fidelity classifier \citep{harkous2020have}, or a model trained for natural language inference \citep{dusek2020nli} could help to promote lexical variability of the text.
+% Our string matching heuristic is quite crude and may lead to a high number of fallbacks. Introducing a more precise heuristic, such as a semantic fidelity classifier \citep{harkous2020have}, or a model trained for natural language inference \citep{dusek2020nli} could help to promote lexical variability of the text.
 
-Finally, we note that the text-editing paradigm allows to visualize the changes made by the model, introducing the option to accept or reject the changes at each step, and even build a set of custom rules on top of the individual edit operations based on the affected tokens. This flexibility could be useful for tweaking the model manually for a production system.
+% Finally, we note that the text-editing paradigm allows to visualize the changes made by the model, introducing the option to accept or reject the changes at each step, and even build a set of custom rules on top of the individual edit operations based on the affected tokens. This flexibility could be useful for tweaking the model manually for a production system.
 
 
 % \subsection{Conclusions}
 % We proposed a simple and intuitive approach for D2T generation, splitting the process into two steps: lexicalization of data and improving the text fluency. A trivial lexicalization helps to promote fidelity and domain independence while delegating the subtle work with language to neural models allows to benefit from the power of general-domain pre-training. While a straightforward application of this approach on the WebNLG and E2E datasets does not produce state-of-the-art results in terms of automatic metrics, the results still show considerable improvements above the baseline. We provided insights into the behavior of the model, highlighted its potential benefits, and proposed the directions for further improvements.
 
 
-
-
-\section{Pipelined Text-Based Operations with Pretrained LMs}
+\section{Pipeline of Text-to-Text Neural Modules}
 \label{sec:pipeline}
-\subsection{Pipeline Operations}
-\label{sec:pipeline-ops}
+\begin{refbox}
+    This section is based on the paper \emph{Neural Pipeline for Zero-Shot Data-to-Text Generation} \cite{kasner2022neural}, joint work with Ondřej Dušek, published in the Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (ACL 2022).
+\end{refbox}
+
+In this section, we further develop the approach from \autoref{sec:iterative} for generating semantically accurate text from structured data. The main limitation of the previous approach, which was based on iterative transformations of simple templates, was the limited fluency of the output texts. To improve the text fluency, we propose an approach for transforming the templates based on a sequence of modules trained on general-domain text-based operations: ordering, aggregation, and paragraph compression. We train \acp{plm} for performing these operations on a synthetic corpus \textsc{WikiFluent} which we build from English Wikipedia. Our experiments on WebNLG and E2E show that our approach enables \ac{d2t} generation from \ac{rdf} triples in zero-shot settings. Our code and data is available on Github.\footnote{\url{https://github.com/kasnerz/zeroshot-d2t-pipeline}}
+
+\subsection{Motivation}
+Our experiments in \autoref{sec:iterative} with iterative sentence fusion led to several observations:
+
+\begin{enumerate}
+    \item The fixed order of triples limits the expressivity of the model, leading to unnatural outputs.
+    \item Using the sentence fusion model on every sentence boundary tends to produce sentences which are too compact.
+    \item State-of-the-art approaches for text generation are based on autoregressive models, as opposed to text-editing models or specialized graph-based models \cite{malmi2019lasertagger,kaleTexttoTextPreTrainingDatatoText2020,ribeiroInvestigatingPretrainedLanguage2020}.
+\end{enumerate}
+
+Following these observations, we improve our approach by (1) inserting a triple-ordering step in the process, (2) replacing the sentence fusion with sentence aggregation, and (3) basing the approach on trainable autoregressive models.
+
+
+\subsection{Our Approach}
+Our approach follows the idea of pipeline-based approaches (see \autoref{sec:d2t-pipeline}), in particular the pipelines based on iterative improvements of simple templates  \cite{laha2020scalable} and neural modules \cite{ferreiraNeuralDatatotextGeneration2019}. In contrast to previous approaches, our pipeline is fully trainable on general-domain data, i.e., without using any training data from target \ac{d2t} datasets. By eliminating the need for human references, we get rid of the costly and time-consuming reference collection process, while also avoiding the brittleness of \emph{few-shot} approaches \cite{chenFewShotNLGPreTrained2019,suFewShotTabletoTextGeneration2021,changSelectGenChallengeFinding2021}.
+
+
+\paragraph{Pipeline Steps} Our pipeline makes use of content planning (\emph{ordering} and \emph{aggregation}), which was shown to improve the quality of \ac{d2t} generation outputs \cite{moryossef2019improving,moryossef2019step,trisedyaSentenceGenerationEntity2020,su2021plan}, along with our custom final \emph{paragraph compression} step. In particular, our pipeline consists of the following:
+
+\begin{enumerate}
+    \item \textbf{Ordering:} Sentence ordering is the task of organizing a set of natural language sentences to increase the coherence of a text \cite{barzilay2001sentence,lapata2003probabilistic}. Several neural methods for this task were proposed, using either interactions between pairs of sentences \cite{chen2016neural,li2017neural}, global interactions \cite{gong2016end,wang2019hierarchical}, or combination of both \cite{cui2020bert}. We base our ordering module (§\ref{sec:ord_model}) on the recent work of \citet{calizzano2021ordering}, who use a pointer network \cite{wang2019hierarchical,vinyals2015pointer} on top of a PLM.
+    \item \textbf{Aggregation} Typically, multiple pieces of input information need to be merged into a single sentence. Previous works \cite{wiseman2018learning,shao-etal-2019-long,shen-etal-2020-neural,xu2021agggen} capture the segments which correspond to individual parts of the input as latent variables. Unlike these works, we adopt a simpler scenario using an already ordered sequence of facts (see §\ref{sec:templates}), into which we selectively insert delimiters to mark sentence boundaries.
+    \item \textbf{Paragraph Compression} We introduce \textit{paragraph compression} (PC) as a new task and the final step in our D2T generation pipeline. This task combines several standard natural-language tasks including sentence fusion, rephrasing, and coreference resolution. Unlike text summarization or simplification \cite{zhang2020pegasus,jiang2020neural}, we aim to convey the complete semantics of the text without omitting any facts. In contrast to sentence fusion \cite{geva2019discofuse,barzilay2005sentence} or sentence compression \cite{filippova2013overcoming}, we operate in the context of multiple sentences in a paragraph.  The task is the central focus of our \textsc{WikiFluent} corpus (§\ref{sec:wikifluent}).
+
+\end{enumerate}
+
+% Finetuning PLMs on human-written references is widely accepted as a standard approach for adapting PLMs to the D2T generation objective and achieving good performance on a given benchmark \cite{agarwal2021knowledge,ke2021jointgt}. However, 
+
+
+% In this paper, we present a \emph{zero-shot} alternative to the traditional finetuning paradigm by formulating the D2T generation from RDF triples as a sequence of general-domain operations over text in natural language. We start by transforming individual triples to text using trivial templates, which we subsequently order, aggregate, and compress on the paragraph level to produce the resulting description of the data. In constrast to traditional pipeline systems, all our pipeline modules are built upon PLMs and operate over sentences in natural language. The modules are trained on our new \textsc{WikiFluent} corpus, which contains 934k examples of first paragraphs from the English Wikipedia, each supplied with a synthesized set of simple template-like sentences which together convey the meaning of the original paragraph.
+% Our approach allows generating natural language descriptions from RDF triples with a minimum amount of domain-specific rules or knowledge and without using training data from the D2T datasets. Although our approach is primarily a probe into the territory of zero-shot approaches and cannot yet match the quality of state-of-the-art models, we show that it can yield large improvements upon simple baselines and match older supervised systems on automatic metrics for text fluency. Moreover, the semantic accuracy metrics and our manual error analysis suggest that our approach offers a way to prevent omissions and hallucinations common in few-shot approaches.
+
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\textwidth]{img/zeroshot_pipeline.pdf}
+    \caption{A scheme of our pipeline for zero-shot data-to-text generation from RDF triples: (1) ordering, (2) aggregation, (3) paragraph compression. Individual pipeline modules are trained on a large general-domain text corpus and operate over text in natural language. In-domain knowledge is included only in the simple hand-crafted templates for each predicate.}\label{fig:zeroshot:pipeline}
+\end{figure}
+
+
+
 \subsection{Experiments}
 \label{sec:pipeline-exp}
