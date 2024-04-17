@@ -4,7 +4,7 @@
 
 In this chapter, we introduce three approaches for low-resource \ac{d2t} generation based on \acp{plm}. By \emph{low-resource}, we mean using as little data as possible for generating fluent and accurate text. We develop approaches that leverage the general-domain pretraining of \acp{plm} in order to generate texts in domains with thousands, hundreds, or even zero training examples.
 
-The data we focus on are RDF triples from factual knowledge graphs and meaning representations in dialogue systems. The main feature of these kinds of data is that we always want to verbalize the whole input. For larger data, we would need a separate content selection component, but our approaches are generalizable to other kinds of data which fulfill this requirement.
+The data we focus on are \acs{rdf} (\Acl{rdf}) triples from factual knowledge graphs and meaning representations in dialogue systems. The main feature of these kinds of data is that we always want to verbalize the whole input. For larger data, we would need a separate content selection component, but our approaches are generalizable to other kinds of data which fulfill this requirement.
 
 The simplest setting, presented in \autoref{sec:finetuning}, consists of finetuning a pretrained transformer encoder-decoder model. For finetuning the model, we need approximately thousands of in-domain examples. We show that this baseline is powerful, achieving competitive results on a shared task for generating knowledge graph descriptions. On top of that, we show that this approach generalizes to other languages than English, namely Russian.
 
@@ -24,12 +24,12 @@ We introduce a simple approach for generating knowledge graph descriptions. Our 
 
 \subsection{WebNLG+ Shared Task}
 \label{sec:webnlgp}
-The WebNLG Challenge 2020\footnote{\url{https://synalp.gitlabpages.inria.fr/webnlg-challenge/challenge_2020/}} (WebNLG+; \citealp{ferreira20202020}) was the second edition of the shared task in graph-to-text generation. The task was based on the WebNLG dataset, which contains subgraphs from the DBpedia knowledge graph. Each subgraph is described by a set of RDF triples and accompanied with crowdsourced text descriptions (see \autoref{sec:datasets}). On top of the original challenge \cite{gardentWebNLGChallengeGenerating2017}, WebNLG+ included a separate track of generating texts in Russian, in which we also participated.
+The WebNLG Challenge 2020\footnote{\url{https://synalp.gitlabpages.inria.fr/webnlg-challenge/challenge_2020/}} (WebNLG+; \citealp{ferreira20202020}) was the second edition of the shared task in graph-to-text generation. The task was based on the WebNLG dataset, which contains subgraphs from the DBpedia knowledge graph. Each subgraph is described by a set of \ac{rdf} triples and accompanied with crowdsourced text descriptions (see \autoref{sec:datasets}). On top of the original challenge \cite{gardentWebNLGChallengeGenerating2017}, WebNLG+ included a separate track of generating texts in Russian, in which we also participated.
 
 
 \subsection{Problem Formulation}
 \label{sec:mbart}
-Our input is a set of RDF triples $x \in X$, where each triple $x = (s, p, o)$ describes the relation $p$ between the entities $s$ and $o$ in the knowledge graph. Our target output $Y$ is a fluent and semantically accurate natural language description of $X$.
+Our input is a set of \ac{rdf} triples $x \in X$, where each triple $x = (s, p, o)$ describes the relation $p$ between the entities $s$ and $o$ in the knowledge graph. Our target output $Y$ is a fluent and semantically accurate natural language description of $X$.
 
 
 We formulate the task as \emph{sequence-to-sequence} generation. First, we linearize the input sequence in the default order. We select two arbitrary separator tokens: one to delimit the contituents of the triple and another to delimit individual triples. Using the linearized sequence as an input and the target text, we finetune a pretrained encoder-decoder model using the cross-entropy objective (see \autoref{sec:transformer}). We use the finetuned model to generate the target texts using autoregressive decoding (see Algorithm~\ref{alg:decoding}).
@@ -70,7 +70,7 @@ The model uses 12 layers for the encoder and 12 layers for the decoder ($\sim$68
         \textbf{transcr.} & Franzhipan - odin iz ingredientov tarta Bejkvell.                                                                     \\
         \textbf{transl.}  & Frangipane is one of the ingredients of the Bakewell tart.                                                            \\
     \end{tabular}
-    \caption{Example outputs from the mBART model(s) finetuned for RDF-to-text generation. (1) The model can work with unseen entities, dates and numbers. (2) The model is quite robust to unseen properties, such as \texttt{populationMetro}. However, the surface form of the property deviates too much from its meaning and the sentence is incorrect. (3) The model trained on Russian targets can use English data to form sentences in Russian, transcribing the entities to Cyrillic.}
+    \caption{Example outputs from the mBART model(s) finetuned for \ac{rdf}-to-text generation. (1) The model can work with unseen entities, dates and numbers. (2) The model is quite robust to unseen properties, such as \texttt{populationMetro}. However, the surface form of the property deviates too much from its meaning and the sentence is incorrect. (3) The model trained on Russian targets can use English data to form sentences in Russian, transcribing the entities to Cyrillic.}
     \label{tab:mbart:examples}
 \end{table*}
 
@@ -122,7 +122,7 @@ To better understand the nature of errors made by our system, we manually inspec
 
 In a few cases, the model hallucinates a relation not specified in the data (e.g., “born on January 1, 1934 in Istanbul” when a date of birth and current residence is given, not the birthplace) or is not able to infer background knowledge not given on the input (it talks about a dead person in the present tense).
 % The swaps in roles and hallucinated relations also occured in Russian; in addition, we found a hallucinated (correct) airport name and a few forgotten ingredients for a dish from a long list. 
-Factual errors in Russian were less frequent (9 sentences), which is expected as there are no unseen categories. Moreover, the system shows an impressive performance at translating entity names from the English RDF into Russian.
+Factual errors in Russian were less frequent (9 sentences), which is expected as there are no unseen categories. Moreover, the system shows an impressive performance at translating entity names from the English \ac{rdf} into Russian.
 
 We further found 10 outputs with suboptimal phrasing in English and 9 in Russian, where the model did not connect properties of the same type in a coordination (e.g., two musical genres for a record) or gave numbers without proper  units (e.g., “runtime of 89.0” or “area of 250493000000.0”).
 
@@ -142,12 +142,12 @@ The performance of our model is also noticeably lower on categories unseen in tr
     This section is based on the paper \emph{Data-to-Text Generation with Iterative Text Editing} \cite{kasnerDatatoTextGenerationIterative2020}, joint work with Ondřej Dušek, published in the Proceedings of the 13th International Conference on Natural Language Generation (INLG 2020).
 \end{refbox}
 
-We present an approach for generating semantically accurate texts from structured data in low-resource settings. Our approach uses a text-editing model (\textsc{LaserTagger}) trained on the task of \emph{sentence fusion}. We first transform individual data items to text using trivial templates, and iteratively improve the resulting text using the \textsc{LaserTagger} model. We evaluate our approach on the WebNLG and E2E datasets, comparing to state-of-the-art approaches. Furthermore, we demonstrate that our task formulation opens up the possibility for zero-shot \ac{d2t} generation by training a model on a general-domain dataset for sentence fusion. The code for the experiments is available on Github.\footnote{\url{https://github.com/kasnerz/d2t_iterative_editing}}
+We present an approach for generating semantically accurate texts from structured data in low-resource settings. Our approach builds on a text-editing model trained on the task of \emph{sentence fusion}. We first transform individual data items to text using trivial templates, and iteratively improve the resulting text using the sentence fusion model, filtering, and re-ranking.  Our approach gets lower scores on lexical similarity metrics on WebNLG and E2E datasets than the state-of-the-art approaches; however, it achieves high levels of semantic accuracy due to the limited scope of the sentence fusion model and guaranteed presence of the entities. We also demonstrate that our task formulation opens up the possibility for zero-shot \ac{d2t} generation by training a model on a general-domain dataset for sentence fusion. The code for the experiments is available on Github.\footnote{\url{https://github.com/kasnerz/d2t_iterative_editing}}
 
 
 \subsection{Motivation}
 \label{sec:text-editing}
-Our goal is to improve the semantic accuracy \ac{d2t} generation. Other works have pursued this goal, e.g., by adapting the decoding algorithm \cite{tianStickingFactsConfident2020}, improving robustness of the model by injecting noise in its hidden states \cite{kedzie_good_2019}, or self-training with a natural language understanding model \cite{nieSimpleRecipeReducing2019}. Our approach is inspired by the systems which use a generate-then-rerank approach \citep{dusekSequencetoSequenceGenerationSpoken2016,juraska_deep_2018}, e.g. using a classifier \cite{harkousHaveYourText2020}, to filter incorrect output.
+Our goal is to improve the semantic accuracy \ac{d2t} generation. Other works have pursued this goal, e.g., by adapting the decoding algorithm \cite{tianStickingFactsConfident2020}, improving robustness of the model by injecting noise in its hidden states \cite{kedzie_good_2019}, or self-training with a natural language understanding model \cite{nieSimpleRecipeReducing2019}. Our approach is inspired by the systems which use a \emph{generate-then-rerank} approach \citep{dusekSequencetoSequenceGenerationSpoken2016,juraska_deep_2018}, e.g. using a classifier \cite{harkousHaveYourText2020}, to filter incorrect outputs.
 
 To generate outputs with sufficient semantic accuracy for the filtering step, we take advantage of three facts: (1) we can lexicalize individual data items using trivial templates, (2) concatenating the lexicalizations tends to produce an unnatural sounding but semantically accurate output, and (3) a \ac{plm} trained on improving the output fluency can be used for combining the lexicalizations.
 
@@ -159,7 +159,7 @@ To generate outputs with sufficient semantic accuracy for the filtering step, we
 
 \subsection{Our Approach}
 \label{sec:text-editing-exp}
-We focus on data structured as RDF triples.\footnote{Later, we also trivially extend our approach to key-value pairs.} In our approach, we start from single-triple templates and iteratively fuse them into the resulting text while filtering and reranking the results. We first detail the main components of our system (template extraction, sentence fusion, \ac{plm} scoring) and then give the overall description of the decoding algorithm with filtering and re-ranking.
+We focus on data structured as \ac{rdf} triples.\footnote{Later, we also trivially extend our approach to key-value pairs.} In our approach, we start from single-triple templates and iteratively fuse them into the resulting text while filtering and reranking the results. We first detail the main components of our system (template extraction, sentence fusion, \ac{plm} scoring) and then give the overall description of the generation algorithm.
 
 \begin{figure*}[t]
     \centering
@@ -170,64 +170,58 @@ We focus on data structured as RDF triples.\footnote{Later, we also trivially ex
 
 
 \paragraph{Template Extraction}
-We collect a set of templates for each predicate value. There are multiple possibilities for obtaining the templates: we consider (a) handcrafting the template manually for each predicate in the training set, and (b) automatically extracting the template from the lexicalizations of the examples  in the training set. For unseen predicates, we add a single fallback template: \textit{The <predicate> of <subject> is <object>.}
+We collect a set of templates for each unique predicate. We use two approaches: (a) handcrafting the template manually for each predicate in the training set, and (b) automatically extracting the template from the lexicalizations of the examples  in the training set. For unseen predicates, we add a single fallback template: \textit{The <predicate> of <subject> is <object>.}
 
 
 \paragraph{Sentence Fusion}
 We train a model for the task of \emph{sentence fusion}, i.e., combining sentences into a coherent text \cite{barzilay2005sentence}.
 %We train an independent in-domain sentence fusion model for each dataset. 
-To construct the training data, we select pairs $(X, X')$ of examples from the training data consisting of $(k, k+1)$ triples and having $k$ triples in common. This leaves us with an extra triple $t$ present only in $X'$. For each training example, we use the concatenated sequence $X~\mathrm{lex}(t)$ as a source and the sequence $X'$ as a target, where $\mathrm{lex}(t)$ denotes lexicalizing the triple $t$ using an appropriate template. %The operator $\mathrm{lex}(\cdot)$ denotes the lexicalization; the lexicalization of $t$ is obtained by filling the template as described in Section \ref{sec:alg}. 
-As a result, the model learns to integrate $X$ and $t$ into a single coherent expression.
+To construct the training data for the model, we select pairs of examples $(X, X')$ and their corresponding text descriptions $(Y, Y')$ from the original training set such that the examples consist of $(k, k+1)$ triples and have $k$ triples in common. This leaves us with an extra triple $x_{k+1}$ present only in $X'$. For each training example, we use the concatenated sequence $Y \mathrm{lex}(x_{k+1})$ as a source and the sequence $Y'$ as a target, where $\mathrm{lex}(x_{k+1})$ denotes lexicalizing the triple $x_{k+1}$ using an appropriate template.
+As a result, the model learns to integrate $Y$ and $x_{k+1}$ into a single coherent expression.
 
 
 \paragraph{PLM Scoring} For re-ranking the text, we use an additional component for computing text fluency, which we refer to as \textsc{LMScorer}.
-As described in \autoref{sec:evaluation}, we use perplexity of the text under a a \ac{plm}, computing the score of the output text $Y$ composed of tokens $y_1\ldots y_n$ as a geometric mean of the token conditional probability:
+As described in \autoref{sec:evaluation}, we use perplexity of the text under a a \ac{plm}, computing the score of the output text $Y$ composed of tokens $(y_1, \ldots, y_n)$ as a geometric mean of the token conditional probability:
 \begin{align}
-    \operatorname{score}(Y) = \Bigg( \prod_{i=1}^{n}{P(y_i|y_1 \ldots y_{i-1})} \Bigg)^{\frac{1}{n}}.
+    \operatorname{score}(Y) = \Bigg( \prod_{i=1}^{n}{P(y_i|y_1, \ldots, y_{i-1})} \Bigg)^{\frac{1}{n}}.
 \end{align}
 
 
 
 
-\paragraph{Decoding Algorithm}
-The input of the algorithm (\autoref{fig:iterative:alg}) is a set of $|T|$ ordered triples. First, we lexicalize the triple $t_0$ to get the output text $X_0$, using the filled template with the best score from \textsc{LMScorer}.
+\paragraph{Generation Algorithm}
+The input of the algorithm (\autoref{fig:iterative:alg}) is a set of $T$ ordered triples. First, we lexicalize the triple $x_0$ to get the output text $Y_0$ by filling the available templates and using the template with the best score from \textsc{LMScorer}.
 % This promotes templates which sound more natural for particular values.
-In each of the following steps $i=1\ldots |T|-1$, we lexicalize the triple $t_i$ and concatenate it with $X_{i-1}$.  For improving the fluency of the text, we use the sentence fusion model with beam search to produce $k$ hypotheses. We filter and re-rank the hypotheses, getting $X_{i}$ (see the next paragraph), and proceed to the next step. The output of the algorithm is the text $X_{|T|}$ from the final step.
+In each of the following steps $i=(1, \ldots, T-1)$, we lexicalize the triple $x_i$ and concatenate it with $Y_{i-1}$.  For improving the fluency of the text, we use the sentence fusion model with beam search to produce $k$ hypotheses. We filter and re-rank the hypotheses, getting $Y_{i}$ (see the next paragraph), and proceed to the next step. The output of the algorithm is the text $Y_{T-1}$ from the final step.
 
 
-\paragraph{Filtering and Re-ranking} In each decoding step, we remove hypotheses in the beam missing any entity from the input data using a simple heuristic based on string matching. Next, we rescore the remaining hypotheses in the beam with \textsc{LMScorer} and set the hypothesis with the best score as $X_{i}$. In case there are no sentences left in the beam after the filtering step, we let $X_{i}$ be the text in which the lexicalized $t_i$ is appended after $X_{i-1}$ without sentence fusion.
+\paragraph{Filtering and Re-ranking} In each decoding step, we remove hypotheses in the beam missing any entity from the input data using a simple heuristic based on string matching. Next, we rescore the remaining hypotheses in the beam with \textsc{LMScorer} and set the hypothesis with the best score as $Y_{i}$. In case there are no sentences left in the beam after the filtering step, we let $Y_{i}$ be the text in which the lexicalized $x_i$ is appended after $Y_{i-1}$ without sentence fusion, ensuring the semantic accuracy of the text.
 
 %For the E2E dataset, we first try to find a pair of predicates for which there is a template extracted from the data, and only use the handcrafted templates for the single predicates in the subsequent steps. 
 %The final beam filtering step is a simple heuristic, checking if all entities from the input triples are present in the output.
 
 
-\subsection{Experiments}
-\paragraph{Datasets}
-
-
-
+\subsection{Implementation}
 
 
 \begin{table}[t]
     \centering\footnotesize
-    \begin{tabular}{llll}
-        \textbf{dataset} & \textbf{method} & \textbf{predicate}          & \textbf{example templates }                                                                \\\midrule
-        WebNLG           & extracted       & \texttt{foundedBy}          & \textit{$o$ was the founder of $s$.} | \textit{$s$ was founded by $o$.}                    \\
-        E2E              & extracted       & \texttt{area}+\texttt{food} & \textit{$s$ offers $o_2$ cuisine in the $o_1$.} | \textit{$s$ in $o_1$ serves $o_2$ food.} \\
-        E2E              & manual          & \texttt{near}               & \textit{$s$ is located near $o$.}                 | \textit{$o$ is close to $s$.}
+    \begin{tabular}{lllll}
+        \textbf{dataset} & \textbf{method} & \textbf{predicate}          & \textbf{example \#1}                            & \textbf{example \#2}                     \\\midrule
+        WebNLG           & extracted       & \texttt{foundedBy}          & \textit{$o$ was the founder of $s$.}            & \textit{$s$ was founded by $o$.}         \\
+        E2E              & extracted       & \texttt{area}+\texttt{food} & \textit{$s$ offers $o_2$ cuisine in the $o_1$.} & \textit{$s$ in $o_1$ serves $o_2$ food.} \\
+        E2E              & manual          & \texttt{near}               & \textit{$s$ is located near $o$.}               & \textit{$o$ is close to $s$.}
     \end{tabular}
     \caption{Examples of templates we used in our experiments. The templates for the single predicates in the WebNLG dataset and the pairs of predicates in the E2E dataset are extracted automatically from the training data; the templates for the single predicates in E2E are created manually.}
     \label{tab:iterative:templates_ex}
 \end{table}
 
 
-\paragraph{Template extraction} For WebNLG, we extract the templates from the training examples containing only a \textit{single} triple. In the E2E dataset, there are no such examples; therefore we our solution is twofold: we extract the templates for \textit{pairs} of predicates, using them as a starting point for the algorithm in order to leverage the lexical variability in the data (manually filtering out the templates with semantic noise), and we also create a small set of templates for each \textit{single} predicate manually, using them in the subsequent steps of the algorithm (this is possible due to the low variability of the predicates in the dataset).\footnote{In the E2E dataset, the data is in the form of key-value slots. We transform the data to RDF triples by using the name of the restaurant as a \textit{subject} and the rest of the slots as \textit{predicate} and \textit{object}. This creates \textit{n-1} triples for \textit{n} slots.} See \autoref{tab:iterative:templates_ex} for examples of templates we used in our experiments.
+\paragraph{Template Extraction} We experiment with the WebNLG and E2E datasets (see \autoref{sec:datasets}). For WebNLG, we extract the templates from the training examples containing only a \textit{single} triple. In the E2E dataset, there are no such examples; therefore we first extract the templates for \textit{pairs} of predicates, using them as a starting point for the algorithm in order to leverage the lexical variability in the data (manually filtering out the templates with semantic noise), and we also create a small set of templates for each \textit{single} predicate manually, using them in the subsequent steps of the algorithm.\footnote{In the E2E dataset, the data is in the form of key-value pairs. We transform the data to \ac{rdf} triples by using the name of the restaurant as a \textit{subject} and the rest of the pairs as \textit{predicate} and \textit{object}. This creates \textit{n-1} triples for \textit{n} pairs.} See \autoref{tab:iterative:templates_ex} for examples of templates we used in our experiments.
 
-\paragraph{Sentence Fusion Model} We base our sentence fusion model on \textsc{LaserTagger} \cite{malmi2019lasertagger}. \textsc{LaserTagger} is a sequence generation model which generates outputs by tagging inputs with edit operations: \texttt{KEEP} a token, \texttt{DELETE} a token, and \texttt{ADD} a phrase before the token. In tasks where the output highly overlaps with the input, such as sentence fusion, \textsc{LaserTagger} is able to achieve performance comparable to state-of-the-art models with faster inference times and less training data.
+\paragraph{Sentence Fusion Model} We base our sentence fusion model on the text-editing model \textsc{LaserTagger} \cite{malmi2019lasertagger}. \textsc{LaserTagger} generates outputs by tagging inputs with edit operations (\texttt{KEEP} a token, \texttt{DELETE} a token, and \texttt{ADD} a phrase before the token), which makes it suitable for tasks where the output highly overlaps with the input. An important feature of \textsc{LaserTagger} is the limited size of its vocabulary, which consists of $l$ most frequent (possibly multi-token) phrases used to transform inputs to outputs in the training data. After the vocabulary is precomputed, all infeasible examples in the training data are filtered out. At the cost of limiting the number of training examples, this filtering makes the training data cleaner by removing outliers. The limited vocabulary also makes the model less prone to hallucinations errors.
 
-\paragraph{Limited Vocabulary} An important feature of \textsc{LaserTagger} is the limited size of its vocabulary, which consists of $l$ most frequent (possibly multi-token) phrases used to transform inputs to outputs in the training data. After the vocabulary is precomputed, all infeasible examples in the training data are filtered out. At the cost of limiting the number of training examples, this filtering makes the training data cleaner by removing outliers. The limited vocabulary also makes the model less prone to common neural model errors such as hallucination, which allows us to control the semantic accuracy to a great extent using only simple heuristics and language model rescoring.
-
-\paragraph{LMScorer} In our case,  \textsc{LMScorer} is a pre-trained GPT-2 language model \citep{radford2019language} from the Transformers repository\footnote{\url{https://github.com/huggingface/transformers}} \citep{Wolf2019HuggingFacesTS} wrapped in the \textit{lm-scorer}\footnote{\url{https://github.com/simonepri/lm-scorer}} package.
+\paragraph{LMScorer} As the \textsc{LMScorer} backend, we use the pre-trained GPT-2 language model \citep{radford2019language} from the Transformers repository\footnote{\url{https://github.com/huggingface/transformers}} \citep{wolf2019HuggingFacesTS}. We compute the perplexity scores using the \textit{lm-scorer}\footnote{\url{https://github.com/simonepri/lm-scorer}} package.
 
 
 
@@ -252,17 +246,17 @@ In each of the following steps $i=1\ldots |T|-1$, we lexicalize the triple $t_i$
 
 
 
+\subsection{Experiments}
+As a \emph{baseline}, we generate the best templates according to \textsc{LMScorer} without applying the sentence fusion (i.e., always using the fallback).
 
-\subsection{Setup}
-As a \emph{baseline}, we generate the best templates according to \textsc{LMScorer} without applying the sentence fusion (i.e.\ always using the fallback).
+For the \emph{sentence fusion} experiments, we use \textsc{LaserTagger} with the autoregressive decoder with a beam of size 10. We use all reference lexicalizations and the vocabulary size $V=100$, following our preliminary experiments. We finetune the model for 10,000 updates with batch size 32 and learning rate $2 \times 10^{-5}$.
+For the beam filtering heuristic, we check for the presence of entities by simple string matching in WebNLG; for the E2E dataset, we use a set of regular expressions from \citet{dusekSemanticNoiseMatters2019}. We process the triples in their default order.
 
-For the \emph{sentence fusion} experiments, we use \textsc{LaserTagger} with the autoregressive decoder with a beam of size 10. We use all reference lexicalizations and the vocabulary size $V=100$, following our preliminary experiments, which showed that filtering the references only by limiting the vocabulary size brings the best results (see Supplementary for details). We finetune the model for 10,000 updates with batch size 32 and learning rate $2 \times 10^{-5}$.
-For the beam filtering heuristic, we check for the presence of entities by simple string matching in WebNLG; for the E2E dataset, we use a set of regular expressions from TGen\footnote{\url{https://github.com/UFAL-DSG/tgen}} \citep{dusek_semantic_2019}. We do not use any pre-ordering steps for the triples and process them in the default order.
-
-Additionally, we conduct a \textit{zero-shot domain adaptation} experiment. We train the sentence fusion model with the same setup, but instead of the in-domain datasets, we use a subset of the balanced-Wikipedia portion of the \textsc{DiscoFuse} dataset. In particular, we use the discourse types which frequently occur in our datasets, filtering the discourse types which are not relevant for our use-case. See Supplementary for the full listing of the selected types.
+Additionally, we conduct a \textit{zero-shot domain adaptation} experiment. We train the sentence fusion model with the same setup, but instead of the in-domain datasets, we use a subset of the balanced-Wikipedia portion of the \textsc{DiscoFuse} dataset \cite{geva-etal-2019-discofuse}. In particular, we use the discourse types which frequently occur in our datasets, filtering the discourse types which are not relevant for our use-case. See Supplementary for the full listing of the selected types.
 
 
 % \vspace{-3mm}
+\subsection{Results}
 
 \begin{table*}[t] \footnotesize
     \begin{tabular}{l p{12cm}}
@@ -272,8 +266,36 @@ Additionally, we conduct a \textit{zero-shot domain adaptation} experiment. We t
         \textbf{Step \#2}  & Albert Jennings Fountain, who died in New Mexico Territory, was born in New York City, \greenund{Staten Island}.                                                                    \\ \midrule
         \textbf{Reference} & Albert Jennings Fountain was born in Staten Island, New York City and died in the New Mexico Territory.
     \end{tabular}
-    \caption{An example of correct behavior of the algorithm on the WebNLG dataset. Newly added entities are underlined, the output from Step \#2 is the output text.}\label{tab:ex0}
+    \caption{An example of correct behavior of the algorithm on the WebNLG dataset. Newly added entities are underlined, the output from Step \#2 is the output text.}\label{tab:iterative:output}
 \end{table*}
+
+
+\paragraph{Accuracy vs.\ Fluency}
+The scores from the automatic metrics lag behind the state-of-the-art, although both the fusion and the zero-shot approaches show improvements over the baseline. Our approach ensures zero entity errors, since the entities are filled verbatim into the templates and in case an entity is missing in the whole beam, a fallback is used instead. Semantic inconsistencies still occur, e.g.\ if a verb or function words are missing.
+
+The fused sentences in the E2E dataset, where all the objects are related to a single subject, often lean towards compact forms, e.g.: \textit{Aromi is a family friendly chinese coffee shop with a low customer rating in riverside}. On the contrary, the sentence structure in WebNLG mostly follows the structure from the templates and the model performs minimal changes to fuse the sentences together. See \autoref{tab:iterative:output} for examples of the system outputs. Out of all steps, 28\% are fallbacks (no fusion is performed) in WebNLG and 54\% in the E2E dataset. % v anglictine se za '\%' nedela mezera
+The higher number of fallbacks in the E2E dataset can be explained by a higher lexical variability of the references, together with a higher number of data items per example in the E2E dataset, making it harder for the model to maintain the text coherency over multiple steps.
+
+\paragraph{Templates} On average, there are 12.4 templates per predicate in WebNLG and 8.3 in the E2E dataset. In cases where the set of templates is more diverse, e.g.\ if the template for the predicate \textit{country} has to be selected from \{\textit{<subject> is situated within <object>, <subject> is a dish found in <object>}\}, \textsc{LMScorer} helps to select the semantically accurate template for the specific entities. The literal copying of entities can be too rigid in some cases, e.g.\ \textit{Atatürk Monument (İzmir) is made of ``Bronze''}, but these disfluencies can be improved in the fusion step.
+
+\paragraph{Reordering} \textsc{LaserTagger} does not allow arbitrary reordering of words in the sentence, which can limit the expressiveness of the sentence fusion model. Consider the example in \autoref{fig:iterative:alg}: in order to create a sentence \textit{English is spoken in Dublin, the capital of Ireland}, the model has to delete and re-insert at least one of the entities, e.g.\ \textit{English}, which has to be present in the vocabulary.
+
+\paragraph{Domain Independence} The zero-shot model trained on \textsc{DiscoFuse} is able to correctly pronominalize or delete repeated entities and join the sentences with conjunctives, e.g.\ \textit{William Anders was born in British Hong Kong\underline{, and was} a member of the crew of Apollo 8}. While the model makes only a limited use of sentence fusion, it makes the output more fluent while keeping strong guarantees of the output accuracy.
+
+\subsection{Discussion}
+Building a high-quality sentence fusion model, which lies at the core of our approach, remains a challenge \cite{lebanoff2020learning}. Our simple extractive approach relying on existing D2T datasets may not produce sufficient amount of clean data. On the other hand, the phenomena covered in the \textsc{DiscoFuse} dataset are too narrow for the fully general sentence fusion. We believe that training the sentence fusion model on a larger and more diverse sentence fusion dataset, built e.g. in an unsupervised fashion \cite{lebanoff-etal-2019-scoring}, is a way to improve the robustness of our approach.
+
+Fluency of the output sentences may be also improved by allowing more flexibility for the order of entities, either by including an ordering step in the pipeline \citep{moryossef2019astep}, or by using a text-editing model that is capable of explicit reordering of words in the sentence \cite{mallinson2020felix}. Splitting the data into smaller batches (i.e. setting an upper bound for the number of sentences fused together) could also help to improve the consistency of results with a higher number of data items.
+
+Our string matching heuristic is quite crude and may lead to a high number of fallbacks. Introducing a more precise heuristic, such as a semantic fidelity classifier \citep{harkous2020have}, or a model trained for natural language inference \citep{dusek2020nli} could help to promote lexical variability of the text.
+
+Finally, we note that the text-editing paradigm allows to visualize the changes made by the model, introducing the option to accept or reject the changes at each step, and even build a set of custom rules on top of the individual edit operations based on the affected tokens. This flexibility could be useful for tweaking the model manually for a production system.
+
+
+% \subsection{Conclusions}
+% We proposed a simple and intuitive approach for D2T generation, splitting the process into two steps: lexicalization of data and improving the text fluency. A trivial lexicalization helps to promote fidelity and domain independence while delegating the subtle work with language to neural models allows to benefit from the power of general-domain pre-training. While a straightforward application of this approach on the WebNLG and E2E datasets does not produce state-of-the-art results in terms of automatic metrics, the results still show considerable improvements above the baseline. We provided insights into the behavior of the model, highlighted its potential benefits, and proposed the directions for further improvements.
+
+
 
 
 \section{Pipelined Text-Based Operations with Pretrained LMs}
