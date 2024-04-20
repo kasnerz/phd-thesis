@@ -4,9 +4,9 @@
 <svg
    version="1.1"
    id="svg1"
-   width="364.9129"
-   height="118.33257"
-   viewBox="0 0 364.9129 118.33257"
+   width="378.54172"
+   height="118.33256"
+   viewBox="0 0 378.54171 118.33255"
    sodipodi:docname="objectives.svg"
    inkscape:version="1.3.2 (1:1.3.2+202311252150+091e20ef0f)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -31,9 +31,9 @@
      inkscape:pageopacity="0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="4.8895803"
-     inkscape:cx="233.2511"
-     inkscape:cy="101.23568"
+     inkscape:zoom="1.7287277"
+     inkscape:cx="171.51342"
+     inkscape:cy="182.79339"
      inkscape:window-width="1920"
      inkscape:window-height="1020"
      inkscape:window-x="0"
@@ -45,8 +45,8 @@
        y="0"
        inkscape:label="1"
        id="page1"
-       width="364.9129"
-       height="118.33257"
+       width="378.54172"
+       height="118.33255"
        margin="0"
        bleed="0"
        inkscape:export-filename="objectives.pdf"
@@ -57,7 +57,7 @@
      id="g1"
      inkscape:groupmode="layer"
      inkscape:label="1"
-     transform="translate(-84.463121,-14.130827)">
+     transform="translate(-77.800154,-14.130827)">
     <text
        id="text2"
        xml:space="preserve"
@@ -630,7 +630,7 @@
          sodipodi:role="line"
          id="tspan81"
          x="414.23859"
-         y="116.65071">Causal language</tspan><tspan
+         y="116.65071">(3) Causal language</tspan><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6268px;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.33333"
          sodipodi:role="line"
          x="414.23859"
@@ -657,7 +657,7 @@
          sodipodi:role="line"
          x="269.61499"
          y="123.29246"
-         id="tspan87-6">Text denoising</tspan></text>
+         id="tspan87-6">(2) Text denoising</tspan></text>
     <text
        id="text79-0-8"
        xml:space="preserve"
@@ -668,7 +668,7 @@
          sodipodi:role="line"
          id="tspan81-0-6"
          x="122.05533"
-         y="116.65071">Masked language</tspan><tspan
+         y="116.65071">(1) Masked language</tspan><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6268px;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.33333"
          sodipodi:role="line"
          x="122.05533"
