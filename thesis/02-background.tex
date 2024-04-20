@@ -2,31 +2,37 @@
 \chapter{Background}
 \label{chap:background}
 
-This chapter explains the \textbf{basic concepts} used throughout the thesis. First, we explain \textbf{neural \acp{lm}}: from the basics of neural networks (§\ref{sec:nns}) and language modeling (§\ref{sec:lm-basics}), up to pretrained (§\ref{sec:plms}) and large language models (§\ref{sec:llms}). Then we move on to \textbf{\ac{d2t} generation}: covering rule-based (§\ref{sec:rule-d2t}) and neural-based systems (§\ref{sec:neural-d2t}), \ac{d2t} datasets (§\ref{sec:datasets}) and evaluation methods (§\ref{sec:evaluation}). We assume that the reader has certain expertise in related areas of \ac{nlp}, although not necessarily in \ac{nlg}. We aim to make the work self-contained by covering all the important concepts, pointing the interested reader to related work for more details.
+This chapter explains the basic concepts used throughout the thesis.
 
-Besides that, the chapter serves also as an \textbf{overview of the state of the art} in the fields of interest. In particular, the later subsections (\Cref{sec:plms,sec:llms} for neural \acp{lm} and \Cref{sec:neural-d2t,sec:datasets,sec:evaluation} for \ac{d2t} generation) describe the datasets, models, and metrics used for the experiments. As such, the chapter serves as the main point of reference; we will only briefly revisit the most relevant concepts in the respective chapters.
+In \autoref{sec:lms}, we first cover \emph{neural \acp{lm}}, the workhorse of this thesis. We start with a brief theory of neural networks and text representation for neural networks. This theoretical grounding will help us to define the task of language modeling and its connection to neural networks. We then look at specific neural architectures, particularly the transformer architecture, and show how pretraining models of based on this architecture can give us models with strong \ac{nlp} capabilities.
+
+In \autoref{sec:d2t}, we turn our attention to \ac{d2t} generation, the central task explored in this thesis. To motivate the task, we start with an overview of real-world \ac{d2t} applications. We continue with explaining how can \ac{d2t} generation be decomposed into subtasks and how do various approaches tackle these subtasks; starting from early rule-based approaches all the way to recent neural-based systems. Finally, we describe \ac{d2t} datasets and evaluation metrics, focusing on the ones which are relevant for this thesis.
+
+We assume that the typical reader of this thesis comes from a related \ac{nlp} area and is mostly familiar with the relevant concepts. That being said, the thesis can be also used by a beginner in the field, as the work is self-contained and provides pointers to relevant work for more details. The chapter serves as the main point of reference; we will only briefly revisit the most relevant concepts in the respective chapters.
+
+
 
 
 \section{Neural Language Models}
 \label{sec:lms}
-In this section, we work our way towards neural \acp{lm}: the mathematical foundations of \acp{nn} on which the neural \acp{lm} are built on (\autoref{sec:nns}), the basic ideas of language modeling (\autoref{sec:lm-basics}) and the way \acp{lm} are constructed, trained, and eventually applied in \ac{nlp} (\Cref{sec:plms,sec:llms}).
+In this section, we work our way towards neural \acp{lm}. We start with the mathematical foundations of \acp{nn} on which the neural \acp{lm} are built on (\autoref{sec:nns}), the ways we can represent text in neural networks (\autoref{sec:text-repr}), and the basic ideas of language modeling (\autoref{sec:lm-basics}). Equipped with the necessary theoretical background, we then introduce the transformer architecture (\autoref{sec:transformer}) and how it serves as a basis for pretrained (\autoref{sec:plms}) and large (\autoref{sec:llms}) language models.
 
 \subsection{Neural Networks}
 \label{sec:nns}
-First, we need to build a tool for learning patterns from data\footnote{Until we get to \ac{d2t} generation in \autoref{sec:d2t}, we will use the word ``\textit{data}'' only in its abstract sense, as in ``any inputs we can apply our algorithms to''. We will use the term ``structured data'' whenever it is necessary to make the distinction.}. This tool---which for us will be the \textbf{neural networks}---will later help us with learning patterns about language from large-scale textual data, and in turn with generating text.
+First, we need to build a tool for learning patterns from data.\footnote{Until we get to \ac{d2t} generation in \autoref{sec:d2t}, we will use the word ``\textit{data}'' only in its abstract sense, as in ``any inputs we can apply our algorithms to''. We will use the term ``structured data'' whenever it is necessary to make the distinction.} This tool---which for us will be the neural networks---will specifically help us with learning patterns about language from large-scale textual data, and in turn with generating text.
 
-Let's say our goal is to predict real-number output $y \in \mathbb{R}$ for the given vector of real numbers $\mathbf{x} = (x_1, \ldots, x_d) \in \mathbb{R}^d$.
+To make the task more specific, let's say our goal is to predict real-number output $y \in \mathbb{R}$ for the given vector of real numbers $\mathbf{x} = (x_1, \ldots, x_d) \in \mathbb{R}^d$.
 % \footnote{We will follow the convention that vectors are denoted with boldface letters ($\mathbf{x}$), and real numbers with plain letters ($x$).} 
-We assume that the $\mathbf{x} \rightarrow y$ mapping is not arbitrary (that would leave us with memorizing all the $(\mathbf{x},y)$ pairs), but follows some regularities and underlying patterns that can be learned. This assumption will be naturally satisfied if we consider $(\mathbf{x},y)$ to be representations of real-word data, e.g., documents and their labels.
+We assume that the $\mathbf{x} \rightarrow y$ mapping is not arbitrary (that would leave us with memorizing all the $(\mathbf{x},y)$ pairs), but follows some regularities and underlying patterns that can be learned. (This assumption will be naturally satisfied if we consider $(\mathbf{x},y)$ to be representations of real-word data, e.g., documents and their labels.)
 
-For learning the underlying pattern between $\mathbf{x}$ and $y$, we will use mathematical models designed to capture the pattern in their parameters. The model estimates the parameters from a limited set of examples called the \textit{training data} and uses the learned parameters to predict the outputs on the \textit{test data}.
+For learning the underlying patterns of the mapping, we use mathematical models designed to capture the pattern in their parameters. The models estimate the parameters from a set of $(\mathbf{x},y)$ examples called the \textit{training data}, and use the learned parameters to predict the outputs on a separate set of examples (generally assumed to come from the same data-generating distribution) called the \textit{test data}.
 
-\paragraph{Perceptron Algorithm} One of the early mathematical models designed for predicting the outputs based on the inputs is the \emph{perceptron algorithm} (\citealp{rosenblatt1958perceptron}, \citealp[p.~192]{bishop2006pattern}). In this case, we assume the output is a binary class label: $y \in \{-1, 1\}$. The algorithm learns the parameters $\textbf{w} = (w_1, \ldots, w_d) \in \mathbb{R}^d$ and the bias $b \in \mathbb{R}$ describing a linear decision boundary separating the data points according to their class label. The algorithm proceeds as follows:
+\paragraph{Perceptron Algorithm} One of the early mathematical models designed for learning patterns from data is the \emph{perceptron algorithm} (\citealp{rosenblatt1958perceptron}, \citealp[p.~192]{bishop2006pattern}). In this case, we restrict the output to a binary class label: $y \in \{-1, 1\}$. The perceptron algorithm learns the parameters $\textbf{w} = (w_1, \ldots, w_d) \in \mathbb{R}^d$ and the bias $b \in \mathbb{R}$ describing a linear decision boundary separating the data points according to their class label. The algorithm proceeds as follows:
 
 
 \begin{enumerate}
-    \item The parameters $\textbf{w}$ and $b$ are initialized to small random values or zeros.
-    \item For each training example $(\mathbf{x}_i, y_i)$, the algorithm updates the weights and bias to adjust their current estimate towards the ground truth target:
+    \item The parameters $\textbf{w}$ and $b$ are initialized to small random values (or zeros).
+    \item For each training example $(\mathbf{x}_i, y_i)$, the algorithm updates the weights and bias to adjust their current estimate $\hat{y}_i$ towards the ground truth target $y_i$:
           \begin{align} \label{eq:perceptron1}
               \hat{y}_i  & = \text{sign}(\textbf{w} \cdot \mathbf{x} + b) \\
               \textbf{w} & = \textbf{w} + (y - \hat{y}) \textbf{x}        \\
@@ -37,33 +43,39 @@ For learning the underlying pattern between $\mathbf{x}$ and $y$, we will use ma
 
 The perceptron algorithm is guaranteed to converge if there exists a hyperplane which separates the data belonging to one class from another, otherwise it will not converge \cite{novikoff1962convergence}.
 
-\paragraph{Multi-layer Perceptron} To overcome the fact that the perceptron is limited to linear decision boundaries, we can use a \textbf{\acl{mlp} (\acs{mlp}\glsunset{mlp}}; \citealp[p.~164]{goodfellow2016deep}). This mathematical model---also known as a feed-forward neural network---is able to approximate any bounded continuous function \cite{hornik1989multilayer}.
+\paragraph{Multi-layer Perceptron} To overcome the fact that the perceptron is limited to linear decision boundaries, we can use a \emph{\acl{mlp}} (\acs{mlp}\glsunset{mlp}; \citealp[p.~164]{goodfellow2016deep}). This mathematical model---also known as a \emph{feed-forward neural network}---is able to approximate any bounded continuous function \cite{hornik1989multilayer}.
 
-As the name suggests, \ac{mlp} uses multiple perceptron-like units called \textit{neurons}. Analogically to the perceptron (\autoref{eq:perceptron1}), each neuron computes its output $o$ using the rule:
+As the name suggests, \ac{mlp} processes the input with multiple perceptron-like units called \textit{neurons}. Analogically to the perceptron (\autoref{eq:perceptron1}), each neuron computes its output $o$ using the rule:
 \begin{align}
     o & = f(\mathbf{x}^\top \mathbf{w}  + b),
 \end{align}
 % \begin{itemize}
-where $f: \mathbb{R} \rightarrow \mathbb{R}$ is the \emph{activation function}. Instead of signum, \ac{mlp} uses differentiable non-linear functions, most commonly nowadays \acl{relu} (\acs{relu}\glsunset{relu}; \citealp{nair2010rectified}) or its adapted version \acl{gelu} (\acs{gelu}\glsunset{gelu}; \citealp{hendrycks2016gaussian}).
+where $f: \mathbb{R} \rightarrow \mathbb{R}$ is the \emph{activation function}, $\mathbf{x}\in \mathbb{R}^n$ is the input vector, and $\mathbf{w} \in \mathbb{R}^n$ and $b \in \mathbb{R}$ are learnable parameters. Instead of signum, \ac{mlp} uses differentiable non-linear functions, nowadays most commonly the \acl{relu} (\acs{relu}\glsunset{relu}; \citealp{nair2010rectified}) or its adapted version \acl{gelu} (\acs{gelu}\glsunset{gelu}; \citealp{hendrycks2016gaussian}).
 
-For efficiency, the neurons are organized in layers, which enables formulating the \ac{mlp} computations in terms of matrix multiplication. The $i$-th layer of \ac{mlp} is parametrized with a matrix $\mathbf{W}_i \in \mathbb{R}^{d\times n}$ and a vector of biases $\mathbf{b}_i \in \mathbb{R}^{n}$, processing the \textit{hidden state} $\mathbf{h}_{i-1} \in \mathbb{R}^{d}$ (where we set $\textbf{h}_0 = \textbf{x}$):
+For efficiency, the neurons are organized in layers, which enables formulating the \ac{mlp} computations in terms of matrix multiplication. The $i$-th layer of \ac{mlp} is parametrized with a matrix $\mathbf{W}_i \in \mathbb{R}^{d\times n}$ and a vector of biases $\mathbf{b}_i \in \mathbb{R}^{n}$, processing the intermediate output called the \textit{hidden state} $\mathbf{h}_{i-1} \in \mathbb{R}^{d}$ (where we set $\textbf{h}_0 = \textbf{x}$):
 \begin{align}
     \mathbf{h}_i & = f(\mathbf{h}_{i-1} \mathbf{W}_i + \mathbf{b}_i).
 \end{align}
-During training, we aim to minimize the \textit{loss function} describing the gap between the model predictions and the ground truth output. Since all the computations in \ac{mlp} are differentiable, we can use the chain rule to compute how each parameter in the network contributes to the loss. To minimize the loss, we use the \emph{backpropagation} algorithm \cite{kelley1960gradient,rumelhart1986learning}, updating the network parameters in the reverse order of layers. The magnitude of the updates is controlled by the learning rate parameter $\alpha$.
 
-\paragraph{Recurrent Neural Networks} Unlike \acp{mlp}, where the size of the input is fixed, \acp{rnn} allow us to process a sequence of inputs $\mathbf{X} = (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ of arbitrary length. Generally, an \ac{rnn} computes a sequence of hidden states $\mathbf{H} = (\mathbf{h}^{(0)}, \ldots, \mathbf{h}^{(n)})$ by repeatedly applying a function $f$ parametrized by the parameters of the network $\boldsymbol{\theta}$, the current input $\mathbf{x}_i$, and the previous hidden state $\mathbf{h}^{(i-1)}$ \cite[p.~367]{goodfellow2016deep}:
+To estimate the parameters of the network, we need to \emph{train} the network using the training data. For each training example $(\mathbf{x}, y)$, we first do a \emph{feed-forward pass}: we feed $\mathbf{x}$ into the network and use the current parameters of the network to get the prediction $\hat{y}$. We then update the parameters in order to minimize the gap between the predicted output $\hat{y}$ and the ground truth output $y$. This gap is described by a \textit{loss function} $\mathcal{L}(y, \hat{y}) \rightarrow \mathbb{R}$.
+Since all the computations in \ac{mlp} are differentiable, we can compute exactly how much each of the parameter contributes the loss function using the chain rule. The derivative for each parameter---called a \emph{gradient} when grouped in a vector---directly influences the size of the update for the parameter. The process of computing and applying the updates is called a \emph{backward pass} (or backpropagation; \citealp{kelley1960gradient,rumelhart1986learning}) and operates in the reverse order of layers. The overall magnitude of the updates is controlled by parameter $\alpha \in \mathbb{R}$ called the \emph{learning rate}.
+
+The basic algorithm for updating the parameters---i.e., an \emph{optimizer}---is the {\acl{sgd} (\acs{sgd}\glsunset{sgd}; \citealp[p.~275]{goodfellow2016deep}), which directly updates the parameters in the direction of the gradient. SGD estimates the gradient in each step using a limited number of examples called a \emph{batch}. There are also more advanced optimizers such as Adam \cite{kingma2014adam}, which adapts the learning rate for each parameter based on the history of the gradients.
+
+\paragraph{Recurrent Neural Networks} Unlike with \acp{mlp}, where we the size of the input is fixed, \acp{rnn} allow us to process a sequence of inputs $\mathbf{X} = (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ of arbitrary length. An \ac{rnn} computes a sequence of hidden states $\mathbf{H} = (\mathbf{h}^{(0)}, \ldots, \mathbf{h}^{(n)})$, i.e., one state for each input in the sequence. $\mathbf{H}$---or sometimes more specifically, the last hidden state $\mathbf{h}^{(n)}$---can be thought of as the encoded representation of the input sequence, which can be in turn used in downstream tasks (e.g., for tagging or classifying the sequence).
+
+The \ac{rnn} computes the hidden states $\mathbf{H}$ by repeatedly applying a function $f$ parametrized by the parameters of the network $\boldsymbol{\theta}$, the current input $\mathbf{x}_i$, and the previous hidden state $\mathbf{h}^{(i-1)}$ \cite[p.~367]{goodfellow2016deep}:
 \begin{align}
-    \mathbf{h}^{(i)} = f(\boldsymbol{\theta}, \mathbf{h}^{(i-1)}, \mathbf{x}_i).
+    \mathbf{h}^{(i)} = f(\boldsymbol{\theta}, \mathbf{h}^{(i-1)}, \mathbf{x}_i),
 \end{align}
-The hidden state $\mathbf{h}^{(0)} \in \mathbb{R}^k$ is initialized randomly. After the input is processed, $\mathbf{H}$ contains an encoded representation of the sequence. The exact implementation of the function $f$ may vary, but is generally implemented as a series of matrix multiplications and non-linear functions.
+where the first hidden state $\mathbf{h}^{(0)} \in \mathbb{R}^k$ is initialized randomly.  The function $f$ is generally implemented as a series of matrix multiplications and non-linear functions. The exact implementation of $f$ can get more complex with advanced \ac{rnn} architectures such as LSTM \cite{hochreiter1997long} or GRU \cite{cho2014learning}.
 
-Although \acp{rnn} are suitable for text processing and turned out to be have various successes in \ac{nlp} applications \TODO{cite}, they also have various shortcomings, including the limited dimensionality of the hidden state and limited possibilities of parallelization. However, they will serve as a stepping stone towards the transformer architecture described in \autoref{sec:lm-basics}.
+\acp{rnn}, as an effective architecture for sequence processing, had various successes across \ac{nlp} \cite{karpathy2015unreasonable,salehinejad2017recent}. At the same time, \acp{rnn} turned out to have various shortcomings, such as the vanishing gradient problem, the limited size of the hidden state, or the limited possibilities of parallelization, all of which makes it hard to model long-term dependencies and to efficiently train the network \cite{hochreiter1998vanishing,pascanu2013difficulty}. We will return to \acp{rnn} in \autoref{sec:transformer}, where it will serve as a stepping stone towards the transformer architecture.
 
 
 \subsection{Text Representation}
-\label{sec:lm-basics}
-We will now look into the basics of text representation in neural networks.
+\label{sec:text-repr}
+In this section, we will now look into how we can represent text in neural networks.
 
 
 \paragraph{One-Hot Encoding}
@@ -77,14 +89,11 @@ The naive way to represent each token would be using its integer value. However,
         0 & \text{otherwise}.
     \end{cases}
 \end{align}
+While this representation is more sound, it is quite sparse and does not capture the semantics of individual tokens, which puts high requirements on the representional capacity of the network.
 
-While this representation is sound, it is quite sparse and does not capture the semantics of individual tokens, which puts high requirements on the representional capacity of the network.
+\paragraph{Word Embeddings} A more useful representation of tokens would be the one in which the tokens with similar meaning would be also close in the vector space. To get this representation, we can build on the idea of the distributional theory of meaning, according to which the meaning of a token is defined by a context in which it occurs \cite{harris1954distributional,firth1957synopsis}.
 
-\paragraph{Word Embeddings} To get a more useful representation of tokens, we may require that tokens with similar meaning are also close in the vector space. Using the distributional theory of meaning \cite{harris1954distributional,firth1957synopsis}, we can use the idea that tokens with similar roles also tend to occur in a similar context.
-
-This idea is used in the Word2Vec algorithm \cite{mikolov2013distributed}. The algorithm extracts the token representations as the weights of an \ac{mlp} trained either for predicting the tokens in the neighborhood of each token (the \emph{skip-gram} objective) or vice versa, the token itself based on the tokens in its neighborhood (the \emph{continuous bag-of-words} objective). The output of the algorithm is an \textit{embedding matrix} $\mathbf{W}_e \in \mathbb{R}^{|V|\times d}$, which assigns each token a $d$-dimensional \textit{embedding vector} $\mathbf{x} \in \mathbb{R}^{d}$. The objectives are illustrated in \autoref{fig:word2vec}.
-
-The idea of representing tokens with embedding vectors is employed in neural \acp{lm} described later in this section, even though the embedding matrix is not trained with the aforementioned algorithm, but joinly with the rest of the network.
+A straightforward implication of the theory is that the tokens with similar meaning tend to occur in a similar contexts. This idea is used in the Word2Vec algorithm \cite{mikolov2013distributed}, which gets the token representations as the weights of an \ac{mlp} trained for a specific objective. The objective either consists of predicting the tokens in the neighborhood of each token (the \emph{skip-gram} objective) or vice versa, the token itself based on the tokens in its neighborhood (the \emph{continuous bag-of-words} objective).  The objectives are illustrated in \autoref{fig:word2vec}.
 
 \begin{figure*}[ht]
     \centering
@@ -109,16 +118,19 @@ The idea of representing tokens with embedding vectors is employed in neural \ac
     \label{fig:word2vec}
 \end{figure*}
 
+The output of the algorithm is an \textit{embedding matrix} $\mathbf{W}_e \in \mathbb{R}^{|V|\times d}$, which assigns each token a $d$-dimensional \textit{embedding vector} $\mathbf{x} \in \mathbb{R}^{d}$.
+
+It should be noted that the idea of representing tokens with embedding vectors is employed in neural \acp{lm} described later in this section: however, the embedding matrix is not trained separately with the aforementioned algorithm, but joinly with the rest of the network.
 
 
-\paragraph{Tokenization} We have also implicitly assumed that we have a way of splitting the text into tokens. Naively, we could split the text into words or characters. However, these approaches have their own shortcomings: word-level tokenization will not allow us to cluster together morphologically similar words, while character-level tokenization is computationally inefficient.
 
-\emph{Subword tokenization}  is the middle ground between the two. The goal is to split the text into smaller pieces called \emph{subwords}, so that frequently used words will get their own subword, while less frequent words will be split into multiple subwords.
+\paragraph{Tokenization} Until now, we have implicitly assumed that we have a way of splitting the text into tokens. Naively, we could split the text into words or characters. However, these approaches have their own shortcomings: word-level tokenization will not allow us to cluster together morphologically similar words (and can be more difficult for languages such as Chinese which do not separate words with spaces), while character-level tokenization is computationally inefficient and gives us less meaningful units.
 
-The subword tokenization algorithm that is frequently used in neural \acp{lm} is \emph{\ac{bpe}} \cite{sennrich2016neural}. The \ac{bpe} algorithm starts with the vocabulary of individual bytes, iteratively merging the most frequent tokens and adding them to the vocabulary $V$ until we reach the target vocabulary size. For example, the expression ``Subword tokenization'' could be split into four subwords \texttt{ ['Sub', 'word', '▁token', 'ization']}. The ``\texttt{▁}'' is a special character denoting a preceding space.
+\emph{Subword tokenization}  is the middle ground between the word-level and character-level tokenization. The goal is to split the text into smaller pieces called \emph{subwords}, so that frequently used words get their own subword, while less frequent words are split into multiple subwords. The subword tokenization algorithm that is frequently used in neural \acp{lm} is \emph{\acl{bpe}} (\acs{bpe}\glsunset{bpe}; \citealp{sennrich2016neural}). The \ac{bpe} algorithm starts with the vocabulary of individual bytes, iteratively merging the most frequent tokens and adding them to the vocabulary $V$ until we reach the target vocabulary size. An example subword tokenization of the expression ``Subword tokenization'' could the following four subwords: \texttt{ ['Sub', 'word', '▁token', 'ization']}, where the ``\texttt{▁}'' is a special character denoting a preceding space.
 
 
 \subsection{Language Modeling}
+\label{sec:lm-basics}
 Having a way to represent text, we can move on to processing it. Here, we will explain the notion of \emph{language modeling}.
 
 \paragraph{Language Models} A useful formalism for text processing is a \emph{language model}: a mathematical model that estimates a probability of a sequence of tokens $X = (x_1, \ldots, x_n)$. For estimating the probability, we can factorize it into a product of conditional probabilities for each token using the chain rule:
@@ -528,7 +540,7 @@ Here are some of the common metrics which we use in this work:
     \item \textbf{ChrF++} \cite{popovic2015chrf,popovic2017chrf} is a metric which computes the F1-score on character $n$-grams. The metric is more robust to morphological variations than word-level metrics. On top of the original ChrF metric, Chrf++ also takes word unigrams and bigrams into account.
           % \item \textbf{CIDEr} \cite{vedantam2015cider} is a metric originally designed for evaluating image captions. It considers n-gram overlap, word frequency, and the informativeness of the generated caption compared to the reference captions. While not typically used for text summarization or \ac{mt} evaluation, it can be adapted for these tasks as well.
 \end{itemize}
-\paragraph{Semantic Similarity} Semantic similarity metrics measure the semantic similarity of the generated and reference texts, particularly using their distributional semantics \TODO{cite}. Going beyond lexical resemblance has only become possible with word embeddings (see \autoref{sec:lm-basics}), especially their contextual variant computed by pretrained \ac{rnn} or transformer encoders (\citealp{peters2018deep,devlinBERTPretrainingDeep2019}; see \autoref{sec:transformer}). The metrics are more robust with respect to the lexical variations, but are more computationally expensive and subject to the limitations of pretrained models' biases and black-box nature.
+\paragraph{Semantic Similarity} Semantic similarity metrics measure the semantic similarity of the generated and reference texts, particularly using their distributional semantics \TODO{cite}. Going beyond lexical resemblance has only become possible with word embeddings (see \autoref{sec:text-repr}), especially their contextual variant computed by pretrained \ac{rnn} or transformer encoders (\citealp{peters2018deep,devlinBERTPretrainingDeep2019}; see \autoref{sec:transformer}). The metrics are more robust with respect to the lexical variations, but are more computationally expensive and subject to the limitations of pretrained models' biases and black-box nature.
 
 Here are the metrics which we consider in this work:
 
