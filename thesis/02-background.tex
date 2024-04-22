@@ -31,14 +31,14 @@ For learning the underlying patterns of the mapping, we use mathematical models 
 
 
 \begin{enumerate}
-  \item The parameters $\textbf{w}$ and $b$ are initialized to small random values (or zeros).
-  \item For each training example $(\mathbf{x}_i, y_i)$, the algorithm updates the weights and bias to adjust their current estimate $\hat{y}_i$ towards the ground truth target $y_i$:
-        \begin{align} \label{eq:perceptron1}
-          \hat{y}_i  & = \text{sign}(\textbf{w} \cdot \mathbf{x} + b) \\
-          \textbf{w} & = \textbf{w} + (y - \hat{y}) \textbf{x}        \\
-          b          & = b + y - \hat{y}
-        \end{align}
-  \item The step (2) is repeated until convergence.
+    \item The parameters $\textbf{w}$ and $b$ are initialized to small random values (or zeros).
+    \item For each training example $(\mathbf{x}_i, y_i)$, the algorithm updates the weights and bias to adjust their current estimate $\hat{y}_i$ towards the ground truth target $y_i$:
+          \begin{align} \label{eq:perceptron1}
+              \hat{y}_i  & = \text{sign}(\textbf{w} \cdot \mathbf{x} + b) \\
+              \textbf{w} & = \textbf{w} + (y - \hat{y}) \textbf{x}        \\
+              b          & = b + y - \hat{y}
+          \end{align}
+    \item The step (2) is repeated until convergence.
 \end{enumerate}
 
 The perceptron algorithm is guaranteed to converge if there exists a hyperplane which separates the data belonging to one class from another, otherwise it will not converge \cite{novikoff1962convergence}.
@@ -47,14 +47,14 @@ The perceptron algorithm is guaranteed to converge if there exists a hyperplane 
 
 As the name suggests, \ac{mlp} processes the input with multiple perceptron-like units called \textit{neurons}. Analogically to the perceptron (\autoref{eq:perceptron1}), each neuron computes its output $o$ using the rule:
 \begin{align}
-  o & = f(\mathbf{x}^\top \mathbf{w}  + b),
+    o & = f(\mathbf{x}^\top \mathbf{w}  + b),
 \end{align}
 % \begin{itemize}
 where $f: \mathbb{R} \rightarrow \mathbb{R}$ is the \emph{activation function}, $\mathbf{x}\in \mathbb{R}^n$ is the input vector, and $\mathbf{w} \in \mathbb{R}^n$ and $b \in \mathbb{R}$ are learnable parameters. Instead of signum, \ac{mlp} uses differentiable non-linear functions, nowadays most commonly the \acl{relu} (\acs{relu}\glsunset{relu}; \citealp{nair2010rectified}) or its adapted version \acl{gelu} (\acs{gelu}\glsunset{gelu}; \citealp{hendrycks2016gaussian}).
 
 For efficiency, the neurons are organized in layers, which enables formulating the \ac{mlp} computations in terms of matrix multiplication. The $i$-th layer of \ac{mlp} is parametrized with a matrix $\mathbf{W}_i \in \mathbb{R}^{d\times n}$ and a vector of biases $\mathbf{b}_i \in \mathbb{R}^{n}$, processing the intermediate output called the \textit{hidden state} $\mathbf{h}_{i-1} \in \mathbb{R}^{d}$ (where we set $\textbf{h}_0 = \textbf{x}$):
 \begin{align}
-  \mathbf{h}_i & = f(\mathbf{h}_{i-1} \mathbf{W}_i + \mathbf{b}_i).
+    \mathbf{h}_i & = f(\mathbf{h}_{i-1} \mathbf{W}_i + \mathbf{b}_i).
 \end{align}
 
 To estimate the parameters of the network, we need to \emph{train} the network using the training data. For each training example $(\mathbf{x}, y)$, we first do a \emph{feed-forward pass}: we feed $\mathbf{x}$ into the network and use the current parameters of the network to get the prediction $\hat{y}$. We then update the parameters in order to minimize the gap between the predicted output $\hat{y}$ and the ground truth output $y$. This gap is described by a \textit{loss function} $\mathcal{L}(y, \hat{y}) \rightarrow \mathbb{R}$.
@@ -66,7 +66,7 @@ The basic algorithm for updating the parameters---i.e., an \emph{optimizer}---is
 
 The \ac{rnn} computes the hidden states $\mathbf{H}$ by repeatedly applying a function $f$ parametrized by the parameters of the network $\boldsymbol{\theta}$, the current input $\mathbf{x}_i$, and the previous hidden state $\mathbf{h}^{(i-1)}$ \cite[p.~367]{goodfellow2016deep}:
 \begin{align}
-  \mathbf{h}^{(i)} = f(\boldsymbol{\theta}, \mathbf{h}^{(i-1)}, \mathbf{x}_i),
+    \mathbf{h}^{(i)} = f(\boldsymbol{\theta}, \mathbf{h}^{(i-1)}, \mathbf{x}_i),
 \end{align}
 where the first hidden state $\mathbf{h}^{(0)} \in \mathbb{R}^k$ is initialized randomly.  The function $f$ is generally implemented as a series of matrix multiplications and non-linear functions. The exact implementation of $f$ can get more complex with advanced \ac{rnn} architectures such as LSTM \cite{hochreiter1997long} or GRU \cite{cho2014learning}.
 
@@ -84,10 +84,10 @@ A text is a sequence of discrete units such as characters, words, or subwords. T
 
 The naive way to represent each token would be using its integer value. However, this would misleadingly suggest linear dependence between tokens. A better way is to use the index $i$ for constructing a \textit{one-hot} vector $\mathbf{x} \in \{0,1\}^{|V|} $ for each token:
 \begin{align}
-  x_j = \begin{cases}
-    1 & \text{if } i = j, \\
-    0 & \text{otherwise}.
-  \end{cases}
+    x_j = \begin{cases}
+        1 & \text{if } i = j, \\
+        0 & \text{otherwise}.
+    \end{cases}
 \end{align}
 While this representation is more sound, it is quite sparse and does not capture the semantics of individual tokens, which puts high requirements on the representional capacity of the network.
 
@@ -96,26 +96,26 @@ While this representation is more sound, it is quite sparse and does not capture
 A straightforward implication of the theory is that the tokens with similar meaning tend to occur in a similar contexts. This idea is used in the Word2Vec algorithm \cite{mikolov2013distributed}, which gets the token representations as the weights of an \ac{mlp} trained for a specific objective. The objective either consists of predicting the tokens in the neighborhood of each token (the \emph{skip-gram} objective) or vice versa, the token itself based on the tokens in its neighborhood (the \emph{continuous bag-of-words} objective).  The objectives are illustrated in \autoref{fig:word2vec}.
 
 \begin{figure*}[ht]
-  \centering
-
-  \begin{subfigure}{\textwidth}
     \centering
-    \begin{subfigure}{0.45\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{img/skipgram.pdf}
-      \caption{Skip-gram}
-      \label{fig:skipgram}
+
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/skipgram.pdf}
+            \caption{Skip-gram}
+            \label{fig:skipgram}
+        \end{subfigure}
+        \hspace{-20px}
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=0.75\textwidth]{img/cbow.pdf}
+            \caption{Continuous Bag-of-Words}
+            \label{fig:cbow}
+        \end{subfigure}
     \end{subfigure}
-    \hspace{-20px}
-    \begin{subfigure}{0.45\textwidth}
-      \centering
-      \includegraphics[width=0.75\textwidth]{img/cbow.pdf}
-      \caption{Continuous Bag-of-Words}
-      \label{fig:cbow}
-    \end{subfigure}
-  \end{subfigure}
-  \caption{The objectives employed by the Word2Vec algorithm \cite{mikolov2013distributed}. In this case, the algorithm uses a context window of size $k=5$. In the (a) \emph{skip-gram} algorithm, we sum the embeddings of $k-1$ surrounding tokens and predict the original token. In the (b) \emph{continuous bag-of-words} algorithm, we use the original token for predicting the $k-1$ surrounding tokens.}
-  \label{fig:word2vec}
+    \caption{The objectives employed by the Word2Vec algorithm \cite{mikolov2013distributed}. In this case, the algorithm uses a context window of size $k=5$. In the (a) \emph{skip-gram} algorithm, we sum the embeddings of $k-1$ surrounding tokens and predict the original token. In the (b) \emph{continuous bag-of-words} algorithm, we use the original token for predicting the $k-1$ surrounding tokens.}
+    \label{fig:word2vec}
 \end{figure*}
 
 The output of the algorithm is an \textit{embedding matrix} $\mathbf{W}_e \in \mathbb{R}^{|V|\times d}$, which assigns each token a $d$-dimensional \textit{embedding vector} $\mathbf{x} \in \mathbb{R}^{d}$.
@@ -135,11 +135,11 @@ After establishing the theory of neural networks and showing how represent text 
 
 \paragraph{Language Models} A central concept for text processing using neural networks is a \emph{language model}: a mathematical model that estimates a probability of a sequence of tokens $X = (x_1, \ldots, x_n)$. For estimating the probability, we can factorize the probability into a product of conditional probabilities using the chain rule:
 \begin{align}
-  P(X) = \prod_{i=1}^n P(x_i|x_1, \hdots, x_{i-1}).
+    P(X) = \prod_{i=1}^n P(x_i|x_1, \hdots, x_{i-1}).
 \end{align}
 However, this formulation is not practical: such a model would require too many parameters and it would be difficult or impossible to estimate the parameters for longer sequences which are rare. An \emph{n}-gram \ac{lm} (parametrized by a positive integer $n$) simplifies the product using the assumption that the probability of a token depends only on $N-1$ previous tokens:
 \begin{align}
-  P(X) = \prod_{i=1}^T P(x_i|x_{i-N+1}, \hdots,x_{i-1}).
+    P(X) = \prod_{i=1}^T P(x_i|x_{i-N+1}, \hdots,x_{i-1}).
 \end{align}
 The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for individual \emph{n}-grams by counting the occurences of $n$-grams in a text corpus. The main limitation of $n$-gram \acp{lm} (besides the size of the look-up tables) is the limit on the length of the context for each token, due to which \emph{n}-gram \acp{lm} fail to capture long-term dependencies.
 
@@ -148,7 +148,7 @@ The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for indivi
 
 \paragraph{Neural Language Model} A neural \ac{lm} is a \acl{lm} that estimates the text probability $P_\theta(X)$ using a neural network with parameters $\theta$. To learn $P_\theta(X)$, we can minimize a specific loss function (see \autoref{sec:nns}): the cross-entropy between the model distribution $P_\theta$ and the empirical distribution of sequences in the corpus $P$:
 \begin{align}
-  \mathcal{L} = H(P,P_\theta) = \mathbb{E}_P(-\log P_\theta) = -\sum_{\mathbf{x}\in C}p(X)\log p_{\theta}(X).
+    \mathcal{L} = H(P,P_\theta) = \mathbb{E}_P(-\log P_\theta) = -\sum_{\mathbf{x}\in C}p(X)\log p_{\theta}(X).
 \end{align}
 
 In contrast with \emph{n}-gram \acp{lm}, neural \acp{lm} can capture long-term dependencies and efficiently store the probability distribution in their parameters.
@@ -161,45 +161,45 @@ In this section, we will pave the way towards the \emph{transformer}: the core n
 We have described the \ac{rnn} (\autoref{sec:nns}) as a neural network that can \emph{encode} an input sequence into hidden states. The idea behind the \emph{encoder-decoder} framework \cite{sutskever2014sequence,cho2014learning} is that we can \emph{decode} an output sequence with another network using the last hidden state of the encoder as its initial state. Here, we illustrate how the framework is applied using two \acp{rnn}:
 
 \begin{enumerate}
-  \item The \ac{rnn} called the \emph{encoder} encodes the sentence of input embeddings $\mathbf{X}= (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ into a hidden state $\mathbf{h}_e$ by repeatedly applying a transformation $\mathcal{E}$ in each timestep $t\in(1,n)$:
-        \begin{align}
-          \mathbf{h}_e^{(i)} = \mathcal{E}(\mathbf{h}_e^{(i-1)}, \mathbf{x}_i).
-        \end{align}
-  \item The \ac{rnn} called the \emph{decoder} uses $\mathbf{h}_e^{(n)}$ as its initial state $\mathbf{h}_d^{(0)}$ and produces the sequence of output tokens  $Y = (y_1, \ldots, y_m)$ by repeatedly applying a transformation $\mathcal{D}$ in each timestep $j\in(1,m)$:
-        \begin{align}
-          \mathbf{h}_d^{(j)}, y_j = \mathcal{D}(\mathbf{h}_d^{(j-1)}, y_{j-1}).
-        \end{align}
+    \item The \ac{rnn} called the \emph{encoder} encodes the sentence of input embeddings $\mathbf{X}= (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ into a hidden state $\mathbf{h}_e$ by repeatedly applying a transformation $\mathcal{E}$ in each timestep $t\in(1,n)$:
+          \begin{align}
+              \mathbf{h}_e^{(i)} = \mathcal{E}(\mathbf{h}_e^{(i-1)}, \mathbf{x}_i).
+          \end{align}
+    \item The \ac{rnn} called the \emph{decoder} uses $\mathbf{h}_e^{(n)}$ as its initial state $\mathbf{h}_d^{(0)}$ and produces the sequence of output tokens  $Y = (y_1, \ldots, y_m)$ by repeatedly applying a transformation $\mathcal{D}$ in each timestep $j\in(1,m)$:
+          \begin{align}
+              \mathbf{h}_d^{(j)}, y_j = \mathcal{D}(\mathbf{h}_d^{(j-1)}, y_{j-1}).
+          \end{align}
 \end{enumerate}
 
 \paragraph{Attention Mechanism} We have already mentioned that the hidden state of an \ac{rnn} has a fixed size, which limits the amount of information the network can capture about a sequence. The \emph{attention mechanism} \cite{bahdanau2015neural} enables the decoder to extract the information dynamically from the encoded sequence. In each step $j$, the decoder computes a context vector $c_j$ as the weighted sum of the hidden states of the encoder $\{\mathbf{h}_e^{(0)}, \ldots, \mathbf{h}_e^{(n)}\}$ using the attention matrix $\mathbf{W}_a$:
 \begin{align}
-  \alpha_{ji}  & = \operatorname{softmax}(\mathbf{h}_d^{(j)}\mathbf{W}_a \mathbf{h}_e^{(i)}), \\
-  \mathbf{c}_j & = \sum_i \alpha_{ji} \mathbf{h}_e^{(i)}.
+    \alpha_{ji}  & = \operatorname{softmax}(\mathbf{h}_d^{(j)}\mathbf{W}_a \mathbf{h}_e^{(i)}), \\
+    \mathbf{c}_j & = \sum_i \alpha_{ji} \mathbf{h}_e^{(i)}.
 \end{align}
 The context vector is used as an additional input for the decoder:
 \begin{align}
-  \mathbf{h}_d^{(j)}, y_j = \mathcal{D}(\mathbf{h}_d^{(j-1)}, y_{j-1}, \mathbf{c}_j).
+    \mathbf{h}_d^{(j)}, y_j = \mathcal{D}(\mathbf{h}_d^{(j-1)}, y_{j-1}, \mathbf{c}_j).
 \end{align}
 
 
 \paragraph{Self-attention Mechanism} Self-attention \cite{cheng2016long,vaswani2017attention} is a variant of the attention mechanism in which the source and the target sequence is identical. Given the input $\mathbf{X} \in \mathbb{R}^{n,d}$, the \emph{self-attention} produces the output $\mathbf{H} \in \mathbb{R}^{n,d}$ of the same size. For each token, the resulting vector $\mathbf{h}_i \in \mathbf{H}$ is a weighed combination of the value vectors corresponding to all the tokens in a sequence (including the token itself):
 \begin{align}
-  \mathbf{h}_j = \sum_{i\in 1..n} \alpha_{ji} \mathbf{v}_i,
+    \mathbf{h}_j = \sum_{i\in 1..n} \alpha_{ji} \mathbf{v}_i,
 \end{align}
 where the \emph{value vector} of each token is computed using a trainable \emph{value matrix} $\mathbf{W_v} \in \mathbb{R}^{n,d}$:
 \begin{align}
-  \mathbf{v}_i = \mathbf{x}_i \mathbf{W_v}.
+    \mathbf{v}_i = \mathbf{x}_i \mathbf{W_v}.
 \end{align}
 To get the attention weights $\alpha_{ij}$, we first compute \textit{query} and \textit{key} vectors for each token using trainable matrices $\mathbf{W_q}$ and $\mathbf{W_k} \in \mathbb{R}^{n,d}$. Each weight is then a normalized dot product of the corresponding vectors:
 \begin{align}
-  \mathbf{q}_i & = \mathbf{x}_i \mathbf{W_q}                                                      \\
-  \mathbf{k}_i & = \mathbf{x}_i \mathbf{W_k}                                                      \\
-  \alpha_{ij}  & = \operatorname{softmax}\biggl(\frac{\mathbf{q}_i\mathbf{k}_j}{\sqrt{d}}\biggr).
+    \mathbf{q}_i & = \mathbf{x}_i \mathbf{W_q}                                                      \\
+    \mathbf{k}_i & = \mathbf{x}_i \mathbf{W_k}                                                      \\
+    \alpha_{ij}  & = \operatorname{softmax}\biggl(\frac{\mathbf{q}_i\mathbf{k}_j}{\sqrt{d}}\biggr).
 \end{align}
 The operations can be efficiently paralellized using matrix multiplication:
 \begin{align}
-  \mathbf{Q}                                             = \mathbf{X}\mathbf{W_q},\quad\mathbf{K} & = \mathbf{X}\mathbf{W_k},\quad\mathbf{V} = \mathbf{X}\mathbf{W_v}                           \\
-  \operatorname{Attn}(\mathbf{Q}, \mathbf{K}, \mathbf{V})                                         & = \operatorname{softmax}\biggl(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d}}\biggr)\mathbf{V}.
+    \mathbf{Q}                                             = \mathbf{X}\mathbf{W_q},\quad\mathbf{K} & = \mathbf{X}\mathbf{W_k},\quad\mathbf{V} = \mathbf{X}\mathbf{W_v}                           \\
+    \operatorname{Attn}(\mathbf{Q}, \mathbf{K}, \mathbf{V})                                         & = \operatorname{softmax}\biggl(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d}}\biggr)\mathbf{V}.
 \end{align}
 
 
@@ -207,7 +207,7 @@ The operations can be efficiently paralellized using matrix multiplication:
 
 Specifically, each layer is composed of two sublayers: (a) the \emph{self-attention layer} and (b) the \emph{\ac{mlp} layer}. The output of the $i$-th sublayer is added to its original input $\mathbf{H}^{(i)}$ in a so-called residual connection:
 \begin{align}
-  \mathbf{H}^{(i+1)} = \mathbf{H}^{(i)} + \operatorname{sublayer}(\mathbf{H}^{(i)}).
+    \mathbf{H}^{(i+1)} = \mathbf{H}^{(i)} + \operatorname{sublayer}(\mathbf{H}^{(i)}).
 \end{align}
 The sublayers serve a different purpose: while the \ac{mlp} layer computes element-wise operations over each token, the self-attention layer enables sharing information among tokens. The sublayer input (or output, depending on the architecture variant) is normalized using \emph{layer normalization} \cite{ba2016layer}.
 
@@ -215,46 +215,46 @@ To get the input representation $\mathbf{H}^{(0)}$, we sum the token embeddings 
 
 
 \begin{figure*}[ht]
-  \centering
-  \includegraphics[width=0.9\textwidth]{img/transformer.pdf}
-  \caption{An encoder-decoder variant of the Transformer architecture. The encoder has $N_{e}$ layers, each consisting of a self-attention and MLP sublayer. The decoder has $N_{d}$ layers with masked self-attention and encoder-decoder attention, also followed by an MLP sublayer. The input to each sublayer is normalized using layer norm. After the last decoder layer, the output probabilities are computed using a linear projection and softmax. The figure is adapted from \href{https://github.com/bbycroft/llm-viz/blob/main/src/llm/intro-image.svg}{https://github.com/bbycroft/llm-viz}.}
-  \label{fig:transformer}
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/transformer.pdf}
+    \caption{An encoder-decoder variant of the Transformer architecture. The encoder has $N_{e}$ layers, each consisting of a self-attention and MLP sublayer. The decoder has $N_{d}$ layers with masked self-attention and encoder-decoder attention, also followed by an MLP sublayer. The input to each sublayer is normalized using layer norm. After the last decoder layer, the output probabilities are computed using a linear projection and softmax. The figure is adapted from \href{https://github.com/bbycroft/llm-viz/blob/main/src/llm/intro-image.svg}{https://github.com/bbycroft/llm-viz}.}
+    \label{fig:transformer}
 \end{figure*}
 
 
 Training the transformer model is \emph{self-supervised}: each token in the training sequence serves as the ground-truth ``label'' that the model aims to predict. For each token in the sequence, we train the model to maximize the log probability (i.e., minimize the negative log probability) of the ground truth token $x_i$ given the previous sequence of tokens in the sequence:
 \begin{align}
-  \mathcal{L}_i = -\log P_\theta(x_i|x_1, \hdots, x_{i-1}).
+    \mathcal{L}_i = -\log P_\theta(x_i|x_1, \hdots, x_{i-1}).
 \end{align}
 % We train the model on \emph{batches} of data, using an optimization algorithm such as \acl{sgd} (\acs{sgd}\glsunset{sgd}; \citealp[p.~275]{goodfellow2016deep}) or Adam \cite{kingma2014adam}. The batch size $b$ and the learning rate $\alpha$ are the training hyperparameters.
 As shown in \autoref{fig:transformer}, the original Transformer architecture is based the encoder-decoder framework. While the encoder layers follow the presented scheme, the decoder layers have the following differences:
 \begin{itemize}
-  \item Each layer contains another sublayer called the \emph{encoder-decoder attention}. In contrast to the self-attention mechanism, the \emph{keys} and \emph{values} come from the last layer of the encoder, enabling the decoder to attend to the encoded sequence.
-  \item The self-attention is \emph{masked} so that each token can collect information only from the preceding tokens, which is necessary to enable text generation using left-to-right autoregressive decoding.
+    \item Each layer contains another sublayer called the \emph{encoder-decoder attention}. In contrast to the self-attention mechanism, the \emph{keys} and \emph{values} come from the last layer of the encoder, enabling the decoder to attend to the encoded sequence.
+    \item The self-attention is \emph{masked} so that each token can collect information only from the preceding tokens, which is necessary to enable text generation using left-to-right autoregressive decoding.
 \end{itemize}
 After the last decoder layer, the hidden states are projected into a matrix of size $\mathbb{R}^{|V|\times n}$ and normalized using softmax, producing a probability distribution over the vocabulary for each input token.
 
 \paragraph{Text Generation} For generating text, we can use \textit{left-to-right autoregressive decoding}. The decoding process starts by feeding a special \texttt{<s>} (beginning of sequence) token into the decoder and then iteratively selecting the \emph{i}-th token based on the probability distribution for the \emph{i}-th position, until the  \texttt{</s>} (end of sequence) token is decoded. The procedure is outlined in Algorithm \ref{alg:decoding}.
 \begin{algorithm}[ht]
-  \begin{algorithmic}[1]
-    \State{Initialize: $Y= \texttt{<s>}, y = \texttt{<s>}$ \Comment{Output sequence, current token}}
-    \While{$y \neq \texttt{</s>}$}
-    \State Predict next token probability distribution: $p(y | Y)$
-    \State Select the next token: $y \sim p(y | Y)$ \label{alg:dec:sample}
-    \State Update output sequence: $Y = Y \cup y$
-    \EndWhile
-    \State Return $Y$
-  \end{algorithmic}
-  \caption{Autoregressive decoding}
-  \label{alg:decoding}
+    \begin{algorithmic}[1]
+        \State{Initialize: $Y= \texttt{<s>}, y = \texttt{<s>}$ \Comment{Output sequence, current token}}
+        \While{$y \neq \texttt{</s>}$}
+        \State Predict next token probability distribution: $p(y | Y)$
+        \State Select the next token: $y \sim p(y | Y)$ \label{alg:dec:sample}
+        \State Update output sequence: $Y = Y \cup y$
+        \EndWhile
+        \State Return $Y$
+    \end{algorithmic}
+    \caption{Autoregressive decoding}
+    \label{alg:decoding}
 \end{algorithm}
 
 \noindent The sampling step (line \ref{alg:dec:sample}) can be realized in various ways, including:
 \begin{itemize}
-  \item \textbf{Greedy decoding}: Select the most probable token: $y_i = \argmax{y \in V} p_\theta(y|\mathbf{y}_{<i}).$
-  \item \textbf{Top-$k$ sampling}: Sample the next token from the $k$ most probable tokens.
-  \item \textbf{Top-$p$ (nucleus) sampling} \cite{holtzman2019curious}: Sample the next token from the tokens with cumulative probability $p$.
-  \item \textbf{Beam search}: Extend the $k$ most probable sequences from the previous step with the next tokens, select the $k$ most probable sequences for the next step.
+    \item \textbf{Greedy decoding}: Select the most probable token: $y_i = \argmax{y \in V} p_\theta(y|\mathbf{y}_{<i}).$
+    \item \textbf{Top-$k$ sampling}: Sample the next token from the $k$ most probable tokens.
+    \item \textbf{Top-$p$ (nucleus) sampling} \cite{holtzman2019curious}: Sample the next token from the tokens with cumulative probability $p$.
+    \item \textbf{Beam search}: Extend the $k$ most probable sequences from the previous step with the next tokens, select the $k$ most probable sequences for the next step.
 \end{itemize}
 While the greedy decoding and beam search are used to generate sequences which are more probable (approximating the algorithm for estimating the most probable sequence, which has exponential complexity), the sampling algorithms are used for decoding more creative outputs. The list of the decoding algorithms as presented here is not exhaustive; see \citet{zarriess2021decoding} and \citet{wiher2022decoding} for an overview and further discussion.
 
@@ -264,45 +264,45 @@ It turns out that training a transformer from scratch is not practical. To achie
 
 
 \begin{table}[t]
-  \footnotesize
-  \centering
-  \begin{tabular}{lp{4.5cm}ll}
-    \toprule
-    \textbf{Type}            & \textbf{Pretraining Objective}            & \textbf{Model}                                       & \textbf{\# Parameters} \\
-    \midrule
-    \multirow{2}{*}{Encoder} & \multirow{2}{*}{Masked Language Modeling} & BERT \cite{devlinBERTPretrainingDeep2019}            & 110M-340M              \\
-                             &                                           & RoBERTa \cite{liuRoBERTaRobustlyOptimized2019}       & 125M-355M              \\
-                             &                                           & \textsc{LaserTagger} \cite{malmi2019lasertagger}     &                        \\
-    \midrule
-    \multirow{2}{*}{Enc-Dec} & \multirow{2}{*}{Text Denoising}           & BART \cite{lewisBARTDenoisingSequencetoSequence2019} & 139M-406M              \\
-                             &                                           & mBART \cite{liuMultilingualDenoisingPretraining2020} & 680M                   \\
-                             &                                           & T5 \cite{raffelExploringLimitsTransfer2019}          & 220M-11B               \\
-    \midrule
-    Decoder                  & Causal Language Modeling                  & GPT-2 \cite{radfordLanguageModelsAre2019}            & 117M-1.5B              \\
-                             &                                           & Llama2 \cite{touvronLlamaOpenFoundation2023}         & 7B-70B                 \\
-                             &                                           & Mistral \cite{jiangMistral7B2023}                    & 7B-70B                 \\
-                             &                                           & Zephyr \cite{tunstallZephyrDirectDistillation2023}   & 7B-70B                 \\
-    \bottomrule
-  \end{tabular}
-  \caption{Types of transformer architectures, along with specific models used in this work. The number of parameters may vary based on the model variant.}
-  \label{tab:pretrained_models}
+    \footnotesize
+    \centering
+    \begin{tabular}{lp{4.5cm}ll}
+        \toprule
+        \textbf{Type}            & \textbf{Pretraining Objective}            & \textbf{Model}                                       & \textbf{\# Parameters} \\
+        \midrule
+        \multirow{2}{*}{Encoder} & \multirow{2}{*}{Masked Language Modeling} & BERT \cite{devlinBERTPretrainingDeep2019}            & 110M-340M              \\
+                                 &                                           & RoBERTa \cite{liuRoBERTaRobustlyOptimized2019}       & 125M-355M              \\
+                                 &                                           & \textsc{LaserTagger} \cite{malmi2019lasertagger}     &                        \\
+        \midrule
+        \multirow{2}{*}{Enc-Dec} & \multirow{2}{*}{Text Denoising}           & BART \cite{lewisBARTDenoisingSequencetoSequence2019} & 139M-406M              \\
+                                 &                                           & mBART \cite{liuMultilingualDenoisingPretraining2020} & 680M                   \\
+                                 &                                           & T5 \cite{raffelExploringLimitsTransfer2019}          & 220M-11B               \\
+        \midrule
+        Decoder                  & Causal Language Modeling                  & GPT-2 \cite{radfordLanguageModelsAre2019}            & 117M-1.5B              \\
+                                 &                                           & Llama2 \cite{touvronLlamaOpenFoundation2023}         & 7B-70B                 \\
+                                 &                                           & Mistral \cite{jiangMistral7B2023}                    & 7B-70B                 \\
+                                 &                                           & Zephyr \cite{tunstallZephyrDirectDistillation2023}   & 7B-70B                 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Types of transformer architectures, along with specific models used in this work. The number of parameters may vary based on the model variant.}
+    \label{tab:pretrained_models}
 \end{table}
 
 
 \paragraph{Model types} Depending on the downstream task, different variants of the transformer architecture may be used (see \autoref{tab:pretrained_models} for an overview):
 
 \begin{itemize}
-  \item \textbf{Encoder models} -- The models use only the \emph{encoder} part of the transformer architecture. These models are trained using the \emph{\ac{mlm} objective}: predicting tokens on the masked positions in the sequence. The output of these models is a contextualized representation of the input sequence, which can be used for tasks such as sequence classification, sequence tagging, or computing sequence similarity.
-  \item \textbf{Encoder-decoder models} -- The models use the original \emph{encoder-decoder} architecture. These models are usually trained using a variant of denoising objective: predicting the original sequence from its corrupted version. The models are mostly used for sequence-to-sequence tasks, such as \ac{mt}, question answering or summarization.
-  \item \textbf{Decoder models} -- The models use only the \emph{decoder} part of the transformer architecture. These models are mostly trained using the \emph{causal language modeling objective}: predicting the next token in a sequence. The models are suitable for unconditional text generation, but they can also used for the same tasks as the encoder-decoder models, using the input sequence as the output prefix.
+    \item \textbf{Encoder models} -- The models use only the \emph{encoder} part of the transformer architecture. These models are trained using the \emph{\ac{mlm} objective}: predicting tokens on the masked positions in the sequence. The output of these models is a contextualized representation of the input sequence, which can be used for tasks such as sequence classification, sequence tagging, or computing sequence similarity.
+    \item \textbf{Encoder-decoder models} -- The models use the original \emph{encoder-decoder} architecture. These models are usually trained using a variant of denoising objective: predicting the original sequence from its corrupted version. The models are mostly used for sequence-to-sequence tasks, such as \ac{mt}, question answering or summarization.
+    \item \textbf{Decoder models} -- The models use only the \emph{decoder} part of the transformer architecture. These models are mostly trained using the \emph{causal language modeling objective}: predicting the next token in a sequence. The models are suitable for unconditional text generation, but they can also used for the same tasks as the encoder-decoder models, using the input sequence as the output prefix.
 \end{itemize}
 
 
 \begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.9\textwidth]{img/objectives.pdf}
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/objectives.pdf}
 
-  \caption{A scheme of the common objectives used by pretrained models: (1) masked language modeling (encoder-only), (2) text denoising (encoder-decoder), (3)  causal language modeling (decoder-only). The special symbol \texttt{<s>} (beginning of a sentence) is used to bootstrap the decoding process.}\label{fig:objectives}
+    \caption{A scheme of the common objectives used by pretrained models: (1) masked language modeling (encoder-only), (2) text denoising (encoder-decoder), (3)  causal language modeling (decoder-only). The special symbol \texttt{<s>} (beginning of a sentence) is used to bootstrap the decoding process.}\label{fig:objectives}
 
 \end{figure*}
 
@@ -328,22 +328,22 @@ In this section, we provide background for the task of \ac{d2t} generation. Firs
 \subsection{Task and Applications}
 \label{sec:d2t-tasks}
 
-\ac{d2t} generation is a catch-all term for tasks which require \emph{transforming structured data into natural language}. The input can take various forms, including graphs, trees, 2D tables, charts, or databases. The output is a fluent text which accurately conveys the information from the data \cite{gattSurveyStateArt2018,sharmaInnovationsNeuralDatatotext2022}.
+\ac{d2t} generation is an umbrella term for tasks which require \emph{transforming structured data into natural language}. The input can take various forms, including graphs, trees, 2D tables, charts, or databases. The output is a fluent text which accurately conveys the information from the data \cite{gattSurveyStateArt2018,sharmaInnovationsNeuralDatatotext2022}.
 
 Before we talk \ac{d2t} generation from the research point of view, we will outline its practical applications:
 
 \begin{itemize}
-  \item \textbf{Automated Journalism}: Augmenting (or in simple cases, even replacing) human journalists for writing data-based reports, including:
-        \begin{itemize}
-          \item \textbf{News reports}: Automating news writing, e.g., for election results \cite{leppanen2017data}, incidents \cite{vanderleeCACAPODatasetMultilingual2020}, earthquakes \cite{oremus2014first}, or wildlife tracking \cite{siddharthan2012blogging,ponnamperuma2013tag2blog}.
-          \item \textbf{Sport reports}: Generating game summaries for sports such as basketball \cite{wiseman2017challenges,thomson2020sportsett}, baseball \cite{puduppullyDatatotextGenerationEntity2019}, or soccer \cite{van2017pass}.
-          \item \textbf{Financial reports}: Supporting financial decisions by generating comments on stock prices \cite{murakami2017learning,aoki2018generating} and summarizing financial documents \cite{chapman2022towards}.
-          \item \textbf{Weather reports}: Generating weather forecasts and weather-related reports \cite{goldberg1994using,belz2005corpus,belz2008automatic,angeli-etal-2010-simple,balakrishnan2019constrained}.
-        \end{itemize}
-  \item \textbf{Business Intelligence Reports}: Providing decision support in business reports alongside data summaries and visualizations (mostly commercial companies such as \href{https://www.arria.com}{Arria}, \href{https://infosentience.com}{InfoSentience}, or \href{https://www.vphrase.com}{vPhrase}; see also \citealp{perlitz2023nbiig}).
-  \item \textbf{Chart Captioning}: Generating captions\footnote{In contrast to image captioning \cite{stefanini2022show}, here the systems can rely on the underlying data in textual form (although the approaches can be hybrid, see e.g. \citealp{kantharajCharttoTextLargeScaleBenchmark2022}).} for charts or graphs, e.g., for assistive technologies, document indexing, or simplifying decision support \cite{demirGeneratingTextualSummaries2008,demirSummarizingInformationGraphics2012,obeidCharttoTextGeneratingNatural2020,kantharajCharttoTextLargeScaleBenchmark2022}.
-  \item \textbf{Healthcare Summaries}: Providing  clinical data summaries about patients to clinicians \cite{portet2009automatic,scott2013data}, or vice versa, providing medical information to patients, e.g., for behavioral change \cite{reiter2003lessons} or nutritional counseling \cite{balloccu-reiter-2022-comparing}.
-  \item \textbf{Product Descriptions}: Automating generating product descriptions in specific domains such as for laptops and TVs \cite{wen2015toward,wen2016multi}, or general-domain approaches for big e-commerce platforms \cite{shaoControllableDiverseText2021,kotoCanPretrainedLanguage2022}.
+    \item \textbf{Automated Journalism}: Augmenting (or in simple cases, even replacing) human journalists for writing data-based reports, including:
+          \begin{itemize}
+              \item \textbf{News reports}: Automating news writing, e.g., for election results \cite{leppanen2017data}, incidents \cite{vanderleeCACAPODatasetMultilingual2020}, earthquakes \cite{oremus2014first}, or wildlife tracking \cite{siddharthan2012blogging,ponnamperuma2013tag2blog}.
+              \item \textbf{Sport reports}: Generating game summaries for sports such as basketball \cite{wiseman2017challenges,thomson2020sportsett}, baseball \cite{puduppullyDatatotextGenerationEntity2019}, or soccer \cite{van2017pass}.
+              \item \textbf{Financial reports}: Supporting financial decisions by generating comments on stock prices \cite{murakami2017learning,aoki2018generating} and summarizing financial documents \cite{chapman2022towards}.
+              \item \textbf{Weather reports}: Generating weather forecasts and weather-related reports \cite{goldberg1994using,belz2005corpus,belz2008automatic,angeli-etal-2010-simple,balakrishnan2019constrained}.
+          \end{itemize}
+    \item \textbf{Business Intelligence Reports}: Providing decision support in business reports alongside data summaries and visualizations (mostly commercial companies such as \href{https://www.arria.com}{Arria}, \href{https://infosentience.com}{InfoSentience}, or \href{https://www.vphrase.com}{vPhrase}; see also \citealp{perlitz2023nbiig}).
+    \item \textbf{Chart Captioning}: Generating captions\footnote{In contrast to image captioning \cite{stefanini2022show}, here the systems can rely on the underlying data in textual form (although the approaches can be hybrid, see e.g. \citealp{kantharajCharttoTextLargeScaleBenchmark2022}).} for charts or graphs, e.g., for assistive technologies, document indexing, or simplifying decision support \cite{demirGeneratingTextualSummaries2008,demirSummarizingInformationGraphics2012,obeidCharttoTextGeneratingNatural2020,kantharajCharttoTextLargeScaleBenchmark2022}.
+    \item \textbf{Healthcare Summaries}: Providing  clinical data summaries about patients to clinicians \cite{portet2009automatic,scott2013data}, or vice versa, providing medical information to patients, e.g., for behavioral change \cite{reiter2003lessons} or nutritional counseling \cite{balloccu-reiter-2022-comparing}.
+    \item \textbf{Product Descriptions}: Automating generating product descriptions in specific domains such as for laptops and TVs \cite{wen2015toward,wen2016multi}, or general-domain approaches for big e-commerce platforms \cite{shaoControllableDiverseText2021,kotoCanPretrainedLanguage2022}.
 \end{itemize}
 
 \subsection{D2T Generation Pipeline}
@@ -353,22 +353,22 @@ Before we talk \ac{d2t} generation from the research point of view, we will outl
 Until recently, \ac{d2t} generation was decomposed into approximately 4-6 subtasks\footnote{The count is only approximate: for example, \citet{milleModD2TMultilayerDataset2023} further subdivides some of the subtasks, leading to 10 subtasks in total.} which were addressed separately \cite{reiterBuildingAppliedNatural1997,reiterArchitectureDatatoTextSystems2007,gattSurveyStateArt2018}. Even though the recent advances enable approaches which  solve the task in \emph{end-to-end} fashion (i.e., without intermediate steps), the subtasks are still relevant for conceptualization of \ac{d2t} generation. We selected the following five representative subtasks (illustrated in \autoref{fig:pipeline}):
 
 \begin{enumerate}
-  \item \textbf{Content Selection}: Deciding which facts from the structured data
-        to include in the text.
-  \item \textbf{Document Planning}: Determining the order of the
-        facts, dividing the facts into paragraphs.
-  \item \textbf{Sentence Planning}: Aggregating the facts into
-        sentences.
-  \item \textbf{Lexicalisation}: Transforming the facts to text segments.
-  \item \textbf{Surface Realisation}: Combining the text segments into a well-formed text in natural language.
+    \item \textbf{Content Selection}: Deciding which facts from the structured data
+          to include in the text.
+    \item \textbf{Document Planning}: Determining the order of the
+          facts, dividing the facts into paragraphs.
+    \item \textbf{Sentence Planning}: Aggregating the facts into
+          sentences.
+    \item \textbf{Lexicalisation}: Transforming the facts to text segments.
+    \item \textbf{Surface Realisation}: Combining the text segments into a well-formed text in natural language.
 \end{enumerate}
 
 
 \begin{figure*}[t]
-  \centering
-  \includegraphics[width=\textwidth]{img/pipeline.pdf}
+    \centering
+    \includegraphics[width=\textwidth]{img/pipeline.pdf}
 
-  \caption{A five-step \ac{d2t} generation pipeline on the example of generating a weather forecast. (1) The relevant fields for the forecast are selected from the data table. (2) The fields are ordered. (3) The ordered fields are aggregated into sentences. (4) Each field is transformed into a text segment. (5) The text segments are combined into the final text.}\label{fig:pipeline}
+    \caption{A five-step \ac{d2t} generation pipeline on the example of generating a weather forecast. (1) The relevant fields for the forecast are selected from the data table. (2) The fields are ordered. (3) The ordered fields are aggregated into sentences. (4) Each field is transformed into a text segment. (5) The text segments are combined into the final text.}\label{fig:pipeline}
 
 \end{figure*}
 
@@ -415,10 +415,10 @@ The field of neural \ac{d2t} generation is broad, as it has been gaining a lot o
 \paragraph{Linearization} For getting an input sequence suitable for the neural model, structured data first needs to be converted into a sequence of tokens. To preserve the original structure of data while keeping the input simple, a common practice is to use \emph{linearization}: a minimalistic representation with a handful of dedicated special tokens serving as delimiters. An example linearization of a knowledge graph is depicted in \autoref{fig:linearization}~(c). Linearization can be very effective \cite{yang2020improving,hoyle2021promoting,xieUnifiedSKGUnifyingMultiTasking2022}, beating specialized encodings designed to process the particular structure \cite{marcheggianiDeepGraphConvolutional2018,koncel-kedziorskiTextGenerationKnowledge2019}.
 
 \begin{figure*}[h]
-  \centering
-  \includegraphics[width=\textwidth]{img/linearization.pdf}
+    \centering
+    \includegraphics[width=\textwidth]{img/linearization.pdf}
 
-  \caption{Representations of a simple knowledge graph: (a) the original knowledge graph, (b) its JSON representation, (c) its linearized representation.}\label{fig:linearization}
+    \caption{Representations of a simple knowledge graph: (a) the original knowledge graph, (b) its JSON representation, (c) its linearized representation.}\label{fig:linearization}
 
 \end{figure*}
 
@@ -458,66 +458,66 @@ Improving \ac{plm}-based \ac{d2t} generation in English revolves mainly around (
 In this section, we outline the format and structure of \ac{d2t} generation datasets used in this thesis. The overview of the datasets is presented in \autoref{tab:datasets} (note that we mainly focus on the datasets in boldface). We do not describe here our novel datasets presented in \citet{kasnerMindLabelsDescribing2022} and \citet{kasnerReferenceBasedMetricsAnalyzing2024}; these are described in their respective sections in \autoref{chap:investigating}.
 
 \begin{table*}[t]
-  \centering\small
-  \begin{tabular}{@{}lllr@{}}
-    \toprule
-    \textbf{Dataset}                                                                           & \textbf{Data Format} & \textbf{Domain(s)}      & \textbf{\# Ex.} \\  \midrule
-    CACAPO \cite{vanderleeCACAPODatasetMultilingual2020}                                       & Key-value            & News$^\blacklozenge$    & 20,149          \\
-    DART \cite{nan2021dart}                                                                    & \acs{rdf} triples    & Wikipedia$^\lozenge$    & 70,524          \\
-    \textbf{E2E} \cite{dusekSemanticNoiseMatters2019,dusekEvaluatingStateoftheartEndtoEnd2020} & Key-value            & Restaurants             & 36,856          \\
-    EventNarrative \cite{colas2021eventnarrative}                                              & \acs{rdf} triples    & Events$^\lozenge$       & 224,428         \\
-    HiTab \cite{chengHiTabHierarchicalTable2021}                                               & Table w/hl           & Statistics$^\lozenge$   & 10,672          \\
-    Chart-To-Text \cite{kantharajCharttoTextLargeScaleBenchmark2022}                           & Table                & Statistics$^\lozenge$   & 34,811          \\
-    Logic2Text \cite{chenLogic2TextHighFidelityNatural2020}                                    & Table w/hl           & Wikipedia$^\lozenge$    & 10,753          \\
-    LogicNLG \cite{chenLogicalNaturalLanguage2020}                                             & Table                & Wikipedia$^\lozenge$    & 37,015          \\
-    NumericNLG \cite{suadaaTabletoTextGenerationNumerical2021}                                 & Table                & Science$^\lozenge$      & 1,355           \\
-    SciGen \cite{moosaviLearningReasonText2021}                                                & Table                & Science$^\lozenge$      & 17,551          \\
-    \textbf{Rotowire} \cite{wiseman2017challenges}                                             & Table                & Basketball              & 6,150           \\
-    ToTTo \cite{parikhToTToControlledTableToText2020}                                          & Table w/hl           & Wikipedia$^\lozenge$    & 136,553         \\
-    \textbf{WebNLG} \cite{gardentWebNLGChallengeGenerating2017}                                & \acs{rdf} triples    & DBPedia$^\blacklozenge$ & 42,873          \\
-    WikiBio \cite{lebretNeuralTextGeneration2016}                                              & Key-value            & Biographies$^\lozenge$  & 728,321         \\
-    WikiSQL \cite{zhong2017seq2sql}                                                            & Table + SQL          & Wikipedia$^\lozenge$    & 80,654          \\
-    WikiTableText \cite{bao2018table}                                                          & Key-value            & Wikipedia$^\lozenge$    & 13,318          \\
-    \bottomrule
-  \end{tabular}
-  \caption{The list of \ac{d2t} datasets used in this work. The datasets are included in the \textsc{TabGenie} framework (\autoref{sec:tabgenie}), the datasets in \textbf{boldface} are also used in other experiments. Glossary of data types: \textit{Key-value}: key-value pairs, \textit{Graph}: subject-predicate-object triples, \textit{Table}: tabular data (\textit{w/hl}: with highlighted cells), \textit{Chart}: chart data, \textit{SQL}: strings with SQL queries. $\blacklozenge$ indicates that the dataset is multi-domain; $\lozenge$ indicates that the dataset is open-domain.}
-  \label{tab:datasets}.
+    \centering\small
+    \begin{tabular}{@{}lllr@{}}
+        \toprule
+        \textbf{Dataset}                                                                           & \textbf{Data Format} & \textbf{Domain(s)}      & \textbf{\# Ex.} \\  \midrule
+        CACAPO \cite{vanderleeCACAPODatasetMultilingual2020}                                       & Key-value            & News$^\blacklozenge$    & 20,149          \\
+        DART \cite{nan2021dart}                                                                    & \acs{rdf} triples    & Wikipedia$^\lozenge$    & 70,524          \\
+        \textbf{E2E} \cite{dusekSemanticNoiseMatters2019,dusekEvaluatingStateoftheartEndtoEnd2020} & Key-value            & Restaurants             & 36,856          \\
+        EventNarrative \cite{colas2021eventnarrative}                                              & \acs{rdf} triples    & Events$^\lozenge$       & 224,428         \\
+        HiTab \cite{chengHiTabHierarchicalTable2021}                                               & Table w/hl           & Statistics$^\lozenge$   & 10,672          \\
+        Chart-To-Text \cite{kantharajCharttoTextLargeScaleBenchmark2022}                           & Table                & Statistics$^\lozenge$   & 34,811          \\
+        Logic2Text \cite{chenLogic2TextHighFidelityNatural2020}                                    & Table w/hl           & Wikipedia$^\lozenge$    & 10,753          \\
+        LogicNLG \cite{chenLogicalNaturalLanguage2020}                                             & Table                & Wikipedia$^\lozenge$    & 37,015          \\
+        NumericNLG \cite{suadaaTabletoTextGenerationNumerical2021}                                 & Table                & Science$^\lozenge$      & 1,355           \\
+        SciGen \cite{moosaviLearningReasonText2021}                                                & Table                & Science$^\lozenge$      & 17,551          \\
+        \textbf{Rotowire} \cite{wiseman2017challenges}                                             & Table                & Basketball              & 6,150           \\
+        ToTTo \cite{parikhToTToControlledTableToText2020}                                          & Table w/hl           & Wikipedia$^\lozenge$    & 136,553         \\
+        \textbf{WebNLG} \cite{gardentWebNLGChallengeGenerating2017}                                & \acs{rdf} triples    & DBPedia$^\blacklozenge$ & 42,873          \\
+        WikiBio \cite{lebretNeuralTextGeneration2016}                                              & Key-value            & Biographies$^\lozenge$  & 728,321         \\
+        WikiSQL \cite{zhong2017seq2sql}                                                            & Table + SQL          & Wikipedia$^\lozenge$    & 80,654          \\
+        WikiTableText \cite{bao2018table}                                                          & Key-value            & Wikipedia$^\lozenge$    & 13,318          \\
+        \bottomrule
+    \end{tabular}
+    \caption{The list of \ac{d2t} datasets used in this work. The datasets are included in the \textsc{TabGenie} framework (\autoref{sec:tabgenie}), the datasets in \textbf{boldface} are also used in other experiments. Glossary of data types: \textit{Key-value}: key-value pairs, \textit{Graph}: subject-predicate-object triples, \textit{Table}: tabular data (\textit{w/hl}: with highlighted cells), \textit{Chart}: chart data, \textit{SQL}: strings with SQL queries. $\blacklozenge$ indicates that the dataset is multi-domain; $\lozenge$ indicates that the dataset is open-domain.}
+    \label{tab:datasets}.
 \end{table*}
 
-\paragraph{Data Formats} The following formats are the most common formats of structured data in our datasets:
+\paragraph{Data Formats} The following formats of structured data are present in our datasets:
 
 \begin{itemize}
-  \item \textbf{Key-value pairs}: Each input is a set of tuples $(k, v)$, where $k$ is a key (also called a slot), which is typically a text string, and $v$ is a value, which can be a text string or a number. It is often used as a \emph{\ac{mr}} in dialogue systems, e.g., for dialogue states or dialogue acts (see, e.g., \cite{peng.
-  \item \textbf{\acs{rdf} (\Acl{rdf})\footnote{See \url{https://www.w3.org/TR/PR-rdf-syntax/}.} triples}: Each input is a set of triples $(s, p, o)$, where $s$ is a \emph{subject},  $p$ is a \emph{predicate}, and $o$ is an \textit{object}. A subject is usually an entity (person, object, or place), an object is either also an entity, or a generic text string or a number. A predicate expresses the relation between the subject and the object. This formalism can be also used to describe a \emph{directed graph} (e.g., a knowledge graph), where $s$ and $o$ are nodes and $p$ is a directed edge between these nodes.
-  \item \textbf{Table}: Each input is structured as a \textit{table}, i.e., a two-dimensional cell matrix of $m$ columns and $n$ rows. Cells can be divided between headings (containing a ``key'' for the respective row or column), or contain a textual or numerical value. A subset of cells may be \emph{highlighted } -- in that case, the output text should describe only that particular subset of cells. A generalized version of a table may also contain merged cells, nested headings, or multiple disjoint table regions.
+    \item \textbf{Key-value pairs}: The input is a set of tuples $(k, v)$, where $k$ is a key (also called a slot), which is typically a text string, and $v$ is a value, which can be a text string or a number. The format is often used as a \emph{\ac{mr}} in dialogue systems, e.g., for representing dialogue states or dialogue acts \cite{rastogiScalableMultiDomainConversational2020,budzianowskiMultiWOZLargeScaleMultiDomain2020}.
+    \item \textbf{\acs{rdf} (\Acl{rdf}\glsunset{rdf})\footnote{See \url{https://www.w3.org/TR/PR-rdf-syntax/}.} triples}: The input is a set of triples $(s, p, o)$, where $s$ is a \emph{subject},  $p$ is a \emph{predicate}, and $o$ is an \textit{object}. This formalism directly translates to a \emph{directed graph}, where $s$ and $o$ are nodes and $p$ is a directed edge between these nodes. In a knowledge graph such as Wikidata or DBPedia, the subject is usually an entity (e.g., a person, an object, or a place); the object is either also an entity, or a generic value; and the predicate expresses the relation between the subject and the object.
+    \item \textbf{Table}: The input is structured as a \textit{table}, i.e., a two-dimensional cell matrix of $m$ columns and $n$ rows. A table cell can contain a textual or numerical value. If a cell is marked as a heading, it contains the ``key'' for the respective row or column. In some datasets, a subset of cells is \emph{pre-highlighted} -- in that case, the output text should describe only that particular subset of cells. A generalized version of a table may also contain merged cells, nested headings, or multiple disjoint table regions, analogically to real-world data.
 \end{itemize}
 
-As we show in \autoref{chap:tabgenie}, all of the aforementioned formats can be unified in a tabular format with minimal information loss. In \autoref{sec:prompting}, we also show how to handle data in the JSON format.\footnote{JavaScript Object Notation; see \url{https://www.json.org}.} Other data formats, which we do not consider here, include \ac{amr}
+As we show in \autoref{chap:tabgenie}, key-value pairs and RDF triples can be converted to a tabular format with minimal information loss. In \autoref{sec:prompting}, we also show how to handle data in the JSON\footnote{JavaScript Object Notation; see \url{https://www.json.org}.} format, which is not standardly used in \ac{d2t} generation datasets. We do not consider here data formats with more task-specific structure such as \acl{amr} (\acs{amr}\glsunset{amr}; \citealp{banarescu2013abstract}).
 
-\paragraph{Domains} The notion of a \emph{domain} is usually understood in \ac{d2t} generation under the \href{https://dictionary.cambridge.org/dictionary/english/domain}{Cambridge Dictionary} definition ``an area of interest''. However, the term may be slippery: while \citet{wen2016multi} consider the domains so related as \emph{TVs} and \emph{laptops} as distinct, \citet{lin2023survey} considers the tables from ACL Anthology papers \cite{suadaaTabletoTextGenerationNumerical2021} as domain-specific.
+\paragraph{Domains} In \ac{d2t} generation, the notion of a \emph{domain} is usually close to the Cambridge Dictionary definition ``an area of interest''\footnote{\url{https://dictionary.cambridge.org/dictionary/english/domain}}. However, the exact scope may vary: while \citet{wen2016multi} consider the domains of \emph{TVs} and \emph{laptops} as distinct, \citet{lin2023survey} propose a single domain \emph{tables from ACL Anthology papers} \cite{suadaaTabletoTextGenerationNumerical2021}.
 
-Most commonly, the term \emph{multi-domain} is used if the content of two subsets of data comes from a different distributions, so that a model train on one subset does not straighforwardly generalize to another (see, e.g., \citealp{vanderleeCACAPODatasetMultilingual2020,budzianowskiMultiWOZLargeScaleMultiDomain2020,rastogiScalableMultiDomainConversational2020}). If the topic of the dataset is unrestricted, or if it is based on a large-scale data source such as Wikipedia, the datasets is then considered \emph{open-domain} (see, e.g., \citealp{chenLogicalNaturalLanguage2020,nan2021dart,kann2022open}).
+The definition becomes more clear when looking at the term ``multi-domain'': most commonly, a dataset is called \emph{multi-domain} if two subsets of data comes from distributions so different that the model trained on the first subset does not straighforwardly generalize to the second one (see, e.g., \citealp{vanderleeCACAPODatasetMultilingual2020,budzianowskiMultiWOZLargeScaleMultiDomain2020,rastogiScalableMultiDomainConversational2020}). If the topic of the dataset is unrestricted, or if it is based on a large-scale data source such as Wikipedia, the dataset is considered \emph{open-domain} (see, e.g., \citealp{chenLogicalNaturalLanguage2020,nan2021dart,kann2022open}).
 
 \paragraph{Datasets} The following datasets are the most relevant for the thesis:
 
 \begin{itemize}
-  \item \textbf{WebNLG}: The WebNLG dataset \cite{gardentCreatingTrainingCorpora2017,gardentWebNLGChallengeGenerating2017} contains \ac{rdf} triples from DBPedia \cite{auer2007dbpedia} and their crowdsourced descriptions. Each example consists of 1-7 triples, together forming a subgraph in the DBPedia knowledge graph. The target text should describe all the entities and the relations between them. The original WebNLG dataset \cite{gardentCreatingTrainingCorpora2017} contains 15 domains, out of which 5 are \emph{unseen}, i.e., included only in the test set (Athlete, Artist, MeanOfTransportation, CelestialBody, Politician). Each set of triples included several verbalizations to promote lexical variability. The dataset has been iteratively fixed, annotated for intermediate subtasks, and enriched with semi-automated German translations \cite{castroferreiraEnrichingWebNLGCorpus2018}. The version 3.0 \cite{ferreira20202020} contains one additional domain and automatic translations to Russian.
-        \begin{itemize}
-          \item
-                The dataset has been used in a series of shared tasks called \emph{WebNLG Challenge} \cite{gardentWebNLGChallengeGenerating2017,shimorinaWebNLGChallengeHuman2019,ferreira20202020,cripwell2023WebNLGShared2023}, out of which we participated in the 2020 edition (\citealp{ferreira20202020}; see \autoref{sec:finetuning}). We also used the dataset in the experiments on low-resource \ac{d2t} generation (\Cref{sec:iterative,sec:pipeline}), evaluation (\autoref{sec:sem-acc}), data processing (\autoref{sec:tabgenie}), and out-of-domain generalization (\autoref{sec:describing}).
-        \end{itemize}
+    \item \textbf{WebNLG}: The WebNLG dataset \cite{gardentCreatingTrainingCorpora2017,gardentWebNLGChallengeGenerating2017} contains \ac{rdf} triples from DBPedia \cite{auer2007dbpedia} and their crowdsourced descriptions. Each example consists of 1-7 triples, together forming a subgraph in the DBPedia knowledge graph. The target text should describe all the entities and the relations between them. The original WebNLG dataset \cite{gardentCreatingTrainingCorpora2017} contains 15 domains, out of which 5 are \emph{unseen}, i.e., included only in the test set. Each set of triples included several verbalizations to promote lexical variability. In version 2.x, the dataset has been fixed, annotated for intermediate subtasks, and enriched with semi-automated German translations \cite{shimorinaHandlingRareItems2018,castroferreiraEnrichingWebNLGCorpus2018}. The version 3.0 \cite{ferreira20202020} contains one additional domain and automatic translations to Russian.
+          \begin{itemize}
+              \item
+                    We participated in the 2020 edition of \emph{WebNLG Challenge},which is a series of shared tasks based on the WebNLG dataset (\citealp{gardentWebNLGChallengeGenerating2017,shimorinaWebNLGChallengeHuman2019,ferreira20202020,cripwell2023WebNLGShared2023}; see \autoref{sec:finetuning}). We also used the dataset in the experiments on low-resource \ac{d2t} generation (\Cref{sec:iterative,sec:pipeline}), evaluation (\autoref{sec:sem-acc}), data processing (\autoref{sec:tabgenie}), and out-of-domain generalization (\autoref{sec:describing}).
+          \end{itemize}
 
-  \item \textbf{E2E}: The E2E dataset \cite{dusekEvaluatingStateoftheartEndtoEnd2020} contains restaurant descriptions in the form of key-value pairs (3-8 items per example) and corresponding human-written restaurant recommendations. The name of the dataset is derived from the E2E Challenge, a shared task that focused on evaluating end-to-end \ac{d2t} generation systems. Since original version of the dataset contained semantic noise (incorrect or missing facts in the crowdsourced descriptions), we use the cleaned version from \citet{dusekSemanticNoiseMatters2019} as the default version for our experiments.
-        \begin{itemize}
-          \item
-                Similarly to WebNLG, we used the dataset in the experiments on low-resource \ac{d2t} generation (\Cref{sec:iterative,sec:pipeline}), evaluation (\autoref{sec:sem-acc}), and data processing (\autoref{sec:tabgenie}).
-        \end{itemize}
+    \item \textbf{E2E}: The E2E dataset \cite{dusekEvaluatingStateoftheartEndtoEnd2020,dusekSemanticNoiseMatters2019} contains restaurant descriptions in the form of key-value pairs (3-8 items per example) and corresponding human-written restaurant recommendations. The name of the dataset is derived from the E2E Challenge, a shared task that focused on evaluating end-to-end \ac{d2t} generation systems \cite{dusekEvaluatingStateoftheartEndtoEnd2020}. Since original version of the dataset contained semantic noise (incorrect or missing facts in the crowdsourced descriptions), we use the cleaned version from \citet{dusekSemanticNoiseMatters2019} as the default version for our experiments.
+          \begin{itemize}
+              \item
+                    Similarly to WebNLG, we used the dataset in the experiments on low-resource \ac{d2t} generation (\Cref{sec:iterative,sec:pipeline}), evaluation (\autoref{sec:sem-acc}), and data processing (\autoref{sec:tabgenie}).
+          \end{itemize}
 
-  \item \textbf{Rotowire}: Rotowire \cite{wiseman2017challenges} is a dataset with tabular statistics of basketball games and their corresponding game summaries. The target text contains only a subset of the input data (not highlighted a priori), so the systems need to model \emph{content selection} as well. Together with the above-average length of the target summaries, this aspect makes the dataset particularly challenging for \ac{d2t} generation systems.
-        \begin{itemize}
-          \item
-                We used the outputs from the neural systems on this dataset for building a token-level evaluation metric (\autoref{sec:eval-token}), and we included its updated version SportSett:Basketball \cite{thomson2020sportsett} in our data processing toolkit (\autoref{sec:tabgenie}).
-        \end{itemize}
+    \item \textbf{Rotowire}: Rotowire \cite{wiseman2017challenges} is a dataset with tabular statistics of basketball games and their corresponding game summaries. The target text contains only a small subset of the full input table, which is not highlighted a priori, so the systems also need to model the content selection step. Together with the above-average length of the target summaries, this aspect makes the dataset particularly challenging for \ac{d2t} generation systems.
+          \begin{itemize}
+              \item
+                    We used the outputs from the neural systems on this dataset for building a token-level evaluation metric (\autoref{sec:eval-token}), and we included its updated version SportSett:Basketball \cite{thomson2020sportsett} in our data processing toolkit (\autoref{sec:tabgenie}).
+          \end{itemize}
 \end{itemize}
 
 
@@ -525,32 +525,32 @@ Most commonly, the term \emph{multi-domain} is used if the content of two subset
 \subsection{Evaluation Metrics}
 \label{sec:evaluation}
 
-The most common evaluation measures for \ac{d2t} generation are \emph{intrinsic}, i.e., focusing on evaluating certain aspects of the quality of the system and its outputs \cite{gkatzia2015snapshot,celikyilmazEvaluationTextGeneration2021}.\footnote{As opposed to \emph{extrinsic} measures, which evaluate the impact of the system in the external environment \cite{celikyilmazEvaluationTextGeneration2021}. While \emph{extrinsic} metrics could give us better picture of the real-world impact, they are not suitable for early research stages due to high demands on the system quality, and they are also less suitable for evaluating individual subtasks \cite{van2019best}.} On a high-level, the intrinsic measures can be grouped between \emph{automatic metrics} and \emph{human evaluation}. Automatic metrics are generally cheaper, faster, and more replicable, but often serve only as a crude heuristic for the desired performance measure. Human evaluation is more expensive and difficult to execute, but if executed correctly, it can give us a more precise and fine-grained picture of system performance. A rule of thumb is that an experimental result should be supported by both kinds of metrics.
+The most common evaluation measures for \ac{d2t} generation are \emph{intrinsic}, i.e., focusing on evaluating certain aspects of the quality of the system and its outputs \cite{gkatzia2015snapshot,celikyilmazEvaluationTextGeneration2021}.\footnote{As opposed to \emph{extrinsic} measures, which evaluate the impact of the system in the external environment \cite{celikyilmazEvaluationTextGeneration2021}. While \emph{extrinsic} metrics could give us better picture of the real-world impact, they are not suitable for early research stages due to high demands on the system quality, and they are also less suitable for evaluating individual subtasks \cite{van2019best}.} The intrinsic measures can be grouped between \emph{automatic metrics} and \emph{human evaluation}. Automatic metrics are generally cheaper, faster, and more replicable, but often serve only as a crude heuristic for the desired performance measure. Human evaluation is more expensive and difficult to execute, but if executed correctly, it can give us a more precise and fine-grained picture of system performance. A rule of thumb is that an experimental result should be supported by both kinds of metrics.
 
 
-If we have human-written (also called \emph{ground truth} or \emph{golden}\footnote{\emph{Golden} refers to the fact that the systems usually try to imitate human performance. However, see \citet{clarkAllThatHuman2021} or \citet{dusekSemanticNoiseMatters2019} for examples where human-written references are not the desired correct reference, especially when gathered by crowdsourcing platforms.}) reference texts at our disposal, we can use \emph{reference-based}  automatic metrics. Here, the implicit assumption is that more similar the generated text is to the respective human-written reference text, the better. \emph{Referenceless} metrics, on the other hand, can be more varied: they can either judge the intrinsic qualities of the text such as text fluency, text diversity, and reading level, or---taking the input data into account---the faithfulness of the text with respect to the input data.
+If we have human-written (also called \emph{ground truth} or \emph{golden}\footnote{The term \emph{golden} can misleadingly suggest that human-written references are the holy grail which the systems should imitate. However, see the works such as \citet{dusekSemanticNoiseMatters2019} or \citet{clarkAllThatHuman2021} which showcase that human-written outputs can be noisy or subpar.}) reference texts at our disposal, we can use \emph{reference-based}  automatic metrics. The implicit assumption with reference-based metrics is that more similar the generated text is to the respective human-written reference text, the better. \emph{Referenceless} metrics, on the other hand, can be more varied: they can either judge the intrinsic qualities of the text such as text fluency, text diversity, and reading level, or---taking the input data into account---the faithfulness of the text with respect to the input data.
 
 
-\paragraph{Lexical Similarity} Lexical similarity metrics measure the similarity between the generated and reference text using their word-level overlap. The metrics are fast, easy to compute, and have been used for decades as a convenient proxy for system comparison in various \ac{nlp} areas \cite{celikyilmazEvaluationTextGeneration2021}. However, there is a recent upsurge of works arguing against these metrics, because their correlations with human judgements for high quality outputs are low or negative, and the metrics fail to capture fine-grained phenomena \cite{mathurTangledBLEUReevaluating2020,kocmiShipNotShip2021,gehrmannRepairingCrackedFoundation2022}. As a general rule, lexical similarity metrics (which are still useful, e.g., for comparison with prior work) should be accompanied by other metrics.
+\paragraph{Lexical Similarity} Lexical similarity metrics measure the similarity between the generated and reference text using their word-level overlap. The metrics are fast, easy to compute, and have been used for decades as a convenient proxy for system comparison in various \ac{nlp} areas \cite{celikyilmazEvaluationTextGeneration2021}. However, there is a recent upsurge of works arguing against these metrics, because their correlations with human judgements for high quality outputs are low or negative, and the metrics fail to capture fine-grained phenomena \cite{mathurTangledBLEUReevaluating2020,kocmiShipNotShip2021,gehrmannRepairingCrackedFoundation2022}. As a general rule, lexical similarity metrics (if used, e.g., for comparison with prior work) should be accompanied by other metrics.
 
 Here are some of the common metrics which we use in this work:
 
 \begin{itemize}
-  \item \textbf{BLEU} \cite{papineni2002bleu} measures $n$-gram precision, i.e., to which extent do the $n$-grams in the generated text correspond to the reference text.  It is computed as a geometric mean of the $n$-gram precisions, with a brevity penalty to penalize shorter outputs. BLEU has been originally used for evaluating \ac{mt}, but since then it has become commonplace in \ac{nlp}. The SacreBLEU library \cite{post2018call}  was developed to tackle inconsistencies in implementations of the metric.
-  \item \textbf{ROUGE} \cite{lin-2004-rouge} is a set of metrics which focus on recall, i.e., to which extent does the generated text preserve the information in the reference text. ROUGE has been originally designed for evaluating automatic summarization, but similarly to BLEU, it has been used widely (and as recently found by \citet{gruskyRogueScores2023}, oftentimes incorrectly) across the \ac{nlp} literature. ROUGE includes several variants, such as ROUGE-L, which measures the longest matching word sequence, and ROUGE-{1/2/3/4}, which measures the overlap on the respective n-grams.
-  \item \textbf{METEOR} \cite{banerjee-lavie-2005-meteor} is a metric which computes harmonic mean of precision and recall computed on unigrams. METEOR also partially addresses semantic similarities of texts by using stemming and synonym matching. It has been shown to produce better correlations with human judgements than BLEU \cite{agarwal2008meteor}, but is more complex and expensive to compute.
-  \item \textbf{NIST} \cite{martin2000nist} is a metric which focuses on precision similarly to BLEU. Howeveer, ot assigns lower weights to less common n-grams, which are considered less informative \cite{doddington2002automatic}, and its length penalty is more robust to small variations in text length.
-  \item \textbf{ChrF++} \cite{popovic2015chrf,popovic2017chrf} is a metric which computes the F1-score on character $n$-grams. The metric is more robust to morphological variations than word-level metrics. On top of the original ChrF metric, Chrf++ also takes word unigrams and bigrams into account.
-        % \item \textbf{CIDEr} \cite{vedantam2015cider} is a metric originally designed for evaluating image captions. It considers n-gram overlap, word frequency, and the informativeness of the generated caption compared to the reference captions. While not typically used for text summarization or \ac{mt} evaluation, it can be adapted for these tasks as well.
+    \item \textbf{BLEU} \cite{papineni2002bleu} measures $n$-gram precision, i.e., to which extent do the $n$-grams in the generated text correspond to the reference text.  It is computed as a geometric mean of the $n$-gram precisions, with a brevity penalty to penalize shorter outputs. BLEU has been originally used for evaluating \ac{mt}, but since then it has become commonplace in \ac{nlp}. The SacreBLEU library \cite{post2018call}  was developed to tackle inconsistencies in implementations of the metric.
+    \item \textbf{ROUGE} \cite{lin-2004-rouge} is a set of metrics which focus on recall, i.e., to which extent does the generated text preserve the information in the reference text. ROUGE has been originally designed for evaluating automatic summarization, but similarly to BLEU, it has been used widely (and as recently found by \citet{gruskyRogueScores2023}, oftentimes incorrectly) across the \ac{nlp} literature. ROUGE includes several variants, such as ROUGE-L, which measures the longest matching word sequence, and ROUGE-{1/2/3/4}, which measures the overlap on the respective n-grams.
+    \item \textbf{METEOR} \cite{banerjee-lavie-2005-meteor} is a metric which computes harmonic mean of precision and recall computed on unigrams. METEOR also partially addresses semantic similarities of texts by using stemming and synonym matching. It has been shown to produce better correlations with human judgements than BLEU \cite{agarwal2008meteor}, but is more complex and expensive to compute.
+    \item \textbf{NIST} \cite{martin2000nist} is a metric which focuses on precision similarly to BLEU. However, it assigns lower weights to less common n-grams, which are considered less informative \cite{doddington2002automatic}, and its length penalty is more robust to small variations in text length.
+    \item \textbf{ChrF++} \cite{popovic2015chrf,popovic2017chrf} is a metric which computes the F1-score on \emph{character} $n$-grams. The metric is more robust to morphological variations than word-level metrics. On top of the original ChrF metric, Chrf++ also takes word unigrams and bigrams into account.
+          % \item \textbf{CIDEr} \cite{vedantam2015cider} is a metric originally designed for evaluating image captions. It considers n-gram overlap, word frequency, and the informativeness of the generated caption compared to the reference captions. While not typically used for text summarization or \ac{mt} evaluation, it can be adapted for these tasks as well.
 \end{itemize}
-\paragraph{Semantic Similarity} Semantic similarity metrics measure the semantic similarity of the generated and reference texts, particularly using their distributional semantics \TODO{cite}. Going beyond lexical resemblance has only become possible with word embeddings (see \autoref{sec:text-repr}), especially their contextual variant computed by pretrained \ac{rnn} or transformer encoders (\citealp{peters2018deep,devlinBERTPretrainingDeep2019}; see \autoref{sec:transformer}). The metrics are more robust with respect to the lexical variations, but are more computationally expensive and subject to the limitations of pretrained models' biases and black-box nature.
+\paragraph{Semantic Similarity} As described in \autoref{sec:text-repr}, word embeddings map words with similar meaning to a shared part of the vector space. Semantic similarity metrics use this fact to measure the similarity of the texts as a distance between their embeddings. The metrics most often rely on \emph{contextual embeddings} computed by pretrained \ac{rnn} or transformer encoders (\citealp{peters2018deep,devlinBERTPretrainingDeep2019}; see \autoref{sec:transformer}). In contrast with lexical similarity metrics, semantic similarity metrics are more robust with respect to the lexical variations, but are more computationally expensive and subject to the limitations of pretrained models, including their biases and black-box nature.
 
 Here are the metrics which we consider in this work:
 
 \begin{itemize}
-  \item \textbf{BERTScore} \cite{zhang2019bertscore} measures semantic similarity of the texts by computing cosine similarity between the embeddings of the texts encoded by a pretrained transformer model. It was originally developed on top of BERT \cite{devlinBERTPretrainingDeep2019}, but it now supports other transformer encoder models. Its flexibility helps to achieve better correlations with human judgment, but makes it less suitable for intra-work comparison.
-  \item \textbf{BLEURT} \cite{sellam2020bleurt} measures semantic similarity using a BERT model \cite{devlinBERTPretrainingDeep2019} which is further finetuned on synthetically labeled data. The similarity is again computed as a cosine similarity of the contextual embeddings. Compared to BERTScore, BLEURT is less flexible but ensures more consistent setup across works.
-  \item \textbf{NUBIA} \cite{kaneNUBIANeUralBased2020} measures semantic equivalence of texts by combining features from two finetuned RoBERTa models \cite{liuRoBERTaRobustlyOptimized2019}---on the semantic similarity benchmark STS \cite{cer-etal-2017-semeval} and on the natural language inference benchmark MNLI \cite{williams2018mnli}---and the perplexity from the GPT-2 model \cite{radford2019language}. These features are combined with an \ac{mlp} layer. Combining the features ensures even better robustness of the metric at the cost of higher complexity and higher computational requirements.
+    \item \textbf{BERTScore} \cite{zhang2019bertscore} measures semantic similarity of the texts by computing cosine similarity between the embeddings of the texts encoded by a pretrained transformer model. It was originally developed on top of BERT \cite{devlinBERTPretrainingDeep2019}, but it now supports other transformer encoder models. Its flexibility helps to achieve better correlations with human judgment, but makes it less suitable for intra-work comparison.
+    \item \textbf{BLEURT} \cite{sellam2020bleurt} measures semantic similarity using a BERT model \cite{devlinBERTPretrainingDeep2019} which is further finetuned on synthetically labeled data. The similarity is again computed as a cosine similarity of the contextual embeddings. Compared to BERTScore, BLEURT is less flexible but ensures more consistent setup across works.
+    \item \textbf{NUBIA} \cite{kaneNUBIANeUralBased2020} measures semantic equivalence of texts by combining features from two finetuned RoBERTa models \cite{liuRoBERTaRobustlyOptimized2019}---on the semantic similarity benchmark STS \cite{cer-etal-2017-semeval} and on the natural language inference benchmark MNLI \cite{williams2018mnli}---and the perplexity from the GPT-2 model \cite{radford2019language}. These features are combined with an \ac{mlp} layer. Combining the features ensures even better robustness of the metric, at the cost of higher complexity and higher computational requirements.
 \end{itemize}
 
 \paragraph{Semantic Accuracy} Semantic accuracy---also called \emph{faithfulness} or \emph{factual consistency} \cite{celikyilmazEvaluationTextGeneration2021}---measures inacurracies in the output text with respect to the input data. The inacurracies can be broadly divided into \emph{omissions} (the model not mentioning facts in the input data) and hallucinations (the model mentioning extra facts that are not supported by the input data). Naturally, omissions apply only if the task requires to mention all the facts present in the input data. Further, the hallucinations can be \emph{extrinsic}, i.e., the model introduces external information not present in the data, or \emph{intrinsic}, i.e., the model uses the data incorrectly \cite{maynezFaithfulnessFactualityAbstractive2020}.
@@ -566,8 +566,8 @@ Lexical diversity is not generally required for \ac{d2t} generation, although th
 \paragraph{Human Evaluation} Since automatic metrics serve only as imperfect proxies for human judgment, using \emph{human annotators} is a crucial part of any \ac{nlg} experimental evaluation \cite{gehrmannRepairingCrackedFoundation2022}. Although are attempts at standardizing human evaluation \cite{thomsonGoldStandardMethodology2020}, human annotation protocols are usually task-specific \cite{van2019best,belzDisentanglingPropertiesHuman2020}. There are two main paradigms of human evaluation: large-scale evaluation using crowd workers focusing mostly on quantitative aspects (\emph{crowdsourcing}), and small-scale evaluation using expert annotators focusing mostly on qualitative aspects (\emph{manual evaluation}).
 
 \begin{itemize}
-  \item \textbf{Crowdsourcing}: Crowdsourcing platforms such as Amazon Mechanical Turk\footnote{\url{https://www.mturk.com}} or Prolific\footnote{\url{https://prolific.com}} are often used for distributing the work between human annotators. These platforms offer a convenient interface for hiring annotators with a specific background and ensuring that the annotators are paid fair wage. Due to financial incentives, the quality of outputs may vary, especiallysince the workers may nowadays be tempted to use \acp{llm} for certain tasks \cite{veselovskyArtificialArtificialArtificial2023}. It is therefore necessary to employ quality assurance checks in the annotation process.
-  \item \textbf{Manual Evaluation}: To measure fine-grained aspects of output quality, manual evaluation---done either by the paper authors or other domain experts---may be employed. The goal of manual evaluation is to provide insights into the kind of errors that appear in the output texts, using a small or moderate-size sample of data (20-100 examples).
+    \item \textbf{Crowdsourcing}: Crowdsourcing platforms such as Amazon Mechanical Turk\footnote{\url{https://www.mturk.com}} or Prolific\footnote{\url{https://prolific.com}} are often used for distributing the work between human annotators. These platforms offer a convenient interface for hiring annotators with a specific background and ensuring that the annotators are paid fair wage. Due to financial incentives, the quality of outputs may vary, especially since the workers may be tempted to delegate certain tasks to \acp{llm} \cite{veselovskyArtificialArtificialArtificial2023}. It is therefore necessary to employ quality assurance checks in the annotation process.
+    \item \textbf{Manual Evaluation}: To measure fine-grained aspects of output quality, manual evaluation can be performed either by the paper authors or other domain experts. The goal of manual evaluation is to provide insights into the kind of errors that appear in the output texts, using a small or moderate-size sample of data (20-100 examples).
 \end{itemize}
 
 
