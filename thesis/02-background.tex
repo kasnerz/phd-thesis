@@ -330,9 +330,9 @@ In this section, we provide background for the task of \ac{d2t} generation. Firs
 \subsection{Task and Applications}
 \label{sec:d2t-tasks}
 
-\ac{d2t} generation is an umbrella term for tasks which require \emph{transforming structured data into natural language}. The input can take various forms, including graphs, trees, 2D tables, charts, or databases. The output is a fluent text that accurately conveys the information from the data \cite{gattSurveyStateArt2018,sharmaInnovationsNeuralDatatotext2022}.
+\ac{d2t} generation is an umbrella term for tasks that require transforming structured data into natural language. The input can take various forms, including graphs, trees, 2D tables, charts, or databases; the output is a fluent text that accurately conveys the information from the data \cite{gattSurveyStateArt2018,sharmaInnovationsNeuralDatatotext2022}.
 
-Before we talk \ac{d2t} generation from the research point of view, we will outline its practical applications:
+Before we talk \ac{d2t} generation from the research point of view, let's have a look at its practical applications:
 
 \begin{itemize}
     \item \textbf{Automated Journalism}: Augmenting (or, in simple cases, even replacing) human journalists for writing data-based reports, including:
@@ -342,7 +342,7 @@ Before we talk \ac{d2t} generation from the research point of view, we will outl
               \item \textbf{Financial reports}: Supporting financial decisions by generating comments on stock prices \cite{murakami2017learning,aoki2018generating} and summarizing financial documents \cite{chapman2022towards}.
               \item \textbf{Weather reports}: Generating weather forecasts and weather-related reports \cite{goldberg1994using,belz2005corpus,belz2008automatic,angeli-etal-2010-simple,balakrishnan2019constrained}.
           \end{itemize}
-    \item \textbf{Business Intelligence Reports}: Providing decision support in business reports alongside data summaries and visualizations (mostly commercial companies such as \href{https://www.arria.com}{Arria}, \href{https://infosentience.com}{InfoSentience}, or \href{https://www.vphrase.com}{vPhrase}; see also \citealp{perlitz2023nbiig}).
+    \item \textbf{Business Intelligence Reports}: Providing decision support in business reports alongside data summaries and visualizations (mostly commercial companies such as \href{https://www.arria.com}{Arria}, \href{https://infosentience.com}{InfoSentience}, or \href{https://www.vphrase.com}{vPhrase}; see \citealp{daleNavigatingTextGeneration2023} for a recent overview).
     \item \textbf{Chart Captioning}: Generating captions\footnote{In contrast to image captioning \cite{stefanini2022show}, here the systems can rely on the underlying data in textual form (although the approaches can be hybrid, see e.g. \citealp{kantharajCharttoTextLargeScaleBenchmark2022}).} for charts or graphs, e.g., for assistive technologies, document indexing, or simplifying decision support \cite{demirGeneratingTextualSummaries2008,demirSummarizingInformationGraphics2012,obeidCharttoTextGeneratingNatural2020,kantharajCharttoTextLargeScaleBenchmark2022}.
     \item \textbf{Healthcare Summaries}: Providing clinical data summaries about patients to clinicians \cite{portet2009automatic,scott2013data}, or vice versa, providing medical information to patients, e.g., for behavioral change \cite{reiter2003lessons} or nutritional counseling \cite{balloccu-reiter-2022-comparing}.
     \item \textbf{Product Descriptions}: Automating generating product descriptions in specific domains such as for laptops and TVs \cite{wen2015toward,wen2016multi}, or general-domain approaches for big e-commerce platforms \cite{shaoControllableDiverseText2021,kotoCanPretrainedLanguage2022}.
@@ -352,7 +352,7 @@ Before we talk \ac{d2t} generation from the research point of view, we will outl
 \label{sec:d2t-pipeline}
 
 
-Until recently, \ac{d2t} generation was decomposed into approximately 4-6 subtasks\footnote{The count is only approximate: for example, \citet{milleModD2TMultilayerDataset2023} further subdivides some of the subtasks, leading to 10 subtasks in total.} which were addressed separately \cite{reiterBuildingAppliedNatural1997,reiterArchitectureDatatoTextSystems2007,gattSurveyStateArt2018}. Even though the recent advances enable approaches which solve the task in \emph{end-to-end} fashion (i.e., without intermediate steps), the subtasks are still relevant for conceptualization of \ac{d2t} generation. We selected the following five representative subtasks (illustrated in \autoref{fig:pipeline}):
+Until recently, \ac{d2t} generation was decomposed into approximately 4-6 subtasks\footnote{The count is only approximate: for example, \citet{milleModD2TMultilayerDataset2023} further subdivides some of the subtasks, leading to 10 subtasks in total.} which were addressed separately \cite{reiterBuildingAppliedNatural1997,reiterArchitectureDatatoTextSystems2007,gattSurveyStateArt2018}. Even though the recent advances enable approaches which solve the task in \emph{end-to-end} fashion (i.e., without intermediate steps), the subtasks are still relevant for conceptualization of \ac{d2t} generation. We selected the following five representative subtasks illustrated in \autoref{fig:pipeline}:
 
 \begin{enumerate}
     \item \textbf{Content Selection}: Deciding which facts from the structured data
@@ -377,13 +377,13 @@ Until recently, \ac{d2t} generation was decomposed into approximately 4-6 subtas
 
 Decomposing \ac{d2t} generation into subtasks helps to modularize the system. Each module can have a specific and well-defined function, which makes the system more explainable. Modularization also enables realizing each subtask using a different approach (see \Cref{sec:rule-d2t,sec:stat-d2t,sec:neural-d2t}).
 
-The subtasks are typically executed in a \emph{pipeline}, i.e., the input is sequentially processed by a series of ordered modules. The main issue of the pipeline-based approach is error accumulation: the effect of errors from one module propagating to downstream modules. Despite this issue, the pipeline approach remains widely used. It can also benefit end-to-end neural systems \cite{ferreiraNeuralDatatotextGeneration2019}, as we will explore in \autoref{sec:pipeline}.
+The subtasks are typically executed in a \emph{pipeline}, i.e., the input is sequentially processed by a series of modules. The main issue of the pipeline-based approach is error accumulation: the errors from one module propagating to downstream modules. Despite this issue, the pipeline approach remains widely used. It can also benefit end-to-end neural systems \cite{ferreiraNeuralDatatotextGeneration2019}, as we will explore in \autoref{sec:pipeline}.
 
 
 \subsection{Rule-based Approaches}
 \label{sec:rule-d2t}
 
-By \emph{rule-based approaches} for \ac{d2t} generation---as opposed to data-driven approaches---we mean approaches that require manual construction of rules or grammars. It is helpful to view these approaches through the lens of the \ac{d2t} generation pipeline (\autoref{sec:d2t-pipeline}), as these approaches usually tackle particular subtasks of the pipeline. Rule-based approaches (in combination with other approaches) are still in use in various forms today \cite{gattSurveyStateArt2018,daleNaturalLanguageGeneration2020,daleNavigatingTextGeneration2023}.
+By \emph{rule-based approaches} for \ac{d2t} generation, as opposed to data-driven approaches, we mean approaches that require manual construction of rules or grammars. It is helpful to view these approaches through the lens of the \ac{d2t} generation pipeline (\autoref{sec:d2t-pipeline}), as these approaches usually tackle particular subtasks of the pipeline. Rule-based approaches, in combination with other approaches, are still in use in various forms today \cite{gattSurveyStateArt2018,daleNaturalLanguageGeneration2020,daleNavigatingTextGeneration2023}.
 
 
 \paragraph{Content Selection and Text Planning} In the earlier stages of the \ac{d2t} generation pipeline, the rules typically rely on the judgment of domain experts. For the content selection step, extracting important information from the data is done using domain-specific heuristics, e.g., \textit{``if a pattern is detected in the signal, include it in the report''} \cite{portet2009automatic}. Various factors can influence the decision, including the target length of the report, the type of the report, and its target audience \cite{gkatziaContentSelectionDatatoText2016}. The text planning depends on discourse strategies, which are designed to satisfy the desired communicative goals (such as \emph{define}, \emph{compare}, or \emph{describe}) and are encoded using domain-specific schemata \cite{mckeown1985text}. The resulting rules are typically in the form \textit{``if a player scores two consecutive goals, describe these in the same sentence''}  \cite{gattSurveyStateArt2018}.
