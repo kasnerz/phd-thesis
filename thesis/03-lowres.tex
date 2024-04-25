@@ -300,7 +300,9 @@ The higher number of fallbacks in the E2E dataset can be explained by a higher l
     This section is based on the paper \emph{Neural Pipeline for Zero-Shot Data-to-Text Generation} \cite{kasner2022neural}, joint work with Ondřej Dušek, published in the Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (ACL 2022).
 \end{refbox}
 
-In this section, we further develop the approach from \autoref{sec:iterative} for generating semantically accurate text from structured data. The main limitation of the previous approach, which was based on iterative transformations of simple templates, was the limited fluency of the output texts. To improve the text fluency, we propose an approach for transforming the templates based on a sequence of modules trained on general-domain text-based operations: ordering, aggregation, and paragraph compression. We train \acp{plm} for performing these operations on a synthetic corpus \textsc{WikiFluent} which we build from English Wikipedia. Our experiments on WebNLG and E2E show that our approach enables \ac{d2t} generation from \ac{rdf} triples in zero-shot settings. Our code and data is available on Github.\footnote{\url{https://github.com/kasnerz/zeroshot-d2t-pipeline}}
+In this section, we further develop the approach from \autoref{sec:iterative} for generating semantically accurate text from structured data. The main limitation of the previous approach, which was based on iterative transformations of simple templates, was the limited fluency of the output texts. To improve text fluency, we propose adding ordering and aggregation, making the process a three-step pipeline. We also propose a way to make each of these steps trainable on a generic synthetic corpus. We confirm that on WebNLG and E2E dataset, our approach can get lower rates of omissions and hallucinations than prior approaches according to a semantic accuracy metric (on the E2E dataset, the rate is close to zero), while achieving levels of lexical similarity comparable to some of the prior systems; all of this without the need for in-domain training data. Our code and data is available on Github.\footnote{\url{https://github.com/kasnerz/zeroshot-d2t-pipeline}}
+
+% an approach for transforming the templates based on a sequence of modules trained on general-domain text-based operations: ordering, aggregation, and paragraph compression. We train \acp{plm} for performing these operations on a synthetic corpus \textsc{WikiFluent} which we build from English Wikipedia. Our experiments on WebNLG and E2E show that our approach enables \ac{d2t} generation from \ac{rdf} triples in zero-shot settings. Our code and data is available on Github.\footnote{\url{https://github.com/kasnerz/zeroshot-d2t-pipeline}}
 
 \subsection{Motivation}
 Our experiments in \autoref{sec:iterative} with iterative sentence fusion led to several observations:
@@ -308,39 +310,89 @@ Our experiments in \autoref{sec:iterative} with iterative sentence fusion led to
 \begin{enumerate}
     \item The fixed order of triples limits the expressivity of the model, leading to unnatural outputs.
     \item Using the sentence fusion model on every sentence boundary tends to produce sentences which are too compact.
-    \item State-of-the-art approaches for text generation are based on autoregressive models, as opposed to text-editing models or specialized graph-based models \cite{malmi2019lasertagger,kaleTexttoTextPreTrainingDatatoText2020,ribeiroInvestigatingPretrainedLanguage2020}.
+    \item Instead of specialized architectures such as text-editing models, state-of-the-art approaches for text generation are based on autoregressive models \cite{kaleTexttoTextPreTrainingDatatoText2020,ribeiroInvestigatingPretrainedLanguage2020}.
 \end{enumerate}
 
-Following these observations, we improve our approach by (1) inserting a triple-ordering step in the process, (2) replacing the sentence fusion with sentence aggregation, and (3) basing the approach on trainable autoregressive models.
+Following these observations, we improve our approach by (1) inserting a triple-ordering step in the process, (2) replacing the sentence fusion by paragraph compression, and (3) basing the approach on trainable autoregressive models.
 
 
-\subsection{Our Approach}
-Our approach follows the idea of pipeline-based approaches (see \autoref{sec:d2t-pipeline}), in particular the pipelines based on iterative improvements of simple templates  \cite{laha2020scalable} and neural modules \cite{ferreiraNeuralDatatotextGeneration2019}. In contrast to previous approaches, our pipeline is fully trainable on general-domain data, i.e., without using any training data from target \ac{d2t} datasets. By eliminating the need for human references, we get rid of the costly and time-consuming reference collection process, while also avoiding the brittleness of \emph{few-shot} approaches \cite{chenFewShotNLGPreTrained2019,suFewShotTabletoTextGeneration2021,changSelectGenChallengeFinding2021}.
+Our approach follows the idea of pipeline-based approaches (see \autoref{sec:d2t-pipeline}). In particular, our pipeline follow the idea of pipelines based on iterative improvements of simple templates  \cite{laha2020scalable} and neural modules \cite{ferreiraNeuralDatatotextGeneration2019}. We focus on the \emph{ordering} and \emph{aggregation} steps, which were shown to improve the quality of \ac{d2t} generation outputs \cite{moryossef2019improving,moryossef2019step,trisedyaSentenceGenerationEntity2020,su2021plan}.
 
+In contrast to previous approaches, our pipeline is fully trainable on general-domain data, i.e., without using any training data from target \ac{d2t} datasets. By eliminating the need for human references, we get rid of the costly and time-consuming reference collection process. At the same time, we also avoid the brittleness of few-shot approaches which are sensitive to the choice of finetuning examples \cite{chenFewShotNLGPreTrained2019,suFewShotTabletoTextGeneration2021,changSelectGenChallengeFinding2021}.
 
-\paragraph{Pipeline Steps} Our pipeline makes use of content planning (\emph{ordering} and \emph{aggregation}), which was shown to improve the quality of \ac{d2t} generation outputs \cite{moryossef2019improving,moryossef2019step,trisedyaSentenceGenerationEntity2020,su2021plan}, along with our custom final \emph{paragraph compression} step. In particular, our pipeline consists of the following:
-
-\begin{enumerate}
-    \item \textbf{Ordering:} Sentence ordering is the task of organizing a set of natural language sentences to increase the coherence of a text \cite{barzilay2001sentence,lapata2003probabilistic}. Several neural methods for this task were proposed, using either interactions between pairs of sentences \cite{chen2016neural,li2017neural}, global interactions \cite{gong2016end,wang2019hierarchical}, or combination of both \cite{cui2020bert}. We base our ordering module (§\ref{sec:ord_model}) on the recent work of \citet{calizzano2021ordering}, who use a pointer network \cite{wang2019hierarchical,vinyals2015pointer} on top of a PLM.
-    \item \textbf{Aggregation} Typically, multiple pieces of input information need to be merged into a single sentence. Previous works \cite{wiseman2018learning,shao-etal-2019-long,shen-etal-2020-neural,xu2021agggen} capture the segments which correspond to individual parts of the input as latent variables. Unlike these works, we adopt a simpler scenario using an already ordered sequence of facts (see §\ref{sec:templates}), into which we selectively insert delimiters to mark sentence boundaries.
-    \item \textbf{Paragraph Compression} We introduce \textit{paragraph compression} (PC) as a new task and the final step in our D2T generation pipeline. This task combines several standard natural-language tasks including sentence fusion, rephrasing, and coreference resolution. Unlike text summarization or simplification \cite{zhang2020pegasus,jiang2020neural}, we aim to convey the complete semantics of the text without omitting any facts. In contrast to sentence fusion \cite{geva2019discofuse,barzilay2005sentence} or sentence compression \cite{filippova2013overcoming}, we operate in the context of multiple sentences in a paragraph.  The task is the central focus of our \textsc{WikiFluent} corpus (§\ref{sec:wikifluent}).
-
-\end{enumerate}
-
-% Finetuning PLMs on human-written references is widely accepted as a standard approach for adapting PLMs to the D2T generation objective and achieving good performance on a given benchmark \cite{agarwal2021knowledge,ke2021jointgt}. However, 
-
-
-% In this paper, we present a \emph{zero-shot} alternative to the traditional finetuning paradigm by formulating the D2T generation from RDF triples as a sequence of general-domain operations over text in natural language. We start by transforming individual triples to text using trivial templates, which we subsequently order, aggregate, and compress on the paragraph level to produce the resulting description of the data. In constrast to traditional pipeline systems, all our pipeline modules are built upon PLMs and operate over sentences in natural language. The modules are trained on our new \textsc{WikiFluent} corpus, which contains 934k examples of first paragraphs from the English Wikipedia, each supplied with a synthesized set of simple template-like sentences which together convey the meaning of the original paragraph.
-% Our approach allows generating natural language descriptions from RDF triples with a minimum amount of domain-specific rules or knowledge and without using training data from the D2T datasets. Although our approach is primarily a probe into the territory of zero-shot approaches and cannot yet match the quality of state-of-the-art models, we show that it can yield large improvements upon simple baselines and match older supervised systems on automatic metrics for text fluency. Moreover, the semantic accuracy metrics and our manual error analysis suggest that our approach offers a way to prevent omissions and hallucinations common in few-shot approaches.
-
+\subsection{Method}
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=\textwidth]{img/zeroshot_pipeline.pdf}
-    \caption{A scheme of our pipeline for zero-shot data-to-text generation from RDF triples: (1) ordering, (2) aggregation, (3) paragraph compression. Individual pipeline modules are trained on a large general-domain text corpus and operate over text in natural language. In-domain knowledge is included only in the simple hand-crafted templates for each predicate.}\label{fig:zeroshot:pipeline}
+    \caption{A scheme of our approach for zero-shot data-to-text generation from RDF triples. After a simple transformation of triples to facts, we apply the pipeline of modules for (1) ordering, (2) aggregation, (3) paragraph compression. Individual modules are trained on a large general-domain text corpus and operate over text in natural language. In-domain knowledge is included only in the simple hand-crafted templates for each predicate.}\label{fig:zeroshot:pipeline}
+\end{figure}
+In this section, we provide the formal description of our proposed approach. Similarly to \Cref{sec:finetuning,sec:iterative}, we focus on the task of producing a natural language description $Y$ a set of \ac{rdf} triples $x \in X$, where each triple $x = (s, p, o)$ describes the relation $p$ between the entities $s$ and $o$ in the knowledge graph.
+
+Our pipeline proceeds as follows. Given a set of triples $X$ on the input, we:
+\begin{enumerate}
+    \item transform the triples into \textit{facts}, which are short sentences in natural language,
+    \item sort the facts using an \textit{ordering} module,
+    \item insert sentence delimiters between the sorted facts using an \textit{aggregation} module,
+    \item input the ordered sequence of facts with delimiters into a \textit{paragraph compression} module, which generates the final description $Y$.
+\end{enumerate}
+
+\paragraph{Transforming Triples to Facts}
+\label{sec:templates}
+The first step in our pipeline involves transforming each of the input triples $x_i \in X$ into a fact $f_i \in F$  using a transformation $T: X \rightarrow F$. We define a fact $f_i$ as a single sentence in natural language describing $x_i$.
+The transformation serves two purposes: (a) preparing the data for the subsequent text-to-text operations, (b) introducing in-domain knowledge about the semantics of individual predicates.
+
+
+% This step can be realized e.g. using a simple template for each predicate (cf. §\ref{sec:templates_model}).
+% Several neural methods for this task were proposed, using either interactions between pairs of sentences \cite{chen2016neural,li2017neural}, global interactions \cite{gong2016end,wang2019hierarchical}, or combination of both \cite{cui2020bert}. We base our ordering module (§\ref{sec:ord_model}) on the recent work of \citet{calizzano2021ordering}, who use a pointer network \cite{wang2019hierarchical,vinyals2015pointer} on top of a PLM.
+
+
+\paragraph{Ordering} We assume that the default order of triples $X$ is random and the same applies for the respective facts $F$. Note, however, that $F$ is a set of meaningful sentences. We can use this to our advantage and apply a sentence ordering module \cite{barzilay2001sentence,lapata2003probabilistic} to maximize the coherency of the paragraph resulting from their concatenation. An example outcome of such operation may be grouping together facts mentioning \textit{birth date} and \textit{birth place} of a person, followed by their \textit{occupation}, as it is shown in \autoref{fig:zeroshot:pipeline}.
+
+Formally, we apply the ordering module $O(F)$ to get an ordered sequence of facts: $F_o = \{f_{o_1}, \ldots, f_{o_n}\}$, where $o_{1:n}$ is a permutation of fact indices. The ordering module allows downstream modules to only focus on operations over neighboring sentences.
+
+
+\paragraph{Aggregation} Some facts will be typically mentioned together in a single sentence. Considering the previous example, \textit{occupation} is likely to be mentioned separately, while \textit{birth date} and \textit{birth place} are likely to be mentioned together. Unlike previous works \cite{wiseman2018learning,shao-etal-2019-long,shen-etal-2020-neural,xuAGGGENOrderingAggregating2021}, which capture the segments corresponding to individual parts of the input as latent variables, we simply insert delimiters into the ordered sequence of facts to mark sentence boundaries.
+
+Formally, the aggregation module takes a sequence of ordered facts $F_o$ as input and produces a sequence of sentence delimiters $A(F_o) = \{\delta_{o_1}, \delta_{o_2}, \ldots, \delta_{o_{n-1}}\}$; $\delta_{i} \in \{0, 1\}$. The output $\delta_{i}=1$ means that the neighboring facts should be mentioned separately, i.e. the neighboring sentences should \textit{not} be fused. Conversely, $\delta_{i}=0$ means that the facts should be aggregated and their corresponding sentences should be fused. The markers serve as sentence fusion hints for the paragraph compression module.
+
+
+
+\paragraph{Paragraph Compression}  The \ac{pc} module aim to output the final text description.  It has two main objectives: (a) \textit{fusing} related sentences, i.e., sentences $i$ and $j$ in between which $\delta_{i}=0$, and (b) \textit{rephrasing} the text to improve its fluency, e.g. fixing disfluencies in the templates, replacing noun phrases with refering expressions, etc.
+
+Formally, the model takes as input the ordered sequence of facts with delimiters $F_a = \{f_{o_1}, \delta_{o_1}, f_{o_2}, \ldots, \delta_{o_{n-1}}, f_{o_n}\}$ and produces the final text $Y$. Unlike in text summarization or sentence simplification, the edits will typically be minor, since the goal is to preserve the semantics of the already ordered sequence of sentences.
+
+
+
+\subsection{\textsc{WikiFluent} Corpus}
+\label{sec:pipeline:wikifluent}
+Here we descibe the process of building a large-scale synthetic corpus \textsc{WikiFluent}. The corpus provides training data for the neural models which we use in our implementation of the ordering, aggregation, and paragraph compression modules (see \autoref{sec:pipeline:exp}).
+
+Our goal is to cover a broad range of domains while capturing the sentence style in D2T generation with respect to both the input facts and the target descriptions. In other words, we aim to build a corpus in which (1) the input is a set of simple, template-like sentences, (2) the output is a fluent text in natural language preserving the semantics of the input. As we describe below in detail, we achieve that by using human-written paragraphs in English Wikipedia and applying \textit{split-and-rephrase} and  \textit{coreference resolution} models to obtain synthetic source texts. The process is illustrated in Figure \ref{fig:wikifluent}; corpus statistics are included in Appendix \ref{app:stats}.
+
+\subsection{Data Source} For building the \textsc{WikiFluent} corpus, we extracted 934k first paragraphs of articles from a Wikipedia dump\footnote{\texttt{enwiki-20210401-pages-articles-multistream}} using WikiExtractor \cite{Wikiextractor2015}. Wikipedia is commonly used for large-scale pretraining of D2T generation models \cite{jin2020genwiki,chen-etal-2020-kgpt}. Although it is not bias-free, it provides more balanced sample of natural language use than typical D2T generation datasets. We used the first paragraphs of Wikipedia entries, which contain mostly concise, fact-based descriptions.
+We selected paragraphs with length between 30-430 characters; filtering out lists, disambiguations, and repeated and malformed paragraphs. To balance the length of inputs, we selected 250k examples each from 4 equally sized length ranges (30-130 characters, etc.).
+
+
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/wikifluent.pdf}
+    \caption{The building process of the \textsc{WikiFluent} corpus. We apply a split-and-rephrase model on each sentence in the paragraph and resolve coreferences in the split sentences. The result is a set of simple sentences which together convey the same meaning as the original paragraph. The synthesized sentences are used as \textit{input} into our models, the original human-written texts are used as \textit{ground truth}.}\label{fig:wikifluent}
 \end{figure}
 
+\paragraph{Split-and-Rephrase}
 
+To generate a set of simple sentences, we divide each paragraph into sentences using NLTK \cite{bird2006nltk} and apply a \textit{split-and-rephrase} model on each sentence. Split-and-rephrase is a task of splitting a complex sentence into a meaning preserving sequence of shorter
+sentences \citep{narayan-etal-2017-split}. The process is illustrated in the upper part of Figure \ref{fig:wikifluent}.
+
+We train our split-and-rephrase model on the large-scale WikiSplit corpus by \citet{botha-etal-2018-learning}, containing human-made sentence splits from Wikipedia edit history. Following the same setup as for a paragraph compression model (§\ref{sec:pc}), we train BART-base \cite{lewis2020bart} on the WikiSplit dataset in a sequence-to-sequence setting. Next, we apply the trained split-and-rephrase model on each sentence in our Wikipedia-based corpus, uniformly randomly choosing between 0-2 recursive calls to ensure that the splits are not deterministic. If the sentence cannot be meaningfully split, the model tends to duplicate the sentence on the output; in that case, we use only the original sentence and do not proceed with the splitting.
+
+\paragraph{Coreference Replacement}  As the next step, we concatenate the split sentences and apply a coreference resolution model \cite{gardner2018allennlp,Lee2018HigherorderCR} in order to replace referring expressions with their antencendents (e.g., pronouns with noun phrases). The motivation for this step is to match the style of the facts (see §\ref{sec:templates}), which do not use pronouns since each fact describes a single triple only. Note that this procedure replaces the referring expressions only in the synthesized sentences (which are used as input) and keeps them in the original paragraphs (which are used as ground truth). As a consequence, the paragraph compression module is implicitly trained to generate referring expressions in the final description.
+
+\paragraph{Filtering} To ensure that the generated sentences convey the same semantics as the original paragraph, we use a pretrained RoBERTa model\footnote{\url{https://huggingface.co/roberta-large-mnli}} \cite{liu2019roberta} trained on the MultiNLI dataset \cite{williams2018broad} for checking the semantic accuracy of the generated text. Following \citet{duvsek2020evaluating}, we test if the original paragraph entails each of the synthesized sentences (checking for omissions), and if the set of concatenated synthesized sentences entails the original paragraph (checking for hallucinations). In a filtered version of the \textsc{WikiFluent} corpus, we include only the examples without omissions or hallucinations (as computed by the model), reducing it to 714k examples (approximately 75\% of the original size).
 
 \subsection{Experiments}
 \label{sec:pipeline-exp}
+% In this paper, we present a \emph{zero-shot} alternative to the traditional finetuning paradigm by formulating the D2T generation from RDF triples as a sequence of general-domain operations over text in natural language. We start by transforming individual triples to text using trivial templates, which we subsequently order, aggregate, and compress on the paragraph level to produce the resulting description of the data. In constrast to traditional pipeline systems, all our pipeline modules are built upon PLMs and operate over sentences in natural language. The modules are trained on our new \textsc{WikiFluent} corpus, which contains 934k examples of first paragraphs from the English Wikipedia, each supplied with a synthesized set of simple template-like sentences which together convey the meaning of the original paragraph.
+% Our approach allows generating natural language descriptions from RDF triples with a minimum amount of domain-specific rules or knowledge and without using training data from the D2T datasets. Although our approach is primarily a probe into the territory of zero-shot approaches and cannot yet match the quality of state-of-the-art models, we show that it can yield large improvements upon simple baselines and match older supervised systems on automatic metrics for text fluency. Moreover, the semantic accuracy metrics and our manual error analysis suggest that our approach offers a way to prevent omissions and hallucinations common in few-shot approaches.
