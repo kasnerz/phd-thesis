@@ -487,120 +487,109 @@ We evaluate outputs from the \textsc{\{1,2,3\}-stage} variants of our pipeline u
 
     \centering \small
     \begin{tabular}{llcccccccc} \toprule
-                                                                                     &                  & \multicolumn{4}{c}{\textbf{WebNLG}} & \multicolumn{4}{c}{\textbf{E2E}}                                                                                                       \\
-                                                                                     &                  & \textbf{B}                          & \textbf{M}                       & \textbf{O}     & \textbf{H}     & \textbf{B}     & \textbf{M}     & \textbf{O}     & \textbf{H}     \\\midrule
-
-        \multicolumn{2}{l}{$\text{UPF-FORGe}^*$}                                     & 38.65            & 39.00                               & 0.075                            & 0.101          & -              & -              & -              & -                               \\
-        \multicolumn{2}{l}{$\textsc{Melbourne}^*$}                                   & 45.13            & 37.00                               & 0.237                            & 0.202          & -              & -              & -              & -                               \\
-        \multicolumn{2}{l}{$\text{\citet{keJointGTGraphTextJoint2021}}^{\dagger *}$} & 66.14            & 47.25                               & -                                & -              & -              & -              & -              & -                               \\
-        \multicolumn{2}{l}{$\text{\citet{laha2020scalable}}^{\dagger}$}              & 24.80            & 34.90                               & -                                & -              & -              & -              & -              & -                               \\\cdashlinelr{1-10}
-        \multicolumn{2}{l}{\textsc{TGen}$^*$}                                        & -                & -                                   & -                                & -              & 40.73          & 37.76          & 0.016          & 0.083                           \\
-        \multicolumn{2}{l}{\citet{harkousHaveYourText2020}$^*$}\hspace{-2mm}         & -                & -                                   & -                                & -              & 43.60          & 39.00          & -              & -                               \\
-        \multicolumn{2}{l}{\baselinecopy{}}                                          & 37.18            & 38.77                               & 0.000                            & 0.000          & 24.19          & 34.89          & 0.000          & 0.000                           \\\midrule
-        \multirow{3}{*}{\textit{full}}                                               & \textsc{3-stage} & 42.92                               & 39.07                            & 0.051          & 0.148          & \textbf{36.04} & 36.95          & \textbf{0.001} & \textbf{0.001} \\
-                                                                                     & \textsc{2-stage} & 42.90                               & 39.28                            & \textbf{0.043} & 0.125          & 35.84          & 36.91          & \textbf{0.001} & \textbf{0.001} \\
-                                                                                     & \textsc{1-stage} & 39.08                               & 38.94                            & 0.071          & 0.204          & 30.81          & 36.01          & 0.009          & 0.122          \\\cdashlinelr{1-10}
-        \multirow{3}{*}{\textit{filtered}}                                           & \textsc{3-stage} & 43.19                               & 39.13                            & 0.152          & \textbf{0.073} & 35.88          & 36.95          & \textbf{0.001} & \textbf{0.001} \\
-                                                                                     & \textsc{2-stage} & \textbf{43.49}                      & \textbf{39.32}                   & 0.146          & 0.096          & 36.01          & \textbf{36.99} & \textbf{0.001} & \textbf{0.001} \\
-                                                                                     & \textsc{1-stage} & 42.99                               & 38.81                            & 0.202          & 0.093          & 34.08          & 36.32          & 0.012          & 0.050          \\ \bottomrule
+                                                                                       &                  & \multicolumn{4}{c}{\textbf{WebNLG}} & \multicolumn{4}{c}{\textbf{E2E}}                                                                                                       \\
+                                                                                       &                  & \textbf{B}                          & \textbf{M}                       & \textbf{O}     & \textbf{H}     & \textbf{B}     & \textbf{M}     & \textbf{O}     & \textbf{H}     \\\midrule
+        \multicolumn{2}{l}{\baselinecopy{}}                                            & 37.18            & 38.77                               & 0.000                            & 0.000          & 24.19          & 34.89          & 0.000          & 0.000                           \\\cdashlinelr{1-10}
+        \multicolumn{2}{l}{$\text{UPF-FORGe}^*$}                                       & 38.65            & 39.00                               & 0.075                            & 0.101          & -              & -              & -              & -                               \\
+        \multicolumn{2}{l}{$\textsc{Melbourne}^*$}                                     & 45.13            & 37.00                               & 0.237                            & 0.202          & -              & -              & -              & -                               \\
+        \multicolumn{2}{l}{$\text{\citet{keJointGTGraphTextJoint2021}}^{\dagger *}$}   & 66.14            & 47.25                               & -                                & -              & -              & -              & -              & -                               \\
+        \multicolumn{2}{l}{$\text{\citet{laha2020scalable}}^{\dagger}$}                & 24.80            & 34.90                               & -                                & -              & -              & -              & -              & -                               \\\cdashlinelr{1-10}
+        \multicolumn{2}{l}{\textsc{TGen}$^*$}                                          & -                & -                                   & -                                & -              & 40.73          & 37.76          & 0.016          & 0.083                           \\
+        \multicolumn{2}{l}{\citet{harkousHaveYourText2020}$^{\dagger *}$}\hspace{-2mm} & -                & -                                   & -                                & -              & 43.60          & 39.00          & -              & -                               \\\midrule
+        \multirow{3}{*}{\textit{full}}                                                 & \textsc{3-stage} & 42.92                               & 39.07                            & 0.051          & 0.148          & \textbf{36.04} & 36.95          & \textbf{0.001} & \textbf{0.001} \\
+                                                                                       & \textsc{2-stage} & 42.90                               & 39.28                            & \textbf{0.043} & 0.125          & 35.84          & 36.91          & \textbf{0.001} & \textbf{0.001} \\
+                                                                                       & \textsc{1-stage} & 39.08                               & 38.94                            & 0.071          & 0.204          & 30.81          & 36.01          & 0.009          & 0.122          \\\cdashlinelr{1-10}
+        \multirow{3}{*}{\textit{filtered}}                                             & \textsc{3-stage} & 43.19                               & 39.13                            & 0.152          & \textbf{0.073} & 35.88          & 36.95          & \textbf{0.001} & \textbf{0.001} \\
+                                                                                       & \textsc{2-stage} & \textbf{43.49}                      & \textbf{39.32}                   & 0.146          & 0.096          & 36.01          & \textbf{36.99} & \textbf{0.001} & \textbf{0.001} \\
+                                                                                       & \textsc{1-stage} & 42.99                               & 38.81                            & 0.202          & 0.093          & 34.08          & 36.32          & 0.012          & 0.050          \\ \bottomrule
     \end{tabular}
-    \caption{Automatic metrics on E2E. B = BLEU, M = METEOR, O = omissions / \# facts, H = hallucinations / \# examples. The systems marked with asterisk (*) are trained on the E2E dataset. The results for \citet{harkous2020have} are taken from their work.}
-    \label{tab:webnlg}
-
+    \caption{Automatic metrics on the WebNLG and E2E datasets. B = BLEU, M = METEOR, O = omissions / \# facts, H = hallucinations / \# examples. The systems marked with asterisk (*) are trained on the in-domain data. The results for the systems marked with $\dagger$ are taken from the respective works.}
+    \label{tab:pipeline:auto}
 \end{table}
 
 
 
-Following prior work, we use BLEU \cite{papineni2002bleu} and METEOR \cite{banerjee2005meteor} to evaluate the outputs against the human references.\footnote{We use the implementation from \url{https://github.com/tuetschek/e2e-metrics}.} We also evaluate the number of omission and hallucination errors (i.e., facts missing or added, respectively) using a metric from \citet{duvsek2020evaluating} based on a RoBERTa model \cite{liu2019roberta} pretrained on natural language inference (NLI).
+Following prior work, we use BLEU \cite{papineni2002bleu} and METEOR \cite{banerjee-lavie-2005-meteor} to evaluate the outputs against the human references.\footnote{We use the implementation from \url{https://github.com/tuetschek/e2e-metrics}.} We also evaluate the number of omission and hallucination errors (i.e., facts missing or added, respectively) using a metric from \citet{dusekEvaluatingSemanticAccuracy2020} based on a RoBERTa model \cite{liuRoBERTaRobustlyOptimized2019} pretrained on natural language inference.
 
-We include a diverse set of baselines for comparison. For \textbf{WebNLG} (see Table \ref{tab:webnlg}), we compare our systems with the results of:
+We include a diverse set of baselines for comparison. \baselinecopy{} denotes the baseline of copying the facts without further processing. For WebNLG, we further compare our systems with the results of:
 \begin{itemize}
-    \item UPF-FORGe and \textsc{Melbourne} -- systems (grammar-based and supervised, respectively) from the first run of WebNLG Challenge \cite{gardent2017webnlg},
-    \item  \citet{ke2021jointgt} -- a state-of-the-art system with a structure-aware encoder and task-specific pretraining,
-    \item \citet{laha2020scalable} -- the only other (to our knowledge) zero-shot D2T generation system applied to WebNLG.
+    \item UPF-FORGe and \textsc{Melbourne} -- systems (grammar-based and supervised, respectively) from the first run of WebNLG Challenge \cite{gardentWebNLGChallengeGenerating2017},
+    \item  \citet{keJointGTGraphTextJoint2021} -- a state-of-the-art system with a structure-aware encoder and task-specific pretraining,
+    \item \citet{laha2020scalable} -- a zero-shot D2T generation system.
+\end{itemize}
+For E2E, we compare our systems with the results of:
+\begin{itemize}
+    \item \textsc{TGen} \cite{dusekTrainingNaturalLanguage2015} -- the baseline system for the E2E Challenge \cite{dusekEvaluatingStateoftheartEndtoEnd2020},
+    \item \citet{harkousHaveYourText2020} -- a state-of-the-art supervised system on cleaned E2E data.
 \end{itemize}
 
-For \textbf{E2E} (see Table \ref{tab:e2e}), we compare our systems with the results of:
-\begin{itemize}[nosep,leftmargin=17pt]
-    \item \textsc{TGen} \cite{duvsek2015training} -- the baseline system for the E2E Challenge \cite{duvsek2020evaluating_challenge},
-    \item \citet{harkous2020have} -- a state-of-the-art supervised system on cleaned E2E data.
-\end{itemize}
+The automatic evaluation (\autoref{tab:pipeline:auto}) shows that our systems consistently outperform the \baselinecopy{} baseline (e.g., $\sim$12 BLEU points for E2E), which is already strong thanks to our manually curated set of templates.\footnote{On WebNLG, our \baselinecopy{} baseline achieves 37.18 BLEU points, compared to 24.80 BLEU points of the \textit{full system} of \citet{laha2020scalable}, which uses automatic template generation.} Automatic scores also suggest that our systems are comparable with some older supervised systems, although it underperforms the state-of-the-art supervised systems.
 
-For both datasets, \baselinecopy{} denotes the baseline of copying the facts without further processing.
-
-The automatic evaluation shows that our systems consistently outperform the \baselinecopy{} baseline (e.g., $\sim$12 BLEU points for E2E), which is already strong thanks to our manually curated set of templates.\footnote{On WebNLG, our \baselinecopy{} baseline achieves 37.18 BLEU points, compared to 24.80 BLEU points of the \textit{full system} of \citet{laha2020scalable}, which uses automatic template generation.} Automatic scores also suggest that our systems are comparable with some older supervised systems. Nevertheless, our systems still underperform the state-of-the-art supervised systems. For this reason, we further focus on manual \textit{error analysis} in §\ref{sec:eval_manual} to pinpoint the current shortcomings of our approach.
-
-The \textsc{2-stage} system is generally on par with the \textsc{3-stage} system or better, which indicates that explicit aggregation using the \textsc{agg} model may not be necessary. However, an advantage of having a separate aggregation module is the possibility to control the aggregation step explicitly. The models using the filtered version of the corpus generally produce better results, although they also bring in a larger number of omissions.
+The \textsc{2-stage} system is generally on par with the \textsc{3-stage} system, which indicates that explicit aggregation using the \textsc{agg} model may not be necessary. However, a separate aggregation module allows to control the aggregation step explicitly. The models using the filtered version of the corpus generally produce better results, although they also bring in a larger number of omissions.
 
 
 \paragraph{Manual Error Analysis}
 
-% \label{sec:eval_manual}
-% \begin{table}[t]
-%   \centering\small
-%   \begin{tabular}{>{\hspace{-1mm}}l >{\hspace{-1mm}}l c >{\hspace{-2mm}}c >{\hspace{-2mm}}c >{\hspace{-2mm}}c >{\hspace{-2mm}}c >{\hspace{1mm}}c >{\hspace{-2mm}}c >{\hspace{-2mm}}c >{\hspace{-2mm}}c >{\hspace{-2mm}}c} \toprule
-%      &                  & \multicolumn{5}{c}{\bf WebNLG} & \multicolumn{5}{c}{\bf E2E}                                                                                                         \\
-%      &                  & \textbf{H}                     & \textbf{I}                  & \textbf{O} & \textbf{R} & \textbf{G} & \textbf{H} & \textbf{I} & \textbf{O} & \textbf{R} & \textbf{G} \\\midrule
-%     \multirow{3}{*}{\rotatebox[origin=c]{90}{\textit{full}}}
-%      & \textsc{3-stage} & 3                              & 39                          & 2          & 2          & 16         & 0          & 1          & 0          & 0          & 17         \\
-%      & \textsc{2-stage} & 8                              & 36                          & 1          & 5          & 16         & 1          & 1          & 0          & 1          & 23         \\
-%      & \textsc{1-stage} & 28                             & 27                          & 6          & 10         & 20         & 17         & 0          & 1          & 79         & 45\Bstrut  \\\hdashline[0.5pt/2pt]
-%     \multirow{3}{*}{\rotatebox[origin=c]{90}{\textit{filtered}}}
-%      & \textsc{3-stage} & 2                              & 37                          & 2          & 1          & 15         & 0          & 0          & 0          & 0          & 17\Tstrut  \\
-%      & \textsc{2-stage} & 5                              & 32                          & 1          & 2          & 14         & 0          & 0          & 0          & 0          & 11         \\
-%      & \textsc{1-stage} & 8                              & 40                          & 6          & 6          & 16         & 11         & 2          & 1          & 41         & 22         \\\bottomrule
-%   \end{tabular}\caption{Number of manually annotated errors on 100 examples: H = hallucinations, I = incorrect fact merging, O = omissions, R = redundancies, G = grammar errors or disfluencies.}
-%   \label{tab:manual}
-% \end{table}
-
-Since automatic performance metrics do not provide insights into specific weaknesses of the system \cite{van2021underreporting}, we manually examined 100 outputs of the models. We counted the number of errors: factual (hallucinations, omissions, incorrect fact merging, redundancies) and grammatical. The results are summarized in Table \ref{tab:manual}.
-
-The \textsc{1-stage} model (which has to order the facts implicitly) tends to repeat the facts in the text (especially in E2E) and produces frequent hallucinations. These problems are largely eliminated with the \textsc{2-stage} and \textsc{3-stage} models, which produce almost no hallucinations or omissions.
-However, the outputs on WebNLG for all systems suffer from semantic errors resulting from merging of unrelated facts. This mostly happens with unrelated predicates connected to the same subject/object (e.g.\ “X was born in Y”, “X worked as Z” expressed as “X worked as Z in Y”; see Appendix \ref{app:examples} for examples). This behavior is the main obstacle to ensure factual consistency of the output. As a possible remedy, we propose explicitly controlling the semantics of sentence fusion \cite{ben2020semantically}, e.g. using a variant of constrained decoding \cite{balakrishnan2019constrained,wang2021mention}.
-
-On the E2E data, which has a simpler triple structure (all predicates share the same subject), the outputs are generally consistent and the \textsc{2-stage} and \textsc{3-stage} models exhibit almost no semantic errors. Grammar errors and disfluencies stem mainly from over-eager paragraph compression or from artifacts in our templates and are relatively minor (e.g., missing “is” in “serves French food and family-friendly”).
-
-
-\subsection{Content Planning}
-\label{sec:eval_planning}
-
-Following \citet{su2021plan} and \citet{zhao2020bridging}, we report the accuracy and BLEU-2 score of our \textbf{ordering model} on WebNLG against the human-generated plans from \citet{ferreira2018enriching}. The results are listed in Table \ref{tab:cp} and compared against a \textsc{random} baseline (random ordering) and prior work. The results show that although our approach again lags behind state-of-the-art supervised approaches, it can outperform both the random baseline and the Transformer-based approach from \citet{ferreira2019neural} while not using any in-domain examples.
-
-% \begin{table}[t]
-%   \centering\small
-%   \begin{tabular}{lcc} \toprule
-%                                                     & \textbf{B-2} & \textbf{Acc} \\ \midrule
-%     Transformer \cite{ferreira2019neural}$^\dagger$ & 52.20        & 0.35         \\
-%     Step-by-step \cite{moryossef2019step}$^\dagger$ & 70.80        & 0.47         \\
-%     PLANENC \cite{zhao2020bridging}$^\dagger$       & 80.10        & 0.62         \\
-%     Plan-then-generate \cite{su2021plan}$^\dagger$  & 84.97        & 0.72\Bstrut  \\\hdashline[0.5pt/2pt]
-%     \textsc{random}                                 & 47.00        & 0.29\Tstrut  \\ \midrule
-%     Ours (BART+ptr)                                 & 59.10        & 0.48         \\ \bottomrule
-%   \end{tabular}
-%   \caption{Evaluation of our zero-shot ordering model based on \citet{calizzano2021ordering}. B-2 = BLEU-2, Acc = accuracy. The results marked with $\dagger$ are copied from the respective papers.}
-%   \label{tab:cp}
-% \end{table}
-
-We also evaluate the accuracy of our \textbf{aggregation model}, using triples ordered according to the plans from \citet{ferreira2018enriching} as input. The accuracy is 0.33 per example and 0.62 per sentence boundary (random baseline is 0.23 and 0.50, respectively). The results show that although our approach is better than the random baseline, there is still room for improvement.
-
-Finally, we manually evaluate how the \textbf{PC model} follows the content plan (i.e., keeping the predefined order and aggregating the sentences according to the delimiters) using 100 randomly chosen examples with more than 1 triple on WebNLG and E2E. We find that the model follows the content plan in 95\% and 100\% of cases, respectively. The incorrect cases include a fact not properly mentioned or an extra boundary between sentences without a separator. We can thus conclude that the pretraining task successfully teaches the PC model to follow a given content plan.
-
-
-\subsection{Intrinsic Evaluation}
-\label{sec:wikifluent_test}
-Aside from the main D2T generation results, we also provide an intrinsic evaluation of our pipeline modules on the \mbox{\textsc{WikiFluent}} test sets. We evaluated the ordering, aggregation, and paragraph compression modules trained on the \textit{full} \textsc{WikiFluent} corpus. The results for both \textit{full} and \textit{filtered} test sets are summarized in Table \ref{tab:wikifluent_test}. The PC model achieves high scores, which follows from the fact that we provide it with ground truth content plans (i.e., the ordering and aggregation plan corresponding to the original paragraph). Accuracy of the ordering and aggregation modules is comparable to their performance on D2T datasets.
-
 \begin{table}[t]
     \centering\small
-    \begin{tabular}{ll cc} \toprule
-                                          &                       & \textbf{test (full)} & \textbf{test (filt.)} \\\midrule
-        \multirow{2}{*}{\textsc{ord}}     & BLEU-2                & 64.8                 & 71.9                  \\
-                                          & Accuracy              & 0.70                 & 0.77                  \\ \midrule
-        \multirow{2}{*}{\textsc{Agg}}     & Acc. per example      & 0.68                 & 0.68                  \\
-                                          & Acc. per sent. bound. & 0.93                 & 0.93                  \\ \midrule
-        \multirow{2}{*}{\textsc{\ac{pc}}} & BLEU                  & 90.72                & 91.60                 \\
-                                          & METEOR                & 63.89                & 65.03                 \\ \bottomrule
+    \begin{tabular}{l l ccccc >{\hspace{3mm}}ccccc} \toprule
+         &                  & \multicolumn{5}{c}{\bf WebNLG} & \multicolumn{5}{c}{\bf E2E}                                                                                                         \\
+         &                  & \textbf{H}                     & \textbf{I}                  & \textbf{O} & \textbf{R} & \textbf{G} & \textbf{H} & \textbf{I} & \textbf{O} & \textbf{R} & \textbf{G} \\\midrule
+        \multirow{3}{*}{\textit{full}}
+         & \textsc{3-stage} & 3                              & 39                          & 2          & 2          & 16         & 0          & 1          & 0          & 0          & 17         \\
+         & \textsc{2-stage} & 8                              & 36                          & 1          & 5          & 16         & 1          & 1          & 0          & 1          & 23         \\
+         & \textsc{1-stage} & 28                             & 27                          & 6          & 10         & 20         & 17         & 0          & 1          & 79         & 45         \\\cdashlinelr{1-12}
+        \multirow{3}{*}{\textit{filtered}}
+         & \textsc{3-stage} & 2                              & 37                          & 2          & 1          & 15         & 0          & 0          & 0          & 0          & 17         \\
+         & \textsc{2-stage} & 5                              & 32                          & 1          & 2          & 14         & 0          & 0          & 0          & 0          & 11         \\
+         & \textsc{1-stage} & 8                              & 40                          & 6          & 6          & 16         & 11         & 2          & 1          & 41         & 22         \\\bottomrule
     \end{tabular}
-    \caption{Result of individual pipeline modules on the \textsc{WikiFluent} test sets (full / filtered). The metrics correspond to the metrics used for evaluating the modules for D2T generation.}
-    \label{tab:wikifluent_test}
+    \caption{Number of manually annotated errors on 100 examples: H = hallucinations, I = incorrect fact merging, O = omissions, R = redundancies, G = grammar errors or disfluencies.}
+    \label{tab:pipeline:manual}
 \end{table}
+We manually examined 100 outputs of the model, counting the number of factual (hallucinations, omissions, incorrect fact merging, redundancies) and grammatical errors. The results are summarized in Table \ref{tab:pipeline:manual}.
+
+The \textsc{1-stage} model (which has to order the facts implicitly) tends to repeat the facts in the text (especially in E2E) and produces frequent hallucinations. These problems are largely eliminated with the \textsc{2-stage} and \textsc{3-stage} models, which produce almost no hallucinations or omissions.
+However, the outputs on WebNLG for all systems suffer from semantic errors resulting from merging of unrelated facts. This mostly happens with unrelated predicates connected to the same subject/object (e.g.\ “X was born in Y”, “X worked as Z” expressed as “X worked as Z in Y”). On the E2E data, which has a simpler triple structure (all predicates share the same subject), the outputs are generally consistent and the \textsc{2-stage} and \textsc{3-stage} models exhibit almost no semantic errors. Grammar errors and disfluencies stem mainly from over-eager paragraph compression or from artifacts in our templates and are relatively minor (e.g., missing “is” in “serves French food and family-friendly”).
+
+
+\paragraph{Content Planning} We manually evaluate how the \ac{pc} model follows the content plan (i.e., keeping the predefined order and aggregating the sentences according to the delimiters) using 100 randomly chosen examples with more than 1 triple on WebNLG and E2E. We find that the model follows the content plan in 95\% and 100\% of cases, respectively.\footnote{The incorrect cases include a fact not properly mentioned, and an extra boundary between sentences without a separator.} We can thus conclude that the pretraining task successfully teaches the PC model to follow a given content plan.
+
+
+% Following \citet{su2021plan} and \citet{zhao2020bridging}, we report the accuracy and BLEU-2 score of our \textbf{ordering model} on WebNLG against the human-generated plans from \citet{ferreira2018enriching}. The results are listed in Table \ref{tab:cp} and compared against a \textsc{random} baseline (random ordering) and prior work. The results show that although our approach again lags behind state-of-the-art supervised approaches, it can outperform both the random baseline and the Transformer-based approach from \citet{ferreira2019neural} while not using any in-domain examples.
+
+% \begin{table}[t]
+%     \centering\small
+%     \begin{tabular}{lcc} \toprule
+%                                                         & \textbf{B-2} & \textbf{Acc} \\ \midrule
+%         Transformer \cite{ferreira2019neural}$^\dagger$ & 52.20        & 0.35         \\
+%         Step-by-step \cite{moryossef2019step}$^\dagger$ & 70.80        & 0.47         \\
+%         PLANENC \cite{zhao2020bridging}$^\dagger$       & 80.10        & 0.62         \\
+%         Plan-then-generate \cite{su2021plan}$^\dagger$  & 84.97        & 0.72         \\\cdashlinelr{1-3}
+%         \textsc{random}                                 & 47.00        & 0.29         \\ \midrule
+%         Ours (BART+ptr)                                 & 59.10        & 0.48         \\ \bottomrule
+%     \end{tabular}
+%     \caption{Evaluation of our zero-shot ordering model based on \citet{calizzano2021ordering}. B-2 = BLEU-2, Acc = accuracy. The results marked with $\dagger$ are copied from the respective papers.}
+%     \label{tab:pipeline:cp}
+% \end{table}
+
+% We also evaluate the accuracy of our \textbf{aggregation model}, using triples ordered according to the plans from \citet{ferreira2018enriching} as input. The accuracy is 0.33 per example and 0.62 per sentence boundary (random baseline is 0.23 and 0.50, respectively). The results show that although our approach is better than the random baseline, there is still room for improvement.
+
+% Finally, 
+
+% \paragraph{Intrinsic Evaluation} We also provide evaluation of our pipeline modules on the \mbox{\textsc{WikiFluent}} test sets. We evaluated the ordering, aggregation, and paragraph compression modules trained on the \textit{full} \textsc{WikiFluent} corpus. The results for both \textit{full} and \textit{filtered} test sets are summarized in Table \ref{tab:wikifluent_test}. The PC model achieves high scores, which follows from the fact that we provide it with ground truth content plans (i.e., the ordering and aggregation plan corresponding to the original paragraph). Accuracy of the ordering and aggregation modules is comparable to their performance on D2T datasets.
+
+% \begin{table}[t]
+%     \centering\small
+%     \begin{tabular}{ll cc} \toprule
+%                                           &                       & \textbf{test (full)} & \textbf{test (filt.)} \\\midrule
+%         \multirow{2}{*}{\textsc{ord}}     & BLEU-2                & 64.8                 & 71.9                  \\
+%                                           & Accuracy              & 0.70                 & 0.77                  \\ \midrule
+%         \multirow{2}{*}{\textsc{Agg}}     & Acc. per example      & 0.68                 & 0.68                  \\
+%                                           & Acc. per sent. bound. & 0.93                 & 0.93                  \\ \midrule
+%         \multirow{2}{*}{\textsc{\ac{pc}}} & BLEU                  & 90.72                & 91.60                 \\
+%                                           & METEOR                & 63.89                & 65.03                 \\ \bottomrule
+%     \end{tabular}
+%     \caption{Result of individual pipeline modules on the \textsc{WikiFluent} test sets (full / filtered). The metrics correspond to the metrics used for evaluating the modules for D2T generation.}
+%     \label{tab:wikifluent_test}
+% \end{table}
