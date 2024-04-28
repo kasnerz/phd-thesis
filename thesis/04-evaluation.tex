@@ -218,6 +218,9 @@ The goal of the Shared Task on Evaluating Accuracy in Generated Texts at INLG 20
 \end{itemize}
 \begin{figure}[t]
     \footnotesize
+    \lineacross{}
+
+
     The Memphis Grizzlies (5-\errnum{2}) defeated the Phoenix Suns (3 - 2) \errent{Monday} 102-91 at the \errent{Talking Stick Resort Arena} in Phoenix. The Grizzlies had a \errword{strong} first half where they \errword{out-scored} the Suns \errnum{59}-\errnum{42}. Marc Gasol scored 18 points, \errword{leading} the Grizzlies.  \errctx{Isaiah Thomas added} 15 points, he is \errnc{averaging 19 points on the season so far}.
     \vspace{1mm}
 
@@ -233,6 +236,8 @@ The goal of the Shared Task on Evaluating Accuracy in Generated Texts at INLG 20
         \item \errctx{Isaiah Thomas added}                     -- Context error.  Thomas played for the Suns, but context here implies he played for the Grizzlies and added to their score.
         \item \errnc{averaging 10 points on the season so far} -- Not checkable.  This is very hard to check, since data sources report performance per season and per game, not performance up to a particular point in a season.
     \end{itemize}
+    \lineacross{}
+
     \caption{Example text with error annotations adapted from \citet{thomsonGenerationChallengesResults2021}, using the annotation style from \citet{thomsonEvaluatingFactualAccuracy2023}. The original data for this game is available at \url{https://www.basketball-reference.com/boxscores/201411050PHO.html} .}
     \label{fig:tok-eval:example}
 \end{figure}
@@ -264,7 +269,7 @@ An example of error annotation is provided in \autoref{fig:tok-eval:example}. Th
 \end{figure*}
 
 
-Our system is composed of three steps:
+Our system is composed of three steps, which we describe below:
 \begin{enumerate}
     \item A rule-based generator for fact descriptions,
     \item A retrieval system for selecting facts relevant for a given sentence,
