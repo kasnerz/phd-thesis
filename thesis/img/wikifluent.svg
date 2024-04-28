@@ -2,22 +2,22 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="186.36339mm"
    height="103.48838mm"
    viewBox="0 0 186.36339 103.48838"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
-   sodipodi:docname="wikifluent.svg">
+   inkscape:version="1.3.2 (1:1.3.2+202311252150+091e20ef0f)"
+   sodipodi:docname="wikifluent.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb">
   <defs
      id="defs2">
     <marker
@@ -27,7 +27,11 @@
        refX="0"
        refY="0"
        orient="auto"
-       inkscape:stockid="Arrow1Lend">
+       inkscape:stockid="Arrow1Lend"
+       viewBox="0 0 17.77385393 10.15648796"
+       markerWidth="7.5"
+       markerHeight="5"
+       preserveAspectRatio="xMidYMid">
       <path
          transform="matrix(-0.8,0,0,-0.8,-10,0)"
          style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
@@ -1129,7 +1133,11 @@
        refX="0"
        refY="0"
        orient="auto"
-       inkscape:stockid="Arrow1Lstart">
+       inkscape:stockid="Arrow1Lstart"
+       viewBox="0 0 17.77385393 10.15648796"
+       markerWidth="17.77385393"
+       markerHeight="10.15648796"
+       preserveAspectRatio="xMidYMid">
       <path
          transform="matrix(0.8,0,0,0.8,10,0)"
          style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
@@ -1154,14 +1162,14 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.9899495"
-     inkscape:cx="226.28197"
-     inkscape:cy="80.987216"
+     inkscape:zoom="0.58929118"
+     inkscape:cx="-170.54387"
+     inkscape:cy="697.44807"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1023"
+     inkscape:window-height="1052"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -1175,7 +1183,10 @@
      inkscape:bbox-paths="true"
      inkscape:snap-bbox-edge-midpoints="true"
      inkscape:snap-bbox-midpoints="true"
-     showguides="false" />
+     showguides="false"
+     inkscape:showpageshadow="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -1194,7 +1205,7 @@
      id="layer1"
      transform="translate(-66.714656,45.5281)">
     <rect
-       style="opacity:1;fill:#fff6d5;fill-opacity:0.55707762;stroke:none;stroke-width:0.54445481;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
+       style="opacity:1;fill:none;fill-opacity:0.55707762;stroke:none;stroke-width:0.54445481;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect1469"
        width="166.08055"
        height="9.6175289"
@@ -1246,10 +1257,10 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        xml:space="preserve"><tspan
          id="tspan1425"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.26458332"
          y="109.43966"
          x="94.958054"
-         sodipodi:role="line" /></text>
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.26458332" /></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker88009)"
        d="m -47.171501,98.611454 18.567126,-4.36803 z"
@@ -1269,10 +1280,10 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        xml:space="preserve"><tspan
          id="tspan3187"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke:none;stroke-width:0.26458332"
          y="125.63601"
          x="5.6689196"
-         sodipodi:role="line" /></text>
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke:none;stroke-width:0.26458332" /></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -1282,8 +1293,8 @@
          sodipodi:role="line"
          x="87.733894"
          y="126.17062"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.26458332"
-         id="tspan3201" /></text>
+         id="tspan3201"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.26458332" /></text>
     <path
        sodipodi:nodetypes="ccc"
        style="fill:none;stroke:#000000;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:2.11666654, 2.11666654;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#marker3421)"
@@ -1316,45 +1327,45 @@
          sodipodi:role="line"
          x="77.040245"
          y="97.290321"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.26458332"
-         id="tspan6750" /></text>
+         id="tspan6750"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.26458332" /></text>
     <rect
        ry="0.96175551"
-       y="4.0129671"
+       y="3.4838004"
        x="86.225616"
        height="9.6175289"
        width="166.27625"
        id="rect3465"
-       style="opacity:1;fill:#ececec;fill-opacity:0.94977172;stroke:none;stroke-width:0.54477549;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke" />
+       style="opacity:1;fill:#ececec;fill-opacity:0.949772;stroke:none;stroke-width:0.544775;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke" />
     <rect
-       style="opacity:0.44500002;fill:#ffe680;fill-opacity:0.95294118;stroke:none;stroke-width:0.5526576;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
+       style="opacity:0.445;fill:none;fill-opacity:0.952941;stroke:none;stroke-width:0.552658;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect8389"
        width="166.33186"
        height="9.8945351"
        x="86.169762"
-       y="-5.3434944"
+       y="-5.8726611"
        ry="0.989456" />
     <rect
        ry="0.96175551"
-       y="-14.205508"
+       y="-14.734674"
        x="86.364624"
        height="9.6175289"
        width="166.08055"
        id="rect2943"
-       style="opacity:1;fill:#fff6d6;fill-opacity:0.55686275;stroke:none;stroke-width:0.54445481;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke" />
+       style="opacity:1;fill:none;fill-opacity:0.556863;stroke:none;stroke-width:0.544455;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke" />
     <text
        id="text6758"
-       y="-10.816152"
+       y="-6.5828204"
        x="91.773415"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;line-height:1.5;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332;paint-order:markers fill stroke"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;line-height:1.5;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;paint-order:markers fill stroke"
        xml:space="preserve"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332;paint-order:markers fill stroke"
-         y="-5.6308184"
+         y="-6.5828204"
          x="91.773415"
          sodipodi:role="line"
-         id="tspan7501" /><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332;paint-order:markers fill stroke"
-         y="1.7775151"
+         id="tspan7501"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.264583;paint-order:markers fill stroke" /><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.264583;paint-order:markers fill stroke"
+         y="0.8255145"
          x="91.773415"
          sodipodi:role="line"
          id="tspan7503">It is located in Westmeath, Ireland. </tspan></text>
@@ -1364,11 +1375,11 @@
        x="-13.687684"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        xml:space="preserve"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332"
          y="108.84287"
          x="-13.687684"
          id="tspan7206"
-         sodipodi:role="line" /></text>
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332" /></text>
     <rect
        style="opacity:1;fill:#ececec;fill-opacity:0.94977172;stroke:none;stroke-width:0.54477549;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect3486"
@@ -1384,9 +1395,9 @@
        height="9.8945351"
        width="166.37912"
        id="rect3488"
-       style="opacity:0.44500002;fill:#ffe680;fill-opacity:0.95294118;stroke:none;stroke-width:0.5527361;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke" />
+       style="opacity:0.44500002;fill:none;fill-opacity:0.95294118;stroke:none;stroke-width:0.5527361;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke" />
     <rect
-       style="opacity:1;fill:#fff6d6;fill-opacity:0.55686275;stroke:none;stroke-width:0.54554892;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
+       style="opacity:1;fill:none;fill-opacity:0.55686275;stroke:none;stroke-width:0.54554892;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect3490"
        width="166.74872"
        height="9.6175289"
@@ -1486,11 +1497,11 @@
        x="-184.8242"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        xml:space="preserve"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332"
          y="82.771538"
          x="-184.8242"
          id="tspan7497"
-         sodipodi:role="line" /></text>
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332" /></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:4.58611107px;line-height:1.25;font-family:Go;-inkscape-font-specification:'Go, Semi-Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -1504,15 +1515,15 @@
          style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:4.58611107px;font-family:Go;-inkscape-font-specification:'Go, Semi-Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;stroke-width:0.26458332">coreference replacement</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;line-height:1.5;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332;paint-order:markers fill stroke"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;line-height:1.5;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;paint-order:markers fill stroke"
        x="91.773415"
-       y="-6.5828204"
+       y="-7.1119871"
        id="text2897"><tspan
          id="tspan2895"
          sodipodi:role="line"
          x="91.773415"
-         y="-6.5828204"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332;paint-order:markers fill stroke">The Westmeath Examiner is a weekly newspaper.  </tspan></text>
+         y="-7.1119871"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.264583;paint-order:markers fill stroke">The Westmeath Examiner is a weekly newspaper.  </tspan></text>
     <text
        id="text2907"
        y="-29.856953"
@@ -1526,7 +1537,7 @@
          id="tspan2905">It was founded in 1882. </tspan></text>
     <rect
        ry="0.95789927"
-       y="-14.259119"
+       y="-14.788284"
        x="86.293205"
        height="28.218502"
        width="166.19949"
@@ -1534,15 +1545,15 @@
        style="opacity:1;fill:none;fill-opacity:1;stroke:#7b7b7b;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:0.6, 0.6;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;line-height:1.5;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332;paint-order:markers fill stroke"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;line-height:1.5;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;paint-order:markers fill stroke"
        x="91.376633"
-       y="10.359719"
+       y="9.8305531"
        id="text2947"><tspan
          id="tspan2945"
          sodipodi:role="line"
          x="91.376633"
-         y="10.359719"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332;paint-order:markers fill stroke">It was founded in 1882. </tspan></text>
+         y="9.8305531"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.264583;paint-order:markers fill stroke">It was founded in 1882. </tspan></text>
     <text
        id="text9527"
        y="-18.715252"
@@ -1554,18 +1565,6 @@
          x="158.12286"
          sodipodi:role="line"
          id="tspan7286">split-and-rephrase</tspan></text>
-    <g
-       id="use77187"
-       style="fill:#b3b3b3;stroke:none;paint-order:markers fill stroke"
-       transform="matrix(6.9436768,0,0,2.5002375,135.53537,-24.780088)">
-      <title
-         id="title3338">chevron-down</title>
-      <path
-         id="path3340"
-         d="M 1.3229167,2.9104167 0,1.5875 0.396875,1.190625 1.3229167,2.1828125 2.2489583,1.190625 2.6458333,1.5875 Z"
-         inkscape:connector-curvature="0"
-         style="stroke-width:0.26458332;paint-order:markers fill stroke" />
-    </g>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:4.58611107px;line-height:1.25;font-family:Go;-inkscape-font-specification:'Go, Semi-Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332;paint-order:markers fill stroke"
@@ -1577,34 +1576,22 @@
          x="156.43553"
          y="20.934443"
          style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:4.58611107px;font-family:Go;-inkscape-font-specification:'Go, Semi-Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke-width:0.26458332;paint-order:markers fill stroke">coreference replacement</tspan></text>
-    <g
-       transform="matrix(6.9436768,0,0,2.5002375,134.60392,14.302651)"
-       style="fill:#b3b3b3;stroke:none;paint-order:markers fill stroke"
-       id="g3354">
-      <title
-         id="title3350">chevron-down</title>
-      <path
-         style="stroke-width:0.26458332;paint-order:markers fill stroke"
-         inkscape:connector-curvature="0"
-         d="M 1.3229167,2.9104167 0,1.5875 0.396875,1.190625 1.3229167,2.1828125 2.2489583,1.190625 2.6458333,1.5875 Z"
-         id="path3352" />
-    </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;line-height:1.5;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332;paint-order:markers fill stroke"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;line-height:1.5;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;paint-order:markers fill stroke"
        x="91.773415"
-       y="28.342186"
+       y="32.575523"
        id="text3374"><tspan
          id="tspan3370"
          sodipodi:role="line"
          x="91.773415"
-         y="33.527519"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332;paint-order:markers fill stroke" /><tspan
+         y="32.575523"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.264583;paint-order:markers fill stroke" /><tspan
          id="tspan3372"
          sodipodi:role="line"
          x="91.773415"
-         y="40.935852"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332;paint-order:markers fill stroke"><tspan
+         y="39.98386"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:Go;-inkscape-font-specification:'Go, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.264583;paint-order:markers fill stroke"><tspan
    style="font-weight:bold;paint-order:markers fill stroke"
    id="tspan3384">The Westmeath Examiner</tspan> is located in Westmeath, Ireland. </tspan></text>
     <text
@@ -1633,17 +1620,17 @@
          sodipodi:role="line">processed paragraph</tspan></text>
     <text
        id="text1379"
-       y="-4.6660271"
+       y="-5.1951938"
        x="74.988052"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52777767px;line-height:1.25;font-family:Go;-inkscape-font-specification:'Go, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332;paint-order:markers fill stroke"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52778px;line-height:1.25;font-family:Go;-inkscape-font-specification:'Go, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;paint-order:markers fill stroke"
        xml:space="preserve"><tspan
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52777767px;font-family:Go;-inkscape-font-specification:'Go, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#000000;stroke-width:0.26458332;paint-order:markers fill stroke"
-         y="-4.6660271"
-         x="75.478119"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52778px;font-family:Go;-inkscape-font-specification:'Go, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#000000;stroke-width:0.264583;paint-order:markers fill stroke"
+         y="-5.1951938"
+         x="74.988052"
          sodipodi:role="line"
          id="tspan1381">split </tspan><tspan
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52777767px;font-family:Go;-inkscape-font-specification:'Go, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#000000;stroke-width:0.26458332;paint-order:markers fill stroke"
-         y="-0.25630498"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52778px;font-family:Go;-inkscape-font-specification:'Go, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#000000;stroke-width:0.264583;paint-order:markers fill stroke"
+         y="-0.78546876"
          x="74.988052"
          sodipodi:role="line"
          id="tspan4369">successful</tspan></text>
@@ -1664,14 +1651,14 @@
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52777767px;font-family:Go;-inkscape-font-specification:'Go, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#000000;stroke-width:0.26458332;paint-order:markers fill stroke"
          id="tspan1391">resolved</tspan></text>
     <path
-       style="fill:none;stroke:#000000;stroke-width:0.26499999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker2094);paint-order:markers fill stroke"
-       d="m 91.020467,-8.3327685 -8.68693,3.5583509 z"
+       style="fill:none;stroke:#000000;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker2094);paint-order:markers fill stroke"
+       d="m 91.020467,-8.8619352 -8.68693,3.5583509 z"
        id="path1342"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:0.26499999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker2266);paint-order:markers fill stroke"
-       d="M 91.239783,0.90789797 82.286257,-4.7715805 Z"
+       style="fill:none;stroke:#000000;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker2266);paint-order:markers fill stroke"
+       d="M 91.239783,0.3787313 82.286257,-5.3007472 Z"
        id="path1344"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc" />
@@ -1687,5 +1674,13 @@
        id="path2660"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;stroke:#333333;stroke-width:0.365;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker86583-2-8-8);stroke-dasharray:none"
+       d="m 152.15223,-15.526746 c 0.0233,-10.664109 0.0233,-10.664109 0.0233,-10.664109"
+       id="path2" />
+    <path
+       style="fill:none;stroke:#333333;stroke-width:0.365;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker86583-2-8-8);stroke-dasharray:none"
+       d="m 152.15223,24.160767 c 0.0233,-10.664109 0.0233,-10.664109 0.0233,-10.664109"
+       id="path3" />
   </g>
 </svg>
