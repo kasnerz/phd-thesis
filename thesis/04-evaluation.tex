@@ -15,7 +15,7 @@ In this chapter, we introduce two approaches for evaluating semantic accuracy of
 In this section, we propose a new metric for evaluating the semantic accuracy of D2T generation. Our metric is based on a neural model pretrained for \ac{nli}.
 % : the task of determing whether a hypothesis is true, false, or neutral with respect to a premise. 
 We use the \ac{nli} model to check textual entailment between the input data and the output text in both directions, allowing us to reveal omissions or hallucinations.
-We demonstrate that even without any extra model training and with minimal handcrafting, our approach achieves high accuracy (>90\%) on the E2E dataset, competitive with scripts specifically handcrafted for the domain, and produces useful results (>75\% accuracy, 0.6 Spearman correlation with human scores) on the more challenging WebNLG dataset. Additionally, we show with manual error analysis that some instances marked as errors were in fact assessed \emph{correctly} by our metric. The experimental code for our metric is available on GitHub.\footnote{\url{https://github.com/ufal/nlgi_eval}}
+We demonstrate that even without any extra model training and with minimal handcrafting, our approach achieves high accuracy (>90\%) on the E2E dataset, competitive with scripts specifically handcrafted for the domain, and produces useful results (>75\% accuracy, 0.6 Spearman correlation with human scores) on the more challenging WebNLG dataset. Additionally, we show with manual error analysis that some instances marked as errors were in fact assessed correctly by our metric. The experimental code for our metric is available on GitHub.\footnote{\url{https://github.com/ufal/nlgi_eval}}
 
 \subsection{Motivation}
 
@@ -76,21 +76,14 @@ and \textit{entailment} (see \autoref{sec:sem-acc:method}). We consider a \ac{nl
 We experiment with the WebNLG and E2E datasets (see \autoref{sec:datasets} for details). Since both datasets were used in shared tasks, we can compare the outputs of our system with the respective measures of semantic accuracy:
 \begin{itemize}
     \item For WebNLG, we compare our metric with crowdsourced human ratings of semantic adequacy \cite{shimorinaWebNLGChallengeHuman2019}. In particular, we use the question about semantic adequacy: \textit{``Does the text correctly represent the meaning in the data?''}, where the human annotators used a three-point Likert scale (1 = Incorrect, 2 = Medium, 3 = Correct). The answers are averaged over multiple annotators. In our experiments, we consider a sentence correct if it achieved human rating 2.5 or higher.\footnote{We also tried a threshold of 2.0, with slightly worse results.}
-    \item For E2E, we compare our metric to the results of the handcrafted automatic script which was used in the E2E challenge \cite{dusekEvaluatingStateoftheartEndtoEnd2020},\footnote{While the E2E challenge did include crowdsourced evaluation of semantic accuracy, the results were unreliable, overestimating the number of errors \cite{dusekEvaluatingStateoftheartEndtoEnd2020}.} We further use small sets of system outputs and human-written texts with expert annotation \citep[provided by][]{dusekSemanticNoiseMatters2019} to evaluate our approach against gold-standard annotation and to compare to existing semantic accuracy classifiers for E2E data.
+    \item For E2E, we compare our metric to the results of the handcrafted automatic script which was used in the E2E challenge \cite{dusekEvaluatingStateoftheartEndtoEnd2020}.\footnote{While the E2E challenge did include crowdsourced evaluation of semantic accuracy, the results were unreliable, overestimating the number of errors \cite{dusekEvaluatingStateoftheartEndtoEnd2020}.} We further use small sets of system outputs and human-written texts with expert annotation \citep[provided by][]{dusekSemanticNoiseMatters2019} to evaluate our approach against gold-standard annotation and to compare to existing semantic accuracy classifiers for E2E data.
 \end{itemize}
 
 
-We evaluate the \emph{Default} and \emph{Backoff} approaches to acquiring templates as described in \autoref{sec:sem-acc:method}. The \emph{Default} setup works with one custom template per predicate type. For WebNLG, we obtained templates by delexicalizing human references for single-triple examples from WebNLG training data.\footnote{For each predicate, we choose randomly if more templates are found and use the backoff if no templates are found.} For E2E, we handcrafted 8 templates.
-The templates are filled with values from individual input triples and concatenated for multi-triple inputs as described in Section~\ref{sec:eval-process}.
+We evaluate the \emph{Default} and \emph{Backoff} approaches to acquiring templates as described in \autoref{sec:sem-acc:method}. For WebNLG, we obtained templates by delexicalizing human references for single-triple examples from WebNLG training data.\footnote{For each predicate, we choose randomly if more templates are found and use the backoff if no templates are found.} For E2E, we handcrafted eight templates for each of the predicate in the dataset.
 
-% There's also limited human-annotated system outputs (400) and human-written scripts (200),
-% where we can compare to the automatic script.
-
-% =============================================================================
-\section{Results Analysis}
-\label{sec:results}
-% -----------------------------------------------------------------------------
-
+\subsection{Evaluation}
+\label{sec:sem-acc:evaluation}
 
 \begin{table}[t]
     \centering \small
@@ -106,30 +99,8 @@ The templates are filled with values from individual input triples and concatena
 
 
 
-
-\begin{table*}[t]
-    \centering\footnotesize
-    \begin{tabular}{@{}l c c ccc >{\hspace{3mm}} c c ccc@{}}\toprule
-                          & \multicolumn{5}{c}{\bfseries Human-written (E2E training set)} & \multicolumn{5}{c}{\bfseries System outputs (TGen)}                                                                     \\
-                          & \bf Af                                                         & \bf Ar                                              & \bf R & \bf P & \bf F1 & \bf Af & \bf Ar & \bf R & \bf P & \bf F1 \\\midrule
-        Slug2Slug aligner & 0.685                                                          & 0.765                                               & 0.550 & 0.800 & 0.652  & 0.995  & 1.000  & 1.000 & 1.000 & 1.000  \\
-        E2E script        & 0.820                                                          & 0.885                                               & 1.000 & 0.777 & 0.874  & 0.995  & 0.995  & 1.000 & 0.950 & 0.974  \\
-        TGen reranker     & 0.110                                                          & 0.435                                               & 0.975 & 0.413 & 0.579  & 0.220  & 0.278  & 1.000 & 0.116 & 0.208  \\
-        \midrule
-        Default           & 0.600                                                          & 0.700                                               & 0.625 & 0.625 & 0.625  & 0.978  & 0.978  & 0.947 & 0.837 & 0.888  \\ % 005
-        Backoff           & 0.530                                                          & 0.640                                               & 0.675 & 0.540 & 0.600  & 0.833  & 0.833  & 0.974 & 0.359 & 0.525  \\\bottomrule % 006
-    \end{tabular}
-    \caption{Semantic classifiers evaluated on expert human annotation on E2E data (see \autoref{tab:sem-acc:res} for metrics legend).}
-    \label{tab:sem-acc:e2e-slot-comparison}
-\end{table*}
-
-
-
-% Random baseline would be 0.5 or 0.25 for fine
-We evaluate our metric in terms of accuracy, precision, recall, and F1-measure (where \emph{not\_OK} samples are treated as positive since we focus on detecting errors).
-We additionally perform a manual error analysis on a random sample of 100 error examples for each dataset, i.e.\ examples where our metric gave a different assessment from the ground truth (provided by crowdsourced annotation for WebNLG and by a handcrafted classification script for E2E as described in Section~\ref{sec:experiments}). % \ZK{zase bych dal poznámku klidně do textu, ať čtenář nemusí tolik skákat}
-In general, the results are high above the random baseline (0.5 for the \textsc{Rough} metric and 0.25 for the \textsc{Fine} metric) but differ between the datasets, which we discuss below. %in the following subsections.
-
+We evaluate our metric in terms of accuracy, precision, recall, and F1-measure (where \emph{not\_OK} samples are treated as positive since we focus on detecting errors). The overall scores for both datasets are summarized in \autoref{tab:sem-acc:res}.
+We additionally perform a manual error analysis on a random sample of 100 error examples for each dataset, i.e.\ examples where our metric gave a different assessment from the ground truth.
 
 
 % The results for the E2E dataset are better, probably due to the lower lexical variability of the dataset.
@@ -138,81 +109,317 @@ In general, the results are high above the random baseline (0.5 for the \textsc{
 
 % recall is probably more important than precision (not that there are differences)
 
-\subsection{WebNLG Analysis}
-\label{sec:webnlg_results}
-The overall scores for the WebNLG dataset are summarized in Table \ref{tab:webnlg}. %Here, we compare the \textsc{Rough} metric against the (thresholded) human rating.
-To further check whether the size of the input affects performance, we computed Spearman correlation of the number of input triples with metric errors. The resulting very low value of -0.05 ($p=$\,0.02, \emph{Default} setting) shows that the metric holds its performance even for more complex WebNLG examples. %\OD{added this, does it work here?} \ZK{chvilku mi trvalo pochopit, co to číslo počítá, ale asi jo}
-%\OD{number of predicates doesn't seem to have a huge effect on performance (1: 78.22, 2: 84.00, 3: 73.55, 4: 77.55, 3: 73.95; spearman -0.0503, p=0.0175)}
+\paragraph{WebNLG Analysis} The overall scores show that our metric deviates quite a lot from the human judgments. Our manual error analysis indicates several reasons:
+\begin{enumerate}
+    \item The annotation is somewhat noisy and using a threshold is not ideal---many correctly rendered outputs do not reach the 2.5 threshold, while some incorrect ones do.
+    \item Imprecise templates can confuse the \ac{nli} (e.g., for the predicate \emph{nationality}, our extracted template is \emph{\textless{}subj\textgreater{} was \textless{}obj\textgreater{}}, which works well with values such as \emph{French}, but not with \emph{United States}). This is a weak point of our metric, as illustrated by the very small performance difference between the \emph{Default} and \emph{Backoff} setups; however, the issue can be mitigated by a better selection of the templates from training data, e.g.\ using language-model scoring.
+    \item The human annotators tend to give lower scores to accurate but ungrammatical or poorly organized texts, while our metric tends to rate these texts as \emph{OK}.
+\end{enumerate}
 
+Our re-examination shows that almost half of the error examples (42 out of 100) were in fact correctly classified by our metric (i.e.\ their crowdsourced human annotation was incorrect),  so the true performance is most likely higher than the reported numbers.
+
+The Spearman correlation of our model's confidence scores with the average human scores is around 0.63 ($p<$1e-10). This is similar to $n$-gram-based metrics on this data (\citealp{shimorinaWebNLGChallengeHuman2019} reports 0.59 for BLEU and 0.73 for METEOR), but unlike these metrics, our approach does not require human-written reference texts.
+
+% To further check whether the size of the input affects performance, we computed Spearman correlation of the number of input triples with metric errors. The resulting very low value of -0.05 ($p=$\,0.02, \emph{Default} setting) shows that the metric holds its performance even for more complex WebNLG examples.
 %
-%
-% WebNLG much worse, although still better than random
-% not much difference with the backoff templates -- 0.77 vs 0.76
-% good correlation with human judgements 0.62-0.63
-%
-% We can see that the setup using only a backoff template leads to almost the same results as the default setup.
-%
-%\OD{TODO supplementary should have examples}
-%\OD{not much difference w.r.t. backoff means templates are bad}
-On the other hand, the overall scores show that our metric deviates quite a lot from the human judgments. Our manual error analysis indicates several reasons for that (see Supplementary for examples): (1) The annotation is somewhat noisy and using a threshold is not ideal---many correctly rendered outputs do not reach the 2.5 threshold (while some incorrect ones do). (2) Imprecise templates can confuse the \ac{nli}
-%make the metric check for different information 
-(e.g., for the predicate \emph{nationality}, our extracted template is \emph{\textless{}subj\textgreater{} was \textless{}obj\textgreater{}}, which works well with values such as \emph{French}, but not with \emph{United States}). This is currently a weak point of our metric, as illustrated by the very small performance difference between the \emph{Default} and \emph{Backoff} setups; however, the issue can be mitigated by a better selection of the templates from training data, e.g.\ using language-model scoring.
-(3) The human annotators tend to give lower scores to accurate but ungrammatical or poorly organized texts. Our metric tends to rate these texts as \emph{OK}.
+% On the other hand, heck for different information 
+
+
 %Third, we note that many examples are dubious, e.g. there are typos in the text or the text interprets the data too loosely. In these cases, the notion of semantic accuracy can differ between the annotators.
-Overall, our re-examination shows that almost half of the error examples (42 out of 100) were in fact correctly classified by our metric (i.e.\ their crowdsourced human annotation was incorrect), %\ZK{přidat něco jako "and not by human evaluators", ať je z toho jasný, že se díváme na chyby a tvrdíme, že to vlastně nejsou chyby?}\OD{takhle dobrý?}
-so the true performance is most likely higher than the reported numbers. % due to errors in human annotation.
-
-The Spearman correlation of our model's confidence scores with the average human scores is around 0.63 ($p<$1e-10). This is similar to n-gram-based metrics on this data (\citealp{shimorina_human_2018} reports 0.59 for BLEU and 0.73 for METEOR), but unlike these metrics, our approach does not require human-written reference texts.
 
 
 
-\subsection{E2E Analysis}
-\label{sec:e2e-results}
 
-% E2E -- very good result -- 0.9 rough, 0.92 fine
 
-% below average prices =~ less than £20
-% adult only != not family friendly
+\paragraph{E2E Analysis} The results for the E2E dataset are very good compared to the WebNLG dataset, with over 90\% agreement with the handcrafted script. This can be attributed to lower lexical variability and less noisy texts, as well as to the better quality of the handcrafted templates (the difference between the \emph{Default} and \emph{Backoff} setups is much more pronounced here).
+Again, we observe only a very slight drop in performance for more complex E2E inputs (Spearman correlation of metric errors with the number of input triples is -0.08, $p<$1e-10 for the \emph{Default} setting). The main issues identified by our error analysis are:
+\begin{enumerate}
+    \item Problems in the interpretation of some values, e.g., \textit{price range=less than \textsterling{}20} is verbalized as ``cheap'' or \textit{family-friendly=no} as ``adult-only''. These cases are classified as \emph{not\_OK} by the \ac{nli} model.
+    \item Missing or over-greedy patterns in the slot error script, causing annotation errors.
+    \item Edge cases: some expressions cannot be interpreted in a straightforward way, e.g.\ ``high restaurant'' for \emph{pricerange=high} is deemed OK by the \ac{nli} but not by the slot error script.
+    \item Expressions in the outputs that do not correspond to input facts, such as ``with full service'', are considered hallucinations by the \ac{nli}, but ignored by the slot error script.
+\end{enumerate}
+Again, we consider about half of the error examples (45 out of 100) as correctly classified by our metric, and thus our metric's performance is probably higher than the reported values due to erroneous annotation from the handcrafted script.
 
-% noticeable difference w.r.t. backoff templates
+\subsection{Discussion}
 
-The results for the E2E dataset (shown in Table \ref{tab:e2e}) are very good compared to the WebNLG dataset, with over 90\% agreement with the handcrafted script. This can be attributed to lower lexical variability and less noisy texts, as well as to the better quality of the handcrafted templates (the difference between the \emph{Default} and \emph{Backoff} setups is much more pronounced here).
-Again, we observe only a very slight drop in performance for more complex E2E inputs (Spearman correlation of metric errors with the number of input triples is -0.08, $p<$1e-10 for the \emph{Default} setting).
-%\OD{only slight drop in performance for more complex inputs (around 96\% rough for up to 5 triples, 93\% for 6 triples, 91\% for 7, spearman 0.07638, p=1.3948e-18)}
+% \begin{table*}[t]
+%     \centering\footnotesize
+%     \begin{tabular}{@{}l c c ccc >{\hspace{3mm}} c c ccc@{}}\toprule
+%                           & \multicolumn{5}{c}{\bfseries Human-written (E2E training set)} & \multicolumn{5}{c}{\bfseries System outputs (TGen)}                                                                     \\
+%                           & \bf Af                                                         & \bf Ar                                              & \bf R & \bf P & \bf F1 & \bf Af & \bf Ar & \bf R & \bf P & \bf F1 \\\midrule
+%         Slug2Slug aligner & 0.685                                                          & 0.765                                               & 0.550 & 0.800 & 0.652  & 0.995  & 1.000  & 1.000 & 1.000 & 1.000  \\
+%         E2E script        & 0.820                                                          & 0.885                                               & 1.000 & 0.777 & 0.874  & 0.995  & 0.995  & 1.000 & 0.950 & 0.974  \\
+%         TGen reranker     & 0.110                                                          & 0.435                                               & 0.975 & 0.413 & 0.579  & 0.220  & 0.278  & 1.000 & 0.116 & 0.208  \\
+%         \midrule
+%         Default           & 0.600                                                          & 0.700                                               & 0.625 & 0.625 & 0.625  & 0.978  & 0.978  & 0.947 & 0.837 & 0.888  \\ % 005
+%         Backoff           & 0.530                                                          & 0.640                                               & 0.675 & 0.540 & 0.600  & 0.833  & 0.833  & 0.974 & 0.359 & 0.525  \\\bottomrule % 006
+%     \end{tabular}
+%     \caption{Semantic classifiers evaluated on expert human annotation on E2E data (see \autoref{tab:sem-acc:res} for metrics legend).}
+%     \label{tab:sem-acc:e2e-slot-comparison}
+% \end{table*}
 
-%The reference texts often ignore \textit{eatType=restaurant}, which is probably deemed as implicit for the domain. We report the results where we ignore this particular slot-value pair and we observe notable improvements.
-%\OD{TODO remove this, incl. from tables}
-%\OD{TODO bigger diff w.r.t. backoff, i.e. templates are better}
-The main issues identified by our error analysis are:
-(1) Problems in the interpretation of some values, e.g., \textit{price range=less than \textsterling{}20} is verbalized as ``cheap'' or \textit{family-friendly=no} as ``adult-only''. These cases are classified as \emph{not\_OK} by the \ac{nli} model.
-(2) Missing or over-greedy patterns in the slot error script, causing annotation errors.
-(3) Edge cases: some expressions cannot be interpreted in a straightforward way, e.g.\ ``high restaurant'' for \emph{pricerange=high} is deemed OK by the \ac{nli} but not by the slot error script.
-(4) Expressions in the outputs that do not correspond to input facts, such as ``with full service'', are considered hallucinations by the \ac{nli}, but ignored by the slot error script.
-Again, we consider about half of the error examples (45 out of 100) as correctly classified by our metric (see Supplementary for details), and thus our metric's performance is probably higher than the reported values due to erroneous annotation from the handcrafted script.
 
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-\subsection{E2E MR Classifier Comparison}
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-\label{sec:e2e-classifiers}
-%As described in Section~\ref{sec:experiments}, there are data in the E2E restaurant domain human-annotated for accuracy (part of the training set, some TGen outputs; \citealp{dusek_semantic_2019}). 
-We used expert-annotated E2E data samples (%part of the training set and some system outputs, 
-cf.~Section~\ref{sec:experiments}) to compare our approach to other accuracy classifiers in the E2E domain:
-\begin{itemize}[nosep,leftmargin=10pt]
-    \item \textbf{Slug2Slug slot aligner} \citep{juraska_deep_2018} is based on keyword matches. It is carefully tuned but not designed to detect hallucination; it only checks for presence of facts from the input MR.
-    \item \textbf{E2E slot error script} (used in Section~\ref{sec:e2e-results}) is based on regular expressions; it is also able to detect irrelevant facts.
-    \item \textbf{TGen reranker} is an LSTM-based model trained on the E2E training data to rerank outputs of the TGen system \cite{dusek_sequence--sequence_2016} based on their semantic accuracy.
-          % \item TGen's reranking classifier trained on cleaned E2E data (i.e., reclassified by the slot error script)
-\end{itemize}
+% % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% \paragraph{E2E MR Classifier Comparison}
+% % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% %As described in Section~\ref{sec:experiments}, there are data in the E2E restaurant domain human-annotated for accuracy (part of the training set, some TGen outputs; \citealp{dusek_semantic_2019}). 
+% We used expert-annotated E2E data samples to compare our approach to other accuracy classifiers in the E2E domain:
+% \begin{itemize}[nosep,leftmargin=10pt]
+%     \item \textbf{Slug2Slug slot aligner} \citep{juraska_deep_2018} is based on keyword matches. It is carefully tuned but not designed to detect hallucination; it only checks for presence of facts from the input MR.
+%     \item \textbf{E2E slot error script} (used in Section~\ref{sec:e2e-results}) is based on regular expressions; it is also able to detect irrelevant facts.
+%     \item \textbf{TGen reranker} is an LSTM-based model trained on the E2E training data to rerank outputs of the TGen system \cite{dusek_sequence--sequence_2016} based on their semantic accuracy.
+%           % \item TGen's reranking classifier trained on cleaned E2E data (i.e., reclassified by the slot error script)
+% \end{itemize}
 
-The results for all classifiers (in Table~\ref{tab:e2e-slot-comparison}) are much weaker on human-written data, which exhibit much more variability than system outputs.
-%While the TGen reranker may be useful for relative comparisons of system outputs, it 
-The TGen reranker is very weak when required to detect all facts properly.
-Our approach is slightly less precise than both handcrafted scripts, but the difference is small on system outputs (97.8\% vs. 99.5\% accuracy). If we disregard the value \emph{eatType=restaurant}, which is generally noisy, we get 76.5\% accuracy and 97.6\% recall on the human-written data. Moreover, our approach requires much less handcrafting and is more general.
+% The results for all classifiers (in Table~\ref{tab:e2e-slot-comparison}) are much weaker on human-written data, which exhibit much more variability than system outputs.
+% %While the TGen reranker may be useful for relative comparisons of system outputs, it 
+% The TGen reranker is very weak when required to detect all facts properly.
+% Our approach is slightly less precise than both handcrafted scripts, but the difference is small on system outputs (97.8\% vs. 99.5\% accuracy). If we disregard the value \emph{eatType=restaurant}, which is generally noisy, we get 76.5\% accuracy and 97.6\% recall on the human-written data. Moreover, our approach requires much less handcrafting and is more general.
 
 
 \section{Token-Level Error Detection}
-\label{sec:eval-token}
-\subsection{Shared Task}
-\label{sec:eval-st}
-\subsection{Our Submission}
-\label{sec:eval-ours}
+\label{sec:tok-eval}
+
+\begin{refbox}
+    This section is based on the paper \emph{Text-in-Context: Token-Level Error Detection for Table-to-Text Generation} \cite{kasnerTextinContextTokenLevelError2021}, joint work with Simon Mille and Ondřej Dušek, published in the Proceedings of the 14th International Conference on Natural Language Generation (INLG 2021). The work describes our submission to the Shared Task on Evaluating Accuracy in Generated Texts. The main part of the project was executed by the author of the thesis; Simon Mille provided the rule-based generator and wrote its description.
+\end{refbox}
+
+
+In this section, we present an automatic metric for \ac{d2t} generation, which can detect semantic accuracy errors in the generated text on the \emph{token level}. Our metric uses a combination of a rule-based \ac{d2t} generation system and \acp{plm}. We first use a rule-based \ac{d2t} generation system to generate sentences with facts that can be derived from the input. For each sentence we evaluate, we select a subset of facts which are relevant by measuring semantic similarity to the sentence in question. Finally, we finetune a pretrained language model on annotated data along with the relevant facts for fine-grained error detection.
+
+On the test set of the Shared Task on Evaluating Accuracy in Generated Texts, we achieve 69\% recall and 75\% precision with a model trained on a mixture of human-annotated and synthetic data, placing first out of four submissions in the track for automatic metrics. The code for our experiments is available on Github.\footnote{\url{https://github.com/kasnerz/accuracySharedTask_CUNI-UPF}}
+
+
+\subsection{Motivation}
+\label{sec:tok-acc:motivation}
+
+
+In \autoref{sec:sem-acc}, we presented a metric for detecting semantic errors for \ac{d2t} generation at the level of individual data items. The metric is well-suited for cases where the text should mention all the data on the input, since it can report individual missing items (i.e., \emph{omissions}). However, it is less suitable for detecting incorrect information in the text (i.e., \emph{hallucinations}), since it can give only a single ``hallucination score'' for the entire text. This is problematic for texts generated from complex data, where the omissions are not relevant, since the system select mentions only a small set of relevant items.
+
+
+An example of such dataset is Rotowire (\citealp{wiseman2017challenges}; see also \autoref{sec:datasets}). In this dataset, the task is to generate basketball match summaries from tabular data. Rotowire poses multiple challenges for neural systems: it requires content selection and its human-written training texts are themselves not always grounded in data, which makes neural models more susceptible to hallucination.
+The output texts are also usually longer, which makes the hallucinations more common and detecting hallucination errors on a more fine-grained level essential.
+
+% Specific content-checking metrics mostly remain a domain of handcrafted pattern matching \cite{wen2015semantically,dusekSemanticNoiseMatters2019}, which does not scale well to new domains.
+% While human evaluation provides a more reliable alternative, it is costly and difficult to set up \cite{van2019best,belzDisentanglingPropertiesHuman2020,thomsonGoldStandardMethodology2020}. Regarding neural metrics such as BERTScore \cite{zhang2019bertscore} or BLEURT \cite{sellam2020bleurt}, most of them have not been evaluated for content preservation, especially on the level of individual tokens.
+
+
+\subsection{Shared Task in Evaluating Accuracy}
+\label{sec:tok-acc:st}
+The goal of the Shared Task on Evaluating Accuracy in Generated Texts at INLG 2021 was to develop a token-level error annotation metric \cite{reiterSharedTaskEvaluating2020}. The organizers of the shared task first carefully annotated 60 outputs of various neural systems trained on Rotowire, using the error types defined in \citet{thomsonGoldStandardMethodology2020}:
+\begin{itemize}
+    \item \errnum{NUMBER} --  Incorrect number (both digits and numerals).
+    \item \errent{NAME} -- Incorrect named entity (people, places, teams, days of the week).
+    \item \errword{WORD} -- Incorrect word which is not one of the above.
+    \item \errctx{CONTEXT} --  A phrase inappropriate for the context.
+    \item \errnc{NOT\_CHECKABLE} --  A statement which cannot be checked.
+    \item \errother{OTHER} --  Any other type of mistake.
+\end{itemize}
+\begin{figure}[t]
+    \footnotesize
+    The Memphis Grizzlies (5-\errnum{2}) defeated the Phoenix Suns (3 - 2) \errent{Monday} 102-91 at the \errent{Talking Stick Resort Arena} in Phoenix. The Grizzlies had a \errword{strong} first half where they \errword{out-scored} the Suns \errnum{59}-\errnum{42}. Marc Gasol scored 18 points, \errword{leading} the Grizzlies.  \errctx{Isaiah Thomas added} 15 points, he is \errnc{averaging 19 points on the season so far}.
+    \vspace{1mm}
+
+    \begin{itemize}
+        \item \errnum{2}                                       -- Incorrect number, should be 0.
+        \item \errent{Monday}                                  -- Incorrect named entity, should be Wednesday.
+        \item \errent{Talking Stick Resort Arena}              -- Incorrect named entity, should be US Airways Center.
+        \item \errword{strong}                                 -- Incorrect word, the Grizzlies did not do well in the first half.
+        \item \errword{out-scored}                             -- Incorrect word, the Suns had a higher score in first half.
+        \item \errnum{59}                                      -- Incorrect number, should be 46.
+        \item \errnum{42}                                      -- Incorrect number, should be 52 .
+        \item \errword{leading}                                -- Incorrect word.  Marc Gasol did not lead the Grizzlies, Mike Conley did with 24 points.
+        \item \errctx{Isaiah Thomas added}                     -- Context error.  Thomas played for the Suns, but context here implies he played for the Grizzlies and added to their score.
+        \item \errnc{averaging 10 points on the season so far} -- Not checkable.  This is very hard to check, since data sources report performance per season and per game, not performance up to a particular point in a season.
+    \end{itemize}
+    \caption{Example text with error annotations adapted from \citet{thomsonGenerationChallengesResults2021}, using the annotation style from \citet{thomsonEvaluatingFactualAccuracy2023}. The original data for this game is available at \url{https://www.basketball-reference.com/boxscores/201411050PHO.html} .}
+    \label{fig:tok-eval:example}
+\end{figure}
+An example of error annotation is provided in \autoref{fig:tok-eval:example}. The objective of the shared task was to either implement an automatic metric for creating the same type of annotations automatically, or to develop a human evaluation scenario capable of producing the same annotations while requiring less resources.
+
+
+% Our submission for the shared task falls into the first category:
+% we developed an automatic metric for token-level error annotation which combines a rule-based generation system with a neural retrieval model and a pretrained neural LM used for error tagging.
+% We evaluated our approach in a cross-validation scenario to select the best configuration for the shared task. Overall, our system is able to reach 65\% error detection F1 score and ranked first out of four automatic submissions in the shared task.
+
+
+
+\subsection{Our System}
+\label{sec:tok-eval:system}
+
+\begin{figure*}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{img/tok-eval_generator.pdf}
+    \caption{Rule-based NLG which we use to generate facts from the input data. The facts are used as an input to the error checking model (see Figure \ref{fig:tok-eval:system}). We experiment with (a) simple hand-crafted templates and (b) compact sentences generated by the FORGe system.}
+    \label{fig:tok-eval:gen}
+\end{figure*}
+
+
+\begin{figure*}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{img/tok-eval_system.pdf}
+    \caption{An overview of our system. First, we generate the facts from the input table with a rule-based NLG system (see Figure \ref{fig:gen}). For each evaluated sentence $s$, we select $c$ facts with the highest semantic similarity, getting a context $C$. The pair $(C, s)$ is given as an input to a pretrained LM for token-level error classification.}
+    \label{fig:tok-eval:system}
+\end{figure*}
+
+
+Our system is composed of three steps:
+\begin{enumerate}
+    \item A rule-based generator for fact descriptions,
+    \item A retrieval system for selecting facts relevant for a given sentence,
+    \item A token-level error tagger.
+\end{enumerate}
+
+
+\paragraph{Rule-based Fact Descriptions}
+
+We use rule-based systems to generate natural language descriptions of facts from the input tables, relating to all players and both teams. The facts are later supplied to the error-checking model for grounding the evaluated sentence (see Section~\ref{sec:error-tagger}).
+% For each sentence in the supplied NLG output to classify, the retrieval model 
+% selects the most relevant generated fact descriptions.
+% These are then supplied to the LM tagger, which uses them as grounding to support its token-level classification of errors in the NLG output sentence.
+%We experiment with two fact description generation systems: simple descriptions created by filling in hand-crafted sentence templates for single facts, and compact descriptions generated using a grammar-based system which starts from abstract templates that are aggregated and rendered as sentences in several steps.\SM{Last sentence repeated below, could cut}
+We experiment with both \emph{simple} descriptions created by filling in sentence templates, and \emph{compact} descriptions generated using a grammar-based system.
+The simple system produces about 569 facts/sentences for each game.
+The compact system generates about 112 sentences per game, i.e., 5 times less; the game descriptions contain the same amount of information but the individual sentences are more syntactically complex.
+%About \textbf{570 sentences are generated for each game} to cover the facts related to all players and both teams 
+
+\paragraph{Facts generated} For each game, we first generate every fact in the input table, i.e., 44 facts about the game (hosting team, visiting team, date converted to weekday) and so-called line-score objects (team name and statistics) and box-score objects (player name, player team, player starting position and their personal statistics).
+
+Subsequently, we generate 85 further facts that can be inferred from the input table. These are based on reading the first 20 human-written summaries in the training data and finding frequently mentioned facts that can easily be derived from input, such as which team won and by how much, comparisons between the team and player raw data (e.g., \emph{Team A dominated the defensive rebounding}, \emph{Team A and Team B committed the same number of fouls}; \emph{Player X was the (second) best scorer of the game/his team}), complex statistics (e.g., \emph{Team A totaled X steals}; \emph{Player X (almost) recorded a double-double}), or an interpretation of some numbers (e.g., \emph{Team A came back in the 4th quarter; Team A was efficient/bad at shooting}).%
+%, if they have more than 50\% respectively less than 40\% shooting accuracy overall).
+\footnote{\label{fn1}A number of mentioned facts could not be obtained from the Rotowire data, as for instance the player stats per quarter, a career high points total, whether a player is an all-star or not, or if a player scored the winning shot.}
+
+%We use two different rule-based NLG systems to produce the facts.
+\paragraph{Simple descriptions} are produced by a template-based system, with one template per fact. We handcrafted 129 sentence templates to cover all the facts described above. A sentence template looks like the following: “\textit{[PLAYER$\_$NAME] scored [PTS] points.}”, where square brackets indicate variables that are instantiated with the corresponding input values (see Figure~\ref{fig:gen} for sample sentences).
+
+\paragraph{Compact descriptions} are produced by the FORGe system \cite{mille-etal-2019-teaching}, which allows for the generation of more compact sentences by instantiating abstract (predicate-argument) templates instead of full sentences for each fact. For instance, the template for the points scored would be: \emph{[PLAYER$\_$NAME] $\leftarrow$A1 provide A2$\rightarrow$ point NonCore$\rightarrow$[PTS]}, where A1 and A2 denote the first and second arguments respectively, and NonCore a non-argumental relation. FORGe receives a series of instantiated templates and performs surface realization in several steps, by first aggregating the templates based on predicate and/or argument identity, and then structuring, linearizing and inflecting components of the sentences. The FORGe grammars were
+used off-the-shelf,\footnote{Minor debugging was needed to cover some new contexts.} with cross-sentence referring expression generation deactivated so that each generated sentence can be used on its own. We manually crafted 98 abstract templates and added a description of the included lexical units into the FORGe lexicon.
+For instance, the five simple sentences shown at the bottom of the yellow column in  Figure~\ref{fig:gen} are covered by a single compact sentence shown at the bottom of the orange column.
+%(compare : \textit{Patrick Patterson provided 14 points on 5/6 shooting, 5 rebounds, 3 defensive rebounds, 2 offensive rebounds and 1 assist.
+%Patrick Patterson, who committed 2 fouls, played 24 minutes}.
+%\footnote{Note that the verbalizations in the simple and compact scenarios are not necessarily the same.}
+
+
+\subsection{Context Retrieval}
+\label{sec:context-retrieval}
+Since the maximum length of the input sequence for our error-checking model (see Section \ref{sec:error-tagger}) is 512 tokens (about 10\% of the total length of the generated sentences $G$), we need to select only a subset of $G$, which we refer to as \textbf{context} $C$. We want to put the relevant sentences into $C$ and filter out the rest to make the error tagging easier. This problem is hard in general, as any string matching (e.g.\ using numbers or names mentioned in the sentence) will fail on lexical variations. % and make it difficult to control the size of the context.
+
+Our solution is based on selecting sentences with the highest \textbf{semantic similarity}. For each generated sentence $g_i\in G$, we measure semantic similarity between $g_i$ and the evaluated sentence $s$ using Sentence Transformers \cite{reimers-2019-sentence-bert}.\footnote{\url{https://www.sbert.net/}}
+In particular, we embed the sentence tokens by applying mean pooling on the output of \texttt{paraphrase-distilroberta-base-v2}, getting the embedding vectors $e_{s}$ and $e_{g_i}$. % of size $h=768$.
+Then we compute the cosine similarity between the embeddings.
+% \begin{align*}
+% score = \frac{e_s \cdot e_{g_i}}{\lVert e_s \rVert \lVert e_{g_i} \rVert}.
+% \end{align*}
+For the context $C$, we select the top $c$ sentences from $G$ that have the highest cosine similarity to $s$.
+
+%\ZK{ok, už je to synchronizovaný... jdu teď pracovat na tezích a podívám se na to pozdějš ;)}
+% We cannot provide the model all the facts $G$ generated from the table, because we are limited by the maximum sequence length of the pre-trained model (512 tokens for RoBERTa). We also want to filter our relevant facts to make the fact-checking easier.
+% We therefore include only $c$ sentences in the context $C\subset G$.
+% We select the sentences for $C$ in the following way: 
+
+\begin{table*}[!htbp]
+    \centering\footnotesize
+    \begin{tabular}{@{}l l r >{\hspace{2mm}} ccc >{\hspace{2mm}} ccc >{\hspace{2mm}} ccc@{}}\toprule
+        \multirow{2}{*}{\bf Gen.}                    & \multirow{2}{*}{\bf Data} & \multirow{2}{*}{$c$} & \multicolumn{3}{c}{\bf EMR = 0.25} & \multicolumn{3}{c}{\bf EMR = 0.5} & \multicolumn{3}{c}{\bf EMR = 0.75}                                                         \\
+                                                     &                           &                      & R                                  & P                                 & F1                                 & R         & P     & F1    & R         & P     & F1    \\\midrule
+        \multirow{8}{*}{\bf\rotatebox{90}{Simple} }  & \multirow{4}{*}{s}
+                                                     & 5                         & 0.123                & 0.723                              & 0.210                             & 0.165                              & 0.512     & 0.250 & 0.310 & 0.323     & 0.316         \\
+                                                     &                           & 10                   & 0.138                              & 0.737                             & 0.232                              & 0.181     & 0.549 & 0.272 & 0.328     & 0.400 & 0.360 \\
+                                                     &                           & 20                   & 0.137                              & \bf 0.741                         & 0.231                              & 0.179     & 0.559 & 0.271 & 0.327     & 0.433 & 0.373 \\
+                                                     &                           & 40                   & 0.165                              & 0.712                             & 0.268                              & 0.199     & 0.560 & 0.294 & 0.296     & 0.436 & 0.353 \\\cdashlinelr{2-12}
+                                                     & \multirow{4}{*}{s+h}
+                                                     & 5                         & 0.422                & 0.617                              & 0.501                             & 0.414                              & 0.594     & 0.488 & 0.401 & 0.583     & 0.475         \\
+                                                     &                           & 10                   & 0.467                              & 0.551                             & 0.506                              & 0.438     & 0.638 & 0.519 & 0.428     & 0.665 & 0.521 \\
+                                                     &                           & 20                   & 0.518                              & 0.640                             & 0.573                              & 0.544     & 0.575 & 0.559 & 0.509     & 0.595 & 0.549 \\
+                                                     &                           & 40                   & 0.584                              & 0.644                             & \bf 0.613                          & \bf 0.595 & 0.612 & 0.603 & 0.519     & 0.639 & 0.573 \\\midrule
+        \multirow{8}{*}{\bf \rotatebox{90}{Compact}} & \multirow{4}{*}{s}
+                                                     & 5                         & 0.151                & \bf 0.696                          & 0.248                             & 0.170                              & 0.617     & 0.267 & 0.336 & 0.427     & 0.376         \\
+                                                     &                           & 10                   & 0.176                              & 0.663                             & 0.278                              & 0.195     & 0.624 & 0.297 & 0.295     & 0.486 & 0.367 \\
+                                                     &                           & 20                   & 0.196                              & 0.672                             & 0.303                              & 0.205     & 0.635 & 0.310 & 0.278     & 0.552 & 0.370 \\
+                                                     &                           & 40                   & 0.166                              & 0.643                             & 0.264                              & 0.197     & 0.595 & 0.296 & 0.306     & 0.530 & 0.388 \\ \cdashlinelr{2-12}
+                                                     & \multirow{4}{*}{s+h}
+                                                     & 5                         & 0.600                & 0.641                              & 0.620                             & 0.552                              & 0.635     & 0.591 & 0.588 & 0.600     & 0.594         \\
+                                                     &                           & 10                   & 0.583                              & 0.662                             & 0.620                              & 0.629     & 0.606 & 0.617 & \bf 0.656 & 0.606 & 0.630 \\
+                                                     &                           & 20                   & 0.622                              & 0.647                             & 0.634                              & 0.597     & 0.688 & 0.639 & 0.600     & 0.660 & 0.629 \\
+                                                     &                           & 40                   & 0.614                              & 0.690                             & \bf \phantom{*}0.650*              & 0.609     & 0.630 & 0.619 & 0.611     & 0.630 & 0.620 \\\bottomrule
+    \end{tabular}
+    \caption{Recall (R), precision (P) and F1 scores on development data. For data, $s$ indicates synthetic training data and $h$ human training data.  $c$ indicates the number of sentences in the context provided to the tagger, EMR stands for entity modification rate. Best recall, precision and F1 scores for both generators (simple and compact) are shown in bold, the submitted model is identified by an asterisk (*).}
+    \label{tab:results-dev}
+\end{table*}
+
+\subsection{LM-based Error Tagger}
+\label{sec:error-tagger}
+We use a RoBERTa LM \cite{liu_roberta_2019} with a token-level classification head as our error-checking model. Unlike unsupervised approaches based on examining attention values \cite{thorne2019generating,li2020sa} or input perturbations \cite{kim2020explaining}, we train the model directly to predict error categories using annotated data, similarly to \citet{yoosuf2019fine}.
+
+% A training example is a tuple $(X, Y)$.
+The model receives an input $X = (C, s)$, composed of the context $C$, i.e., relevant background facts selected by context retrieval in Section~\ref{sec:context-retrieval}, and the generated sentence $s$ to be tagged. The inputs are separated by the delimiter \texttt{</s>}.
+The model is trained to annotate each token in $s$ either with an \textit{OK} label, or with a label corresponding to one of the error categories.
+%The target $Y = (y_1, \ldots, y_n)$ is a sequence of labels corresponding to the tokens in $s$: either \textit{OK} or one of the error categories.
+
+We experiment with two data sources for training the model:
+(1) \textbf{gold-standard annotated data} from the shared task (which contains all error types),
+(2) \textbf{synthetic data} created by perturbing the human-written summaries from Rotowire (which contains only \textit{NAME} and \textit{NUMBER} errors; see Section~\ref{sec:synth-data} for details).
+% For our submission, we use two-stage finetuning: first we finetune on synthetic data, then we finetune on the annotated data. 
+% \ODdel{A cross-validation on the development set gives us 65\% F1-score (61\% precision and 69\% recall).}\OD{I'd include at least bits of the mega-table instead.}
+
+\subsection{Synthetic Data}
+\label{sec:synth-data}
+The gold-standard data contains only 60 games, as opposed to 3,395 games in the Rotowire training set. This led us to an idea of using the training set as a source of synthetic data for our model.
+
+We create the synthetic data by introducing errors into human-written descriptions. We focus only on the \textit{NAME} and \textit{NUMBER} errors---the categories which are the most represented and also easiest to generate. In each sentence, we identify named entities in the text using \textit{spaCy}.\footnote{\url{https://spacy.io}} We modify only certain portion of entities according to the \textit{entity modification rate}, which we treat as a hyperparameter. We introduce the \textit{NAME} errors by:
+\begin{enumerate}[label={(\arabic*)},nosep]
+    \item swapping the names of teams with opponent teams,
+    \item swapping the names of players with other players in the game,
+    \item swapping the names of cities with other cities in the Rotowire dataset,
+    \item modifying the days of the week.
+\end{enumerate}
+For \textit{NUMBER} errors, we take an integer $n$ identified in the text, sample a number from a normal distribution with $\mu=n$ and $\sigma=3$, and truncate it to get the integer. We re-sample if the output equals the original number, or for negative outputs.
+%repeat the process until the integral part of the number is different from the original number and we keep the integral part. We threshold the modified numbers at 0 to avoid negative numbers which are uncommon in the dataset.
+If the number is spelled out, we use \texttt{text2num}\footnote{\url{https://pypi.org/project/text2num/}} and  \texttt{num2words}\footnote{\url{https://pypi.org/project/num2words/}} to convert to digits and back.
+
+
+\section{Experiments}
+\label{sec:experiments}
+
+%\subsection{Training Setup}
+We train a PyTorch version of RoBERTa from the Huggingface Transfomers repository \cite{wolf2019huggingface} using the AdamW optimizer \cite{loshchilov2018fixing}, learning rate $5\times10^{-5}$ and linear warmup.
+% $\beta_1=0.9, \beta_2=0.997, \epsilon=10^{-8}$, 
+We finetune the model for 10 epochs and select the model with the highest validation score.
+We experiment with several hyperparameters: % regarding our training data: 
+\begin{enumerate}[label={(\alph*)},nosep]
+    \item \emph{simple} vs.~\emph{compact} sentences in $G$, % (Section \ref{sec:rule-based-system})
+    \item  \textit{number of sentences} retrieved for the context: $c$ = 5, 10, 20 or 40;
+    \item \textit{entity modification rate} (EMR): proportion of entities which are modified in the synthetic data: 0.25, 0.5, or 0.75.
+\end{enumerate}
+
+%\subsection{Evaluation Metrics}
+We evaluate the model using a script provided by the organizers, which computes recall and precision of the model output with respect to the human-annotated data. Since we use the human-annotated data for training, we perform 6-fold cross-validation: in each run, we use 45 games for training, 5 games for validation, and 10 games for evaluation.
+
+The results of our model on the development data are listed in Table \ref{tab:results-dev}.\footnote{Due to space constraints, we do not list the results of model trained only on annotated data. The results were overall in the 0.3-0.5 range for both recall and precision, and no model was the best-performing one in terms of any metric.}
+For our final submission, we selected the model with the best F1-score overall, which is 0.65 (61\% recall and 69\% precision). The model uses 40 compact sentences in context, 0.25 EMR and was trained on both synthetic and human-annotated data. However, note that the hyperparameters of the best models are quite varied. Although compact texts are generally helpful, there are also some well-performing models using simple templates only. A higher number of sentences in context may help to achieve better F1-score, but not always (the longer context is also sometimes cropped to fit the input). Using a higher EMR then generally leads to higher recall, suggesting that the model adapts to the base rate of errors.
+
+% ---------------------------------------------------------
+\label{sec:results}
+
+\section{Results of our Charles-UPF submission}
+
+\begin{table}[t]
+    \centering\small
+    \begin{tabular}{l cccc}\toprule
+        \multirow{2}{*}{\bf Error Type} & \multicolumn{2}{c}{\bf Mistake} & \multicolumn{2}{c}{\bf Token}                 \\
+                                        & R                               & P                             & R     & P     \\ \midrule
+        \textit{NAME}                   & 0.750                           & 0.846                         & 0.759 & 0.862 \\
+        \textit{NUMBER}                 & 0.777                           & 0.750                         & 0.759 & 0.752 \\
+        \textit{WORD}                   & 0.514                           & 0.483                         & 0.465 & 0.529 \\
+        \textit{CONTEXT}                & 0.000                           & -                             & 0.000 & -     \\
+        \textit{NOT\_CHECKABLE}         & 0.000                           & -                             & 0.000 & -     \\
+        \textit{OTHER}                  & 0.000                           & -                             & 0.000 & -     \\ \noalign{\vskip 0.1cm}\hdashline\noalign{\vskip 0.1cm}
+        Overall                         & 0.691                           & 0.756                         & 0.550 & 0.769 \\\bottomrule
+    \end{tabular}
+    \caption{Results of our system on test data: recall (R) and precision (P) are shown for individual error types.}
+    \label{tab:results-test}
+\end{table}
+
+Table \ref{tab:results-test} shows the results of our model on the official test data of the task, broken down by error types. The overall scores are higher than on the development set -- test set recall is 0.691 (vs.~0.614 on the development set) and precision is 0.756 (vs.~0.690). The fact that we used the whole available human annotated data for training the final model may have contributed to the difference, but it is also possible that the test data was somewhat less challenging. We note that our model was able to identify only three types of errors (\textit{NAME}, \textit{NUMBER}, \textit{WORD}), having better results for the \textit{NAME} and \textit{NUMBER} errors. We believe the explanation is two-fold: the names and numbers are often found verbatim in the input data (and in our generated facts), which makes them easy to detect, and also the corresponding error types were the most represented in the training data. In contrast, the three error types which were not detected are much less represented in the training data and hard to detect in our setup.
+

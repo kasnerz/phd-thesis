@@ -67,6 +67,7 @@
 \usepackage{quoting,xparse}
 \usepackage{tikz}
 \usepackage{cleveref}
+\usepackage{soul}
 % \usepackage{pbox}
 % oxford comma
 \newcommand{\creflastconjunction}{, and\nobreakspace}
@@ -154,6 +155,7 @@
 \newcommand{\orange}[1]{{\leavevmode\color{orange}{#1}}}
 
 
+
 \newcommand{\modeltemplates}{\mbox{T5-T}}
 \newcommand{\modelstruct}{\mbox{T5-S}}
 \newcommand{\modelfnr}{\mbox{T5-F+T}}
@@ -170,6 +172,24 @@
   urlcolor=mydarkblue,
   unicode=true
 }
+
+
+\definecolor{errred}{HTML}{C9404F}
+\definecolor{errblue}{HTML}{C9404F}
+\definecolor{errorange}{HTML}{E29C30}
+\definecolor{erryellow}{HTML}{C9AB40}
+\definecolor{errpurple}{HTML}{954CB0}
+\definecolor{errgrey}{HTML}{A0A0A0}
+
+% colors for each error
+\newcommand{\errnum}[1]{{\leavevmode\color{errred} \ul{\textbf{#1\textsuperscript{N}}}}}
+\newcommand{\errent}[1]{{\leavevmode\color{errblue} \ul{\textbf{#1\textsuperscript{E}}}}}
+\newcommand{\errword}[1]{{\leavevmode\color{errorange} \ul{\textbf{#1\textsuperscript{W}}}}}
+\newcommand{\errctx}[1]{{\leavevmode\color{erryellow} \ul{\textbf{#1\textsuperscript{C}}}}}
+\newcommand{\errnc}[1]{{\leavevmode\color{errpurple} \ul{\textbf{#1\textsuperscript{NC}}}}}
+\newcommand{\errother}[1]{{\leavevmode\color{errgrey} \ul{\textbf{#1\textsuperscript{O}}}}}
+
+
 
 % \hypersetup{
 %     colorlinks=false,
