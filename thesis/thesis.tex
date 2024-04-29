@@ -48,6 +48,33 @@
 \lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
 \lstset{framextopmargin=50pt}
 
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+language=Python,
+basicstyle=\tt,
+morekeywords={self},              % Add keywords here
+keywordstyle=\color{deepblue},
+emph={MyClass,__init__},          % Custom highlighting
+emphstyle=\color{deepred},    % Custom highlighting style
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false
+}}
+
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+
 \setlist[itemize]{itemsep=0.02cm,topsep=0.2cm}
 \setlist[enumerate]{itemsep=0.02cm,topsep=0.2cm,label={(\arabic*)}}
 
@@ -67,7 +94,8 @@
 \usepackage{quoting,xparse}
 \usepackage{tikz}
 \usepackage{cleveref}
-\usepackage{soul}
+% \usepackage{soul}
+\usepackage{lua-ul}
 % \usepackage{pbox}
 % oxford comma
 \newcommand{\creflastconjunction}{, and\nobreakspace}
@@ -180,14 +208,16 @@
 \definecolor{erryellow}{HTML}{C9AB40}
 \definecolor{errpurple}{HTML}{954CB0}
 \definecolor{errgrey}{HTML}{A0A0A0}
+\definecolor{errok}{HTML}{4CB055}
 
 % colors for each error
-\newcommand{\errnum}[1]{{\leavevmode\color{errblue} \ul{\textbf{#1\textsuperscript{N}}}}}
-\newcommand{\errent}[1]{{\leavevmode\color{errred} \ul{\textbf{#1\textsuperscript{E}}}}}
-\newcommand{\errword}[1]{{\leavevmode\color{errorange} \ul{\textbf{#1\textsuperscript{W}}}}}
-\newcommand{\errctx}[1]{{\leavevmode\color{erryellow} \ul{\textbf{#1\textsuperscript{C}}}}}
-\newcommand{\errnc}[1]{{\leavevmode\color{errpurple} \ul{\textbf{#1\textsuperscript{NC}}}}}
-\newcommand{\errother}[1]{{\leavevmode\color{errgrey} \ul{\textbf{#1\textsuperscript{O}}}}}
+\newcommand{\errnum}[1]{{\leavevmode\color{errblue} \underLine{\textbf{#1\textsuperscript{N}}}}}
+\newcommand{\errent}[1]{{\leavevmode\color{errred} \underLine{\textbf{#1\textsuperscript{E}}}}}
+\newcommand{\errword}[1]{{\leavevmode\color{errorange} \underLine{\textbf{#1\textsuperscript{W}}}}}
+\newcommand{\errctx}[1]{{\leavevmode\color{erryellow} \underLine{\textbf{#1\textsuperscript{C}}}}}
+\newcommand{\errnc}[1]{{\leavevmode\color{errpurple} \underLine{\textbf{#1\textsuperscript{NC}}}}}
+\newcommand{\errother}[1]{{\leavevmode\color{errgrey} \underLine{\textbf{#1\textsuperscript{O}}}}}
+\newcommand{\errok}[1]{{\leavevmode\color{errok} \underLine{\textbf{#1\textsuperscript{O}}}}}
 
 \newcommand{\lineacross}{\rule{\linewidth}{1pt}}
 
