@@ -95,24 +95,36 @@ Beside the web interface, \textsc{TabGenie} also provides more developer-friendl
 
 \paragraph{Command-line Tools} \textsc{TabGenie} supports several basic commands via command line:
 \begin{itemize}
-    \item \textbf{Run} The \texttt{tabgenie run} command launches the local web server, mimicking the behavior of \texttt{flask run}. Example usage:
-          \begin{bash}
-              tabgenie run --port=8890 --host="0.0.0.0"
-          \end{bash}
-    \item \textbf{Export} The \texttt{tabgenie export} command enables batch exporting of the dataset. The supported formats are \texttt{xlsx}, \texttt{html}, \texttt{json}, \texttt{txt}, and \texttt{csv}. Except for \texttt{csv}, table properties can be exported along with the table content. Example usage:
-          \begin{bash}
-              tabgenie export --dataset "webnlg" \
-              --split "dev" \
-              --out_dir "export/datasets/webnlg" \
-              --export_format "xlsx"
-          \end{bash}
+    \item \textbf{Run} The \texttt{tabgenie run} command launches the local web server, mimicking the behavior of \texttt{flask run}.
+
+          \noindent Example usage:
+          % \begin{noindent}
+\begin{bash}
+tabgenie run --port=8890 --host="0.0.0.0"
+\end{bash}
+% \end{noindent}
+    \item \textbf{Export} The \texttt{tabgenie export} command enables batch exporting of the dataset. The supported formats are \texttt{xlsx}, \texttt{html}, \texttt{json}, \texttt{txt}, and \texttt{csv}. Except for \texttt{csv}, table properties can be exported along with the table content.
+
+          \noindent Example usage:
+          % \begin{noindent}
+\begin{bash}
+tabgenie export --dataset "webnlg" \
+    --split "dev" \
+    --out_dir "export/datasets/webnlg" \
+    --export_format "xlsx"
+\end{bash}
+% \end{noindent}
           \noindent Export can also be done in the web interface.
-    \item \textbf{Spreadsheet} For error analysis, it is common to select $N$ random examples from the dataset along with the system outputs and manually annotate them with error categories (see~§\ref{sec:cs:analysis}). The \texttt{tabgenie sheet} command generates a suitable spreadsheet for this procedure. Example usage:
-          \begin{bash}
-              tabgenie sheet --dataset "webnlg" \
-              --split "dev" \
-              --in_file "out-t5-base.jsonl" \
-              --out_file "analysis_webnlg.xlsx" \
-              --count 50
-          \end{bash}
+    \item \textbf{Spreadsheet} For error analysis, it is common to select $N$ random examples from the dataset along with the system outputs and manually annotate them with error categories. The \texttt{tabgenie sheet} command generates a suitable spreadsheet for this procedure.
+
+          \noindent Example usage:
+          % \begin{noindent}
+\begin{bash}
+tabgenie sheet --dataset "webnlg" \
+    --split "dev" \
+    --in_file "out-t5-base.jsonl" \
+    --out_file "analysis_webnlg.xlsx" \
+    --count 50
+    \end{bash}
+% \end{noindent}
 \end{itemize}
