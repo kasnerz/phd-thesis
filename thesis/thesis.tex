@@ -46,7 +46,7 @@
 \usepackage{listings}
 
 \lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
-\lstset{framextopmargin=50pt}
+% \lstset{framextopmargin=50pt}
 
 \definecolor{deepblue}{rgb}{0,0,0.5}
 \definecolor{deepred}{rgb}{0.6,0,0}
@@ -54,26 +54,40 @@
 
 % Python style for highlighting
 \newcommand\pythonstyle{\lstset{
-language=Python,
-basicstyle=\tt,
-morekeywords={self},              % Add keywords here
-keywordstyle=\color{deepblue},
-emph={MyClass,__init__},          % Custom highlighting
-emphstyle=\color{deepred},    % Custom highlighting style
-stringstyle=\color{deepgreen},
-frame=tb,                         % Any extra options here
-showstringspaces=false
+  language=Python,
+  basicstyle=\tt,
+  morekeywords={self},              % Add keywords here
+  keywordstyle=\color{deepblue},
+  emph={MyClass,__init__},          % Custom highlighting
+  emphstyle=\color{deepred},    % Custom highlighting style
+  stringstyle=\color{deepgreen},
+  frame=tb,                         % Any extra options here
+  showstringspaces=false
+  }}
+  % Bash style for highlighting
+\newcommand\bashstyle{\lstset{
+  language=Bash,
+  basicstyle=\tt,
+  morekeywords={self},              % Add keywords here
+  keywordstyle=\color{deepblue},
+  emph={MyClass,__init__},          % Custom highlighting
+  emphstyle=\color{deepred},    % Custom highlighting style
+  stringstyle=\color{deepgreen},
+  frame=tb,                         % Any extra options here
+  showstringspaces=false
 }}
 
 
 % Python environment
-\lstnewenvironment{python}[1][]
-{
+\lstnewenvironment{python}[1][] {
 \pythonstyle
 \lstset{#1}
-}
-{}
-
+}{}
+% Bash environment
+\lstnewenvironment{bash}[1][] {
+\bashstyle
+\lstset{#1}
+}{}
 
 \setlist[itemize]{itemsep=0.02cm,topsep=0.2cm}
 \setlist[enumerate]{itemsep=0.02cm,topsep=0.2cm,label={(\arabic*)}}

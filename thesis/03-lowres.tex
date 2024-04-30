@@ -157,7 +157,7 @@ To generate outputs with sufficient semantic accuracy for the filtering step, we
 % They use the sequence-to-sequence T5 model \citep{raffel2019exploring} to generate the output text from scratch instead of iteratively editing the intermediate outputs, which leaves less control over the model.
 
 
-\subsection{Our Approach}
+\subsection{Method}
 \label{sec:text-editing-exp}
 We focus on data structured as \ac{rdf} triples.\footnote{Later, we also trivially extend our approach to key-value pairs.} In our approach, we start from single-triple templates and iteratively fuse them into the resulting text while filtering and reranking the results. We first detail the main components of our system (template extraction, sentence fusion, \ac{plm} scoring) and then give the overall description of the generation algorithm.
 
@@ -366,7 +366,7 @@ For training the modules, we need to build a corpus in which (1) the input is a 
 
 % we collect a large-scale synthetic corpus \textsc{WikiFluent}. Our goal is to build a corpus covering a broad range of domains and capturing the sentence style in D2T generation. In other words, we . As we describe below in detail, we achieve that by using human-written paragraphs in English Wikipedia and applying \textit{split-and-rephrase} and  \textit{coreference resolution} models to obtain synthetic source texts. The process is illustrated in Figure \ref{fig:wikifluent}; corpus statistics are included in Appendix \ref{app:stats}.
 
-\subsection{Data Source} For building the \textsc{WikiFluent} corpus, we first extracted 934k first paragraphs of articles from a Wikipedia dump\footnote{\texttt{enwiki-20210401-pages-articles-multistream}} using WikiExtractor \cite{Wikiextractor2015}. Wikipedia is commonly used for large-scale pretraining of D2T generation models, as it provides a source of neutral texts based on factual data \cite{jinGenWikiDatasetMillion2020,chenKGPTKnowledgeGroundedPreTraining2020}.
+\paragraph{Data Source} For building the \textsc{WikiFluent} corpus, we first extracted 934k first paragraphs of articles from a Wikipedia dump\footnote{\texttt{enwiki-20210401-pages-articles-multistream}} using WikiExtractor \cite{Wikiextractor2015}. Wikipedia is commonly used for large-scale pretraining of D2T generation models, as it provides a source of neutral texts based on factual data \cite{jinGenWikiDatasetMillion2020,chenKGPTKnowledgeGroundedPreTraining2020}.
 % Although it is not bias-free, it provides more balanced sample of natural language use than typical D2T generation datasets. 
 We used the first paragraphs of Wikipedia entries with length between 30-430 characters; filtering out lists, disambiguations, and malformed paragraphs. To balance the length of inputs, we divided the paragraphs according to their length into 4 equally-sized bins (30-130 characters, etc.) and selected 250k examples from each bin.
 
