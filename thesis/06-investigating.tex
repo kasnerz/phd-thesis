@@ -15,70 +15,105 @@ In \autoref{sec:quintd}, we investigate abilities of open \acp{llm} for \ac{d2t}
 \begin{refbox}
     This section is based on the paper \emph{Mind the Labels: Describing Relations in Knowledge Graphs With Pretrained Models} \cite{kasnerMindLabelsDescribing2022}, joint work with Ioannis Konstas and Ondřej Dušek. The work was published in the Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics (EACL 2023). The project was led by the author of the thesis; Ioannis Konstas and Ondřej Dušek mentored the project.
 \end{refbox}
-In this section, we investigate to which extent do human-readable data labels help \acp{plm} with \ac{d2t} generation. We start by noticing that \acp{plm} can use labels such as column headings, keys, or relation names to generalize to out-of-domain examples. However, is this ability robust enough, and do we also expect the models to produce accurate outputs if these labels are ambiguous or incomplete?
-
-Specifically, we focus here on the task of descibing a relation between two entities. For our experiments, we collect \textsc{Rel2Text}: a novel dataset for verbalizing a diverse set of 1,522 unique relations from three large-scale knowledge graphs (Wikidata, DBPedia, YAGO). We evaluate model outputs on unseen relations using a combination of automatic metrics and manual analysis. We find that although PLMs for D2T generation expectedly fail on unclear cases, models trained with a large variety of relation labels are surprisingly robust in verbalizing novel, unseen relations. We argue that using data with a diverse set of clear and meaningful labels is key to training D2T generation systems capable of generalizing to novel domains. We release the code and data for our experiments on Github.\footnote{\url{https://github.com/kasnerz/rel2text}}
+In this section, we investigate to which extent do human-readable data labels help \acp{plm} with \ac{d2t} generation. We start by noticing that \acp{plm} can use labels such as column headings, keys, or relation names to generalize to out-of-domain examples. The question is (a) whether this ability robust enough and (b) how accurate are the outputs in cases where these labels are ambiguous or incomplete. To answer this question, we focus on the task of descibing a relation between two entities. For our experiments, we collect \textsc{Rel2Text}: a novel dataset for verbalizing a diverse set of 1,522 unique relations from three large-scale knowledge graphs (Wikidata, DBPedia, YAGO). We evaluate model outputs on unseen relations using a combination of automatic metrics and manual analysis. We find that although \acp{plm} for D2T generation expectedly fail on unclear cases, models trained with a large variety of relation labels are surprisingly robust in verbalizing novel, unseen relations. We argue that using data with a diverse set of clear and meaningful labels is key to training D2T generation systems capable of generalizing to novel domains. We release the code and data for our experiments on Github.\footnote{\url{https://github.com/kasnerz/rel2text}}
 
 
 % 
 % In this paper, 
 
 \subsection{Motivation}
-D2T generation systems need to accurately capture the semantics of relations between values in the data. However, the data labels such as relation names \cite{farber2018linked,haller2022analysis}, table headings \cite{parikhToTToControlledTableToText2020}, or meaning representation keys \cite{dusekEvaluatingStateoftheartEndtoEnd2020} may provide only superficial or---if the labels are abbreviations, such as in the Rotowire dataset \cite{wiseman2017challenges}---no usable hints about the data semantics. Learning how to properly describe the data is thus a challenge for \ac{d2t} generation systems, typically requiring in-domain training data of sufficient quality and quantity \cite{dusekSemanticNoiseMatters2019}.
-
-PLMs such as BART \cite{lewisBARTDenoisingSequencetoSequence2019} or T5 \cite{raffelExploringLimitsTransfer2019} can quickly adapt to new domains and exhibit robustness to out-of-domain inputs. However, the PLMs for D2T generation are still limited by the expressivity of the data labels. Consider \autoref{fig:rel2text:teaser} (a): the model can use its representation of \textit{``godparent''} to understand there is a \textit{``is-a-godparent-of''} relation between the entities, but it has to infer (or guess) who is the godparent of whom. Even in the less ambiguous cases (b) and (c), the model still has to correctly capture the intended semantics of the relation (e.g. \textit{``occupant''} meaning \textit{``home team''}).
+D2T generation systems need to accurately capture the semantics of relations between values in the data. However, the data labels such as relation names \cite{farber2018linked,haller2022analysis}, table headings \cite{parikhToTToControlledTableToText2020}, or meaning representation keys \cite{dusekEvaluatingStateoftheartEndtoEnd2020} may provide only superficial or---if the labels are abbreviations, such as in the Rotowire dataset \cite{wiseman2017challenges}---no usable hints about the data semantics.
 
 
-\begin{figure}[t]
+% \begin{figure}[t]
 
-    \begin{minipage}{0.55\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{img/mind_the_labels.pdf}
-        \caption{Data-to-text generation models use relation labels (such as  \mbox{\textit{godparent}}, \mbox{\textit{occupant}}, and \mbox{\textit{musicBy}}) to describe relations between entities. However, unclear labels can lead to various lexical or semantic incoherencies in the output descriptions, such as swapping the relation direction (a), using too literal expressions (b), or expressions with low specificity.}
-        \label{fig:rel2text:teaser}
-    \end{minipage}
-    \hfill
-    \begin{minipage}{0.4\textwidth}
-        % \begin{table}[t!] \footnotesize
-        % \def\arraystretch{1.2}
-        \centering
-        \footnotesize
-        \begin{tabular}{lp{3.3cm}} \toprule
-            \textbf{relation}   & \textbf{verbalization}                                               \\ \midrule
-            \textit{is part of} & \eh{} is part of \et{}.                                              \\\hdashline[0.5pt/2pt]
-            \textit{duration}   & \eh{} lasted for \et{}.                                              \\\hdashline[0.5pt/2pt]
-            \textit{platform}   & \eh{} is available on \et{}.\newline\eh{} runs on \et{}.             \\\hdashline[0.5pt/2pt]
-            \textit{country}    & \eh{} was born in \et{}. \newline \eh{} is located in \et{}.         \\\hdashline[0.5pt/2pt]
-            \textit{parent}     & \eh{} is the parent of \et{}. \newline \et{} is the parent of \eh{}. \\\bottomrule
-        \end{tabular}
-        \captionof{table}{Example verbalizations of relation labels with head and tail entities (\eh, \et). Relations can be copied verbatim (\textit{is part of}), have a unique verbalization (\textit{duration}), or multiple equivalent lexical choices (\textit{platform}). There %may also be 
-            is also ambiguity stemming from the semantics of the entities (\textit{country}) or the relation itself (\textit{parent}).}
-        \label{tab:example}
-        % \end{table}
-    \end{minipage}
-\end{figure}
+\begin{table}[t!] \small
+    \centering
+    \begin{tabular}{llp{3.7cm}l} \toprule
+        \textbf{label}    & \textbf{property id}                                       & \textbf{verbalization}                                               & \textbf{note}                       \\ \midrule
+        \textit{part of}  & \href{https://www.wikidata.org/wiki/Property:P361}{P361}   & \eh{} is part of \et{}.                                              & can be used verbatim                \\\cdashlinelr{1-4}
+        \textit{duration} & \href{https://www.wikidata.org/wiki/Property:P2047}{P2047} & \eh{} lasted for \et{}.                                              & unambiguous verbalization           \\\cdashlinelr{1-4}
+        \textit{platform} & \href{https://www.wikidata.org/wiki/Property:P400}{P400}   & \eh{} is available on \et{}.\newline\eh{} runs on \et{}.             & multiple equivalent lexical choices \\\cdashlinelr{1-4}
+        \textit{occupant} & \href{https://www.wikidata.org/wiki/Property:P466}{P466}   & \et{} is occupied by \eh{}.\newline\eh{} plays at \et{}.             & semantics depends on entities       \\\cdashlinelr{1-4}
+        % \textit{country}  & \href{https://www.wikidata.org/wiki/Property:P17}{P17}     & \eh{} was born in \et{}. \newline \eh{} is located in \et{}.         & semantics depends on entities       \\\cdashlinelr{1-4}
+        \textit{parent}   & \href{https://www.wikidata.org/wiki/Property:P8810}{P8810} & \eh{} is the parent of \et{}. \newline \et{} is the parent of \eh{}. & ambiguous relation direction        \\\bottomrule
+    \end{tabular}
+    \captionof{table}{Example relation labels and the variability in their verbalizations. \eh{} and \et{} denote subject and object in the triple, respectively. The Wikidata page for each relation is available at \url{https://www.wikidata.org/wiki/Property:<property_id>}.}
+    \label{tab:rel2text:example}
+\end{table}
 
-We investigate to what extent can PLMs use arbitrary labels describing relations between entities. A suitable testing ground is the task of describing (i.e., \textit{verbalizing}) individual triples in a \ac{kg}, which can be considered a trivial case of graph-to-text generation \cite{ribeiroInvestigatingPretrainedLanguage2020,koncel-kedziorskiTextGenerationKnowledge2019}. In this task, there is a wide range of lexical choices for the \textit{relation label} (see Table \ref{tab:example}), while the \textit{entities} can be copied verbatim or with only minor morphological changes.
-
-Current human-annotated datasets for D2T generation contain only a small number of relations
-%(ranging from a handful to lower hundreds) 
-and rarely contain any unseen relations in the test set \cite{mille2021automatic}.
-We collect a novel dataset \textsc{Rel2Text} (\underline{R}e-writing \underline{e}dge \underline{l}abels to Text),\footnote{Or simply ``Relations-to-Text''.} acting as a test bench for our experiments. It contains 4,097 single triples from three large-scale KGs (Wikidata, \mbox{DBPedia}, and YAGO) and their crowdsourced verbalizations, covering 1,522 unique relations (§\ref{sec:data}). Each relation is equipped with a label, a textual description, and up to five triples in which the relation occurs in the KG.
-
-Using the \textsc{Rel2Text} dataset, we evalute the ability of PLMs to verbalize relations which were not present in the training set. We consider both models finetuned on other relations in our dataset and models finetuned on datasets from a related domain. We also experiment with scenarios involving few-shot finetuning, training on masked labels, and extending the labels with descriptions (§\ref{sec:analysis},~\ref{sec:results}).
-
-We find that the PLMs are quite robust in verbalizing a diverse set of relations based on their label (achieving \textasciitilde 90\% of overall entailment probability). We show that semantically unfaithful model outputs are often caused by incomplete, ambiguous, or noisy input data. Somewhat suprisingly, we also show that longer relation descriptions do not provide substantial improvements over using short labels. However, even for data using short relation labels, the model trained on verbalizing relations can achieve results comparable to verbalizing relations using manual templates in two downstream tasks (§\ref{sec:downstream}).
+\acp{plm} such as BART \cite{lewisBARTDenoisingSequencetoSequence2019} or T5 \cite{raffelExploringLimitsTransfer2019} can quickly adapt to new domains and exhibit robustness to out-of-domain inputs, but are still limited by the expressivity of the data labels. Consider the last example in \autoref{tab:rel2text:example}: the model can use its representation of \textit{``parent''} to understand there is a \textit{``is-a-parent-of''} relation between the entities, but it has to infer (or guess) who is the parent of whom. Even in less ambiguous cases, the model still has to correctly capture the intended semantics of the relation (e.g. \textit{``occupant''} meaning \textit{``home team''}).
 
 
 
+We investigate to what extent can \acp{plm} use arbitrary labels describing relations between entities. A suitable testing ground is the task of describing (i.e., \textit{verbalizing}) individual \acs{rdf}\glsunset{rdf} triples in a \ac{kg}. In this task, there is a wide range of lexical choices for the \textit{relation label}, while the \textit{entities} can be copied verbatim or with only minor morphological changes.
+
+Current human-annotated datasets for \ac{d2t} generation generation contain only a small number of relations and rarely contain any unseen relations in the test set \cite{mille2021automatic}.
+The existing datasets covering verbalizations of a wider range of KG relations are based on \textbf{model-generated outputs}. \citet{agarwal2021knowledge} used semantic filtering and distant supervision for generating a large-scale corpus of synthetic verbalizations of the English Wikidata. We use their KeLM corpus to investigate how training on large-scale synthetic data differs from training on a small-scale human-annotated dataset (see\ §\ref{sec:analysis}). Parallel to us, \citet{amaral2022wdv} introduced the WDV dataset with verbalizations of individual Wikidata triples. The scope and size of their dataset is similar to ours, but their verbalizations are human-validated outputs of the T5 model \cite{raffel2020exploring} finetuned on the WebNLG dataset.
+
+Other works have tried \textbf{incorporating descriptions of data labels} in the model inputs. In one of the experiments, \citet{wang2021kepler} use descriptions of relations from Wikidata instead of their labels for relation embeddings, concluding that it results in worse performance on downstream tasks. Conversely, \citet{kale-rastogi-2020-template} and \citet{lee2021dialogue} improve the performance of their systems by including schema descriptions on the input for the dialogue state tracking and dialogue response generation systems.
+
+There has also been a research interest in \textbf{verbalizing single triples} as a stand-alone preprocessing step for NLP tasks. The step has been shown to improve the generalization ability of downstream models for data-to-text generation \cite{laha2020scalable,kasner2020data,kasner2022neural,xiang2022asdot} and response generation in dialogue systems \cite{kale-rastogi-2020-template}. This step can also serve for making the input similar to the format used during pretraining, e.g.\ for  natural language inference (NLI) models (\citealp{gupta2020infotabs,neeraja2021incorporating,duvsek2020evaluating}). The above works employ a variety of methods to convert triples to text, ranging from simple templates and rule-based systems to prompting large \acp{plm}. However, none of these works investigate how \acp{plm} behave when presented with novel relations.
 
 
-The contributions of our work are as follows:
+% 
+
+% Using the \textsc{Rel2Text} dataset, we evalute the ability of \acp{plm} to verbalize relations which were not present in the training set. We consider both models finetuned on other relations in our dataset and models finetuned on datasets from a related domain. We also experiment with scenarios involving few-shot finetuning, training on masked labels, and extending the labels with descriptions (§\ref{sec:analysis},~\ref{sec:results}).
+
+% We find that the \acp{plm} are quite robust in verbalizing a diverse set of relations based on their label (achieving \textasciitilde 90\% of overall entailment probability). We show that semantically unfaithful model outputs are often caused by incomplete, ambiguous, or noisy input data.
+
+
+
+% Somewhat suprisingly, we also show that longer relation descriptions do not provide substantial improvements over using short labels.  
+
+% However, even for data using short relation labels, the model trained on verbalizing relations can achieve results comparable to verbalizing relations using manual templates in two downstream tasks (§\ref{sec:downstream}).
+
+
+
+\subsection{\textsc{Rel2Text} dataset}
+\label{sec:rel2text:data}
+We collect a novel dataset \textsc{Rel2Text} (\underline{R}e-writing \underline{e}dge \underline{l}abels to Text),\footnote{Or simply ``Relations-to-Text''.} acting as a test bench for our experiments. It contains 4,097 single triples from three large-scale KGs (Wikidata, \mbox{DBPedia}, and YAGO) and their crowdsourced verbalizations, covering 1,522 unique relations. Each relation is equipped with a label, a textual description, and up to five triples in which the relation occurs in the KG.
+
+For our experiments, we need data with diverse labels and their human verbalizations. In this section, we describe how we gather RDF\footnote{\url{https://www.w3.org/TR/PR-rdf-syntax/}} triples from large-scale KGs (§\ref{sec:input_data}) and collect their verbalization through crowdsourcing (§\ref{sec:rel2text},\ \ref{sec:postprocessing}).
+
+\paragraph{Input Data}
+An RDF triple is a tuple $t = (e_h, r, e_t)$, where $r$ denotes the relation between the head entity $e_h$ and the tail entity $e_t$.
+We retrieve triples from three open large-scale KGs encoding factual knowledge:
+
 \begin{itemize}
-    \item We examine the ability of PLMs to describe graph relations, showing that \textit{clear and meaningful labels} are the basis for successful generalization to unseen relations.
-    \item We present \textsc{Rel2Text}---a human-annotated dataset with 4,097 examples verbalizing 1,522 relations from three large-scale open KGs.
-    \item We show that a model trained on \textsc{Rel2Text} can serve as a drop-in replacement for manual templates, preserving or improving performance on downstream tasks.
+    \item \textbf{Wikidata} \cite{vrandevcic2014wikidata} is a large-scale Wikipedia-based KG created using collaborative editing. With approximately 10,000 human-created relations equipped with descriptions,\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Database_reports/List_of_properties/all}} it is by far the largest source of variety in relation labels.
+    \item \textbf{YAGO} \cite{pellissier2020yago} is a KG which builds upon factual knowledge from Wikidata, but uses a limited set of 116 pre-defined relations from \texttt{schema.org} \cite{guha2016schema} mapped to a subset of Wikidata relations.
+    \item \textbf{DBPedia} \cite{lehmann2015dbpedia} is a KG that maps Wikipedia infotables to a predefined ontology containing 1,355 relations, about 350 of which are accompanied by a description.
 \end{itemize}
+
+We query all KGs using their openly available endpoints to retrieve a list of relations in each KG. For each relation, we retrieve up to five \textit{triples} that use this relation, and the relation \textit{description}, i.e.\ a short explanatory text.
+If present, we also retrieve descriptions for the head and tail entities.
+
+We apply a set of filtering heuristics, leaving out e.g.\ relations describing KG metadata or identification numbers.\footnote{Relations describing various IDs make up a suprisingly large portion of relations in Wikidata. Since we focus on diversity instead of coverage, we decided not to include these relations in our dataset.} In this way, we collect 7,334 triples with 1,716 relations in total. For the full description regarding the data retrieval, please refer to Appendix~\ref{app:scraping}.
+
+\subsection{Annotation Process}
+We collect human-written verbalizations for all input triples using Prolific.\footnote{\url{https://www.prolific.co/}} We built a web interface in which the human annotators are shown a single triple $t$ and asked to describe it in a single sentence. The annotators are encouraged to re-use the entities in their original form, but they are able to change the form if necessary. The annotators can also report noisy inputs. We employed 420 annotators in total, each of which annotated 20 examples. We set the average reward per hour according to the platform recommendations to  7.29 pounds per hour and we accepted all the inputs which passed our built-in checks. See Appendix \ref{app:crowdsourcing} for more details on the annotation process.
+
+
+\subsection{Postprocessing the Data}
+A considerable portion of the collected verbalizations contain typos and grammatical errors, misunderstood meaning of the relation, or extra information in the input. To ensure high quality of our data, we manually examined all crowdsourced examples and annotated them as \textit{OK}, \textit{noisy}, \textit{corrupted} or \textit{containing extra information}.
+Appendix \ref{app:postprocessing} includes postprocessing details.
+In the rest of the paper, we only use the subset of our dataset with \textit{OK} annotations, one per input triple (4,097 examples, 1,522 distinct relations), although we also make the remaining noisy instances available for future research.
+
+
+\section{Analysis and Evaluation}
+In our analysis, we are interested in the following research questions:
+\begin{itemize}
+    \item \textbf{RQ1:} Are the PLMs finetuned for D2T generation able to describe relations \textit{not present in the finetuning corpus}?
+    \item \textbf{RQ2:} How many \textit{training examples} do the PLMs need to generate satisfactory outputs?
+    \item \textbf{RQ3:} How do the PLMs behave when provided \textit{limited lexical cues} about the relation?
+    \item \textbf{RQ4:} Can relation \textit{descriptions} help to clarify ambiguous cases and improve semantic accuracy of the outputs?
+\end{itemize}
+
+To answer these questions, we divide our \textsc{Rel2text} dataset into a training and test splits (see §\ref{sec:setup} for details). We then use the \textbf{\textsc{Rel2Text} test set} to evaluate a finetuned BART model \cite{lewis2020bart}, a pretrained encoder-decoder transformer, which is used as a backbone of many recent data-to-text models (\citealp{ke2021jointgt,xing2021structure,ribeiro2020investigating,liu2021kg}).\footnote{We believe that our findings also apply to similar models such as T5 \cite{raffel2020exploring}, which have shown comparable performance on related tasks.}
+
+To answer \textit{RQ1}, we compare the performance of BART finetuned on the \textsc{Rel2Text} training set with BART finetuned on two qualitatively different D2T datasets -- \textsc{WebNLG} and \textsc{KeLM}. Using \textsc{Rel2text} only, we then prepare various setups for answering \textit{RQ2}, \textit{RQ3}, and \textit{RQ4} (details in §\ref{sec:experiments}). We analyze the outputs of the models  both automatically (§\ref{sec:auto}) and manually (§\ref{sec:manual}).
+
 
 
 

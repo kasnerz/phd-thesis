@@ -206,11 +206,11 @@ In each of the following steps $i=(1, \ldots, T-1)$, we lexicalize the triple $x
 
 \begin{table}[t]
     \centering\footnotesize
-    \begin{tabular}{lllll}
-        \textbf{dataset} & \textbf{method} & \textbf{predicate}          & \textbf{example \#1}                            & \textbf{example \#2}                     \\\midrule
-        WebNLG           & extracted       & \texttt{foundedBy}          & \textit{$o$ was the founder of $s$.}            & \textit{$s$ was founded by $o$.}         \\
-        E2E              & extracted       & \texttt{area}+\texttt{food} & \textit{$s$ offers $o_2$ cuisine in the $o_1$.} & \textit{$s$ in $o_1$ serves $o_2$ food.} \\
-        E2E              & manual          & \texttt{near}               & \textit{$s$ is located near $o$.}               & \textit{$o$ is close to $s$.}
+    \begin{tabular}{@{}lllll@{}}
+        \textbf{dataset} & \textbf{method} & \textbf{predicate}          & \textbf{example \#1}                       & \textbf{example \#2}                \\\midrule
+        WebNLG           & extracted       & \texttt{foundedBy}          & \et{} was the founder of \eh{}.            & \eh{} was founded by \et{}.         \\
+        E2E              & extracted       & \texttt{area}+\texttt{food} & \eh{} offers $\ets$ cuisine in the $\etf$. & \eh{} in $\etf$ serves $\ets$ food. \\
+        E2E              & manual          & \texttt{near}               & \eh{} is located near \et{}.               & \et{} is close to \eh{}.
     \end{tabular}
     \caption{Examples of templates we used in our experiments. The templates for the single predicates in the WebNLG dataset and the pairs of predicates in the E2E dataset are extracted automatically from the training data; the templates for the single predicates in E2E are created manually.}
     \label{tab:iterative:templates_ex}

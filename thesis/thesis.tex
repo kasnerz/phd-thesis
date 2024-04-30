@@ -202,15 +202,10 @@
 \definecolor{hlyellow}{RGB}{255, 230, 128}
 \newcommand{\hlyellow}[1]{{\leavevmode\color{hlyellow}{#1}}}
 
-\newcommand{\eh}{\colorbox{hlblue}{%
-\parbox{\widthof{X}}{%
-    X
-}}
-}
-\newcommand{\et}{\colorbox{hlyellow}{%
-\parbox{\widthof{Y}}{%
-    Y
-}}}
+\newcommand{\eh}{\colorbox{hlblue}{\parbox{\widthof{$s$}}{$s$}}}
+\newcommand{\et}{\colorbox{hlyellow}{\parbox{\widthof{$o$}}{$o$}}}
+\newcommand{\etf}{\colorbox{hlyellow}{\parbox{\widthof{$o_1$}}{$o_1$}}}
+\newcommand{\ets}{\colorbox{hlyellow}{\parbox{\widthof{$o_2$}}{$o_2$}}}
 
 \newcommand{\modeltemplates}{\mbox{T5-T}}
 \newcommand{\modelstruct}{\mbox{T5-S}}
