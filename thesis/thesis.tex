@@ -197,6 +197,20 @@
 \newcommand{\orange}[1]{{\leavevmode\color{orange}{#1}}}
 
 
+\definecolor{hlblue}{RGB}{115, 193, 214}
+\newcommand{\hlblue}[1]{{\leavevmode\color{hlblue}{#1}}}
+\definecolor{hlyellow}{RGB}{255, 230, 128}
+\newcommand{\hlyellow}[1]{{\leavevmode\color{hlyellow}{#1}}}
+
+\newcommand{\eh}{\colorbox{hlblue}{%
+\parbox{\widthof{X}}{%
+    X
+}}
+}
+\newcommand{\et}{\colorbox{hlyellow}{%
+\parbox{\widthof{Y}}{%
+    Y
+}}}
 
 \newcommand{\modeltemplates}{\mbox{T5-T}}
 \newcommand{\modelstruct}{\mbox{T5-S}}

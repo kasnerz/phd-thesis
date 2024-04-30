@@ -70,11 +70,11 @@ The following are our main contributions, following the research questions outli
 % \setlist[description]{labelindent=\parindent, leftmargin=0em}
 
 \begin{description}[leftmargin=\widthof{\textbf{Ad RQ1\ \ }}]
-    \item[Ad \ref{rq:1}] We show that  with a very \textbf{simple \ac{lm}-based finetuned baseline}, we can achieve strong results on a shared task of generating texts from a knowledge graph (\autoref{sec:finetuning}). We also point out the advantages and limitations of open \acp{llm} on \ac{d2t} generation in zero-shot settings (\autoref{sec:prompting}).
-    \item[Ad \ref{rq:2}] We show how to \textbf{transform the data to intermediate text-like input} suitable for \acp{lm} using handcrafted or automatically extracted templates (\Cref{sec:iterative,sec:pipeline,sec:sem-acc}), rule-based \ac{nlg} methods (\autoref{sec:tok-eval}), and specialized \acp{lm} (\autoref{sec:describing}). We show that these methods can serve as a basis both for competitive neural-based \ac{d2t} generation systems and for novel \ac{lm}-based evaluation metrics.
+    \item[Ad \ref{rq:1}] We show that  with a very \textbf{simple \ac{lm}-based finetuned baseline}, we can achieve strong results on a shared task of generating texts from a knowledge graph (\autoref{sec:finetuning}). We also point out the advantages and limitations of open \acp{llm} on \ac{d2t} generation in zero-shot settings (\autoref{sec:quintd}).
+    \item[Ad \ref{rq:2}] We show how to \textbf{transform the data to intermediate text-like input} suitable for \acp{lm} using handcrafted or automatically extracted templates (\Cref{sec:iterative,sec:pipeline,sec:sem-acc}), rule-based \ac{nlg} methods (\autoref{sec:tok-eval}), and specialized \acp{lm} (\autoref{sec:rel2text}). We show that these methods can serve as a basis both for competitive neural-based \ac{d2t} generation systems and for novel \ac{lm}-based evaluation metrics.
     \item[Ad \ref{rq:3}] We show how we can limit \acp{lm} to the task of improving text fluency and use these \acp{lm} for building \textbf{more controllable \ac{d2t} generation systems} with an iterative approach (\autoref{sec:iterative}) and modular architecture (\autoref{sec:pipeline}). We show that these systems open up a new way of thinking about neural-based \ac{lm} with a different set of trade-offs than rule-based or end-to-end systems.
     \item[Ad \ref{rq:4}] We develop \textbf{\ac{lm}-based automatic metrics} for evaluating outputs of \ac{d2t} generation systems on the level of data item mentions (\autoref{sec:sem-acc}) and output tokens (\autoref{sec:tok-eval}). We show that the metrics achieve strong correlations with human judgment in comparison with other metrics.
-    \item[Ad \ref{rq:5}] We \textbf{unify the format} of multiple \ac{d2t} generation datasets for easier processing and visualization (\autoref{sec:tabgenie}). Using novel datasets, we also \textbf{evaluate the output quality and semantic accuracy} of \acp{lm} across multiple \ac{d2t} tasks, data formats, and domains (\Cref{sec:prompting,sec:describing}).
+    \item[Ad \ref{rq:5}] We \textbf{unify the format} of multiple \ac{d2t} generation datasets for easier processing and visualization (\autoref{sec:tabgenie}). Using novel datasets, we also \textbf{evaluate the output quality and semantic accuracy} of \acp{lm} across multiple \ac{d2t} tasks, data formats, and domains (\Cref{sec:quintd,sec:rel2text}).
 \end{description}
 
 
@@ -101,8 +101,8 @@ The \Cref{chap:low-res,chap:evaluation,chap:tabgenie,chap:investigating}, which 
         \multicolumn{3}{l}{\textbf{\autoref{chap:tabgenie}: Data Processing and Visualization}}                                           \\
         §\ref{sec:tabgenie}   & \textsc{TabGenie} toolkit for \ac{d2t} datasets        & \citet{kasnerTabGenieToolkitTabletoText2023}     \\ \cdashlinelr{1-3}
         \multicolumn{3}{l}{\textbf{\autoref{chap:investigating}: Investigating Domain Generalization}}                                    \\
-        §\ref{sec:describing} & Describing unseen triples in a knowledge graph         & \citet{kasnerMindLabelsDescribing2022}           \\
-        §\ref{sec:prompting}  & \ac{d2t} generation across domains with open \acp{llm} & \citet{kasnerReferenceBasedMetricsAnalyzing2024} \\\bottomrule
+        §\ref{sec:rel2text}   & Describing unseen triples in a knowledge graph         & \citet{kasnerMindLabelsDescribing2022}           \\
+        §\ref{sec:quintd}     & \ac{d2t} generation across domains with open \acp{llm} & \citet{kasnerReferenceBasedMetricsAnalyzing2024} \\\bottomrule
     \end{tabular}
 
     \caption{Overview of the thesis.}
