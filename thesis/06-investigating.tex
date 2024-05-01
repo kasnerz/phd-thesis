@@ -2,7 +2,7 @@
 \chapter{Data-to-Text Generation with Custom Datasets}
 \label{chap:investigating}
 
-In this chapter, we observe and quantify behaviors of neural \acp{lm} in specific \ac{d2t} generation scenarios. To support our investigations, we venture beyond existing \ac{d2t} generation datasets.
+In this chapter, we observe behaviors of neural \acp{lm} in specific \ac{d2t} generation scenarios. To support our investigations, we venture beyond existing \ac{d2t} generation datasets.
 % There are several reasons why existing datasets may not be adequate: low variability of data labels, inadequate formats, or the issues with data contamination. 
 Building custom datasets helps us to overcome limitations of existing datasets and provide a more detailed picture for the task we set out to study.
 
@@ -143,8 +143,8 @@ We use 90\% of the remaining examples for the training set and 10\% for the vali
           \end{itemize}
 \end{itemize}
 
-
-\paragraph{Evaluation}
+\subsection{Evaluation Setup}
+\paragraph{Automatic Metrics}
 We evaluate generated outputs using an extensive set of automatic metrics from the GEM-metrics\footnote{\url{https://github.com/GEM-benchmark/GEM-metrics}} package \cite{gehrmannGEMBenchmarkNatural2021}. We use BLEU \cite{papineni2002bleu}, \mbox{METEOR} \cite{banerjee-lavie-2005-meteor}, and BLEURT \cite{sellam2020bleurt} for measuring lexical similarity. For semantic similarity, we use NUBIA \cite{kaneNUBIANeUralBased2020} along its individual features: the semantic similarity score (SS) on a 0-5 scale, the contradiction (C), neutral (N), and entailment (E) probabilities, and the perplexity score (PPL). To assess lexical diversity, we measure the number of unique n-grams (U-1), conditional entropy of bi-grams (CE2), and the mean segmental type-token ratio over segment lengths of 100 (MSTTR). We also measure the average output length in tokens (len). See \autoref{sec:evaluation} for detailed description of the metrics.
 
 \begin{table*}[t]
@@ -186,7 +186,7 @@ We evaluate generated outputs using an extensive set of automatic metrics from t
 \paragraph{Manual Error Analysis} Based on our preliminary observations, we identify four sources of model errors: semantic errors (\textsc{Sem}), with a swap of the relation direction (\textsc{Dir}) as a special case, too literal (\textsc{Lit}), i.e.\ containing awkward or misleading phrasing, and grammar/lexical errors (\textsc{Lex}). We further identified two types of input data errors: ambiguous relations (\textsc{Ent}) and relations with unclear labels (\textsc{Lbl}). Examples are shown in \autoref{tab:rel2text:cat}.
 For error analysis, we select 100 random examples together with their corresponding outputs from the \textit{\BARTr}, \textit{\BARTw}, \textit{\BARTk}, \textit{fewshot-100}, \textit{mask-all} and \textit{desc-cat} models. Without revealing the output sources, we mark all error categories that apply.
 
-\subsection{Results}
+\subsection{Findings from Automatic Metrics}
 \label{sec:rel2text:results}
 \begin{table*}[t]\centering
     \footnotesize
@@ -215,14 +215,16 @@ For error analysis, we select 100 random examples together with their correspond
 \end{table*}
 
 
-\paragraph{Lexical and Semantic Similarity} \autoref{tab:rel2text:auto} shows automatic scores for all our models.
+\autoref{tab:rel2text:auto} shows automatic scores for all our models.
+
+\paragraph{Lexical and Semantic Similarity}
 \BARTr{} is the best among the fully trained models in terms of lexical overlap metrics, which is expected, as it is trained on the most similar reference distribution. \BARTw{} and \BARTk{} models are almost equal in terms of semantic consistency, achieving around 90\% average entailment probability, which is on par with the copy baseline.
 
 \paragraph{Few-shot Models} For the few-shot models, semantic similarity is much lower (e.g.\ the average entailment probability is between 65\% and 85\%), showing that there is a certain minimum amount of data needed to achieve consistent outputs. As we show in \autoref{fig:rel2text:fewshot}, using more examples for training the model generally helps to decrease variance and increase performance across various metrics.
 
-\paragraph{Masked Relations} Interestingly, the models which do not see the relations during test time (\textit{mask-test} and \textit{mask-all}) still achieve around 60\% average entailment probability, similarly to the worst few-shot model. Although their rate of contradictions is higher than for other models, the results suggest that in many cases, the guessed relation is compatible with the correct relation. Another interesting observation is that the \textit{mask-train} model (trained not to use the labels) is able to use the labels provided at test time to improve the outputs considerably (contradiction rate drops from 17\% to 5\% compared to \textit{mask-all}).
+\paragraph{Masked Relations} Interestingly, the models which do not see the relations during test time (\textit{mask-test} and \textit{mask-all}) still achieve around 60\% average entailment probability, similarly to the worst few-shot model. Although their rate of contradictions is higher than for other models, the results suggest that in many cases, the guessed relation is semantically consisten with the correct relation. Another interesting observation is that the \textit{mask-train} model (trained not to use the labels) is able to use the labels provided at test time to improve the outputs considerably (contradiction rate drops from 17\% to 5\% compared to \textit{mask-all}).
 
-\paragraph{Influence of Descriptions} The fact that the short labels are both sufficient and necessary for the successful verbalization is emphasized by the fact that the \textit{desc-repl} model is worse than \BARTr{} (although the descriptions are longer and supposedly explain the relation semantics), and the benefits of concatenating the descriptions alongside the relation labels (\textit{desc-cat}) are negligible, only slightly improving lexical similarity metrics (0.5 BLEU point gain over \BARTr{}).
+\paragraph{Influence of Descriptions} The fact that the short labels are both sufficient and necessary for the successful verbalization is emphasized by the fact that the \textit{desc-repl} model is worse than \BARTr{} (although the descriptions are longer and supposedly explain the relation semantics). Moreover, the benefits of concatenating the descriptions alongside the relation labels (\textit{desc-cat}) are negligible, only slightly improving lexical similarity metrics (0.5 BLEU point gain over \BARTr{}).
 
 \paragraph{Lexical Diversity} In terms of lexical diversity, human references use more unique n-grams, but the model outputs are very similar in other aspects. It remains to be seen if the model outputs can stay semantically consistent with diversity-focused decoding techniques such as nucleus sampling \cite{holtzman2019curious}.
 
@@ -232,86 +234,62 @@ For error analysis, we select 100 random examples together with their correspond
     \caption{Boxplots for selected metrics from Table \ref{tab:auto} w.r.t. the number of examples (displayed on the \textit{x}-axis, $\textit{full} = 1522$), taking into account variance from individual random seeds (cf.\ Table~\ref{tab:autostdev}).}\label{fig:rel2text:fewshot}
 \end{figure}
 
-
-
-\paragraph{Error Analysis Results}
-Results are summarized in Figure \ref{fig:manual}; complete results are presented in Appendix \ref{app:manual}.
-Examples of model outputs for each error type are shown in Table~\ref{tab:cat}; more examples are given in Appendix~\ref{app:examples}.
-
-The \BARTk{} and \BARTw{} models use expressions that are too literal (\textsc{Lit}) in 23 and 29 cases, respectively, while the \BARTr{} and \textit{desc-cat} models do the same only in 11 cases (5 out of which are marked as \textsc{Lbl}, i.e., with an unclear label). This suggests that the variability of our dataset helps models to apply more natural expressions, especially if the relation is understandable from its label.
-
-There is a near-constant portion of examples where the models make a semantic error (\textsc{Sem}) \textit{and} the input is marked as needing an extra description (\textsc{Lbl}). The models also make relatively many semantic errors on their own, most prominently in the case of the \textit{fewshot-100} and the \textit{mask-all} models. The \textit{mask-all} model made a semantic error in 78 cases, suggesting that guessing the exact relation just from the entities is difficult (although still possible in 22 cases). Morevover, the outcomes from this model are fluent (only 4 \textsc{Lex} errors), making it hard to detect faulty cases.
-
-
-The case of swapping the relation direction (\textsc{Dir}) is surprisingly not that common. This is probably down to having only a few examples in our dataset prone to this kind of error.
-Notably, the results for \BARTr{} and \textit{desc-cat} are very similar, rendering the impact of extra descriptions negligible.
-
-Finally, there were only 12 out of 100 examples annotated as \textsc{Ent}, which suggests that the verbalization of the relation can be mostly decided irrespective of the entities in the triple.
-
-
-
+\subsection{Findings from Manual Error Analysis}
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.7\textwidth]{img/rel2text-graph.pdf}
-    \caption{Number of annotated errors per model (see §\ref{sec:manual} and Table~\ref{tab:cat} for the description of error categories and §\ref{sec:experiments} for the models). The striped part signifies that the label of the input was marked as unclear. See Appendix \ref{app:manual} for details.}\label{fig:rel2text:manual}
+    \caption{Number of annotated errors per model (see \autoref{tab:rel2text:cat} for the description of error categories and \autoref{sec:rel2text:analysis} for the models). The striped part signifies that the label of the input was marked as unclear.}
+    \label{fig:rel2text:manual}
 \end{figure}
+Results are summarized in \autoref{fig:rel2text:manual}; examples of model outputs for each error type are shown in \autoref{tab:rel2text:cat}.
+
+\paragraph{Naturalness of Expressions} The \BARTk{} and \BARTw{} models use expressions that are too literal (\textsc{Lit}) in 23 and 29 cases, respectively, while the \BARTr{} and \textit{desc-cat} models do the same only in 11 cases (5 out of which are marked as \textsc{Lbl}, i.e., with an unclear label). This suggests that the variability of our dataset helps models to apply more natural expressions, especially if the relation is understandable from its label.
+
+\paragraph{Semantic Errors} There is a near-constant portion of examples where the models make a semantic error (\textsc{Sem}) \textit{and} the input is marked as needing an extra description (\textsc{Lbl}). The models also make relatively many semantic errors on their own, most prominently in the case of the \textit{fewshot-100} and the \textit{mask-all} models. The \textit{mask-all} model made a semantic error in 78 cases, suggesting that guessing the exact relation just from the entities is difficult (although still possible in 22 cases). Morevover, the outcomes from this model are fluent (only 4 \textsc{Lex} errors), making it hard to detect faulty cases.
+The case of swapping the relation direction (\textsc{Dir}) is surprisingly not that common, which is probably down to having only a few examples in our dataset prone to this kind of error.
+
+\paragraph{Additional Clues} There were only 12 out of 100 examples annotated as \textsc{Ent}, which suggests that the verbalization of the relation can be mostly decided irrespective of the entities in the triple. Notably, the results for \BARTr{} and \textit{desc-cat} are very similar, rendering the impact of extra descriptions negligible.
 
 
+\subsection{Applications to Downstream Tasks}
+\label{sec:rel2text:downstream}
+Given that the \BARTr{} model can describe relations from their labels with high accuracy, we investigate if we can use the model to replace manually created templates in downstream tasks. We select two qualitatively different tasks, both using the idea of transforming individual input triples to simple sentences as a preprocessing step: tabular reasoning and zero-shot data-to-text generation.
 
-
-\section{Downstream Tasks}
-\label{sec:downstream}
-Given that the \BARTr{} model can describe relations from their labels with high accuracy, we investigate if we can use the model to replace manually created templates in downstream tasks. We select two qualitatively different tasks, both using the idea of transforming individual input triples to simple sentences as a preprocessing step: tabular reasoning (§\ref{sec:tab_res}) and zero-shot data-to-text generation (§\ref{sec:zeroshot}).
-
-\subsection{Tabular Reasoning}
-\label{sec:tab_res}
-
-\citet{gupta2020infotabs} presented the \textsc{InfoTabS} dataset as an NLI benchmark on tabular data. Each example is a structured table with a set of premises, i.e.\ natural language claims about the table; the task is to determine whether each premise is entailed by the table, contradicted by it, or neither.
-
-They represent the table as \textit{a paragraph} where each table cell is represented as a short sentence, mostly using a simple template \text{``The \textit{key} of \textit{title} are \textit{value}.''} \citet{neeraja2021incorporating} extend \citeauthor{gupta2020infotabs}'s approach, including a \textit{better paragraph representation} for which they prepare a fine-grained set of rules for individual entity categories. The rules\footnote{Formalized using more than 250 lines of Python code: \url{https://github.com/utahnlp/knowledge\_infotabs/blob/main/scripts/preprocess/bpr.py\#L120}} aim to minimize the number of ungrammatical sentences and improve the reasoning abilities of the NLI model.
-
-We replicate the setup of \citet{neeraja2021incorporating} for the original (OPR) and better (BPR) paragraph representation using their public codebase. We then replace their templates with our \BARTr{} model, verbalizing the triple (\textit{title}, \textit{key}, \textit{value}). The results are summarized in Table \ref{tab:nli}.
 
 \begin{table}[t]\centering
     \small
     \setlength{\tabcolsep}{4pt}
     \begin{tabular}{lcccc}\toprule
-        premise repr.                       & dev   & $\alpha_1$ & $\alpha_2$ & $\alpha_3$ \\\midrule
-        OPR \cite{gupta2020infotabs}        & 76.78 & 75.30      & 68.46      & 64.63      \\
-        BPR \cite{neeraja2021incorporating} & 77.04 & 74.44      & 67.46      & 63.17      \\
-        \BARTr{} (ours)                     & 74.44 & 74.31      & 64.59      & 63.46      \\
+        \textbf{premise repr.}              & \textbf{dev} & $\alpha_1$ & $\alpha_2$ & $\alpha_3$ \\\midrule
+        OPR \cite{gupta2020infotabs}        & 76.78        & 75.30      & 68.46      & 64.63      \\
+        BPR \cite{neeraja2021incorporating} & 77.04        & 74.44      & 67.46      & 63.17      \\
+        \BARTr{} (ours)                     & 74.44        & 74.31      & 64.59      & 63.46      \\
         \bottomrule
     \end{tabular}
-    \caption{Accuracy for the dev set and test sets  $\alpha_{1,2,3}$ from the \textsc{InfoTabS} dataset. The results are averaged over 3 random seeds.}\label{tab:nli}
+    \caption{Accuracy for the dev set and test sets  $\alpha_{1,2,3}$ from the \textsc{InfoTabS} dataset. The results are averaged over 3 random seeds.}
+    \label{tab:rel2text:nli}
 \end{table}
 
-Our preliminary manual evaluation suggests that the sentences from our model are indeed more grammatical (even compared to BPR). However, we observe that the
-performance is comparable across all three test sets. In line with \citet{mccoy2019right}, we conclude that for classification tasks such as NLI, the input content appears to be more important than the input form.
 
-\subsection{Zero-shot Data-to-Text Generation}
-\label{sec:zeroshot}
+\paragraph{Tabular Reasoning} For the task of \ac{nli} from a table, \citet{gupta2020infotabs} represent each table cell using a simple template \text{``The \textit{key} of \textit{title} are \textit{value}.''}. \citet{neeraja2021incorporating} extend their approach by preparing a fine-grained set of rules\footnote{Formalized using more than 250 lines of Python code: \url{https://github.com/utahnlp/knowledge\_infotabs/blob/main/scripts/preprocess/bpr.py\#L120}} for individual entity categories. We replicate the setup of \citet{neeraja2021incorporating} for the original (OPR) and better (BPR) paragraph representation using their public codebase. We then replace their templates with our \BARTr{} model, verbalizing the triple (\textit{title}, \textit{key}, \textit{value}). The results are summarized in Table \ref{tab:rel2text:nli}. Our preliminary manual evaluation suggests that the sentences from our model are indeed more grammatical (even compared to BPR), but we observe comparable performance across all three test sets. In line with \citet{mccoy2019right}, we conclude that for classification tasks such as NLI, the input content appears to be more important than the input form.
 
-\citet{kasner2022neural} proposed a setup for zero-shot D2T generation in which pretrained models are used to gradually transform text into the final description. The first step of the pipeline requires transforming individual triples into text. We focus on the WebNLG dataset, for which the authors manually created 354 templates.\footnote{Available at \url{https://github.com/kasnerz/zeroshot-d2t-pipeline/blob/main/templates/templates-webnlg.json}} We replicate the authors' setup using their public code, applying \BARTr{} instead of the templates.
-The results are summarized in Table \ref{tab:zeroshot}.
 
 \begin{table}[t]\centering
     \small
     \setlength{\tabcolsep}{4pt}
     \begin{tabular}{clcccc}\toprule
-        dataset                            & model    & BLEU  & METEOR & O     & H     \\\midrule
-        \multirow{2}{*}{\textit{filtered}} & orig     & 43.19 & 39.13  & 0.152 & 0.073 \\
-                                           & \BARTr{} & 45.39 & 38.97  & 0.056 & 0.161 \\\cdashlinelr{1-6}
-        \multirow{2}{*}{\textit{full}}     & orig     & 42.92 & 39.07  & 0.051 & 0.148 \\
-                                           & \BARTr{} & 44.63 & 38.93  & 0.058 & 0.166 \\
+        \textbf{dataset}                   & \textbf{model} & \textbf{BLEU} & \textbf{METEOR} & \textbf{O} & \textbf{H} \\\midrule
+        \multirow{2}{*}{\textit{filtered}} & orig           & 43.19         & 39.13           & 0.152      & 0.073      \\
+                                           & \BARTr{}       & 45.39         & 38.97           & 0.056      & 0.161      \\\cdashlinelr{1-6}
+        \multirow{2}{*}{\textit{full}}     & orig           & 42.92         & 39.07           & 0.051      & 0.148      \\
+                                           & \BARTr{}       & 44.63         & 38.93           & 0.058      & 0.166      \\
         \bottomrule
     \end{tabular}
-    \caption{Lexical similarity metrics (BLEU, METEOR) and ommission (O) and hallucinaton (H) rate; following the setup in \citet{kasner2022neural}.}\label{tab:zeroshot}
+    \caption{Lexical similarity metrics (BLEU, METEOR) and ommission (O) and hallucinaton (H) rate; following the setup in \citet{kasner2022neural}.}\label{tab:rel2text:zeroshot}
 \end{table}
 
-We note that the pipeline using our model for preprocessing is able to achieve improvements of $\sim$2 BLEU points, at the cost of a slightly higher omission and hallucination rate, but crucially without needing the manual effort to create templates.
-Cursory examination shows that sentences produced by our model are qualitatively similar to the manual templates, but more varied. Unlike the templates, our model may verbalize a relation differently depending on the context.
+\paragraph{Zero-shot Data-to-Text Generation} In \autoref{sec:pipeline}, we described our approach for zero-shot D2T generation which requires transforming individual triples into text \cite{kasner2022neural}. Here we replicate the setup on the WebNLG dataset, applying the \BARTr{} model instead of the templates. The results are summarized in Table \ref{tab:rel2text:zeroshot}.  We note that the pipeline using our model for preprocessing is able to achieve improvements of $\sim$2 BLEU points, at the cost of a slightly higher omission and hallucination rate, but crucially without needing the manual effort to create templates. Cursory examination shows that sentences produced by our model are qualitatively similar to the manual templates, but more varied. Unlike the templates, our model may verbalize a relation differently depending on the context.
 Overall, we argue that training a PLM on verbalizing individual relations can potentially replace the manual effort of creating simple templates, which will have a notable impact for scaling similar approaches to larger datasets.
-
 
 
 
