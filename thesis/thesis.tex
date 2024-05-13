@@ -130,7 +130,21 @@
 \usepackage{nameref}
 \usepackage{tcolorbox}
 
+\definecolor{incorrect}{HTML}{FFBCBC}
+\definecolor{notcheckable}{HTML}{E9D2FF}
+\definecolor{misleading}{HTML}{FFF79F}
+\definecolor{other}{HTML}{DDDDDD}
+
+
 \makeatletter % This line is needed for environment definitions
+% Define a new tcolorbox environment with rounded corners
+\newtcolorbox{verbatimbox}{
+  colback=white, % Background color
+  colframe=black!30, % Border color
+  arc=1pt, % Radius of the rounded corners
+  boxrule=0.5pt, % Border width
+  fontupper=\ttfamily % Use monospaced font for verbatim text
+}
 \newtcolorbox{refbox}{%
   fontupper=\small,
   fontlower=\small,
@@ -217,6 +231,11 @@
 \newcommand{\BARTk}{\textit{full-kelm}}
 \newcommand{\BARTw}{\textit{full-webnlg}}
 
+\newcommand*{\datatool}{\textsc{Quintd}}
+\newcommand*{\benchmark}{\textsc{Quintd}-1}
+\newcommand*{\gptmetric}{$\mathcal{E}_{\text{gpt}}$}
+\newcommand*{\humanmetric}{$\mathcal{E}_{\text{hum}}$}
+
 \usepackage{pifont}% http://ctan.org/pkg/pifont
 \newcommand{\cmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
@@ -245,8 +264,10 @@
 % colors for each error
 \newcommand{\errnum}[1]{{\leavevmode\color{errblue} \underLine{\textbf{#1\textsuperscript{N}}}}}
 \newcommand{\errent}[1]{{\leavevmode\color{errred} \underLine{\textbf{#1\textsuperscript{E}}}}}
+\newcommand{\errinc}[1]{{\leavevmode\color{errred} \underLine{\textbf{#1\textsuperscript{I}}}}}
 \newcommand{\errword}[1]{{\leavevmode\color{errorange} \underLine{\textbf{#1\textsuperscript{W}}}}}
 \newcommand{\errctx}[1]{{\leavevmode\color{erryellow} \underLine{\textbf{#1\textsuperscript{C}}}}}
+\newcommand{\errmis}[1]{{\leavevmode\color{erryellow} \underLine{\textbf{#1\textsuperscript{S}}}}}
 \newcommand{\errnc}[1]{{\leavevmode\color{errpurple} \underLine{\textbf{#1\textsuperscript{NC}}}}}
 \newcommand{\errother}[1]{{\leavevmode\color{errgrey} \underLine{\textbf{#1\textsuperscript{O}}}}}
 \newcommand{\errok}[1]{{\leavevmode\color{errok} \underLine{\textbf{#1\textsuperscript{O}}}}}

@@ -1,17 +1,14 @@
 \chapter{Low-Resource Data-to-Text Generation}
 \label{chap:low-res}
 
-
 In this chapter, we introduce three approaches for low-resource \ac{d2t} generation based on \acp{plm}. By \emph{low-resource}, we mean using as little data as possible for generating fluent and accurate text. We develop approaches that leverage the general-domain pretraining of \acp{plm} in order to generate texts in domains with thousands, hundreds, or even zero training examples.
 
-The data we focus on are \acs{rdf} (\Acl{rdf}) triples from factual knowledge graphs and meaning representations in dialogue systems. The main feature of these kinds of data is that we always want to verbalize the whole input. For larger data, we would need a separate content selection component, but our approaches are generalizable to other kinds of data which fulfill this requirement.
+The data we focus on are \emph{\acs{rdf} triples} from factual knowledge graphs in the WebNLG dataset and \emph{key-value meaning representations} in the E2E dataset. Both datasets were previously described in \autoref{sec:datasets}. These datasets assume that content selection was performed beforehand, i.e., we always want to verbalize the whole input.
 
-The simplest setting, presented in \autoref{sec:finetuning}, consists of finetuning a pretrained transformer encoder-decoder model. For finetuning the model, we need approximately thousands of in-domain examples. We show that this baseline is powerful, achieving competitive results on a shared task for generating knowledge graph descriptions. On top of that, we show that this approach generalizes to other languages than English, namely Russian.
+The most straightforward setting, presented in \autoref{sec:finetuning}, consists of finetuning mBART \cite{liuMultilingualDenoisingPretraining2020}, a pretrained transformer encoder-decoder model. For finetuning the model, we need approximately thousands of in-domain examples. We show that this baseline is powerful, achieving competitive results on a shared task for generating knowledge graph descriptions. On top of that, we show that this approach generalizes to languages other than English, namely Russian.
 
-In \Cref{sec:iterative,sec:pipeline}, we then present approaches which can generate texts with even \emph{more limited amount} of in-domain training examples. Our key idea is to use a \ac{plm} only as a tool for improving text fluency \emph{regardless of the content}, and delegating (possibly crude and basic, but factually correct) verbalization of the content to other, simpler tools. \autoref{sec:iterative} shows an approach using a text-editing model trained on iteratively fusing simple templates, which has a limited vocabulary focused on sentence fusion. The limited vocabulary and training objective pushes the model towards generating factually correct sentences. In \autoref{sec:pipeline}, we also add an ordering and aggregation step for generating more fluent texts. For each of these steps, we can train a \ac{plm} entirely on general-domain operations, reducing the need for in-domain examples to zero.
+In \Cref{sec:iterative,sec:pipeline}, we present approaches that can generate texts with an even more limited amount of in-domain training examples. Our key idea is to use a \ac{plm} only as a tool for improving text fluency \emph{regardless of the content} and delegating (possibly crude and basic, but factually correct) verbalization of the content to different, more controllable means. \autoref{sec:iterative} shows an approach based on a text-editing model, which has a limited vocabulary and is trained on iteratively fusing simple templates. The limited vocabulary and training objective helps the model to generate factually correct sentences. In \autoref{sec:pipeline}, we present an alternative approach that adds an ordering and aggregation step for generating more fluent texts. Moreover, we show how to train a \ac{plm} for all the steps entirely on general-domain operations, reducing the need for in-domain examples to zero.
 
-% \section{Motivation}
-% \label{sec:low-res-mot}
 \section{Finetuning Pretrained Language Models}
 \label{sec:finetuning}
 
@@ -20,7 +17,7 @@ In \Cref{sec:iterative,sec:pipeline}, we then present approaches which can gener
 \end{refbox}
 
 
-In this section, we introduce a simple approach for generating knowledge graph descriptions. Our approach is based on finetuning a multi-lingual \ac{plm} on linearized graphs and the accompanying human-written descriptions from the WebNLG dataset. In the WebNLG+ Shared Task, our model placed in the first third of the leaderboard for English and first or second for Russian on automatic metrics, and in the best or second-best system cluster on human evaluation.
+In this section, we introduce a simple approach for generating knowledge graph descriptions. Our approach is based on finetuning a multi-lingual \ac{plm} on linearized graphs and the accompanying human-written descriptions from the WebNLG dataset. In the WebNLG+ Shared Task, our model ranked in the first third of the leaderboard for English and the first or second for Russian on automatic metrics. It also made it in the best or second-best system cluster on human evaluation. Our approach shows how, with a moderate amount of finetuning data, a simple \ac{plm}-based baseline can achieve satisfactory results for the task. We also highlight the remaining shortcomings of such an approach.
 
 \subsection{WebNLG+ Shared Task}
 \label{sec:webnlgp}
