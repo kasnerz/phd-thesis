@@ -19,13 +19,13 @@ In this section, we work our way towards neural \acp{lm}. We start with the math
 
 \subsection{Neural Networks}
 \label{sec:nns}
-Neural networks will give us a tool for learning patterns from data.\footnote{Until we get to \ac{d2t} generation in \autoref{sec:d2t}, we will use the word ``\textit{data}'' only in its abstract sense, as in ``any inputs we can apply our algorithms to''. We will use the term ``structured data'' whenever it is necessary to make the distinction.} Such a tool will help us with learning language patterns from large-scale textual data, and in turn with generating text.
+Neural networks are a tool for learning patterns from data.\footnote{Until we get to \ac{d2t} generation in \autoref{sec:d2t}, we use the word ``\textit{data}'' only in its abstract sense, as in ``any inputs we can apply our algorithms to''. We use the term ``structured data'' whenever it is necessary to make the distinction.} Such a tool will help us with learning language patterns from large-scale textual data, and in turn with generating text.
 
 To begin, let's say our goal is to predict real-number output $y \in \mathbb{R}$ for the given vector of real numbers $\mathbf{x} = (x_1, \ldots, x_d) \in \mathbb{R}^d$.
 % \footnote{We will follow the convention that vectors are denoted with boldface letters ($\mathbf{x}$), and real numbers with plain letters ($x$).} 
-We assume that the $\mathbf{x} \rightarrow y$ mapping is not arbitrary---that would leave us with memorizing all the $(\mathbf{x},y)$ pairs---but follows some regularities and underlying patterns that can be learned. This assumption will be naturally satisfied if we consider $(\mathbf{x},y)$ to be representations of real-world data, e.g., documents and their labels.
+We assume that the $\mathbf{x} \rightarrow y$ mapping is not arbitrary---that would leave us with memorizing all the $(\mathbf{x},y)$ pairs---but follows some regularities and underlying patterns that can be learned. This assumption is naturally satisfied if we consider $(\mathbf{x},y)$ to be representations of real-world data, e.g., documents and their labels.
 
-We will use mathematical models designed to capture the patterns in their parameters to learn the mapping. The models estimate the parameters from a set of $(\mathbf{x},y)$ examples called the \textit{training data} and use the parameters to predict the outputs on a separate set of examples (generally assumed to come from the same data-generating distribution) called the \textit{test data}.
+We use mathematical models designed to capture the patterns in their parameters to learn the mapping. The models estimate the parameters from a set of $(\mathbf{x},y)$ examples called the \textit{training data} and use the parameters to predict the outputs on a separate set of examples (generally assumed to come from the same data-generating distribution) called the \textit{test data}.
 
 \paragraph{Perceptron Algorithm} One of the early mathematical models designed for learning patterns from data is the \emph{perceptron algorithm} (\citealp{rosenblatt1958perceptron}, \citealp[p.~192]{bishop2006pattern}). For the perceptron algorithm, we need to restrict the output to a binary class label: $y \in \{-1, 1\}$. The algorithm learns the parameters $\textbf{w} = (w_1, \ldots, w_d) \in \mathbb{R}^d$ and the bias $b \in \mathbb{R}$ describing a linear decision boundary separating the data points according to their class label. The algorithm proceeds as follows:
 
@@ -41,7 +41,7 @@ We will use mathematical models designed to capture the patterns in their parame
     \item The step (2) is repeated until convergence.
 \end{enumerate}
 
-The perceptron algorithm is guaranteed to converge if a hyperplane exists that separates the data belonging to one class from another; otherwise, it will not converge \cite{novikoff1962convergence}.
+The perceptron algorithm is guaranteed to converge if a hyperplane exists that separates the data belonging to one class from another; otherwise, it does not converge \cite{novikoff1962convergence}.
 
 \paragraph{Multi-layer Perceptron} To overcome the fact that the perceptron is limited to linear decision boundaries, we can use a \emph{\acl{mlp}} (\acs{mlp}\glsunset{mlp}; \citealp[p.~164]{goodfellow2016deep}). This mathematical model---also known as a \emph{feed-forward neural network}---can approximate any bounded continuous function \cite{hornik1989multilayer}.
 
@@ -49,8 +49,7 @@ As the name suggests, \ac{mlp} processes the input with multiple perceptron-like
 \begin{align}
     o & = f(\mathbf{x}^\top \mathbf{w}  + b),
 \end{align}
-% \begin{itemize}
-where $f: \mathbb{R} \rightarrow \mathbb{R}$ is the \emph{activation function}, $\mathbf{x}\in \mathbb{R}^n$ is the input vector, and $\mathbf{w} \in \mathbb{R}^n$ and $b \in \mathbb{R}$ are learnable parameters. Instead of signum, \ac{mlp} uses differentiable non-linear functions, nowadays most commonly the \acl{relu} (\acs{relu}\glsunset{relu}; \citealp{nair2010rectified}) or its adapted version \acl{gelu} (\acs{gelu}\glsunset{gelu}; \citealp{hendrycks2016gaussian}).
+where $f: \mathbb{R} \rightarrow \mathbb{R}$ is the \emph{activation function}, $\mathbf{x}\in \mathbb{R}^n$ is the input vector, and $\mathbf{w} \in \mathbb{R}^n$ and $b \in \mathbb{R}$ are learnable parameters. Instead of signum, \ac{mlp} uses differentiable non-linear functions, nowadays most commonly the \acl{relu} (\acs{relu}\glsunset{relu}; \citealp{nair2010rectified}), where $f(x) = \text{max}(0, x)$, or its variants \cite{hendrycks2016gaussian,dubey2022activation}.
 
 For efficiency, the neurons are organized in layers, which enables formulating \ac{mlp} computations in terms of matrix multiplication. The $i$-th layer of \ac{mlp} is parametrized with a matrix $\mathbf{W}_i \in \mathbb{R}^{d\times n}$ and a vector of biases $\mathbf{b}_i \in \mathbb{R}^{n}$, processing the intermediate output called the \textit{hidden state} $\mathbf{h}_{i-1} \in \mathbb{R}^{d}$ (where we set $\textbf{h}_0 = \textbf{x}$):
 \begin{align}
@@ -58,9 +57,9 @@ For efficiency, the neurons are organized in layers, which enables formulating \
 \end{align}
 
 To estimate the parameters of the network, we need to \emph{train} the network using the training data. For each training example $(\mathbf{x}, y)$, we first do a \emph{feed-forward pass}: we feed $\mathbf{x}$ into the network and use the current parameters of the network to get the prediction $\hat{y}$. We then update the parameters to minimize the gap between the predicted output $\hat{y}$ and the ground truth output $y$. This gap is described by a \textit{loss function} $\mathcal{L}(y, \hat{y}) \rightarrow \mathbb{R}$.
-Since all the computations in \ac{mlp} are differentiable, we can compute exactly how much each parameter contributes to the loss function using the chain rule for derivatives. The derivative for each parameter---called a \emph{gradient} when grouped in a vector---directly influences the size of the update. The process of computing and applying the updates is called a \emph{backward pass} (or backpropagation; \citealp{kelley1960gradient,rumelhart1986learning}) and operates in the reverse order of layers. The overall magnitude of the updates is controlled by parameter $\alpha \in \mathbb{R}$ called the \emph{learning rate}.
+Since all the computations in \ac{mlp} are differentiable, we can compute exactly how much each parameter contributes to the loss function using the chain rule for derivatives. The derivative for each parameter---called a \emph{gradient} when grouped in a vector---directly influences the size of the update. The process of computing and applying the updates is called a \emph{backward pass} (or backpropagation; \citealp{kelley1960gradient,rumelhart1986learning}) and operates in the reverse order of layers. The magnitude of the updates is controlled by the \emph{learning rate} $\alpha \in \mathbb{R}$.
 
-One of the basic optimizers---i.e., the algorithms for updating the parameters---is the {\acl{sgd} (\acs{sgd}\glsunset{sgd}; \citealp[p.~275]{goodfellow2016deep}). SGD estimates the gradient in each step using a limited number of examples called a \emph{batch} and directly updates the parameters in the direction of the gradient. There are also more advanced optimizers, such as Adam \cite{kingma2014adam}, which adapts the learning rate for each parameter based on the history of the gradients.
+One of the basic optimizers (i.e., the algorithms for updating the parameters) is the {\acl{sgd} (\acs{sgd}\glsunset{sgd}; \citealp[p.~275]{goodfellow2016deep}). SGD estimates the gradient in each step using a limited number of examples called a \emph{batch} and directly updates the parameters in the direction of the gradient. More advanced optimizers, such as Adam \cite{kingma2014adam}, also adapt the learning rate for each parameter based on the history of the gradients, helping to make the convergence more robust.
 
 \paragraph{Recurrent Neural Networks} Unlike with \acp{mlp}, where we the size of the input is fixed, \acp{rnn} allow us to process a sequence of inputs $\mathbf{X} = (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ of arbitrary length. An \ac{rnn} computes a sequence of hidden states $\mathbf{H} = (\mathbf{h}^{(0)}, \ldots, \mathbf{h}^{(n)})$, i.e., one state for each input in the sequence. $\mathbf{H}$---or sometimes more specifically, the last hidden state $\mathbf{h}^{(n)}$---is the encoded representation of the input sequence, which can be in turn used in downstream tasks (e.g., for tagging or classifying the sequence).
 
@@ -70,12 +69,12 @@ The \ac{rnn} computes the hidden states $\mathbf{H}$ by repeatedly applying a fu
 \end{align}
 where the first hidden state $\mathbf{h}^{(0)} \in \mathbb{R}^k$ is initialized randomly.  The function $f$ is generally implemented as a series of matrix multiplications and non-linear functions. The exact implementation of $f$ can get more complex with advanced \ac{rnn} architectures such as LSTM \cite{hochreiter1997long} or GRU \cite{cho2014learning}.
 
-\acp{rnn} had various successes across \ac{nlp} on sequence processing tasks \cite{karpathy2015unreasonable,salehinejad2017recent}. At the same time, \acp{rnn} turned out to have various shortcomings, such as the vanishing gradient problem, the fixed size of the hidden state, and limited possibilities of parallelization; all of which made it hard to model long-term dependencies and train the network efficiently \cite{hochreiter1998vanishing,pascanu2013difficulty}. We will return to \acp{rnn} mainly in \autoref{sec:transformer}, showing how it became a predecessor to the transformer architecture.
+\acp{rnn} had various successes across \ac{nlp} on sequence processing tasks \cite{karpathy2015unreasonable,salehinejad2017recent}. At the same time, \acp{rnn} turned out to have various shortcomings, such as the vanishing gradient problem, the fixed size of the hidden state, and limited possibilities of parallelization; all of which made it hard to model long-term dependencies and train the network efficiently \cite{hochreiter1998vanishing,pascanu2013difficulty}. We return to \acp{rnn} mainly in \autoref{sec:transformer}, showing how it became a predecessor to the transformer architecture.
 
 
 \subsection{Text Representation}
 \label{sec:text-repr}
-In this section, we will look into how we can represent text in neural networks.
+In this section, we look into how we can represent text in neural networks.
 
 \paragraph{One-Hot Encoding}
 % Until now, we have assumed that the input to a network is a vector of real numbers. However, a
@@ -90,10 +89,10 @@ The naive way to represent each token would be using its integer value. However,
 \end{align}
 While this representation is more sound, it is quite sparse and does not capture the semantics of individual tokens, which puts high requirements on the representational capacity of the network.
 
-\paragraph{Word Embeddings} A more useful representation of tokens would be the one in which the tokens with similar meanings would also be close in the vector space. To get this representation, we can build on the distributional theory of meaning, according to which the meaning of a token is defined by a context in which it occurs \cite{harris1954distributional,firth1957synopsis}.
+\paragraph{Word Embeddings} A more useful representation of tokens is the one in which the tokens with similar meanings are also close in the vector space. To get this representation, we can build on the distributional theory of meaning, according to which the meaning of a token is defined by a context in which it occurs \cite{harris1954distributional,firth1957synopsis}.
 % A straightforward implication of the theory is that the tokens with similar meanings tend to occur in similar contexts. 
 
-This idea is used in the Word2Vec algorithm \cite{mikolov2013distributed}. The algorithm trains an \ac{mlp} for a specific objective and uses its weigths as token representations. The \ac{mlp} training objective (illustrated in \autoref{fig:word2vec}) either consists of predicting the tokens in the neighborhood of each token (the \emph{skip-gram} objective) or vice versa, the token itself based on the tokens in its neighborhood (the \emph{continuous bag-of-words} objective). The output of the algorithm is an \textit{embedding matrix} $\mathbf{W}_e \in \mathbb{R}^{|V|\times d}$, which assigns each token a $d$-dimensional \textit{embedding vector} $\mathbf{x} \in \mathbb{R}^{d}$.
+In the context of neural networks, this idea is used in the Word2Vec algorithm \cite{mikolov2013distributed}. The algorithm trains an \ac{mlp} for a specific objective and uses its weigths as token representations. The \ac{mlp} training objective (illustrated in \autoref{fig:word2vec}) either consists of predicting the tokens in the neighborhood of each token (the \emph{skip-gram} objective) or vice versa, the token itself based on the tokens in its neighborhood (the \emph{continuous bag-of-words} objective). The output of the algorithm is an \textit{embedding matrix} $\mathbf{W}_e \in \mathbb{R}^{|V|\times d}$, which assigns each token a $d$-dimensional \textit{embedding vector} $\mathbf{x} \in \mathbb{R}^{d}$.
 
 \begin{figure*}[ht]
     \centering
@@ -118,47 +117,52 @@ This idea is used in the Word2Vec algorithm \cite{mikolov2013distributed}. The a
     \label{fig:word2vec}
 \end{figure*}
 
+The notion of using an embedding matrix for representing tokens is used also in neural \acp{lm} (\autoref{sec:lm-basics}). However, in majority of neural \acp{lm}, the embedding matrix is not trained separately with a specific algorithm, but jointly with the rest of the network.
 
-The idea of representing tokens with embedding vectors is employed in neural \acp{lm} described later in this section. However, it should be noted that the embedding matrix is not trained separately with the algorithm above but jointly with the rest of the network.
+\paragraph{Tokenization} Until now, we have implicitly assumed that we have a way of tokenizing the text, i.e. splitting it into discrete units. The most straightforward way is to tokenize the text into words or characters. However, these approaches have major shortcomings. Word-level tokenization considers morphologically similar words as independent units, forcing the model to learn their representation separately. It also becomes more difficult for languages such as Chinese, which do not separate words with spaces. In contrast, character-level tokenization is computationally inefficient and gives us less meaningful units.
 
-\paragraph{Tokenization} Until now, we have implicitly assumed that we have a way of splitting the text into tokens. Naively, we could split the text into words or characters. However, these approaches have shortcomings. Word-level tokenization will not allow us to cluster together morphologically similar words, and it also becomes more difficult for languages such as Chinese, which do not separate words with spaces. In contrast, character-level tokenization is computationally inefficient and gives us less meaningful units.
+\emph{Subword tokenization}  is the middle ground between the word-level and character-level tokenization. It splits the text into smaller pieces called \emph{subwords}, which are continous character spans of various length. With subword tokenization, frequently used words typically get their own subword while less frequent words are split into multiple subwords.
 
-\emph{Subword tokenization}  is the middle ground between the word-level and character-level tokenization. It splits the text into smaller pieces called \emph{subwords} so that frequently used words get their own subword while less frequent words are split into multiple subwords. The subword tokenization algorithm that is frequently used in neural \acp{lm} is \emph{\acl{bpe}} (\acs{bpe}\glsunset{bpe}; \citealp{sennrich2016neural}). The \ac{bpe} algorithm starts with the vocabulary of individual bytes, iteratively merging the most frequent tokens and adding them to the vocabulary $V$ until we reach the target vocabulary size. An example subword tokenization of the expression ``Subword tokenization'' could be the subwords \texttt{ ['Sub', 'word', '▁token', 'ization']}, where ``\texttt{▁}'' is a special character denoting a preceding space.
+The subword tokenization algorithm that is commonly used in neural \acp{lm} is \emph{\acl{bpe}} (\acs{bpe}\glsunset{bpe}; \citealp{sennrich2016neural}). The \ac{bpe} algorithm starts with the vocabulary of individual bytes, iteratively merging the most frequent tokens and adding them to the vocabulary $V$ until we reach the target vocabulary size. An example subword tokenization of the expression ``Subword tokenization'' could be the subwords \texttt{ ['Sub', 'word', '▁token', 'ization']}, where ``\texttt{▁}'' is a special character denoting a preceding space.
 
 
 \subsection{Language Modeling}
 \label{sec:lm-basics}
-After establishing the theory of neural networks and showing how to represent text for neural networks, we can explain the notion of \emph{language modeling}, which will have direct applications in text processing.
+After establishing the theory of neural networks and showing how to represent text in neural networks, we are ready to explain the notion of \emph{language modeling}, a central concept for building neural \acp{lm}.
 
-\paragraph{Language Models} The central concept for text processing using neural networks is a \emph{language model}: a mathematical model that estimates a probability of a sequence of tokens $X = (x_1, \ldots, x_n)$. To simplify the probability estimation, we can factorize the probability into a product of conditional probabilities using the chain rule:
+\paragraph{Language Model} A \emph{language model} is a mathematical model that estimates a probability of a sequence of tokens $X = (x_1, \ldots, x_n)$. To estimate the probability, we can factorize the sequence probability using the chain rule:
 \begin{align}
     P(X) = \prod_{i=1}^n P(x_i|x_1, \hdots, x_{i-1}).
 \end{align}
-However, this formulation is still impractical: such a model would require too many parameters, and it would be difficult to estimate the parameters for longer sequences. An \emph{n}-gram \ac{lm} (parametrized by a positive integer $n$) simplifies the product using the assumption that the probability of a token depends only on $N-1$ previous tokens:
+This formulation gives us a way to compute the probability of the whole sequence as the product of probabilities of individual sequence prefixes.
+
+\paragraph{\emph{n}-gram Language Model} An \emph{n}-gram \ac{lm} (parametrized by a positive integer $n$) further simplifies the product using the assumption that the probability of a token depends only on $N-1$ previous tokens \cite[p.32]{jurafsky2024}:
 \begin{align}
     P(X) = \prod_{i=1}^T P(x_i|x_{i-N+1}, \hdots,x_{i-1}).
 \end{align}
-The \emph{n}-gram \acp{lm} can be trained by estimating probabilities for individual \emph{n}-grams by counting the occurrences of $n$-grams in a text corpus. The main limitation of $n$-gram \acp{lm} (besides the size of the look-up tables) is the limit on the length of the context for each token, due to which \emph{n}-gram \acp{lm} fail to capture long-term dependencies.
+\emph{n}-gram \acp{lm} can be trained by estimating probabilities for individual \emph{n}-grams by counting the occurrences of $n$-grams in a text corpus, storing the counts for each $n$-gram in a look-up table. The main limitation of $n$-gram \acp{lm} (besides the size of the look-up tables) is the limit on the length of the context for each token, due to which \emph{n}-gram \acp{lm} fail to capture long-term dependencies.
 
 
 
 
-\paragraph{Neural Language Model} A neural \ac{lm} is a \acl{lm} that estimates the text probability $P_\theta(X)$ using a neural network with parameters $\theta$. To learn $P_\theta(X)$, we can minimize a specific loss function (see \autoref{sec:nns}): the cross-entropy between the model distribution $P_\theta$ and the empirical distribution of sequences in the corpus $P$:
+\paragraph{Neural Language Model} A neural \ac{lm} is a \acl{lm} that estimates the text probability $P_\theta(X)$ using a neural network with parameters $\theta$. In contrast with \emph{n}-gram \acp{lm}, neural \acp{lm} can capture long-term dependencies and efficiently store the probability distribution in their parameters.
+
+To learn $P_\theta(X)$, we can train the model to minimize the gap between the model distribution $P_\theta$ and the empirical distribution of sequences in the corpus $P$. For the loss function, the gap can be expressed as a cross-entropy $H$ between $P_\theta$ and $P$:
 \begin{align}
     \mathcal{L} = H(P,P_\theta) = \mathbb{E}_P(-\log P_\theta) = -\sum_{\mathbf{x}\in C}p(X)\log p_{\theta}(X).
 \end{align}
+We discuss the training objectives for specific model architectures in more detail in \autoref{sec:plms}.
 
-In contrast with \emph{n}-gram \acp{lm}, neural \acp{lm} can capture long-term dependencies and efficiently store the probability distribution in their parameters.
 
 \subsection{Transformer Architecture}
 \label{sec:transformer}
-In this section, we will pave the way towards the \emph{transformer}: the core neural architecture used in \ac{nlp} nowadays. We will describe its individual components and describe in high-level terms how the architecture is used for text processing.
+In this section, we pave the way towards the \emph{transformer} \cite{vaswani2017attention}: the core neural architecture used in \ac{nlp} nowadays. We describe its individual components and how the transformer is used for text processing.
 
 \paragraph{Encoder-Decoder Framework}
-We have described the \ac{rnn} (\autoref{sec:nns}) as a neural network that can \emph{encode} an input sequence into hidden states. The encoder-decoder framework \cite{sutskever2014sequence,cho2014learning} will also allow us to \emph{generate an output sequence}. The idea is to use another network called the \emph{decoder} for generating the sequence, using the last hidden state of the encoder as its initial state. Here, we illustrate how the framework is applied using two \acp{rnn}:
+We have described the \ac{rnn} (\autoref{sec:nns}) as a neural network that can \emph{encode} an input sequence into hidden states. The encoder-decoder framework \cite{sutskever2014sequence,cho2014learning} allows us to also \emph{generate an output sequence}. The idea is to use another network called the \emph{decoder} for generating the sequence, using the last hidden state of the encoder as its initial state. Here, we illustrate how the framework is applied using two \acp{rnn}:\footnote{Later adapting the general idea also for the transformer architecture.}
 
 \begin{enumerate}
-    \item The \ac{rnn} called the \emph{encoder} encodes the sentence of input embeddings $\mathbf{X}= (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ into a hidden state $\mathbf{h}_e$ by repeatedly applying a transformation $\mathcal{E}$ in each timestep $t\in(1,n)$:
+    \item The \ac{rnn} called the \emph{encoder} encodes the sentence of input embeddings $\mathbf{X}= (\mathbf{x}_1, \ldots, \mathbf{x}_n)$ into a sequence of hidden states $\mathbf{H}_e = \{\mathbf{h}_e^{(0)}, \ldots, \mathbf{h}_e^{(n)}\}$ (where $\mathbf{h}_e^{(0)}$ is a null vector) by repeatedly applying a transformation $\mathcal{E}$ in each timestep $i\in(1,n)$:
           \begin{align}
               \mathbf{h}_e^{(i)} = \mathcal{E}(\mathbf{h}_e^{(i-1)}, \mathbf{x}_i).
           \end{align}
@@ -170,7 +174,7 @@ We have described the \ac{rnn} (\autoref{sec:nns}) as a neural network that can 
 
 Note that the decoder produces the output sequence iteratively, yielding a token $y_j$ in each timestep. This process is called \emph{autoregressive decoding} and is described in more detail in \autoref{sec:plms}.
 
-\paragraph{Attention Mechanism} We have already mentioned that the hidden state of an \ac{rnn} has a fixed size, which limits the amount of information the network can capture about a sequence. The \emph{attention mechanism} \cite{bahdanau2015neural} enables the decoder to extract the information dynamically from the encoded sequence. In each step $j$, the decoder computes a context vector $c_j$ as the weighted sum of the hidden states of the encoder $\{\mathbf{h}_e^{(0)}, \ldots, \mathbf{h}_e^{(n)}\}$ using the attention matrix $\mathbf{W}_a$:
+\paragraph{Attention Mechanism} We have mentioned that the hidden state of an \ac{rnn} has a fixed size, which limits the amount of information the network can capture about a sequence. The \emph{attention mechanism} \cite{bahdanau2015neural} enables the decoder to extract the information dynamically from the encoded sequence. In each step $j$, the decoder computes a context vector $c_j$ as the weighted sum of the hidden states of the encoder $\mathbf{H}_e$ using the attention matrix $\mathbf{W}_a$:
 \begin{align}
     \alpha_{ji}  & = \operatorname{softmax}(\mathbf{h}_d^{(j)}\mathbf{W}_a \mathbf{h}_e^{(i)}), \\
     \mathbf{c}_j & = \sum_i \alpha_{ji} \mathbf{h}_e^{(i)}.
@@ -189,7 +193,7 @@ where the \emph{value vector} of each token is computed using a trainable \emph{
 \begin{align}
     \mathbf{v}_i = \mathbf{x}_i \mathbf{W_v}.
 \end{align}
-To get the attention weights $\alpha_{ij}$, we first compute \textit{query} and \textit{key} vectors for each token using trainable matrices $\mathbf{W_q}$ and $\mathbf{W_k} \in \mathbb{R}^{n,d}$. Each weight is then a normalized dot product of the corresponding vectors:
+To get the attention weights $\alpha_{ij}$, we first compute \textit{query} and \textit{key} vectors for each token using trainable matrices $\mathbf{W_q}$ and $\mathbf{W_k} \in \mathbb{R}^{n,d}$. Each weight is a normalized dot product of the corresponding vectors:
 \begin{align}
     \mathbf{q}_i & = \mathbf{x}_i \mathbf{W_q}                                                      \\
     \mathbf{k}_i & = \mathbf{x}_i \mathbf{W_k}                                                      \\
@@ -210,30 +214,28 @@ The operations can be efficiently parallelized using matrix multiplication:
 \end{figure*}
 
 
-\paragraph{Transformer Architecture} The \emph{transformer}\footnote{Although \citet{vaswani2017attention} uses ``Transformer'' with a capital ``T'', the orthography is gradually shifting towards the variant with a lower-case ``t''. See, e.g., \citet[p.~215]{jurafsky2024}.} \cite{vaswani2017attention} is a neural network architecture that can process sequences efficiently in parallel. To achieve that, the transformer replaces the \ac{rnn} hidden state (previously used for sharing information among tokens in a single sequence) with the self-attention mechanism applied over a series of layers.
+\paragraph{Transformer Architecture} The \emph{transformer}\footnote{Although \citet{vaswani2017attention} use ``Transformer'' with a capital ``T'', the orthography is gradually shifting towards the variant with a lower-case ``t''. See, e.g., \citet[p.~215]{jurafsky2024}.} \cite{vaswani2017attention} is a neural network architecture that can process sequences efficiently in parallel. To achieve that, the transformer replaces the \ac{rnn} hidden state (previously used for sharing information among tokens in a single sequence) with the self-attention mechanism applied over a series of layers.
 
-Specifically, each layer is composed of two sublayers: (a) the \emph{self-attention layer} and (b) the \emph{\ac{mlp} layer}. The output of the $i$-th sublayer is added to its original input $\mathbf{H}^{(i)}$ in a so-called residual connection:
+Specifically, each layer is composed of two sublayers: (a) the \emph{self-attention layer} and (b) the \emph{\ac{mlp} layer}. The output of the $i$-th sublayer is added to its original input $\mathbf{H}^{(i)}$ in a \emph{residual connection}:
 \begin{align}
     \mathbf{H}^{(i+1)} = \mathbf{H}^{(i)} + \operatorname{sublayer}(\mathbf{H}^{(i)}).
 \end{align}
 The sublayers serve a different purpose: while the \ac{mlp} layer computes element-wise operations over each token, the self-attention layer enables sharing information among tokens. The sublayer input (or output, depending on the architecture variant) is normalized using \emph{layer normalization} \cite{ba2016layer}.
 
-To get the input representation $\mathbf{H}^{(0)}$, we sum the token embeddings $\mathbf{X} \in \mathbb{R}^{n,d}$ with \emph{positional embeddings}. Positional embeddings encode the absolute or relative\footnote{There are multiple variants of positional embeddings with various trade-offs. We do not go into detail here; see \citet{dufter2022position} for an overview.} position information of individual tokens. We need positional embeddings since the sequence processing is parallelized, and the model thus cannot represent the token position as a ``timestep''.
-
-
+To get the input representation $\mathbf{H}^{(0)}$, we sum the token embeddings $\mathbf{X} \in \mathbb{R}^{n,d}$ with \emph{positional embeddings}. Positional embeddings encode the absolute or relative position information of individual tokens, which needs to be represented explicitly in parallel processing.\footnote{There are multiple variants of positional embeddings with various trade-offs; see \citet{dufter2022position} for an overview.}
 
 
 % We train the model on \emph{batches} of data, using an optimization algorithm such as \acl{sgd} (\acs{sgd}\glsunset{sgd}; \citealp[p.~275]{goodfellow2016deep}) or Adam \cite{kingma2014adam}. The batch size $b$ and the learning rate $\alpha$ are the training hyperparameters.
 As shown in \autoref{fig:transformer}, the original Transformer architecture is based on the encoder-decoder framework. The decoder layers implement two additional features:
 \begin{itemize}
-    \item Each layer contains another sublayer called the \emph{encoder-decoder attention}. In contrast to the self-attention mechanism, the \emph{keys} and \emph{values} come from the last layer of the encoder, enabling the decoder to attend to the encoded sequence.
-    \item The self-attention is \emph{masked} so that each token can collect information only from the preceding tokens, which is necessary to enable text generation using left-to-right autoregressive decoding.
+    \item Each layer contains an additional sublayer called the \emph{encoder-decoder attention}. In contrast to the self-attention mechanism, the \emph{keys} and \emph{values} come from the last layer of the encoder, enabling the decoder to attend to the encoded sequence.
+    \item The self-attention is \emph{masked} so that each token can collect information only from the preceding tokens, which is necessary to enable training the model for left-to-right autoregressive decoding.
 \end{itemize}
 After the last decoder layer, the hidden states are projected into a matrix of size $\mathbb{R}^{|V|\times n}$ and normalized using softmax, producing a probability distribution over the vocabulary for each input token.
 
 \subsection{Pretrained Language Models}
 \label{sec:plms}
-It turns out that training a transformer from scratch is not practical. To achieve good performance on downstream tasks, we typically need large-scale training data and spend extensive time training the model. The workflow that was gradually established after the introduction of the transformer architecture is as follows: the models are first \emph{pretrained} using a generic objective on large-scale data---such as The Pile \cite{gao2020pile}, or C4 \cite{raffelExploringLimitsTransfer2019}---and then \emph{finetuned} for downstream tasks on a smaller, task-specific dataset. Although pretraining a model still requires significant computational resources, \acp{plm} can be made available for further finetuning, which is much more efficient.
+To achieve good performance on downstream tasks, we typically need to spend extensive time for training the transformer on large-scale training data. A more efficient workflow is as follows: the models are first \emph{pretrained} using a generic objective on large-scale data---such as The Pile \cite{gao2020pile}, or C4 \cite{raffelExploringLimitsTransfer2019}---and then \emph{finetuned} for downstream tasks on a smaller, task-specific dataset. Although pretraining a model still requires significant computational resources, \acp{plm} can be then distributed for further finetuning, which is in itself much more efficient.
 
 
 \begin{table}[t]
@@ -245,7 +247,7 @@ It turns out that training a transformer from scratch is not practical. To achie
         \midrule
         \multirow{2}{*}{Encoder} & \multirow{2}{*}{Masked Language Modeling} & BERT \cite{devlinBERTPretrainingDeep2019}            & 110M-340M              \\
                                  &                                           & RoBERTa \cite{liuRoBERTaRobustlyOptimized2019}       & 125M-355M              \\
-                                 &                                           & \textsc{LaserTagger} \cite{malmi2019lasertagger}     &                        \\
+                                 &                                           & \textsc{LaserTagger} \cite{malmi2019lasertagger}     & 110M                   \\
         \midrule
         \multirow{2}{*}{Enc-Dec} & \multirow{2}{*}{Text Denoising}           & BART \cite{lewisBARTDenoisingSequencetoSequence2019} & 139M-406M              \\
                                  &                                           & mBART \cite{liuMultilingualDenoisingPretraining2020} & 680M                   \\
@@ -262,27 +264,39 @@ It turns out that training a transformer from scratch is not practical. To achie
 \end{table}
 
 
-\paragraph{Model types} Depending on the downstream task, different variants of the transformer architecture may be used (see \autoref{tab:pretrained_models} for an overview):
+\paragraph{Model types} Depending on the downstream task, different variants of the transformer architecture are used (see \autoref{tab:pretrained_models} for an overview):
 
 \begin{itemize}
-    \item \textbf{Encoder models} -- The models use only the \emph{encoder} part of the transformer architecture. These models are trained using the \emph{\ac{mlm} objective}: predicting tokens on the masked positions in the sequence. The output of these models is a contextualized representation of the input sequence, which can be used for tasks such as sequence classification, sequence tagging, or computing sequence similarity.
-    \item \textbf{Encoder-decoder models} -- The models use the original \emph{encoder-decoder} architecture. These models are usually trained using a variant of denoising objective: predicting the original sequence from its corrupted version. The models are mostly used for sequence-to-sequence tasks, such as \ac{mt}, question answering, or summarization.
-    \item \textbf{Decoder models} -- The models use only the \emph{decoder} part of the transformer architecture. These models are mostly trained using the \emph{causal language modeling objective}: predicting the next token in a sequence. Outside of unconditional text generation, the models can also be used for the same tasks as the encoder-decoder models, using the input sequence as the output prefix.
+    \item \textbf{Encoder models} use only the \emph{encoder} part of the transformer architecture. These models are not generative; instead, the models produce a contextualized representation of the input sequence $\mathbf{X}$. The representation can be used for downstream tasks such as sequence classification, sequence tagging, or computing sequence similarity.
+    \item \textbf{Encoder-decoder models} use the original \emph{encoder-decoder} architecture, and are explicitly trained to transform an input sequence $\mathbf{X}$ into a target sequence $\mathbf{Y}$. Encoder-decoder models are mostly used for sequence-to-sequence tasks, such as \ac{mt}, question answering, or summarization.
+    \item \textbf{Decoder models} use only the \emph{decoder} part of the transformer architecture, which makes them suitable for generating text continuations. While seemingly less expressive, the models can be used for the same tasks as the encoder-decoder models, using the input sequence $\mathbf{X}$ as the prefix for  generating the output sequence $\mathbf{Y}$.
 \end{itemize}
 
+
+\paragraph{Training objectives} Pretraining the transformer model is typically \emph{self-supervised}: each token in the training sequence serves as the ground-truth ``label'' that the model aims to predict. By default, the transformer models are trained with the \emph{cross-entropy loss} \cite[p.92]{jurafsky2024}, maximizing the log probability (i.e., minimizing the negative log probability) of the ground truth sequence. The exact formulation may vary based on the model architecture:
+
+
+\begin{itemize}
+    \item \textbf{Masked Language Modeling}: The objective used for the encoder-only models such as BERT \cite{devlinBERTPretrainingDeep2019}. We predict tokens on the masked positions in the sequence:
+          \begin{align}
+              \mathcal{L}_i = -\log P_\theta(x_i|x_{<i}, x_{>i}).
+          \end{align}
+    \item \textbf{Text Denoising}: The objective used for pretraining encoder-decoder models such as BART \cite{lewisBARTDenoisingSequencetoSequence2019} or T5 \cite{raffelExploringLimitsTransfer2019}. The goal is to predict the original sequence from its corrupted version.
+          \begin{align}
+              \mathcal{L}_i = -\log P_\theta(x_i|x_{<i}, y_{<i}).
+          \end{align}
+    \item \textbf{Causal language modeling} The objective used for pretraining decoder-only models, including GPT-2 \cite{radford2019language} and most of \acp{llm}. The goal is to predict the next token in a sequence $y_i$ given the previous sequence of tokens in the sequence:
+          \begin{align}
+              \mathcal{L}_i = -\log P_\theta(y_i|y_{<i}).
+          \end{align}
+\end{itemize}
 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=0.9\textwidth]{img/objectives.pdf}
-
     \caption{A scheme of the common objectives used by pretrained models: (1) masked language modeling (encoder-only), (2) text denoising (encoder-decoder), (3)  causal language modeling (decoder-only). The special symbol \texttt{<s>} (beginning of a sentence) is used to bootstrap the decoding process.}\label{fig:objectives}
-
 \end{figure*}
 
-\paragraph{Pretraining}  Pretraining the transformer model is typically \emph{self-supervised}: each token in the training sequence serves as the ground-truth ``label'' that the model aims to predict. Specifically, for causal language modeling, which we are the most interested in, we train the model to maximize the log probability (i.e., minimize the negative log probability) of the ground truth token $x_i$ given the previous sequence of tokens in the sequence:
-\begin{align}
-    \mathcal{L}_i = -\log P_\theta(x_i|x_1, \hdots, x_{i-1}).
-\end{align}
 
 \paragraph{Finetuning} By \emph{finetuning} a model, we mean additional training of a pretrained model on a task-specific dataset. Finetuning is more efficient than training a model from scratch, but it is only a one-time process: repeated model updates can lead to erasing previous knowledge, also known as ``catastrophic forgetting'' \cite{mccloskey1989catastrophic,kirkpatrick2017overcoming}. This problem is partially mitigated by multi-task finetuning, in which the tasks are unified under a pre-specified input format and the model is finetuned for all the tasks at once \cite{sanh2021multitask,xieUnifiedSKGUnifyingMultiTasking2022}.
 
