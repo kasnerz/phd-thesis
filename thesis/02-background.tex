@@ -140,18 +140,19 @@ This formulation gives us a way to compute the probability of the whole sequence
 \begin{align}
     P(X) = \prod_{i=1}^T P(x_i|x_{i-N+1}, \hdots,x_{i-1}).
 \end{align}
-\emph{n}-gram \acp{lm} can be trained by estimating probabilities for individual \emph{n}-grams by counting the occurrences of $n$-grams in a text corpus, storing the counts for each $n$-gram in a look-up table. The main limitation of $n$-gram \acp{lm} (besides the size of the look-up tables) is the limit on the length of the context for each token, due to which \emph{n}-gram \acp{lm} fail to capture long-term dependencies.
+The probabilities for individual \emph{n}-grams are estimated by counting their occurrences over a text corpus, storing the counts in a look-up table. The main limitation of $n$-gram \acp{lm} (besides the size of the look-up tables) is the limit on the length of the context for each token, due to which \emph{n}-gram \acp{lm} fail to capture long-term dependencies.
 
 
 
 
 \paragraph{Neural Language Model} A neural \ac{lm} is a \acl{lm} that estimates the text probability $P_\theta(X)$ using a neural network with parameters $\theta$. In contrast with \emph{n}-gram \acp{lm}, neural \acp{lm} can capture long-term dependencies and efficiently store the probability distribution in their parameters.
 
-To learn $P_\theta(X)$, we can train the model to minimize the gap between the model distribution $P_\theta$ and the empirical distribution of sequences in the corpus $P$. For the loss function, the gap can be expressed as a cross-entropy $H$ between $P_\theta$ and $P$:
+The parameters of the neural \ac{lm} are also estimated using a text corpus. For each word $x_i$ in the corpus, we aim to maximize the conditional probability that the model assigns to the word $P_\theta(x_i|x_{<i})$. If we express the gap between the model distribution $P_\theta$ and the empirical distribution of sequences in the corpus $P$ using cross entropy, this formulation is equal to minimizing the negative log-likelihood of the next word \cite[p.158]{jurafsky2024}:
 \begin{align}
-    \mathcal{L} = H(P,P_\theta) = \mathbb{E}_P(-\log P_\theta) = -\sum_{\mathbf{x}\in C}p(X)\log p_{\theta}(X).
+    \mathcal{L}_{CE} = - \log P_\theta(x_i|x_{<i}).
 \end{align}
-We discuss the training objectives for specific model architectures in more detail in \autoref{sec:plms}.
+
+This type of training is also called \emph{self-supervised}: each token in the corpus serves as the ground-truth label that the model aims to predict. We discuss the training objectives for specific model architectures in \autoref{sec:plms}.
 
 
 \subsection{Transformer Architecture}
@@ -273,7 +274,7 @@ To achieve good performance on downstream tasks, we typically need to spend exte
 \end{itemize}
 
 
-\paragraph{Training objectives} Pretraining the transformer model is typically \emph{self-supervised}: each token in the training sequence serves as the ground-truth ``label'' that the model aims to predict. By default, the transformer models are trained with the \emph{cross-entropy loss} \cite[p.92]{jurafsky2024}, maximizing the log probability (i.e., minimizing the negative log probability) of the ground truth sequence. The exact formulation may vary based on the model architecture:
+\paragraph{Training objectives} Pre
 
 
 \begin{itemize}
