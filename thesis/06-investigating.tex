@@ -45,11 +45,11 @@ For our experiments, we collect \textsc{Rel2Text}: a novel dataset for verbalizi
 \acp{plm} such as BART \cite{lewisBARTDenoisingSequencetoSequence2019} or T5 \cite{raffelExploringLimitsTransfer2019} can quickly adapt to new domains and exhibit robustness to out-of-domain inputs. We investigate to what extent are \acp{plm} limited by the expressivity of the data labels. A suitable testing ground is the task of describing individual \acs{rdf}\glsunset{rdf} triples in a \ac{kg}, as shown in \autoref{tab:rel2text:example}. In this task, there is a wide range of lexical choices for the relation label, while the entities can be copied verbatim or with only minor morphological changes. To illustrate the problem, consider the last example in \autoref{tab:rel2text:example}: the model can use its representation of \emph{``parent''} to understand there is a \emph{``is-a-parent-of''} relation between the entities, but it has to infer (or guess) who is the parent of whom. Even in less ambiguous cases, the model still has to correctly capture the intended semantics of the relation (e.g. \emph{``occupant''} meaning \emph{``home team''}).
 
 
-Current human-annotated datasets for \ac{d2t} generation are not suitable for investigating this problem, as they contain only a small number of relations and rarely contain any unseen relations in the test set \cite{mille2021automatic}. The only existing datasets covering verbalizations of a wider range of \ac{kg} relations are based on \emph{model-generated outputs} \cite{agarwalKnowledgeGraphBased2021,amaral2022wdv}.
+Current human-annotated datasets for \ac{d2t} generation are not suitable for investigating this problem, as they contain only a small number of relations and rarely contain any unseen relations in the test set \cite{mille2021automatic}. The only existing datasets covering verbalizations of a wider range of \ac{kg} relations are based on \emph{model-generated outputs} \cite{agarwalKnowledgeGraphBased2021,amaral2022wdv}. For this reason, we collect a novel human-annotated dataset for the task.
 
-We would also like to investigate whether incorporating long-form \emph{descriptions} of data labels helps improving model outputs. Previous works have reach contradictory conclusions: \citet{wang2021kepler} use descriptions of relations instead of their labels for relation embeddings, concluding that it results in worse performance on downstream tasks. Conversely, \citet{kale-rastogi-2020-template} and \citet{lee2021dialogue} improve the performance of their systems by including schema descriptions on the input for the dialogue state tracking and dialogue response generation systems.
+Our aim is also to investigate whether incorporating long-form \emph{descriptions} of data labels helps improve model outputs. Previous works have reached contradictory conclusions: \citet{wang2021kepler} use descriptions of relations instead of their labels for relation embeddings, concluding that it results in worse performance on downstream tasks. Conversely, \citet{kale-rastogi-2020-template} and \citet{lee2021dialogue} improve the performance of their systems by including schema descriptions on the input for the dialogue state tracking and dialogue response generation systems.
 
-Lastly, \emph{verbalizing single triples} is interesting as a stand-alone task. As we have shown previously (\Cref{sec:iterative,sec:pipeline,sec:sem-acc}), in line with other works \cite{xiangASDOTAnyShotDatatoText2022,kale-rastogi-2020-template,gupta2020infotabs,neeraja2021incorporating}, transforming triples to text helps to make the input similar to the format used during pretraining of \acp{plm}. In turn, the transformation helps with applying \acp{plm} on downstream tasks. Various methods have been tried for converting individual triples to text, ranging from simple templates and rule-based systems to prompting \acp{plm}; however, none of these works investigate how to apply these approaches to novel relations.
+Lastly, we investigate \emph{verbalizing single triples} as a stand-alone task. As we have shown (\Cref{sec:iterative,sec:pipeline,sec:sem-acc}), in line with other works \cite{xiangASDOTAnyShotDatatoText2022,kale-rastogi-2020-template,gupta2020infotabs,neeraja2021incorporating}, transforming triples to text helps for \acp{plm}-based data processing. The works above use various methods for converting individual triples to text, ranging from simple templates and rule-based systems to prompting \acp{plm}; however, none of them investigate how to apply these approaches to novel relations.
 
 
 % 
@@ -68,7 +68,7 @@ Lastly, \emph{verbalizing single triples} is interesting as a stand-alone task. 
 
 \subsection{\textsc{Rel2Text} dataset}
 \label{sec:rel2text:data}
-For our experiments, we need data with diverse labels and their human verbalizations. We start by collecting a wide set of relations naturally occuring in three large-scale \acp{kg} (Wikidata, DBPedia, and YAGO). For each relation, we collect its label, textual description, and up to five triples in which the relation occurs in the \ac{kg}. We then use human annotatators to collect a \emph{verbalization} for each triple, i.e., a short sentence capturing the meaning of the triple. After filtering, our dataset---which we call \textsc{Rel2Text} (\underline{R}e-writing \underline{e}dge \underline{l}abels to Text),\footnote{Or simply ``Relations-to-Text''.}---contains 4,097 single triples covering 1,522 unique relations. We describe the data collection process in the following paragraphs.
+For our experiments, we need data with diverse labels and their human verbalizations. We start by collecting a large set of relations from three large-scale \acp{kg} (Wikidata, DBPedia, and YAGO). For each relation, we collect its label, textual description, and up to five triples in which the relation occurs in the \ac{kg}. We then use human annotators to collect a \emph{verbalization} for each triple, i.e., a short sentence capturing the meaning of the triple. After filtering, our dataset---which we call \textsc{Rel2Text} (\underline{R}e-writing \underline{e}dge \underline{l}abels to Text)\footnote{Or simply ``Relations-to-Text''.}---contains 4,097 single triples covering 1,522 unique relations. We describe the data collection process in the following paragraphs.
 
 
 \paragraph{Input Data}
@@ -81,16 +81,16 @@ We retrieve triples from three open large-scale \acp{kg} encoding factual knowle
     \item \textbf{DBPedia} \cite{auer2007dbpedia,lehmann2015dbpedia} is a \ac{kg} that maps Wikipedia infotables to a predefined ontology containing 1,355 relations, about 350 of which are accompanied by a description.
 \end{itemize}
 
-We query all \acp{kg} using their openly available endpoints to retrieve a list of relations in each \ac{kg}. For each relation, we retrieve up to five \textit{triples} that use this relation, and the relation \textit{description}, i.e.\ a short explanatory text.
+We query all \acp{kg} using their openly available endpoints to retrieve a list of relations in each \ac{kg}. For each relation, we retrieve up to five \textit{triples} that use this relation and the relation \textit{description}, i.e., a short explanatory text.
 If present, we also retrieve descriptions for the subject and the object.
 
-We apply a set of filtering heuristics, leaving out e.g.\ relations describing \ac{kg} metadata or identification numbers.\footnote{Relations describing various IDs make up a large portion of relations in Wikidata. Since we focus on diversity instead of coverage, we decided not to include these relations in our dataset.} In this way, we collect 7,334 triples with 1,716 relations in total.
+We apply a set of filtering heuristics, leaving out, e.g., relations describing \ac{kg} metadata or identification numbers.\footnote{Relations describing various IDs make up a large portion of relations in Wikidata. Since we focus on diversity instead of coverage, we decided not to include these relations in our dataset.} In this way, we collect 7,334 triples with 1,716 relations in total.
 
 \paragraph{Annotation Process}
-We collect human-written verbalizations for all input triples using Prolific.\footnote{\url{https://www.prolific.co/}} We built a web interface in which the human annotators are shown a single triple $t$ and asked to describe it in a single sentence. The annotators are encouraged to re-use the entities in their original form, but they are able to change the form if necessary. The annotators can also report noisy inputs. We employed 420 annotators in total, each of which annotated 20 examples. We set the average reward per hour according to the platform recommendations to  \textsterling{}7.29 per hour and we accepted all the inputs which passed our built-in checks.
+We collect human-written verbalizations for all input triples using Prolific.\footnote{\url{https://www.prolific.co/}} We built a web interface where human annotators are shown a single triple $t$ and asked to describe it in a single sentence. The annotators are encouraged to re-use the entities in their original form, but they can change the form if necessary. The annotators can also report noisy inputs. We employed 420 annotators in total, each of which annotated 20 examples. We set the average reward per hour according to the platform recommendations to  \textsterling{}7.29 per hour, and we accepted all the inputs that passed our built-in checks.
 
 \paragraph{Postprocessing the Data}
-A considerable portion of the collected verbalizations contain typos and grammatical errors, misunderstood meaning of the relation, or extra information in the input. To ensure high quality of our data, we manually examined all crowdsourced examples and annotated them as \textit{OK}, \textit{noisy}, \textit{corrupted} or \textit{containing extra information}. For our experiments, we only use the subset of our dataset with \textit{OK} annotations, one per input triple (4,097 examples, 1,522 distinct relations).
+A considerable portion of the collected verbalizations contain typos and grammatical errors, misunderstood meaning of the relation, or extra information in the input. To ensure the high quality of our data, we manually examined all crowdsourced examples and annotated them as \textit{OK}, \textit{noisy}, \textit{corrupted}, or \textit{containing extra information}. For our experiments, we only use the subset of our dataset with \textit{OK} annotations, one per input triple (4,097 examples, 1,522 distinct relations).
 
 
 \subsection{Analysis and Experiments}
@@ -100,22 +100,22 @@ In our analysis, we are interested in the following research questions:
     \item \textbf{RQ1:} Are the PLMs finetuned for D2T generation able to describe relations \textit{not present in the finetuning corpus}?
     \item \textbf{RQ2:} How many \textit{training examples} do the PLMs need to generate satisfactory outputs?
     \item \textbf{RQ3:} How do the PLMs behave when provided \textit{limited lexical cues} about the relation?
-    \item \textbf{RQ4:} Can relation \textit{descriptions} help to clarify ambiguous cases and improve semantic accuracy of the outputs?
+    \item \textbf{RQ4:} Can relation \textit{descriptions} help to clarify ambiguous cases and improve the semantic accuracy of the outputs?
 \end{itemize}
 
 \paragraph*{Datasets}  We experiment with the following datasets, all of which focus on verbalizing factual information from \acp{kg} and use the same triple-based input data format:
 \begin{itemize}
-    \item \textsc{Rel2Text}. Our dataset with single triples from three \acp{kg} with 4,097 examples, 1,522 relations and \textit{human-annotated} outputs.
-    \item WebNLG \cite{ferreira20202020,gardentWebNLGChallengeGenerating2017}. A DBPedia-based triple-to-text dataset with 38k examples, 411 relations, up to 7 triples per example, and \textit{human-annotated} outputs. We use the English part of version 3.0 from HuggingFace.\footnote{\url{https://huggingface.co/datasets/web_nlg}}
-    \item KeLM \cite{agarwalKnowledgeGraphBased2021}. A Wikidata-based dataset with 11M examples, 1,519 relations, up to 13 triples per example, and \textit{model-generated} outputs. We use the dataset released by the authors, splitting it in a 1:100 ratio into validation and training data.
+    \item \textsc{Rel2Text}: Our dataset with single triples from three \acp{kg} with 4,097 examples, 1,522 relations, and \textit{human-annotated} outputs.
+    \item WebNLG \cite{ferreira20202020,gardentWebNLGChallengeGenerating2017}: A DBPedia-based triple-to-text dataset with 38k examples, 411 relations, up to 7 triples per example, and \textit{human-annotated} outputs. We use the English part of version 3.0 from HuggingFace.\footnote{\url{https://huggingface.co/datasets/web_nlg}}
+    \item KeLM \cite{agarwalKnowledgeGraphBased2021}: A Wikidata-based dataset with 11M examples, 1,519 relations, up to 13 triples per example, and \textit{model-generated} outputs. We use the dataset released by the authors, splitting it into a 1:100 ratio for validation and training data.
 \end{itemize}
-To answer the research questions, we divide our \textsc{Rel2text} dataset into a training and test splits. We then use the \textsc{Rel2Text} \emph{test set} to evaluate a finetuned BART model \cite{lewisBARTDenoisingSequencetoSequence2019}. To answer \emph{RQ1}, we compare the performance of BART finetuned on the \textsc{Rel2Text} training set with BART finetuned on WebNLG and KeLM. Using \textsc{Rel2text} only, we then prepare various setups for answering \emph{RQ2}, \emph{RQ3}, and \emph{RQ4}.
+To answer the research questions, we divide our \textsc{Rel2text} dataset into a training and test split. We then use the \textsc{Rel2Text} \emph{test set} to evaluate a finetuned BART model \cite{lewisBARTDenoisingSequencetoSequence2019}. To answer \emph{RQ1}, we compare the performance of BART finetuned on the \textsc{Rel2Text} training set with BART finetuned on WebNLG and KeLM. Using \textsc{Rel2text} only, we then prepare various setups for answering \emph{RQ2}, \emph{RQ3}, and \emph{RQ4}.
 
 
-\paragraph{Rel2Text Data Split} We use approximately 15\% of the \textsc{Rel2Text} examples for the \emph{test set}. To ensure maximum fairness and focus on model generalization to unseen relations, we do not include in the \textsc{Rel2Text} test set any relations which have an exact string match with a relation in KeLM, WebNLG, or the \textsc{Rel2Text} training set. We also exclude any relations for which the maximum semantic similarity\footnote{Computed as cosine similarity between embeddings of the labels, which are encoded using \texttt{all-distilroberta-v1} from SBERT \cite{reimers-gurevych-2019-sentence}.} to any KeLM/WebNLG/\textsc{Rel2Text} training relation exceeds a threshold of $0.9$. We set this threshold empirically in order to exclude relations which are almost synonymous, but slightly lexically different.
+\paragraph{Rel2Text Data Split} We use approximately 15\% of the \textsc{Rel2Text} examples for the \emph{test set}. To ensure maximum fairness and focus on model generalization to unseen relations, we do not include in the \textsc{Rel2Text} test set any relations that have an exact string match with a relation in KeLM, WebNLG, or the \textsc{Rel2Text} training set. We also exclude any relations for which the maximum semantic similarity\footnote{Computed as cosine similarity between embeddings of the labels, which are encoded using \texttt{all-distilroberta-v1} from SBERT \cite{reimers-gurevych-2019-sentence}.} to any KeLM/WebNLG/\textsc{Rel2Text} training relation exceeds a threshold of $0.9$. We set this threshold empirically to exclude relations that are almost synonymous, but slightly lexically different.
 We use 90\% of the remaining examples for the training set and 10\% for the validation set.
 
-\paragraph{Experimental Setup} We split the camel case in the relation labels. For finetuning the models, we linearize the input triples by marking the triple constituents with special tokens that we add to the model vocabulary. In a default scenario, we finetune BART\textsc{-base} for 10 epochs and select the best checkpoint using validation BLEU score, then use greedy decoding to produce outputs. We repeat each experiment with five random seeds, averaging the results.
+\paragraph{Experimental Setup} We split the camel case in the relation labels. For finetuning the models, we linearize the input triples by marking the triple constituents with special tokens that we add to the model vocabulary. In a default scenario, we finetune BART-base \cite{lewisBARTDenoisingSequencetoSequence2019} for 10 epochs and select the best checkpoint using validation BLEU score, then use greedy decoding to produce outputs. We repeat each experiment with five random seeds, averaging the results.
 
 
 \paragraph{Compared Systems} We compare the following systems:
@@ -124,7 +124,7 @@ We use 90\% of the remaining examples for the training set and 10\% for the vali
 
 
 
-    \item \textbf{Full Training Data}: We use the default setup on full \textsc{Rel2Text} and WebNLG training sets. For KeLM (which is about 300$\times$ larger than WebNLG), we finetune the model for 1 epoch only. We denote the trained models \BARTr{}, \BARTw{}, and \BARTk{}, respectively.
+    \item \textbf{Full Training Data}: We use the default setup on full \textsc{Rel2Text} and WebNLG training sets. For KeLM (which is about 300$\times$ larger than WebNLG), we finetune the model only for one epoch. We denote the trained models \BARTr{}, \BARTw{}, and \BARTk{}, respectively.
 
     \item \textbf{Limited Training Data}: For the limited training data setup, we prepare few-shot splits from \textsc{Rel2Text} as subsets containing $N=$ \{25, 50, 100, 200\} relations with a single example per relation. We select examples at random, ensuring that each few-shot split is a subset of the larger splits. We finetune the \textit{fewshot-N} models for 10 epochs without validation, using the last checkpoint.
 
@@ -145,27 +145,33 @@ We use 90\% of the remaining examples for the training set and 10\% for the vali
 
 \subsection{Evaluation Setup}
 \paragraph{Automatic Metrics}
-We evaluate generated outputs using an extensive set of automatic metrics from the GEM-metrics\footnote{\url{https://github.com/GEM-benchmark/GEM-metrics}} package \cite{gehrmannGEMBenchmarkNatural2021}. We use BLEU \cite{papineni2002bleu}, \mbox{METEOR} \cite{banerjee-lavie-2005-meteor}, and BLEURT \cite{sellam2020bleurt} for measuring lexical similarity. For semantic similarity, we use NUBIA \cite{kaneNUBIANeUralBased2020} along its individual features: the semantic similarity score (SS) on a 0-5 scale, the contradiction (C), neutral (N), and entailment (E) probabilities, and the perplexity score (PPL). To assess lexical diversity, we measure the number of unique n-grams (U-1), conditional entropy of bi-grams (CE2), and the mean segmental type-token ratio over segment lengths of 100 (MSTTR). We also measure the average output length in tokens (len). See \autoref{sec:evaluation} for detailed description of the metrics.
 
+
+We evaluate generated outputs using an extensive set of automatic metrics from the GEM-metrics\footnote{\url{https://github.com/GEM-benchmark/GEM-metrics}} package \cite{gehrmannGEMBenchmarkNatural2021}. We use BLEU \cite{papineni2002bleu}, \mbox{METEOR} \cite{banerjee-lavie-2005-meteor}, and BLEURT \cite{sellam2020bleurt} for measuring lexical similarity. For semantic similarity, we use NUBIA \cite{kaneNUBIANeUralBased2020} along with its individual features: the semantic similarity score (SS) on a 0-5 scale, the contradiction (C), neutral (N), and entailment (E) probabilities, and the perplexity score (PPL). To assess lexical diversity, we measure the number of unique n-grams (U-1), conditional entropy of bi-grams (CE2), and the mean segmental type-token ratio over segment lengths of 100 (MSTTR). We also measure the average output length in tokens (len). See \autoref{sec:evaluation} for a detailed description of the metrics.
+
+
+
+\paragraph{Manual Error Analysis} Based on our preliminary observations, we identify four sources of model errors: semantic errors (\textsc{Sem}), with a swap of the relation direction (\textsc{Dir}) as a special case, too literal (\textsc{Lit}), i.e., containing awkward or misleading phrasing, and grammar/lexical errors (\textsc{Lex}). We further identified two types of input data errors: ambiguous relations (\textsc{Ent}) and relations with unclear labels (\textsc{Lbl}). Examples are shown in \autoref{tab:rel2text:cat}.
+For error analysis, we select 100 random examples together with their corresponding outputs from the \textit{\BARTr}, \textit{\BARTw}, \textit{\BARTk}, \textit{fewshot-100}, \textit{mask-all} and \textit{desc-cat} models. Without revealing the output sources, we mark all error categories that apply.
 \begin{table*}[t]
     \centering\footnotesize
     % \setlength{\tabcolsep}{4pt}
     % \renewcommand{\arraystretch}{1.25}
-    \begin{tabular}{p{0.5cm}p{0.8cm}p{11.8cm}} \toprule
+    \begin{tabular}{p{0.5cm}p{1cm}p{11.6cm}} \toprule
 
-         & \textbf{Lbl} & \textbf{Example inputs and outputs (\red{\xmark} incorrect, \green{\cmark} correct)}                                                                                                                                                                                    \\ \midrule
+         & \textbf{Label} & \textbf{Example inputs and outputs (\red{\xmark} incorrect, \green{\cmark} correct)}                                                                                                                                                                                    \\ \midrule
         %
         \multirow{12}{*}{\rotatebox[origin=c]{90}{\textit{model}}}
         % 
-         & \textsc{Sem} & \emph{(Yousra Matine, sport country, Morocco)} \newline \red{\xmark} Yousra Matine was born in Morocco. [\emph{mask-mask}] \newline  \green{\cmark} Yousra Matine plays for Morocco. [\BARTr]                                                                           \\[2mm]
-         & \textsc{Dir} & \emph{(Kentucky Channel, former broadcast network, KET ED)} \newline \red{\xmark} KET ED was broadcast on Kentucky Channel ED. [\emph{fewshot-100}] \newline  \green{\cmark} The Kentucky Channel was broadcast on KET ED. [\BARTr]                                     \\[2mm]
-         & \textsc{Lit} & \emph{(Vietnam Television, first air date, 1970-09-07)} \newline \red{\xmark} The first air date of Vietnam Television was 1970-09-07. [\BARTk] \newline  \green{\cmark} Vietnam Television first aired on 1970-09-07. [\BARTr]                                         \\[2mm]
-         & \textsc{Lex} & \emph{(RPG-43, used in war , The Troubles)} \newline \red{\xmark} RPG-43 was used in the The Troubles. [\BARTr] \newline  \green{\cmark} The RPG-43 was used in the Troubles. [\BARTk]                                                                                  \\[1mm]\cdashlinelr{1-3}\\[-3mm]
+         & \textsc{Sem}   & \emph{(Yousra Matine, sport country, Morocco)} \newline \red{\xmark} Yousra Matine was born in Morocco. [\emph{mask-mask}] \newline  \green{\cmark} Yousra Matine plays for Morocco. [\BARTr]                                                                           \\[2mm]
+         & \textsc{Dir}   & \emph{(Kentucky Channel, former broadcast network, KET ED)} \newline \red{\xmark} KET ED was broadcast on Kentucky Channel ED. [\emph{fewshot-100}] \newline  \green{\cmark} The Kentucky Channel was broadcast on KET ED. [\BARTr]                                     \\[2mm]
+         & \textsc{Lit}   & \emph{(Vietnam Television, first air date, 1970-09-07)} \newline \red{\xmark} The first air date of Vietnam Television was 1970-09-07. [\BARTk] \newline  \green{\cmark} Vietnam Television first aired on 1970-09-07. [\BARTr]                                         \\[2mm]
+         & \textsc{Lex}   & \emph{(RPG-43, used in war , The Troubles)} \newline \red{\xmark} RPG-43 was used in the The Troubles. [\BARTr] \newline  \green{\cmark} The RPG-43 was used in the Troubles. [\BARTk]                                                                                  \\[1mm]\cdashlinelr{1-3}\\[-3mm]
         %
         \multirow{6}{*}{\rotatebox[origin=c]{90}{\textit{data}}}
         %
-         & \textsc{Ent} & \emph{(The Age of Entitlement, by artist, The Basics)} \newline \red{\xmark} The Age of Entitlement was written by The Basics. [\BARTk] \newline  \green{\cmark} The Age of Entitlement was recorded by The Basics.  [\BARTr]                                           \\[2mm]
-         & \textsc{Lbl} & \emph{(General Motors Epsilon platform, vehicle, Cadillac XTS)} \newline \red{\xmark} General Motors Epsilon is a vehicle similar to the Cadillac XTS. [\BARTw] \newline  \green{\cmark} General Motors Epsilon platform is used in the Cadillac XTS. [\emph{desc-cat}] \\
+         & \textsc{Ent}   & \emph{(The Age of Entitlement, by artist, The Basics)} \newline \red{\xmark} The Age of Entitlement was written by The Basics. [\BARTk] \newline  \green{\cmark} The Age of Entitlement was recorded by The Basics.  [\BARTr]                                           \\[2mm]
+         & \textsc{Lbl}   & \emph{(General Motors Epsilon platform, vehicle, Cadillac XTS)} \newline \red{\xmark} General Motors Epsilon is a vehicle similar to the Cadillac XTS. [\BARTw] \newline  \green{\cmark} General Motors Epsilon platform is used in the Cadillac XTS. [\emph{desc-cat}] \\
         \bottomrule
     \end{tabular}
     \caption{Error categories used in manual analysis, with examples of errors found and corresponding correct verbalizations (square brackets denote the model).
@@ -183,11 +189,9 @@ We evaluate generated outputs using an extensive set of automatic metrics from t
 \end{table*}
 
 
-\paragraph{Manual Error Analysis} Based on our preliminary observations, we identify four sources of model errors: semantic errors (\textsc{Sem}), with a swap of the relation direction (\textsc{Dir}) as a special case, too literal (\textsc{Lit}), i.e.\ containing awkward or misleading phrasing, and grammar/lexical errors (\textsc{Lex}). We further identified two types of input data errors: ambiguous relations (\textsc{Ent}) and relations with unclear labels (\textsc{Lbl}). Examples are shown in \autoref{tab:rel2text:cat}.
-For error analysis, we select 100 random examples together with their corresponding outputs from the \textit{\BARTr}, \textit{\BARTw}, \textit{\BARTk}, \textit{fewshot-100}, \textit{mask-all} and \textit{desc-cat} models. Without revealing the output sources, we mark all error categories that apply.
-
 \subsection{Findings from Automatic Metrics}
 \label{sec:rel2text:results}
+
 \begin{table*}[t]\centering
     \footnotesize
     \setlength{\tabcolsep}{5pt}
@@ -213,28 +217,28 @@ For error analysis, we select 100 random examples together with their correspond
     \caption{The summary of evaluation using automatic metrics on \textsc{Rel2text} test set. \textbf{MET} = METEOR, \textbf{BLR} = BLEURT, \textbf{TTR} = MSTTR. See \autoref{sec:rel2text:analysis} for the descriptions of the models and metrics.}
     \label{tab:rel2text:auto}
 \end{table*}
-
-
 \autoref{tab:rel2text:auto} shows automatic scores for all our models.
 
 \paragraph{Lexical and Semantic Similarity}
-\BARTr{} is the best among the fully trained models in terms of lexical overlap metrics, which is expected, as it is trained on the most similar reference distribution. \BARTw{} and \BARTk{} models are almost equal in terms of semantic consistency, achieving around 90\% average entailment probability, which is on par with the copy baseline.
+\BARTr{} is the best among the fully trained models regarding lexical overlap metrics, which is expected, as it is trained on the most similar reference distribution. \BARTw{} and \BARTk{} models are almost equal in terms of semantic consistency, achieving around 90\% average entailment probability, which is on par with the copy baseline.
 
-\paragraph{Few-shot Models} For the few-shot models, semantic similarity is much lower (e.g.\ the average entailment probability is between 65\% and 85\%), showing that there is a certain minimum amount of data needed to achieve consistent outputs. As we show in \autoref{fig:rel2text:fewshot}, using more examples for training the model generally helps to decrease variance and increase performance across various metrics.
+\paragraph{Few-shot Models} For the few-shot models, semantic similarity is much lower (e.g., the average entailment probability is between 65\% and 85\%), showing that there is a certain minimum amount of data needed to achieve consistent outputs. As we show in \autoref{fig:rel2text:fewshot}, using more examples to train the model generally helps decrease variance and increase performance across various metrics.
 
-\paragraph{Masked Relations} Interestingly, the models which do not see the relations during test time (\textit{mask-test} and \textit{mask-all}) still achieve around 60\% average entailment probability, similarly to the worst few-shot model. Although their rate of contradictions is higher than for other models, the results suggest that in many cases, the guessed relation is semantically consisten with the correct relation. Another interesting observation is that the \textit{mask-train} model (trained not to use the labels) is able to use the labels provided at test time to improve the outputs considerably (contradiction rate drops from 17\% to 5\% compared to \textit{mask-all}).
+\paragraph{Masked Relations} Interestingly, the models which do not see the relations during test time (\textit{mask-test} and \textit{mask-all}) still achieve around 60\% average entailment probability, similarly to the worst few-shot model. Although their rate of contradictions is higher than for other models, the results suggest that in many cases, the guessed relation is semantically consisten with the correct relation. Another interesting observation is that the \textit{mask-train} model (trained not to use the labels) can use the labels provided at test time to improve the outputs considerably (contradiction rate drops from 17\% to 5\% compared to \textit{mask-all}).
 
-\paragraph{Influence of Descriptions} The fact that the short labels are both sufficient and necessary for the successful verbalization is emphasized by the fact that the \textit{desc-repl} model is worse than \BARTr{} (although the descriptions are longer and supposedly explain the relation semantics). Moreover, the benefits of concatenating the descriptions alongside the relation labels (\textit{desc-cat}) are negligible, only slightly improving lexical similarity metrics (0.5 BLEU point gain over \BARTr{}).
+\paragraph{Influence of Descriptions} The fact that the short labels are both sufficient and necessary for successful verbalization is emphasized by the fact that the \textit{desc-repl} model is worse than \BARTr{} (although the descriptions are longer and supposedly explain the relation semantics). Moreover, the benefits of concatenating the descriptions alongside the relation labels (\textit{desc-cat}) are negligible, only slightly improving lexical similarity metrics (0.5 BLEU point gain over \BARTr{}).
 
 \paragraph{Lexical Diversity} In terms of lexical diversity, human references use more unique n-grams, but the model outputs are very similar in other aspects. It remains to be seen if the model outputs can stay semantically consistent with diversity-focused decoding techniques such as nucleus sampling \cite{holtzman2019curious}.
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=\textwidth]{img/rel2text-fewshot.pdf}
-    \caption{Boxplots for selected metrics from Table \ref{tab:auto} w.r.t. the number of examples (displayed on the \textit{x}-axis, $\textit{full} = 1522$), taking into account variance from individual random seeds (cf.\ Table~\ref{tab:autostdev}).}\label{fig:rel2text:fewshot}
+    \caption{Boxplots for selected metrics from \autoref{tab:rel2text:auto} w.r.t. the number of examples (displayed on the \textit{x}-axis, $\textit{full} = 1522$), taking into account variance from individual random seeds.}\label{fig:rel2text:fewshot}
 \end{figure}
 
 \subsection{Findings from Manual Error Analysis}
+
+
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.7\textwidth]{img/rel2text-graph.pdf}
@@ -245,7 +249,7 @@ Results are summarized in \autoref{fig:rel2text:manual}; examples of model outpu
 
 \paragraph{Naturalness of Expressions} The \BARTk{} and \BARTw{} models use expressions that are too literal (\textsc{Lit}) in 23 and 29 cases, respectively, while the \BARTr{} and \textit{desc-cat} models do the same only in 11 cases (5 out of which are marked as \textsc{Lbl}, i.e., with an unclear label). This suggests that the variability of our dataset helps models to apply more natural expressions, especially if the relation is understandable from its label.
 
-\paragraph{Semantic Errors} There is a near-constant portion of examples where the models make a semantic error (\textsc{Sem}) \textit{and} the input is marked as needing an extra description (\textsc{Lbl}). The models also make relatively many semantic errors on their own, most prominently in the case of the \textit{fewshot-100} and the \textit{mask-all} models. The \textit{mask-all} model made a semantic error in 78 cases, suggesting that guessing the exact relation just from the entities is difficult (although still possible in 22 cases). Morevover, the outcomes from this model are fluent (only 4 \textsc{Lex} errors), making it hard to detect faulty cases.
+\paragraph{Semantic Errors} There is a near-constant portion of examples where the models make a semantic error (\textsc{Sem}) \textit{and} the input is marked as needing an extra description (\textsc{Lbl}). The models also make relatively many semantic errors, most prominently in the case of the \textit{fewshot-100} and the \textit{mask-all} models. The \textit{mask-all} model made a semantic error in 78 cases, suggesting that guessing the exact relation just from the entities is difficult (although still possible in 22 cases). Moreover, the outcomes from this model are fluent (only 4 \textsc{Lex} errors), making it hard to detect faulty cases.
 The case of swapping the relation direction (\textsc{Dir}) is surprisingly not that common, which is probably down to having only a few examples in our dataset prone to this kind of error.
 
 \paragraph{Additional Clues} There were only 12 out of 100 examples annotated as \textsc{Ent}, which suggests that the verbalization of the relation can be mostly decided irrespective of the entities in the triple. Notably, the results for \BARTr{} and \textit{desc-cat} are very similar, rendering the impact of extra descriptions negligible.
@@ -271,7 +275,7 @@ Given that the \BARTr{} model can describe relations from their labels with high
 \end{table}
 
 
-\paragraph{Tabular Reasoning} For the task of \ac{nli} from a table, \citet{gupta2020infotabs} represent each table cell using a simple template \text{``The \textit{key} of \textit{title} are \textit{value}.''}. \citet{neeraja2021incorporating} extend their approach by preparing a fine-grained set of rules\footnote{Formalized using more than 250 lines of Python code: \url{https://github.com/utahnlp/knowledge\_infotabs/blob/main/scripts/preprocess/bpr.py\#L120}} for individual entity categories. We replicate the setup of \citet{neeraja2021incorporating} for the original (OPR) and better (BPR) paragraph representation using their public codebase. We then replace their templates with our \BARTr{} model, verbalizing the triple (\textit{title}, \textit{key}, \textit{value}). The results are summarized in Table \ref{tab:rel2text:nli}. Our preliminary manual evaluation suggests that the sentences from our model are indeed more grammatical (even compared to BPR), but we observe comparable performance across all three test sets. In line with \citet{mccoy2019right}, we conclude that for classification tasks such as NLI, the input content appears to be more important than the input form.
+\paragraph{Tabular Reasoning} For the task of \ac{nli} from a table, \citet{gupta2020infotabs} represent each table cell using a simple template \text{``The \textit{key} of \textit{title} are \textit{value}.''}. \citet{neeraja2021incorporating} extend their approach by preparing a fine-grained set of rules\footnote{Formalized using more than 250 lines of Python code: \url{https://github.com/utahnlp/knowledge\_infotabs/blob/main/scripts/preprocess/bpr.py\#L120}} for individual entity categories. We replicate the setup of \citet{neeraja2021incorporating} for the original (OPR) and better (BPR) paragraph representation using their public codebase. We then replace their templates with our \BARTr{} model, verbalizing the triple (\textit{title}, \textit{key}, \textit{value}). The results are summarized in Table \ref{tab:rel2text:nli}. Our manual evaluation suggests that the sentences from our model are indeed more grammatical (even compared to BPR), but we observe comparable performance across all three test sets. In line with \citet{mccoy2019right}, we conclude that for classification tasks such as NLI, the input content appears to be more important than the input form.
 
 
 \begin{table}[t]\centering
