@@ -526,14 +526,14 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.3174452"
-     inkscape:cx="263.76809"
-     inkscape:cy="51.615051"
+     inkscape:zoom="2.2411703"
+     inkscape:cx="402.69139"
+     inkscape:cy="45.511936"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1052"
+     inkscape:window-height="1020"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -1057,7 +1057,7 @@
          y="141.47917"
          style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;stroke-width:0.120039">a</tspan></text>
     <rect
-       style="fill:#6fb2c3;fill-opacity:1;stroke:#6fb2c3;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:#5fbcd3;fill-opacity:1;stroke:#5fbcd3;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect7340-4"
        width="6.6289563"
        height="6.1735764"
@@ -1065,7 +1065,7 @@
        y="145.34116"
        ry="1.2201501" />
     <path
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0.120039"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#004455;fill-opacity:1;stroke:none;stroke-width:0.120039"
        sodipodi:type="inkscape:offset"
        inkscape:radius="0"
        inkscape:original="M -20.300781 138.75781 C -20.678959 138.7691 -21.016232 138.91641 -21.134766 139.0293 C -21.14041 139.04623 -21.146484 139.06922 -21.146484 139.0918 C -21.146484 139.11437 -21.146269 139.13736 -21.140625 139.1543 C -21.129336 139.22203 -21.107441 139.32246 -21.056641 139.37891 C -21.011485 139.37891 -20.954667 139.36221 -20.892578 139.33398 C -20.728889 139.26625 -20.498337 139.1875 -20.300781 139.1875 C -20.05807 139.1875 -20.029297 139.32803 -20.029297 139.58203 L -20.029297 139.9043 C -20.080097 139.89301 -20.141466 139.88672 -20.214844 139.88672 C -20.265644 139.88672 -20.316602 139.88693 -20.373047 139.89258 C -20.711713 139.92644 -21.328125 140.10261 -21.328125 140.79688 C -21.328125 141.31616 -20.984291 141.54102 -20.623047 141.54102 C -20.470647 141.54102 -20.335115 141.53084 -20.210938 141.46875 C -20.148849 141.43488 -20.080742 141.37176 -20.046875 141.33789 C -19.990431 141.41691 -19.842498 141.54102 -19.707031 141.54102 C -19.560276 141.53537 -19.453359 141.4742 -19.408203 141.41211 C -19.408203 141.37824 -19.407988 141.28215 -19.402344 141.20312 C -19.582966 141.23699 -19.560547 140.94336 -19.560547 140.94336 C -19.560547 140.6442 -19.548828 140.1922 -19.548828 139.80273 L -19.548828 139.54883 C -19.548828 139.06905 -19.685827 138.79189 -20.103516 138.76367 C -20.199471 138.75803 -20.21047 138.75781 -20.300781 138.75781 z M -20.142578 140.2207 C -20.103067 140.2207 -20.063164 140.22092 -20.029297 140.22656 L -20.029297 140.62695 C -20.029297 140.74549 -20.029727 140.8307 -20.041016 140.89844 C -20.04666 140.9323 -20.052949 140.96527 -20.058594 140.97656 C -20.137616 141.07252 -20.322854 141.15234 -20.492188 141.15234 L -20.53125 141.15234 C -20.706228 141.14105 -20.830078 141.03982 -20.830078 140.75195 C -20.830078 140.39635 -20.599058 140.27758 -20.328125 140.23242 C -20.271681 140.22678 -20.210311 140.2207 -20.142578 140.2207 z "
@@ -1234,7 +1234,7 @@
            style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52778px;font-family:Go;-inkscape-font-specification:'Go, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#6e6e6e;fill-opacity:1;stroke-width:0.264583">triple-to-text</tspan></text>
     </g>
     <rect
-       style="fill:#73d234;fill-opacity:1;stroke:#73d234;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:#ccff00;fill-opacity:1;stroke:#ccff00;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect1"
        width="6.6289563"
        height="6.1735764"
@@ -1243,7 +1243,7 @@
        ry="1.2201501" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0.120039"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#668000;fill-opacity:1;stroke:none;stroke-width:0.120039"
        x="26.019985"
        y="166.76865"
        id="text1"><tspan
@@ -1251,9 +1251,9 @@
          id="tspan1"
          x="26.019985"
          y="166.76865"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;stroke-width:0.120039">b</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#668000;stroke-width:0.120039">b</tspan></text>
     <rect
-       style="fill:#e5bd1c;fill-opacity:0.960784;stroke:#e5bd1c;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.960784"
+       style="fill:#ffdd54;fill-opacity:0.97254902;stroke:#ffdd54;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.96078432"
        id="rect2"
        width="6.6289563"
        height="6.1735764"
@@ -1262,7 +1262,7 @@
        ry="1.2201501" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0.120039"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#806600;fill-opacity:1;stroke:none;stroke-width:0.120039"
        x="26.056683"
        y="184.09254"
        id="text2"><tspan
@@ -1270,7 +1270,7 @@
          id="tspan2"
          x="26.056683"
          y="184.09254"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;stroke-width:0.120039">c</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#806600;stroke-width:0.120039">c</tspan></text>
     <g
        id="g3-2"
        transform="translate(456.99511,3.7793553)">
@@ -1435,7 +1435,7 @@
            style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;stroke-width:0.120039">b</tspan></text>
     </g>
     <rect
-       style="fill:#6fb2c3;fill-opacity:1;stroke:#6fb2c3;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:#5fbcd3;fill-opacity:1;stroke:#5fbcd3;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect26"
        width="6.6289563"
        height="6.1735764"
@@ -1443,7 +1443,7 @@
        y="161.72324"
        ry="1.2201501" />
     <path
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0.120039"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#004455;fill-opacity:1;stroke:none;stroke-width:0.120039"
        sodipodi:type="inkscape:offset"
        inkscape:radius="0"
        inkscape:original="M -20.300781 138.75781 C -20.678959 138.7691 -21.016232 138.91641 -21.134766 139.0293 C -21.14041 139.04623 -21.146484 139.06922 -21.146484 139.0918 C -21.146484 139.11437 -21.146269 139.13736 -21.140625 139.1543 C -21.129336 139.22203 -21.107441 139.32246 -21.056641 139.37891 C -21.011485 139.37891 -20.954667 139.36221 -20.892578 139.33398 C -20.728889 139.26625 -20.498337 139.1875 -20.300781 139.1875 C -20.05807 139.1875 -20.029297 139.32803 -20.029297 139.58203 L -20.029297 139.9043 C -20.080097 139.89301 -20.141466 139.88672 -20.214844 139.88672 C -20.265644 139.88672 -20.316602 139.88693 -20.373047 139.89258 C -20.711713 139.92644 -21.328125 140.10261 -21.328125 140.79688 C -21.328125 141.31616 -20.984291 141.54102 -20.623047 141.54102 C -20.470647 141.54102 -20.335115 141.53084 -20.210938 141.46875 C -20.148849 141.43488 -20.080742 141.37176 -20.046875 141.33789 C -19.990431 141.41691 -19.842498 141.54102 -19.707031 141.54102 C -19.560276 141.53537 -19.453359 141.4742 -19.408203 141.41211 C -19.408203 141.37824 -19.407988 141.28215 -19.402344 141.20312 C -19.582966 141.23699 -19.560547 140.94336 -19.560547 140.94336 C -19.560547 140.6442 -19.548828 140.1922 -19.548828 139.80273 L -19.548828 139.54883 C -19.548828 139.06905 -19.685827 138.79189 -20.103516 138.76367 C -20.199471 138.75803 -20.21047 138.75781 -20.300781 138.75781 z M -20.142578 140.2207 C -20.103067 140.2207 -20.063164 140.22092 -20.029297 140.22656 L -20.029297 140.62695 C -20.029297 140.74549 -20.029727 140.8307 -20.041016 140.89844 C -20.04666 140.9323 -20.052949 140.96527 -20.058594 140.97656 C -20.137616 141.07252 -20.322854 141.15234 -20.492188 141.15234 L -20.53125 141.15234 C -20.706228 141.14105 -20.830078 141.03982 -20.830078 140.75195 C -20.830078 140.39635 -20.599058 140.27758 -20.328125 140.23242 C -20.271681 140.22678 -20.210311 140.2207 -20.142578 140.2207 z "
@@ -1453,7 +1453,7 @@
        d="m -20.300781,138.75781 c -0.378178,0.0113 -0.715451,0.1586 -0.833985,0.27149 -0.0056,0.0169 -0.01172,0.0399 -0.01172,0.0625 0,0.0226 2.15e-4,0.0456 0.0059,0.0625 0.01129,0.0677 0.03318,0.16816 0.08398,0.22461 0.04516,0 0.101974,-0.0167 0.164063,-0.0449 0.163689,-0.0677 0.394241,-0.14648 0.591797,-0.14648 0.242711,0 0.271484,0.14053 0.271484,0.39453 v 0.32227 c -0.0508,-0.0113 -0.112169,-0.0176 -0.185547,-0.0176 -0.0508,0 -0.101758,2.1e-4 -0.158203,0.006 -0.338666,0.0339 -0.955078,0.21003 -0.955078,0.9043 0,0.51928 0.343834,0.74414 0.705078,0.74414 0.1524,0 0.287932,-0.0102 0.412109,-0.0723 0.06209,-0.0339 0.130196,-0.097 0.164063,-0.13086 0.05644,0.079 0.204377,0.20313 0.339844,0.20313 0.146755,-0.006 0.253672,-0.0668 0.298828,-0.12891 0,-0.0339 2.15e-4,-0.12996 0.0059,-0.20899 -0.180622,0.0339 -0.158203,-0.25976 -0.158203,-0.25976 0,-0.29916 0.01172,-0.75116 0.01172,-1.14063 v -0.2539 c 0,-0.47978 -0.136999,-0.75694 -0.554688,-0.78516 -0.09596,-0.006 -0.106954,-0.006 -0.197265,-0.006 z m 0.158203,1.46289 c 0.03951,0 0.07941,2.2e-4 0.113281,0.006 v 0.40039 c 0,0.11854 -4.3e-4,0.20375 -0.01172,0.27149 -0.0056,0.0339 -0.01193,0.0668 -0.01758,0.0781 -0.07902,0.096 -0.26426,0.17578 -0.433594,0.17578 h -0.03906 c -0.174978,-0.0113 -0.298828,-0.11252 -0.298828,-0.40039 0,-0.3556 0.23102,-0.47437 0.501953,-0.51953 0.05644,-0.006 0.117814,-0.0117 0.185547,-0.0117 z"
        transform="translate(68.732414,24.660125)" />
     <rect
-       style="fill:#e5bd1c;fill-opacity:0.960784;stroke:#e5bd1c;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.960784"
+       style="fill:#ffdd54;fill-opacity:0.97254902;stroke:#ffdd54;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.96078432"
        id="rect27"
        width="6.6289563"
        height="6.1735764"
@@ -1462,7 +1462,7 @@
        ry="1.2201501" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0.120039"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#806600;fill-opacity:1;stroke:none;stroke-width:0.120039"
        x="48.330482"
        y="149.74875"
        id="text27"><tspan
@@ -1470,9 +1470,9 @@
          id="tspan27"
          x="48.330482"
          y="149.74875"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;stroke-width:0.120039">c</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#806600;stroke-width:0.120039">c</tspan></text>
     <rect
-       style="fill:#73d234;fill-opacity:1;stroke:#73d234;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:#ccff00;fill-opacity:1;stroke:#ccff00;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect28"
        width="6.6289563"
        height="6.1735764"
@@ -1481,7 +1481,7 @@
        ry="1.2201501" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0.120039"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#668000;fill-opacity:1;stroke:none;stroke-width:0.120039"
        x="48.293785"
        y="184.73036"
        id="text28"><tspan
@@ -1489,9 +1489,9 @@
          id="tspan28"
          x="48.293785"
          y="184.73036"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;stroke-width:0.120039">b</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#668000;stroke-width:0.120039">b</tspan></text>
     <rect
-       style="fill:#6fb2c3;fill-opacity:1;stroke:#6fb2c3;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:#5fbcd3;fill-opacity:1;stroke:#5fbcd3;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect30"
        width="6.6289563"
        height="6.1735764"
@@ -1499,7 +1499,7 @@
        y="161.72324"
        ry="1.2201501" />
     <path
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0.120039"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#004455;fill-opacity:1;stroke:none;stroke-width:0.120039"
        sodipodi:type="inkscape:offset"
        inkscape:radius="0"
        inkscape:original="M -20.300781 138.75781 C -20.678959 138.7691 -21.016232 138.91641 -21.134766 139.0293 C -21.14041 139.04623 -21.146484 139.06922 -21.146484 139.0918 C -21.146484 139.11437 -21.146269 139.13736 -21.140625 139.1543 C -21.129336 139.22203 -21.107441 139.32246 -21.056641 139.37891 C -21.011485 139.37891 -20.954667 139.36221 -20.892578 139.33398 C -20.728889 139.26625 -20.498337 139.1875 -20.300781 139.1875 C -20.05807 139.1875 -20.029297 139.32803 -20.029297 139.58203 L -20.029297 139.9043 C -20.080097 139.89301 -20.141466 139.88672 -20.214844 139.88672 C -20.265644 139.88672 -20.316602 139.88693 -20.373047 139.89258 C -20.711713 139.92644 -21.328125 140.10261 -21.328125 140.79688 C -21.328125 141.31616 -20.984291 141.54102 -20.623047 141.54102 C -20.470647 141.54102 -20.335115 141.53084 -20.210938 141.46875 C -20.148849 141.43488 -20.080742 141.37176 -20.046875 141.33789 C -19.990431 141.41691 -19.842498 141.54102 -19.707031 141.54102 C -19.560276 141.53537 -19.453359 141.4742 -19.408203 141.41211 C -19.408203 141.37824 -19.407988 141.28215 -19.402344 141.20312 C -19.582966 141.23699 -19.560547 140.94336 -19.560547 140.94336 C -19.560547 140.6442 -19.548828 140.1922 -19.548828 139.80273 L -19.548828 139.54883 C -19.548828 139.06905 -19.685827 138.79189 -20.103516 138.76367 C -20.199471 138.75803 -20.21047 138.75781 -20.300781 138.75781 z M -20.142578 140.2207 C -20.103067 140.2207 -20.063164 140.22092 -20.029297 140.22656 L -20.029297 140.62695 C -20.029297 140.74549 -20.029727 140.8307 -20.041016 140.89844 C -20.04666 140.9323 -20.052949 140.96527 -20.058594 140.97656 C -20.137616 141.07252 -20.322854 141.15234 -20.492188 141.15234 L -20.53125 141.15234 C -20.706228 141.14105 -20.830078 141.03982 -20.830078 140.75195 C -20.830078 140.39635 -20.599058 140.27758 -20.328125 140.23242 C -20.271681 140.22678 -20.210311 140.2207 -20.142578 140.2207 z "
@@ -1509,7 +1509,7 @@
        d="m -20.300781,138.75781 c -0.378178,0.0113 -0.715451,0.1586 -0.833985,0.27149 -0.0056,0.0169 -0.01172,0.0399 -0.01172,0.0625 0,0.0226 2.15e-4,0.0456 0.0059,0.0625 0.01129,0.0677 0.03318,0.16816 0.08398,0.22461 0.04516,0 0.101974,-0.0167 0.164063,-0.0449 0.163689,-0.0677 0.394241,-0.14648 0.591797,-0.14648 0.242711,0 0.271484,0.14053 0.271484,0.39453 v 0.32227 c -0.0508,-0.0113 -0.112169,-0.0176 -0.185547,-0.0176 -0.0508,0 -0.101758,2.1e-4 -0.158203,0.006 -0.338666,0.0339 -0.955078,0.21003 -0.955078,0.9043 0,0.51928 0.343834,0.74414 0.705078,0.74414 0.1524,0 0.287932,-0.0102 0.412109,-0.0723 0.06209,-0.0339 0.130196,-0.097 0.164063,-0.13086 0.05644,0.079 0.204377,0.20313 0.339844,0.20313 0.146755,-0.006 0.253672,-0.0668 0.298828,-0.12891 0,-0.0339 2.15e-4,-0.12996 0.0059,-0.20899 -0.180622,0.0339 -0.158203,-0.25976 -0.158203,-0.25976 0,-0.29916 0.01172,-0.75116 0.01172,-1.14063 v -0.2539 c 0,-0.47978 -0.136999,-0.75694 -0.554688,-0.78516 -0.09596,-0.006 -0.106954,-0.006 -0.197265,-0.006 z m 0.158203,1.46289 c 0.03951,0 0.07941,2.2e-4 0.113281,0.006 v 0.40039 c 0,0.11854 -4.3e-4,0.20375 -0.01172,0.27149 -0.0056,0.0339 -0.01193,0.0668 -0.01758,0.0781 -0.07902,0.096 -0.26426,0.17578 -0.433594,0.17578 h -0.03906 c -0.174978,-0.0113 -0.298828,-0.11252 -0.298828,-0.40039 0,-0.3556 0.23102,-0.47437 0.501953,-0.51953 0.05644,-0.006 0.117814,-0.0117 0.185547,-0.0117 z"
        transform="translate(89.369927,24.660125)" />
     <rect
-       style="fill:#e5bd1c;fill-opacity:0.960784;stroke:#e5bd1c;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.960784"
+       style="fill:#ffdd54;fill-opacity:0.97254902;stroke:#ffdd54;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.96078432"
        id="rect31"
        width="6.6289563"
        height="6.1735764"
@@ -1518,7 +1518,7 @@
        ry="1.2201501" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0.120039"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#806600;fill-opacity:1;stroke:none;stroke-width:0.120039"
        x="68.967995"
        y="149.74875"
        id="text31"><tspan
@@ -1526,9 +1526,9 @@
          id="tspan31"
          x="68.967995"
          y="149.74875"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;stroke-width:0.120039">c</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#806600;stroke-width:0.120039">c</tspan></text>
     <rect
-       style="fill:#73d234;fill-opacity:1;stroke:#73d234;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:#ccff00;fill-opacity:1;stroke:#ccff00;stroke-width:0.452;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect32"
        width="6.6289563"
        height="6.1735764"
@@ -1537,7 +1537,7 @@
        ry="1.2201501" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0.120039"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#668000;fill-opacity:1;stroke:none;stroke-width:0.120039"
        x="68.931282"
        y="184.73036"
        id="text32"><tspan
@@ -1545,7 +1545,7 @@
          id="tspan32"
          x="68.931282"
          y="184.73036"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#f2f2f2;stroke-width:0.120039">b</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.64444px;font-family:'Qlassik Medium';-inkscape-font-specification:'Qlassik Medium, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#668000;stroke-width:0.120039">b</tspan></text>
     <path
        style="fill:#808080;stroke:#808080;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#ConcaveTriangle)"
        d="m 29.599511,148.58241 14.18704,15.46546"

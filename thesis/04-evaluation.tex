@@ -3,17 +3,17 @@
 \label{chap:evaluation}
 
 
-In this chapter, we introduce two approaches for evaluating \emph{semantic accuracy} of \ac{d2t} generation. As discussed in \autoref{sec:evaluation}, it is essential that the texts based on data contain information faithful to the input data. Yet, there are no widely applicable automatic metrics to assess the semantic accuracy of generated texts. Our metrics are based on \acp{plm} and generic text-to-text operations, which makes our approaches applicable to various tasks and domains.
+This chapter introduces two approaches for evaluating the semantic accuracy of \ac{d2t} generation. As discussed in \autoref{sec:evaluation}, it is essential that the texts based on the input data are \emph{faithful to the data}, i.e., semantically accurate. Yet, there is a lack of automatic metrics to assess the semantic accuracy of generated texts. The metrics we introduce are based on \acp{plm} and generic text-to-text operations, which makes our approaches applicable to various tasks and domains.
 
-In \autoref{sec:sem-acc}, we first describe a metric which is suitable for detecting omissions and hallucinations in \ac{d2t} generation from \emph{knowledge graphs}. The metric is based on an off-the-shelf \ac{plm} for \ac{nli}, which we repurpose for the task of assessing semantic accuracy. We show that our metric correlates well with human judgements, and that in some cases the metric even provides judgements which are more accurate.
+In \autoref{sec:sem-acc}, we first describe a metric suitable for \ac{d2t} generation tasks where all the facts in the input data should be mentioned. The metric is based on an off-the-shelf \ac{plm} for \ac{nli}, which we repurpose for detecting omissions and hallucinations in the output text. We show that our metric correlates well with human judgments and that in some cases the metric even provides judgments that are more accurate.
 
-In \autoref{sec:tok-eval}, we focus on detecting factual errors in \ac{d2t} generation from \emph{complex tabular data}. We propose a metric based on a neural \ac{plm}-based tagger, which can mark individual tokens with fine-grained error categories. To provide relevant information for the tagger, we combine a rule-based generation and neural-based retrieval model. With our metric, we placed first out of four automatic metrics in the Shared Task on Evaluating Accuracy in Generated Texts.
+In \autoref{sec:tok-eval}, we focus on detecting factual errors in \ac{d2t} generation from complex tabular data. We propose a metric based on a \ac{plm}-based tagger, which can mark individual tokens with fine-grained error categories. To provide relevant information for the tagger, we combine it with a rule-based generator and a neural-based retriever. The metric ranked first out of four automatic metrics in the Shared Task on Evaluating Accuracy in Generated Texts.
 
 \section{Detecting Omissions and Hallucinations}
 \label{sec:sem-acc}
 
 \begin{refbox}
-    This section is based on the paper \emph{Evaluating Semantic Accuracy of Data-to-Text Generation with Natural Language Inference} \cite{dusekEvaluatingSemanticAccuracy2020}, joint work with Ondřej Dušek, published in the Proceedings of the The 13th International Conference on Natural Language Generation (INLG 2020). The experimental part was done by Ondřej Dušek, the author of this thesis came up with the initial idea and wrote the paper. The paper has received the award for the best short paper at the conference.
+    This section is based on the paper \emph{Evaluating Semantic Accuracy of Data-to-Text Generation with Natural Language Inference} \cite{dusekEvaluatingSemanticAccuracy2020}, joint work with Ondřej Dušek, published in the Proceedings of the The 13th International Conference on Natural Language Generation (INLG 2020). The experimental part was done by Ondřej Dušek; the author of this thesis came up with the initial idea and wrote the paper. The paper has received the award for the best short paper at the conference.
 \end{refbox}
 
 In this section, we propose a new metric for evaluating the semantic accuracy of D2T generation. Our metric is based on a neural model pretrained for \ac{nli}.
@@ -24,7 +24,7 @@ We demonstrate that even without any extra model training and with minimal handc
 \subsection{Motivation}
 In \autoref{sec:evaluation}, we described two ways how the semantic accuracy of the text can be compromised: the text may be missing some data (\emph{omission}) or contain extra information not supported by the data (\emph{hallucination}). Since state-of-the-art neural \ac{d2t} generation models are prone to both of these \cite{gehrmannEndtoEndContentPlan2018,ferreiraNeuralDatatotextGeneration2019,dusekEvaluatingStateoftheartEndtoEnd2020}, recognizing the violations of semantic accuracy is essential for proper system evaluation and further development. However, it is difficult for handcrafted heuristics to cover all edge cases, as minor changes in wording may cause major differences in the meaning of the text. Human evaluation, on the other hand, is expensive and difficult to scale.
 
-We note that if we transform individual data items to short sentences (\emph{facts}), we can check whether the each sentence is entailed by the generated text. Specifically, if we find that the sentence is not entailed by the generated text, we can report an \emph{omission} of the corresponding data item. Vice versa, if we concatenate all the facts and these do not entail the generated text; we can report a \emph{hallucination}. For this approach, we need only two ingredients: (1) a way to convert individual data items to facts, and (2) a model that can assess if one sentence entails another. We formalize our approach in the next section.
+We note that if we transform individual data items to short sentences (\emph{facts}), we can check whether each sentence is entailed by the generated text. Specifically, if we find that the sentence is not entailed by the generated text, we can report an \emph{omission} of the corresponding data item. Vice versa, if we concatenate all the facts and these do not entail the generated text, we can report a \emph{hallucination}. For this approach, we need only two ingredients: (1) a way to convert individual data items to facts and (2) a model that can assess if one sentence entails another. We formalize our approach in the next section.
 
 
 
@@ -32,13 +32,13 @@ We note that if we transform individual data items to short sentences (\emph{fac
 \label{sec:sem-acc:method}
 We are given a set of \acs{rdf}\glsunset{rdf} triples $x \in X$, where each triple $x = (s, p, o)$ describes the relation $p$ between the entities $s$ and $o$, and the corresponding natural language description $Y$. Our task is to assess whether $Y$ mentions all the triples in $X$. Additionally, we should also check whether the text mentions any extra information.
 
-\paragraph{Data Preprocessing} Throughout \autoref{chap:low-res}, we have used simple templates for transforming individual triple to facts, i.e., simple sentences capturing the meaning of the triple.  We use the same method here, considering two cases:
+\paragraph{Data Preprocessing} Throughout \autoref{chap:low-res}, we have used simple templates for transforming individual triples to facts, i.e., simple sentences capturing the triple meaning.  We use the same method here, considering two cases:
 \begin{enumerate}
-    \item \emph{Default:} We use a specific template for each predicate, using templates which are either handcrafted or extracted from the NLG systems' training data.
+    \item \emph{Default:} We use a specific template for each predicate, using templates that are either handcrafted or extracted from the NLG systems' training data.
     \item \emph{Backoff:} We use only a single, universal ``backoff'' template for all the facts, in the form: \emph{The \textless{}predicate\textgreater{} of \textless{}subject\textgreater{} is \textless{}object\textgreater{}}.
 \end{enumerate}
 
-\paragraph{Natural Language Inference} \ac{nli} is a sequence classification task which takes two inputs---a \textit{hypothesis} and a \textit{premise}---and produces one of the possible outputs: the hypothesis is \textit{entailed} by (follows from) the premise, \textit{contradicts} the premise, or their relation is \textit{neutral}. Recently, neural models for \ac{nli} \cite{zhang2019semantics,liu-etal-2019-multi,liuRoBERTaRobustlyOptimized2019} reached near-human levels of performance and \ac{nli} was used for evaluating the output of abstractive summarization systems \cite{maynezFaithfulnessFactualityAbstractive2020}.
+\paragraph{Natural Language Inference} \ac{nli} is a sequence classification task that takes two inputs---a \textit{hypothesis} and a \textit{premise}---and produces one of the possible outputs: the hypothesis is \textit{entailed} by (follows from) the premise, \textit{contradicts} the premise, or their relation is \textit{neutral}. Neural models for \ac{nli} \cite{zhang2019semantics,liu-etal-2019-multi,liuRoBERTaRobustlyOptimized2019} have already reached near-human levels of performance, making them suitable for evaluating the output of abstractive summarization systems \cite{maynezFaithfulnessFactualityAbstractive2020}.
 
 % Unlike previous works \cite{nie-etal-2019-simple,tian2019sticking,kedzie-mckeown-2019-good}, we use a pretrained neural model finetuned for \ac{nli} which we do not further train on any domain-specific data.
 
@@ -54,14 +54,14 @@ In this case, the model should detect that the first fact is not entailed by the
 
 We achieve this by using the \ac{nli} model to check for entailment in two directions:
 \begin{enumerate}
-    \item To check for \textrm{omissions}, we use the whole generated text as a premise and sequentially feed each fact as a hypothesis to the \ac{nli} model. Any failed \ac{nli} check is considered an omission. While we could use all concatenated facts in a single \ac{nli} check, our approach gives us further information about which facts are omitted.
-    \item To check for \textrm{hallucinations}, we use a concatenation of all facts as a premise and feed the generated text as a hypothesis to the \ac{nli} model. If this \ac{nli} check fails, the text is considered to contain hallucination. This step cannot be split into simpler \ac{nli} checks.
+    \item To check for \textrm{omissions}, we use the whole generated text as a premise and sequentially feed each fact as a hypothesis to the \ac{nli} model. Any failed \ac{nli} check is considered an omission.
+    \item To check for \textrm{hallucinations}, we concatenate all facts as a premise and feed the generated text as a hypothesis to the \ac{nli} model. If this \ac{nli} check fails, the text is considered to contain hallucination. This step cannot be split into simpler \ac{nli} checks.
 \end{enumerate}
 
 The final output of our metric is either 4-way (denoted as \textsc{Fine}) or 2-way (denoted as \textsc{Rough}):
 \begin{itemize}
-    \item \textsc{Fine}: We output the probabilities of 4 categories: \emph{OK} (i.e., all \ac{nli} checks passed), \emph{omission}, \emph{hallucination}, or \emph{omission+hallucination} (based on the failed checks). The 4-way output is more useful for system evaluation, since we can distinguish whether the system tends to hallucinate or omit information.
-    \item  \textsc{Rough}: The three failure modes are combined into \emph{not\_OK}. The 2-way output corresponds more to a usage inside an \ac{d2t} generation system for output reranking or filtering: any output that is \emph{not\_OK} should be penalized or filtered out.
+    \item \textsc{Fine}: We output the probabilities of 4 categories: \emph{OK} (i.e., all \ac{nli} checks passed), \emph{omission}, \emph{hallucination}, or \emph{omission+hallucination} (based on the failed checks). The 4-way output is more useful for system evaluation since we can distinguish whether the system tends to hallucinate or omit information.
+    \item  \textsc{Rough}: The three failure modes are combined into \emph{not\_OK}. The 2-way output corresponds more to usage inside an \ac{d2t} generation system for output reranking or filtering, where any incorrect should be penalized or filtered out.
 \end{itemize}
 
 Additionally, we compute a \textit{confidence score} of the model as the minimum of all the entailment probabilities.
@@ -76,12 +76,12 @@ and \textit{entailment} (see \autoref{sec:sem-acc:method}). We consider a \ac{nl
 
 We experiment with the WebNLG and E2E datasets (see \autoref{sec:datasets} for the descriptions of the datasets). Since both datasets were used in shared tasks, we can compare the outputs of our system with the respective measures of semantic accuracy:
 \begin{itemize}
-    \item For WebNLG, we compare our metric with crowdsourced human ratings of semantic adequacy \cite{shimorinaWebNLGChallengeHuman2019}. In particular, we use the question: \textit{``Does the text correctly represent the meaning in the data?''}, where the human annotators used a three-point Likert scale (1 = Incorrect, 2 = Medium, 3 = Correct). The answers are averaged over multiple annotators. In our experiments, we consider a sentence correct if it achieved human rating 2.5 or higher.\footnote{We also tried a threshold of 2.0, with slightly worse results.}
+    \item For WebNLG, we compare our metric with crowdsourced human ratings of semantic adequacy \cite{shimorinaWebNLGChallengeHuman2019}. In particular, we use the question: \textit{``Does the text correctly represent the meaning in the data?''}, where the human annotators used a three-point Likert scale (1 = Incorrect, 2 = Medium, 3 = Correct). The answers are averaged over multiple annotators. In our experiments, we consider a sentence correct if it achieved a human rating 2.5 or higher.\footnote{We also tried a threshold of 2.0, with slightly worse results.}
     \item For E2E, we compare our metric to the results of the handcrafted automatic script which was used in the E2E challenge \cite{dusekEvaluatingStateoftheartEndtoEnd2020}.\footnote{While the E2E challenge did include crowdsourced evaluation of semantic accuracy, the results were unreliable, overestimating the number of errors \cite{dusekEvaluatingStateoftheartEndtoEnd2020}.} We further use small sets of system outputs and human-written texts with expert annotation \citep[provided by][]{dusekSemanticNoiseMatters2019} to evaluate our approach against gold-standard annotation and to compare to existing semantic accuracy classifiers for E2E data.
 \end{itemize}
 
 
-We evaluate the \emph{Default} and \emph{Backoff} approaches to acquiring templates as described in \autoref{sec:sem-acc:method}. For WebNLG, we obtained templates by delexicalizing human references for single-triple examples from WebNLG training data.\footnote{For each predicate, we choose randomly if more templates are found and use the backoff if no templates are found.} For E2E, we handcrafted eight templates for each of the predicate in the dataset.
+We evaluate the \emph{Default} and \emph{Backoff} approaches to acquiring templates as described in \autoref{sec:sem-acc:method}. For WebNLG, we obtained templates by delexicalizing human references for single-triple examples from WebNLG training data.\footnote{For each predicate, we choose randomly if more templates are found and use the backoff if no templates are found.} For E2E, we handcrafted eight templates for each predicate in the dataset.
 
 \subsection{Evaluation}
 \label{sec:sem-acc:evaluation}
@@ -101,7 +101,7 @@ We evaluate the \emph{Default} and \emph{Backoff} approaches to acquiring templa
 
 
 We evaluate our metric in terms of accuracy, precision, recall, and F1-measure (where \emph{not\_OK} samples are treated as positive since we focus on detecting errors). The overall scores for both datasets are summarized in \autoref{tab:sem-acc:res}.
-We additionally perform a manual error analysis on a random sample of 100 error examples for each dataset, i.e.\ examples where our metric gave a different assessment from the ground truth.
+We additionally perform a manual error analysis on a random sample of 100 error examples for each dataset, i.e., examples where our metric gave a different assessment from the ground truth.
 
 
 % The results for the E2E dataset are better, probably due to the lower lexical variability of the dataset.
@@ -110,16 +110,16 @@ We additionally perform a manual error analysis on a random sample of 100 error 
 
 % recall is probably more important than precision (not that there are differences)
 
-\paragraph{WebNLG Analysis} The overall scores show that our metric deviates quite a lot from the human judgments. Our manual error analysis indicates several reasons:
+\paragraph{WebNLG Analysis} The Spearman correlation of our model's confidence scores with the average human scores on the WebNLG dataset is moderate (around 63\%; $p<$1e-10). Our manual error analysis indicates several potential sources of discrepancies:
 \begin{enumerate}
-    \item The annotation is somewhat noisy and using a threshold is not ideal---many correctly rendered outputs do not reach the 2.5 threshold, while some incorrect ones do.
-    \item Imprecise templates can confuse the \ac{nli} (e.g., for the predicate \emph{nationality}, our extracted template is \emph{\textless{}subj\textgreater{} was \textless{}obj\textgreater{}}, which works well with values such as \emph{French}, but not with \emph{United States}). This is a weak point of our metric, as illustrated by the very small performance difference between the \emph{Default} and \emph{Backoff} setups. However, the issue can be mitigated by a better selection of the templates from training data, e.g.\ using language-model scoring.
-    \item The human annotators tend to give lower scores to accurate but ungrammatical or poorly organized texts, while our metric tends to rate these texts as \emph{OK}.
+    \item The human annotation is somewhat noisy---many correctly rendered outputs do not reach the 2.5 threshold, while some incorrect ones do.
+    \item The human annotators also tend to give lower scores to accurate but ungrammatical or poorly organized texts, while our metric tends to rate these texts as \emph{OK}.
+    \item Imprecise templates can confuse the \ac{nli} (e.g., for the predicate \emph{nationality}, our extracted template is \emph{\textless{}subj\textgreater{} was \textless{}obj\textgreater{}}, which works well with values such as \emph{French}, but not with \emph{United States}). This is a weak point of our metric, as illustrated by the very small performance difference between the \emph{Default} and \emph{Backoff} setups. However, the issue can be mitigated by a better selection of the templates from training data, e.g., using language-model scoring.
 \end{enumerate}
 
-Our re-examination shows that almost half of the error examples (42 out of 100) were in fact correctly classified by our metric (i.e.\ their crowdsourced human annotation was incorrect),  so the true performance is most likely higher than the reported numbers.
+Moreover, our re-examination shows that almost half of the error examples (42 out of 100) were in fact correctly classified by our metric (i.e., their crowdsourced human annotation was incorrect),  so the true performance is most likely higher than the reported numbers.
 
-The Spearman correlation of our model's confidence scores with the average human scores is around 0.63 ($p<$1e-10). This is similar to $n$-gram-based metrics on this data (\citealp{shimorinaWebNLGChallengeHuman2019} reports 0.59 for BLEU and 0.73 for METEOR), but unlike these metrics, our approach does not require human-written reference texts.
+%  This is similar to $n$-gram-based metrics on this data (\citealp{shimorinaWebNLGChallengeHuman2019} reports 0.59 for BLEU and 0.73 for METEOR), but unlike these metrics, our approach does not require human-written reference texts.
 
 % To further check whether the size of the input affects performance, we computed Spearman correlation of the number of input triples with metric errors. The resulting very low value of -0.05 ($p=$\,0.02, \emph{Default} setting) shows that the metric holds its performance even for more complex WebNLG examples.
 %
@@ -132,15 +132,14 @@ The Spearman correlation of our model's confidence scores with the average human
 
 
 
-\paragraph{E2E Analysis} The results for the E2E dataset are very good compared to the WebNLG dataset, with over 90\% agreement with the handcrafted script. This can be attributed to lower lexical variability and less noisy texts, as well as to the better quality of the handcrafted templates (the difference between the \emph{Default} and \emph{Backoff} setups is much more pronounced here).
-Again, we observe only a very slight drop in performance for more complex E2E inputs (Spearman correlation of metric errors with the number of input triples is -0.08, $p<$1e-10 for the \emph{Default} setting). The main issues identified by our error analysis are:
+\paragraph{E2E Analysis} The results for the E2E dataset are very good compared to the WebNLG dataset, with over 90\% agreement with the handcrafted script. This can be attributed to lower lexical variability and less noisy texts, as well as to the better quality of the handcrafted templates (the difference between the \emph{Default} and \emph{Backoff} setups is much more pronounced here). The main issues identified by our error analysis are:
 \begin{enumerate}
     \item Problems in the interpretation of some values, e.g., \textit{price range=less than \textsterling{}20} is verbalized as ``cheap'' or \textit{family-friendly=no} as ``adult-only''. These cases are classified as \emph{not\_OK} by the \ac{nli} model.
     \item Missing or over-greedy patterns in the slot error script, causing annotation errors.
-    \item Edge cases: some expressions cannot be interpreted in a straightforward way, e.g.\ ``high restaurant'' for \emph{pricerange=high} is deemed OK by the \ac{nli} but not by the slot error script.
-    \item Expressions in the outputs that do not correspond to input facts, such as ``with full service'', are considered hallucinations by the \ac{nli}, but ignored by the slot error script.
+    \item Edge cases: some expressions cannot be interpreted in a straightforward way, e.g., ``high restaurant'' for \emph{pricerange=high} is deemed OK by the \ac{nli} but not by the slot error script.
+    \item Expressions in the outputs that do not correspond to input facts, such as ``with full service'', are considered hallucinations by the \ac{nli} but ignored by the slot error script.
 \end{enumerate}
-Again, we consider about half of the error examples (45 out of 100) as correctly classified by our metric, and thus our metric's performance is probably higher than the reported values due to erroneous annotation from the handcrafted script.
+Again, we consider about half of the error examples (45 out of 100) as correctly classified by our metric, and thus our metric's performance is probably higher than the reported values.
 
 \subsection{Discussion}
 
@@ -187,7 +186,7 @@ Again, we consider about half of the error examples (45 out of 100) as correctly
 \end{refbox}
 
 
-In this section, we present an automatic metric for \ac{d2t} generation which can detect semantic accuracy errors in the generated text on the \emph{token level}. Our metric uses a combination of a rule-based \ac{d2t} generation system and \acp{plm}. We first use a rule-based \ac{d2t} generation system to generate all the facts that can be derived from the input. For each sentence we evaluate, we select a subset of facts which are relevant by measuring their semantic similarity with the examined sentence. For annotating erroneous tokens, we finetune a pretrained language model for token-level classification, using the annotated data with the relevant facts in the context as the ground truth.
+In this section, we present an automatic metric for \ac{d2t} generation that can detect semantic accuracy errors in the generated text on the \emph{token level}. Our metric combines a rule-based \ac{d2t} generation system and \acp{plm}. We first use a rule-based \ac{d2t} generation system to generate all the facts that can be derived from the input. For each sentence we evaluate, we select a subset of relevant facts by measuring their semantic similarity with the examined sentence. For annotating erroneous tokens, we finetune a pretrained language model for token-level classification, using the annotated data with the relevant facts in the context as the ground truth.
 
 On the test set of the Shared Task on Evaluating Accuracy in Generated Texts \cite{thomsonGenerationChallengesResults2021}, we achieve 69\% recall and 75\% precision with a model trained on a mixture of human-annotated and synthetic data, placing first out of four submissions in the track for automatic metrics. The code for our experiments is available on Github.\footnote{\url{https://github.com/kasnerz/accuracySharedTask_CUNI-UPF}}
 
@@ -196,13 +195,13 @@ On the test set of the Shared Task on Evaluating Accuracy in Generated Texts \ci
 \label{sec:tok-acc:motivation}
 
 
-In \autoref{sec:sem-acc}, we presented a metric for detecting semantic errors for \ac{d2t} generation at the level of individual data items. The metric is well-suited for cases where the text should mention all the data on the input, as it can report individual missing items (\emph{omissions}). However, it is less suitable for detecting incorrect information in the text (\emph{hallucinations}), as it can give only a single ``hallucination score'' for the entire text. This is problematic for the texts generated from complex data, where the omissions are not relevant (since we do not verbalize all the input data), but the system can still produce numerous hallucinations.
+In \autoref{sec:sem-acc}, we presented a metric for detecting semantic errors for \ac{d2t} generation at the level of individual data items. The metric is well-suited for cases where the text should mention \emph{all the data on the input}, as it can report individual missing items (omissions). However, it is less suitable for detecting incorrect information in the text (hallucinations), as it can give only a single ``hallucination score'' for the entire text. This is problematic for the texts generated from complex data, where the omissions are not relevant (since we do not verbalize all the input data), but the system can still produce numerous hallucinations.
 
 
 An example of a dataset with complex data is Rotowire (\citealp{wiseman2017challenges}; see \autoref{sec:datasets} for details). In this dataset, the task is to generate basketball match summaries from tabular data. Rotowire poses multiple challenges for neural systems, including the fact that it requires content selection or that its human-written training texts are themselves not always grounded in data, which makes neural models more susceptible to hallucination.
 The output texts are also usually longer, which makes the hallucinations more common and detecting hallucination errors on a more fine-grained level essential.
 
-There is, however, no established way to check for the hallucinations automatically. Specific content-checking metrics mostly remain a domain of handcrafted pattern matching \cite{wen2015semantically,dusekSemanticNoiseMatters2019}, which does not scale well to new domains. While human evaluation provides a more reliable alternative, it is costly and difficult to set up \cite{van2019best,belzDisentanglingPropertiesHuman2020,thomsonGoldStandardMethodology2020}. Regarding neural metrics such as BERTScore \cite{zhang2019bertscore} or BLEURT \cite{sellam2020bleurt}, most of them have not been evaluated for content preservation, especially on the level of individual tokens.
+There is, however, no established way to check for hallucinations automatically. Specific content-checking metrics mostly remain a domain of handcrafted pattern matching \cite{wen2015semantically,dusekSemanticNoiseMatters2019}, which does not scale well to new domains. While human evaluation provides a more reliable alternative, it is costly and difficult to set up \cite{van2019best,belzDisentanglingPropertiesHuman2020,thomsonGoldStandardMethodology2020}. Regarding neural metrics such as BERTScore \cite{zhang2019bertscore} or BLEURT \cite{sellam2020bleurt}, most of them have not been evaluated for content preservation, especially on the level of individual tokens.
 
 
 \subsection{Shared Task in Evaluating Accuracy}
@@ -238,10 +237,10 @@ The goal of the Shared Task on Evaluating Accuracy in Generated Texts at INLG 20
     \end{itemize}
     \lineacross{}
 
-    \caption{Example text with error annotations adapted from \citet{thomsonGenerationChallengesResults2021}, using the annotation style from \citet{thomsonEvaluatingFactualAccuracy2023}. The original data for this game is available at \url{https://www.basketball-reference.com/boxscores/201411050PHO.html} .}
+    \caption{Example text with error annotations adapted from \citet{thomsonGenerationChallengesResults2021}, using the error marking style from \citet{thomsonEvaluatingFactualAccuracy2023}. The original data for this game is available at \url{https://www.basketball-reference.com/boxscores/201411050PHO.html} .}
     \label{fig:tok-eval:example}
 \end{figure}
-An example of annotation of a system output is provided in \autoref{fig:tok-eval:example}. The objective of the shared task was to either implement an automatic metric for creating the same type of annotations automatically, or to develop a human evaluation scenario capable of producing the same annotations while requiring less resources.
+An example of an annotated system output is provided in \autoref{fig:tok-eval:example}. The objective of the shared task was to either implement an automatic metric for creating the same type of annotations automatically or to develop a human evaluation scenario capable of producing the same annotations while requiring fewer resources.
 
 
 % Our submission for the shared task falls into the first category:
@@ -264,7 +263,7 @@ An example of annotation of a system output is provided in \autoref{fig:tok-eval
 
 
 
-Our submission for the shared task falls into the first category. We developed an automatic metric based on a \ac{plm}, which marks each token in the output text for the presence of errors. To make the tabular data understandable for the \ac{lm}, we use a rule-based system to exhaustively generate all the facts that can be derived from the data. Since the context window of the \ac{lm} is limited, we also use a neural-based retrieval system to retrieve only $c$ relevant facts, which are added into the context window of the \ac{lm} to support its decisions. We describe individual components of our system below.
+Our submission for the shared task falls into the first category: we developed an automatic metric based on a \ac{plm}, which marks each token in the output text for the presence of errors. To make the tabular data understandable for the \ac{plm}, we use a rule-based system to exhaustively generate all the facts that can be derived from the data. Since the context window of the \ac{lm} is limited, we also use a neural-based retrieval system to retrieve only $c$ relevant facts, which are added into the context window of the \ac{lm} to support its decisions. We describe individual components of our system below.
 
 % We developed an automatic metric for token-level error annotation which combines (1) a rule-based sentence generation system, (2) a neural retrieval model, and (3) a pretrained encoder \ac{lm} used for error tagging. The idea behind our system is that the pretrained encoder will compare the output with the relevant context retrieved from the data, tagging errors on the token level.
 
@@ -277,15 +276,15 @@ Our submission for the shared task falls into the first category. We developed a
 
 
 \paragraph{Rule-based Fact Descriptions}
-We use rule-based systems to generate natural language descriptions of facts from the input tables. For each game, we generate facts about the game (hosting team, visiting team, date converted to weekday), line-score objects (team name and statistics), and box-score objects (player name, player team, player starting position and their personal statistics). We also generate additional facts that can be inferred from the input table, such as which team won and by how much, comparisons between the team and player raw data (e.g., \emph{Team A and Team B committed the same number of fouls}), details based on statistics (e.g., \emph{Player X recorded a double-double}), or an interpretation of some numbers (e.g., \emph{Team A came back in the 4th quarter}).\footnote{A number of facts frequently mentioned in human-written descriptions could not be obtained from the Rotowire data, as for instance the player stats per quarter, a career high points total, whether a player is an all-star or not, or if a player scored the winning shot.}
+We use a rule-based system to generate facts from the input tables in natural language. For each game, we generate facts about the game (hosting team, visiting team, date converted to weekday), line-score objects (team name and statistics), and box-score objects (player name, player team, player starting position and their personal statistics). We also generate additional facts that can be inferred from the input table, such as which team won and by how much, comparisons between the team and player raw data (e.g., \emph{Team A and Team B committed the same number of fouls}), details based on statistics (e.g., \emph{Player X recorded a double-double}), or an interpretation of some numbers (e.g., \emph{Team A came back in the 4th quarter}).\footnote{A number of facts frequently mentioned in human-written descriptions could not be obtained from the Rotowire data, as for instance the player stats per quarter, a career-high points total, whether a player is an all-star or not, or if a player scored the winning shot.}
 
-We experiment with both \emph{simple} descriptions created by filling in sentence templates, and \emph{compact} descriptions generated using a grammar-based system:
+We experiment with both \emph{simple} descriptions created by filling in sentence templates and \emph{compact} descriptions generated using a grammar-based system:
 \begin{itemize}
     \item \textbf{Simple descriptions} are produced by a template-based system, with one template per fact. We handcrafted 129 sentence templates to cover all the facts described above. A sentence template looks like the following: ``\textit{[PLAYER$\_$NAME] scored [PTS] points.}'', where square brackets indicate variables that are instantiated with the corresponding input values (see Figure~\ref{fig:tok-eval:gen} for sample sentences).
-    \item  \textbf{Compact descriptions} are produced by the FORGe system \cite{mille2019teaching}, which allows for the generation of more compact sentences.  For instance, the five bottom sentences from the simple system in \autoref{fig:tok-eval:gen} are covered by the single bottom sentence from the compact system. FORGe performs surface realization in several steps, by first aggregating the templates based on predicate and/or argument identity, and then structuring, linearizing and inflecting components of the sentences. The FORGe grammars were used off-the-shelf,\footnote{We deactivated cross-sentence referring expression generation so that each generated sentence can be used on its own.} with additional 98 manually crafted abstract templates.
+    \item  \textbf{Compact descriptions} are produced by the FORGe system \cite{mille2019teaching}, which allows for the generation of more compact sentences.  For instance, the five bottom sentences from the simple system in \autoref{fig:tok-eval:gen} are covered by the single bottom sentence from the compact system. FORGe performs surface realization in several steps, by first aggregating the templates based on the predicate and argument identity and then structuring, linearizing, and inflecting components of the sentences. The FORGe grammars were used off-the-shelf,\footnote{We deactivated cross-sentence referring expression generation so that each generated sentence can be used independently.} with additional 98 manually crafted abstract templates.
 \end{itemize}
 
-The simple system produces about 569 facts for each game. The compact system covers the same amount of information with more syntactically complex sentences, producing about 112 sentences per game, i.e., 5 times less.
+The simple system produces about 569 facts for each game. The compact system covers the same amount of information with more syntactically complex sentences, producing about 112 sentences per game, i.e., five times less.
 
 
 \begin{figure*}[t]
@@ -295,8 +294,7 @@ The simple system produces about 569 facts for each game. The compact system cov
     \label{fig:tok-eval:system}
 \end{figure*}
 
-\paragraph{Context Retrieval} The maximum length of the input sequence for our error tagger is 512 tokens, which is about 10\% of the total length of the generated sentences $G$. Therefore, we select only a subset of $G$, which we refer to as \emph{context} $C$. For each generated sentence $g_i\in G$, we measure semantic similarity between $g_i$ and the evaluated sentence $s$ using Sentence Transformers \cite{reimers-gurevych-2019-sentence}.\footnote{\url{https://www.sbert.net/}}
-In particular, we embed the sentence tokens by applying mean pooling on the output of \texttt{paraphrase-distilroberta-base-v2}, getting the embedding vectors $e_{s}$ and $e_{g_i}$. Then we compute the cosine similarity between the embeddings:
+\paragraph{Context Retrieval} The maximum length of the input sequence for our error tagger is 512 tokens, which is about 10\% of the total length of the generated sentences $G$. Therefore, we select only a subset of $G$, which we refer to as \emph{context} $C$. For each generated sentence $g_i\in G$, we measure semantic similarity between $g_i$ and the evaluated sentence $s$ using Sentence Transformers \cite{reimers-gurevych-2019-sentence}. In particular, we embed the sentence tokens by applying mean pooling on the output of \texttt{paraphrase-distilroberta-base-v2}, getting the embedding vectors $e_{s}$ and $e_{g_i}$. Then, we compute the cosine similarity between the embeddings:
 \begin{align}
     score = \frac{e_s \cdot e_{g_i}}{\lVert e_s \rVert \lVert e_{g_i} \rVert}.
 \end{align}
@@ -304,7 +302,7 @@ For the context $C$, we select the top $c$ sentences from $G$ that have the high
 
 
 \paragraph{LM-based Error Tagger}
-As our error tagger, we use RoBERTa \cite{liuRoBERTaRobustlyOptimized2019} with a token-level classification head. The model receives an input $X = (C, s)$ and is trained to annotate each token in $s$ either with an \textit{OK} label, or with a label corresponding to one of the error categories. We experiment with two data sources for training the model:
+As our error tagger, we use RoBERTa \cite{liuRoBERTaRobustlyOptimized2019} with a token-level classification head. The model receives an input $X = (C, s)$ and is trained to annotate each token in $s$ either with an \textit{OK} label or with a label corresponding to one of the error categories. We experiment with two data sources for training the model:
 \begin{itemize}
     \item \emph{gold-standard annotated data} from the shared task (which contains all error types),
     \item \emph{synthetic data} created by perturbing the human-written summaries from Rotowire (which contains only \errent{NAME} and \errnum{NUMBER} errors).
@@ -312,14 +310,14 @@ As our error tagger, we use RoBERTa \cite{liuRoBERTaRobustlyOptimized2019} with 
 % For our submission, we use two-stage finetuning: first we finetune on synthetic data, then we finetune on the annotated data. 
 % \ODdel{A cross-validation on the development set gives us 65\% F1-score (61\% precision and 69\% recall).}\OD{I'd include at least bits of the mega-table instead.}
 
-\paragraph{Synthetic Data} The gold-standard data contains only 60 games, as opposed to 3,395 games in the Rotowire training set. This led us to an idea of using the training set as a source of synthetic data, introducing errors into human-written descriptions. We focus only on the \errent{NAME} and \errnum{NUMBER} errors, i.e., the categories which are the most represented and also easiest to generate. In each sentence, we identify named entities in the text using \emph{spaCy}.\footnote{\url{https://spacy.io}} We modify only certain portion of entities according to the \emph{entity modification rate} (EMR), which we treat as a hyperparameter. We introduce the \errent{NAME} errors by:
+\paragraph{Synthetic Data} The gold-standard data contains only 60 games, as opposed to 3,395 games in the Rotowire training set. This led us to the idea of using the training set as a source of synthetic data, introducing errors into human-written descriptions. We focus only on the \errent{NAME} and \errnum{NUMBER} errors, i.e., the categories that are the most represented and also easiest to generate. In each sentence, we identify named entities in the text using \emph{spaCy}.\footnote{\url{https://spacy.io}} We modify only a certain portion of entities according to the \emph{entity modification rate} (EMR), which we treat as a hyperparameter. We introduce the \errent{NAME} errors by:
 \begin{enumerate}
     \item swapping the names of teams with opponent teams,
     \item swapping the names of players with other players in the game,
     \item swapping the names of cities with other cities in the Rotowire dataset,
     \item modifying the days of the week.
 \end{enumerate}
-For \errnum{NUMBER} errors, we take an integer $n$ identified in the text, sample a number from a normal distribution with $\mu=n$ and $\sigma=3$, and truncate it to get an integer. We re-sample if the output equals the original number, or for negative outputs. If the number is spelled out, we use \texttt{text2num}\footnote{\url{https://pypi.org/project/text2num/}} and  \texttt{num2words}\footnote{\url{https://pypi.org/project/num2words/}} to convert to digits and back.
+For \errnum{NUMBER} errors, we take an integer $n$ identified in the text, sample a number from a normal distribution with $\mu=n$ and $\sigma=3$, and truncate it to get an integer. We re-sample if the output equals the original number or for negative outputs. If the number is spelled out, we use \texttt{text2num}\footnote{\url{https://pypi.org/project/text2num/}} and  \texttt{num2words}\footnote{\url{https://pypi.org/project/num2words/}} to convert to digits and back.
 
 
 \subsection{Experiments}
@@ -332,7 +330,7 @@ We experiment with several hyperparameters: % regarding our training data:
 \begin{itemize}
     \item \emph{simple} vs.~\emph{compact} sentences in $G$, % (Section \ref{sec:rule-based-system})
     \item  \textit{number of sentences} retrieved for the context: $c$ = 5, 10, 20 or 40;
-    \item \textit{entity modification rate} (EMR): proportion of entities which are modified in the synthetic data: 0.25, 0.5, or 0.75.
+    \item \textit{entity modification rate} (EMR): proportion of entities modified in the synthetic data: 0.25, 0.5, or 0.75.
 \end{itemize}
 We evaluate the model using a script provided by the organizers, which computes recall and precision of the model output with respect to the human-annotated data. Since we use the human-annotated data for training, we perform 6-fold cross-validation: in each run, we use 45 games for training, 5 games for validation, and 10 games for evaluation.
 
@@ -387,7 +385,7 @@ We evaluate the model using a script provided by the organizers, which computes 
 \end{table}
 
 \paragraph{Submission Results}
-Table \ref{tab:tok-eval:results-test} shows the results of our model on the official test data of the task, broken down by error types. The overall scores are higher than on the development set -- test set recall is 0.691 (vs.~0.614 on the development set) and precision is 0.756 (vs.~0.690). The fact that we used the whole available human annotated data for training the final model may have contributed to the difference, but it is also possible that the test data was somewhat less challenging. We note that our model was able to identify only three types of errors (\errent{NAME}, \errnum{NUMBER}, \errword{WORD}), having better results for the \errent{NAME} and \errnum{NUMBER} errors. We believe the explanation is two-fold: the names and numbers are often found verbatim in the input data (and in our generated facts), which makes them easy to detect, and also the corresponding error types were the most represented in the training data. In contrast, the three error types which were not detected are much less represented in the training data and hard to detect in our setup.
+Table \ref{tab:tok-eval:results-test} shows the results of our model on the official test data of the task, broken down by error types. The overall scores are higher than on the development set -- test set recall is 0.691 (vs.~0.614 on the development set), and precision is 0.756 (vs.~0.690). The fact that we used all the available human-annotated data for training the final model may have contributed to the difference, but it is also possible that the test data was somewhat less challenging. We note that our model was able to identify only three types of errors (\errent{NAME}, \errnum{NUMBER}, \errword{WORD}), having better results for the \errent{NAME} and \errnum{NUMBER} errors. We believe the explanation is two-fold: the names and numbers are often found verbatim in the input data (and in our generated facts), which makes them easy to detect, and also the corresponding error types were the most represented in the training data. In contrast, the three error types that were not detected are much less represented in the training data and hard to detect in our setup.
 
 
 \subsection{Discussion}
