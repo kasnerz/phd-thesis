@@ -305,384 +305,384 @@ Overall, we argue that training a PLM on verbalizing individual relations can po
     This section is based on the paper \emph{Beyond Basic Benchmarks: Evaluating Open LLMs on Data-to-Text Generation} \cite{kasnerReferenceBasedMetricsAnalyzing2024}, joint work with Ondřej Dušek. The work \ZK{TODO}
 \end{refbox}
 
-We analyze the behaviors of open \acp{llm} on the task of \ac{d2t} generation. To avoid the issue of \ac{llm} training data contamination with standard benchmarks, we design \datatool{} -- a tool for collecting novel structured data records from public APIs. Using a dataset collected with \datatool and leveraging reference-free evaluation, we analyze model behaviors on five D2T generation tasks.
-We find that recent open \acp{llm} (Llama2, Mistral, and Zephyr) can generate fluent and coherent text from standard data formats in zero-shot settings. However, we also show that the semantic accuracy of the outputs is a major issue: both according to our GPT-4-based metric and human annotators, more than 80\% of the outputs of open \acp{llm} contain a semantic error. We publicly release the code, data, and model outputs at \url{https://d2t-llm.github.io/}.
+% We analyze the behaviors of open \acp{llm} on the task of \ac{d2t} generation. To avoid the issue of \ac{llm} training data contamination with standard benchmarks, we design \datatool{} -- a tool for collecting novel structured data records from public APIs. Using a dataset collected with \datatool and leveraging reference-free evaluation, we analyze model behaviors on five D2T generation tasks.
+% We find that recent open \acp{llm} (Llama2, Mistral, and Zephyr) can generate fluent and coherent text from standard data formats in zero-shot settings. However, we also show that the semantic accuracy of the outputs is a major issue: both according to our GPT-4-based metric and human annotators, more than 80\% of the outputs of open \acp{llm} contain a semantic error. We publicly release the code, data, and model outputs at \url{https://d2t-llm.github.io/}.
 
 
-Large language models (\acp{llm}; \citealp{ouyang2022TrainingLM,touvron2023llama,touvronLlamaOpenFoundation2023,jiangMistral7B2023,tunstallZephyrDirectDistillation2023}) have already left a mark in many areas of natural language processing (NLP). Surprisingly, their applicability to the task of data-to-text (D2T) generation \cite{reiter1997building,gatt2018survey} remains underexplored, with limited evaluation on a handful of well-established benchmarks only \cite{axelssonUsingLargeLanguage2023,yuanEvaluatingGenerativeModels2023}. Generating text from structured data is arguably challenging for \acp{llm}, given the specifics of D2T generation, such as long inputs, complex non-linear structure, and strict requirements on semantic accuracy. However, a more significant issue is perhaps the lack of testing grounds. The current D2T generation benchmarks are not only getting saturated \cite{vanmiltenburgBarriersEnablingFactors2023}, but also promote optimization towards traditional reference-based evaluation metrics, which were shown to correlate poorly with human judgment \cite{gehrmann2022repairing,vanderleeHumanEvaluationAutomatically2021,novikovaWhyWeNeed2017}. When it comes to the models, using closed \acp{llm} \cite{openai2023gpt4,chatgpt} is increasingly considered a bad research practice due to its non-reproducibility \cite{rogers2023closed,chen2023chatgpt}. On top of that, contamination of \ac{llm} training data with standard benchmarks further restricts the space for experiments \cite{golchin2023time,aiyappa-etal-2023-trust,balloccu2024leak}.
+% Large language models (\acp{llm}; \citealp{ouyang2022TrainingLM,touvron2023llama,touvronLlamaOpenFoundation2023,jiangMistral7B2023,tunstallZephyrDirectDistillation2023}) have already left a mark in many areas of natural language processing (NLP). Surprisingly, their applicability to the task of data-to-text (D2T) generation \cite{reiter1997building,gatt2018survey} remains underexplored, with limited evaluation on a handful of well-established benchmarks only \cite{axelssonUsingLargeLanguage2023,yuanEvaluatingGenerativeModels2023}. Generating text from structured data is arguably challenging for \acp{llm}, given the specifics of D2T generation, such as long inputs, complex non-linear structure, and strict requirements on semantic accuracy. However, a more significant issue is perhaps the lack of testing grounds. The current D2T generation benchmarks are not only getting saturated \cite{vanmiltenburgBarriersEnablingFactors2023}, but also promote optimization towards traditional reference-based evaluation metrics, which were shown to correlate poorly with human judgment \cite{gehrmann2022repairing,vanderleeHumanEvaluationAutomatically2021,novikovaWhyWeNeed2017}. When it comes to the models, using closed \acp{llm} \cite{openai2023gpt4,chatgpt} is increasingly considered a bad research practice due to its non-reproducibility \cite{rogers2023closed,chen2023chatgpt}. On top of that, contamination of \ac{llm} training data with standard benchmarks further restricts the space for experiments \cite{golchin2023time,aiyappa-etal-2023-trust,balloccu2024leak}.
 
 
-In this paper, we propose an approach that allows us to analyze model behavior in D2T generation on novel, real-world structured data records with reference-free evaluation metrics. We begin by realizing that \textit{unlabeled data are plentiful}. To leverage the data for our experiments, we introduce \datatool\footnote{\underline{Q}uintet of \underline{U}nlabeled \underline{I}nputs for \underline{N}atural \underline{T}asks in \underline{D}ata-to-text, pronounced as ``quintet''} -- a tool for collecting structured data from five domains in standard formats: JSON,
-% \footnote{\url{https://www.json.org/}}
-CSV,
-% \footnote{\url{https://tools.ietf.org/rfc4180}}
-and Markdown.
-% \footnote{\url{https://www.rfc-editor.org/rfc/rfc7763.html}
-We choose the domains so that the data can be directly used as input for five distinct D2T generation tasks. Specifically, our tasks include generating weather forecasts, sports reports, product descriptions, chart captions, and entity descriptions (see Table \ref{tab:data}).
-%
-Next, we collect a set of 1,000 inputs with \datatool and use the inputs as an ad-hoc benchmark (called \benchmark) for testing the abilities of \acp{llm} for D2T generation. We assume that the data formats in \benchmark are common in the \acp{llm}' pretraining corpora, so we specify the task using instructions instead of standard finetuning with human-written outputs, capitalizing on the zero-shot abilities of instruction-tuned \acp{llm} (§\ref{sec:data}).
+% In this paper, we propose an approach that allows us to analyze model behavior in D2T generation on novel, real-world structured data records with reference-free evaluation metrics. We begin by realizing that \textit{unlabeled data are plentiful}. To leverage the data for our experiments, we introduce \datatool\footnote{\underline{Q}uintet of \underline{U}nlabeled \underline{I}nputs for \underline{N}atural \underline{T}asks in \underline{D}ata-to-text, pronounced as ``quintet''} -- a tool for collecting structured data from five domains in standard formats: JSON,
+% % \footnote{\url{https://www.json.org/}}
+% CSV,
+% % \footnote{\url{https://tools.ietf.org/rfc4180}}
+% and Markdown.
+% % \footnote{\url{https://www.rfc-editor.org/rfc/rfc7763.html}
+% We choose the domains so that the data can be directly used as input for five distinct D2T generation tasks. Specifically, our tasks include generating weather forecasts, sports reports, product descriptions, chart captions, and entity descriptions (see Table \ref{tab:data}).
+% %
+% Next, we collect a set of 1,000 inputs with \datatool and use the inputs as an ad-hoc benchmark (called \benchmark) for testing the abilities of \acp{llm} for D2T generation. We assume that the data formats in \benchmark are common in the \acp{llm}' pretraining corpora, so we specify the task using instructions instead of standard finetuning with human-written outputs, capitalizing on the zero-shot abilities of instruction-tuned \acp{llm} (§\ref{sec:data}).
 
 
-We push towards better reproducibility by \textit{focusing on open \acp{llm}}, which -- apart from being more accessible -- also achieve increasingly better results across tasks \cite{zheng2023judging,open-llm-leaderboard}. For our experiments, we use three open \acp{llm} with 7B parameters: Llama-2 \cite{touvronLlamaOpenFoundation2023,llama-2-7b-32k}, Mistral \cite{jiangMistral7B2023}, and Zephyr \cite{tunstallZephyrDirectDistillation2023}. We also use GPT-3.5 \cite{chatgpt} as a closed model baseline for the final experiments. Given the behavioral nature of the experiments with \acp{llm} \cite{holtzmanGenerativeModelsComplex2023}, we put emphasis on reporting model behavior throughout the process  (§\ref{sec:experiments}).
+% We push towards better reproducibility by \textit{focusing on open \acp{llm}}, which -- apart from being more accessible -- also achieve increasingly better results across tasks \cite{zheng2023judging,open-llm-leaderboard}. For our experiments, we use three open \acp{llm} with 7B parameters: Llama-2 \cite{touvronLlamaOpenFoundation2023,llama-2-7b-32k}, Mistral \cite{jiangMistral7B2023}, and Zephyr \cite{tunstallZephyrDirectDistillation2023}. We also use GPT-3.5 \cite{chatgpt} as a closed model baseline for the final experiments. Given the behavioral nature of the experiments with \acp{llm} \cite{holtzmanGenerativeModelsComplex2023}, we put emphasis on reporting model behavior throughout the process  (§\ref{sec:experiments}).
 
-Another piece of the puzzle is \textit{reference-free evaluation}: using the input data as a ground for comparison instead of human references (§\ref{sec:eval}).
-% \cite{duvsek2017referenceless} 
-For evaluation, we use manual annotations from human crowdworkers \cite{vanderleeHumanEvaluationAutomatically2021}, along with a customized automatic metric based on GPT-4 \cite{liuGEvalNLGEvaluation2023,chiang-lee-2023-large,kocmiGEMBAMQMDetectingTranslation2023}. To get a fine-grained picture of model errors, we annotate semantic accuracy errors on the level of individual tokens \cite{thomsonGoldStandardMethodology2020,thomson2023evaluating}.
+% Another piece of the puzzle is \textit{reference-free evaluation}: using the input data as a ground for comparison instead of human references (§\ref{sec:eval}).
+% % \cite{duvsek2017referenceless} 
+% For evaluation, we use manual annotations from human crowdworkers \cite{vanderleeHumanEvaluationAutomatically2021}, along with a customized automatic metric based on GPT-4 \cite{liuGEvalNLGEvaluation2023,chiang-lee-2023-large,kocmiGEMBAMQMDetectingTranslation2023}. To get a fine-grained picture of model errors, we annotate semantic accuracy errors on the level of individual tokens \cite{thomsonGoldStandardMethodology2020,thomson2023evaluating}.
 
-Based on our results, we provide general recommendations about D2T generation with open \acp{llm} across tasks and formats (§\ref{sec:discussion}). Our main findings are as follows:
-\begin{itemize}
-    \item \textbf{Open \acp{llm} can generate fluent outputs from structured data} in common formats under zero-shot settings.
-    \item \textbf{Semantic accuracy is a major obstacle}: both human annotators and GPT-4-based metric report that over 80\% of outputs of open \acp{llm} on our data contain a semantic error.
-    \item \textbf{Long data inputs cause practical issues}, including the need for long-context models, increased GPU memory requirements, and unavailability of few-shot approaches.
-    \item \textbf{Outputs can be empirically improved by following several rules-of-thumb} for preprocessing the model input, such as including units, removing unnecessary fields, or prefixing the model answer.
-\end{itemize}
-
-
-\section{Reference-Free D2T Generation}
-\label{sec:data}
-
-\paragraph{Data Collection Tool}
-\label{sec:data_collection}
-We introduce a tool named \datatool{} for collecting ad-hoc test sets using public APIs in five different domains, and we collect one such set (\benchmark) for our experiments. Our main reasons for departing from the traditional scheme of benchmarking on well-established datasets are:
-\begin{enumerate}
-    \item Any published test sets may be potentially included in the training data of \acp{llm}.
-    \item Public sources of structured data offer enough resources for creating ad-hoc test sets.
-    \item Without human references, our data collection scheme is lightweight and replicable.
-\end{enumerate}
-
-Given the available public sources of data, we settled on the five tasks which are described in Table \ref{tab:data} (see Appendix \ref{app:data} for more details). The tasks are based on structured data in common formats: JSON, CSV, and Markdown.
-
-
-\begin{figure}[t]
-    \centering
-    \small
-    \textbf{Prompt}
-    \begin{verbatimbox}
-        Based on the given data:
-
-        \`{}\`{}\`{}
-
-        \{DATA\}
-
-        \`{}\`{}\`{}
-
-        Your task is to write a brief, fluent, and
-        coherent single-paragraph \{output\_type\} in natural
-        language. The text should be balanced and neutral.
-        Make sure that all the facts mentioned in the text
-        can be derived from the input data, do *not* add
-        any extra information.
-    \end{verbatimbox}
-    \textbf{Output prefix}
-    \begin{verbatimbox}
-        Sure! Here is the \{output\_type\}:
-
-        "
-    \end{verbatimbox}
-    \caption{The prompt $\mathcal{P}$ and the model output prefix we used for the experiments in this paper. \texttt{DATA} is filled with the data record  $x$ and \texttt{output\_type} is filled accordingly for each domain $\mathcal{D}$ (see Table \ref{tab:data}).}
-    \label{fig:quintd:prompt}
-\end{figure}
-
-
-\paragraph{\benchmark Dataset}
-\label{sec:dataset}
-The benchmark we collected using \datatool{} for our experiments in this paper (\datatool{}-1) contains 500 examples in the development set and 500 examples in the test set (100 examples per domain for each split). We keep the size of the dataset moderate for a quick experimental turnaround.
-
-We downloaded the data between November 2023 and January 2024. Note that the dataset contains only \textbf{unlabeled} data without any reference outputs (e.g., weather data, but not a textual weather forecast). New versions of the benchmark can be easily generated with the \datatool{} tool we provide.
-
-
-
-\paragraph{Task Definition}
-Each example in \benchmark consists of a structured data record $x$ from a domain $\mathcal{D} \in $ \{\texttt{openweather}, \texttt{gsmarena}, \texttt{ice\_hockey}, \texttt{owid}, \texttt{wikidata}\}. Given $x$ and a prompt $\mathcal{P}$, the goal is to generate natural language output $y$ faithful to the data $x$, according to the instructions in the prompt $\mathcal{P}$ (see Figure \ref{fig:prompt}).
-
-
-
-
-% Since diversity and controllability of the output style is generally an underexplored topic in D2T generation (although see \citealp{hanGeneratingDiverseDescriptions2021}; \citealp{perlitzDiversityEnhancedTabletoText2022}), we cover three scenarios with different prompts, focusing on \textit{stylized} and \textit{topic-centric generation}:
+% Based on our results, we provide general recommendations about D2T generation with open \acp{llm} across tasks and formats (§\ref{sec:discussion}). Our main findings are as follows:
 % \begin{itemize}
-%   \item $\mathcal{P}_\text{direct}$ -- Generating \texttt{output\_type} in a neutral and balanced way.
-%   \item $\mathcal{P}_\text{stylized}$ -- Generating \texttt{output\_type} written in a specific style (\texttt{style}).
-%   \item $\mathcal{P}_\text{topic-centric}$ -- Generating \texttt{output\_type} focusing on a given aspect (\texttt{aspect}).
+%     \item \textbf{Open \acp{llm} can generate fluent outputs from structured data} in common formats under zero-shot settings.
+%     \item \textbf{Semantic accuracy is a major obstacle}: both human annotators and GPT-4-based metric report that over 80\% of outputs of open \acp{llm} on our data contain a semantic error.
+%     \item \textbf{Long data inputs cause practical issues}, including the need for long-context models, increased GPU memory requirements, and unavailability of few-shot approaches.
+%     \item \textbf{Outputs can be empirically improved by following several rules-of-thumb} for preprocessing the model input, such as including units, removing unnecessary fields, or prefixing the model answer.
 % \end{itemize}
 
-% We selected the values of the style and aspect variables manually for each domain to accomodate for their specific purposes and data formats (see Table~\ref{tab:setups}).
 
+% \section{Reference-Free D2T Generation}
+% \label{sec:data}
 
-\section{Experiments}
-\label{sec:experiments}
-\paragraph{Experimental Process}
-\label{sec:process}
-Our goal is to avoid extensive data preprocessing and prompt engineering since these steps could harm the reproducibility and generalizability of our experiments. With this goal in mind, we decided to use the same prompt template $\mathcal{P}$ for all the domains and models.
+% \paragraph{Data Collection Tool}
+% \label{sec:data_collection}
+% We introduce a tool named \datatool{} for collecting ad-hoc test sets using public APIs in five different domains, and we collect one such set (\benchmark) for our experiments. Our main reasons for departing from the traditional scheme of benchmarking on well-established datasets are:
+% \begin{enumerate}
+%     \item Any published test sets may be potentially included in the training data of \acp{llm}.
+%     \item Public sources of structured data offer enough resources for creating ad-hoc test sets.
+%     \item Without human references, our data collection scheme is lightweight and replicable.
+% \end{enumerate}
 
-For a set of preliminary experiments, we first wrote down the initial version of the prompt and used the data without further preprocessing.
-We then iteratively improved our experimental setup by observing outputs on the development set.
-We describe all the observations and modifications we made before generating the final outputs on the test set in §\ref{sec:observations}.
+% Given the available public sources of data, we settled on the five tasks which are described in Table \ref{tab:data} (see Appendix \ref{app:data} for more details). The tasks are based on structured data in common formats: JSON, CSV, and Markdown.
 
-% https://drive.google.com/file/d/1vMj_to9BHdeX0BgD2eX_rN--Q2kl2uct/view?usp=sharing
-\begin{figure*}[ht]
-    \centering
-    \includegraphics[width=\textwidth]{img/quintd_process.pdf}
-    \caption{Our experimental setup. We first generate the outputs using \acp{llm} that are given raw data and a task-specific prompt. We annotate the token-level semantic errors in the \ac{llm} outputs with (a) an automatic metric based on GPT-4 that matches the output to the raw data, and (b) human annotators, who annotate the errors in the output given the data visualization.}\label{fig:process}
-\end{figure*}
 
-\paragraph{Models}
-\label{sec:models}
-For our experiments, we selected the following \acp{llm} available under an open license:
+% \begin{figure}[t]
+%     \centering
+%     \small
+%     \textbf{Prompt}
+%     \begin{verbatimbox}
+%         Based on the given data:
 
-\begin{itemize}
-    \item \textbf{Llama2} \cite{touvron2023llama,llama-2-7b-32k},\\ \texttt{\small together\-computer\-/Llama-2-7B\--32K-Instruct}
-    \item \textbf{Mistral} \cite{jiangMistral7B2023},\\ \texttt{\small mistralai/Mistral-7B-Instruct-v0.1}
-    \item \textbf{Zephyr}  \cite{tunstallZephyrDirectDistillation2023}. \\ \texttt{\small HuggingFaceH4/zephyr-7b-beta}
-\end{itemize}
+%         \`{}\`{}\`{}
 
-The models are instruction-tuned, operate with 32k context, and perform well on recent benchmarks. All the models have 7B parameters and thus fit on a single NVIDIA A40 (48G VRAM) in 16-bit precision.  The models are available through HuggingFace \cite{wolf2019huggingface}.
+%         \{DATA\}
 
-We accessed the models via an API provided by the \texttt{text-generation-webui} framework\footnote{\url{https://github.com/oobabooga/text-generation-webui}} running locally.
-For the final experiments, we also included GPT-3.5 (\texttt{gpt-3.5-turbo-1106}) accessed through the OpenAI API \cite{chatgpt}.
+%         \`{}\`{}\`{}
 
-\paragraph{Observations from Preliminary Experiments}
-\label{sec:observations}
-During development, we made several observations which we took into account for our final experimental setup:
+%         Your task is to write a brief, fluent, and
+%         coherent single-paragraph \{output\_type\} in natural
+%         language. The text should be balanced and neutral.
+%         Make sure that all the facts mentioned in the text
+%         can be derived from the input data, do *not* add
+%         any extra information.
+%     \end{verbatimbox}
+%     \textbf{Output prefix}
+%     \begin{verbatimbox}
+%         Sure! Here is the \{output\_type\}:
 
-\paragraph{Any input field may appear in the output.} The models do not always select the most relevant fields for the given output. For example, we observed that the models commonly mention identifiers, timestamps, files, and other metadata, leading to unnatural outputs. Due to this, we decided not to include these irrelevant fields in the input.
+%         "
+%     \end{verbatimbox}
+%     \caption{The prompt $\mathcal{P}$ and the model output prefix we used for the experiments in this paper. \texttt{DATA} is filled with the data record  $x$ and \texttt{output\_type} is filled accordingly for each domain $\mathcal{D}$ (see Table \ref{tab:data}).}
+%     \label{fig:quintd:prompt}
+% \end{figure}
 
-\paragraph{Units need to be specified explicitly.} If the units are not specified in the data record, the models tend to resort to their best guess. This may go unnoticed if the unit is evident from the context (e.g., the model will usually not report the temperature in Fahrenheit instead of Celsius), but it may get problematic if the value is ambiguous (e.g., wind speed in km/h versus m/s). Therefore, we explicitly add units to all data records where appropriate.
 
-\paragraph{Understandable labels are enough.} On the flip side, we decided not to add extra descriptions to the keys if the key was understandable from the label (e.g., \texttt{homeTeam} or \texttt{dimensions}). As discussed by \citet{kasner2023mind}, pretrained models tend to interpret the fields correctly as long as the label is human-readable. We only decided to include chart metadata for the CSV files in the \texttt{owid} domain.
+% \paragraph{\benchmark Dataset}
+% \label{sec:dataset}
+% The benchmark we collected using \datatool{} for our experiments in this paper (\datatool{}-1) contains 500 examples in the development set and 500 examples in the test set (100 examples per domain for each split). We keep the size of the dataset moderate for a quick experimental turnaround.
 
-\paragraph{Long inputs can be troublesome.} The inputs in some domains can easily get longer than 10-20k tokens. This issue is amplified by the fact that the evaluated \acp{llm} tokenize numbers into individual digits. To accommodate for the long inputs, we picked models that accept up to 32k tokens.\footnote{For this reason, we use Llama-2-7B-32k with 32k token context \cite{llama-2-7b-32k} instead of the official Llama-2-7B-Instruct, which only supports 4k context \cite{touvronLlamaOpenFoundation2023}.} However, with long inputs, the GPU memory consumption also gets considerably higher, so we needed to downsample the data in \texttt{owid} and \texttt{openweather} to keep their length under \textasciitilde 8k tokens.
+% We downloaded the data between November 2023 and January 2024. Note that the dataset contains only \textbf{unlabeled} data without any reference outputs (e.g., weather data, but not a textual weather forecast). New versions of the benchmark can be easily generated with the \datatool{} tool we provide.
 
 
-\paragraph{Few-shot experiments are infeasible.} Due to the context-length limitations described above, we were not able to conduct few-shot experiments since we could not robustly fit an additional ($x_\text{example}$, $y_\text{example}$) pair in the prompt. We attempted to include only $y_\text{example}$ (making the setup ``half-shot''), but we observed that the models then tended to use entities from the example (unrelated to the actual input) in their outputs. Therefore, we decided not to follow this line of experiments (see §\ref{sec:future} for discussion).
 
-\paragraph{Deterministic decoding and sampling are on par.} In our preliminary experiments, we observed a roughly similar output quality for both deterministic decoding and sampling.\footnote{We used the \texttt{text-generation-webui} default decoding parameters: \texttt{temperature}=0.7, \texttt{top\_p}=0.9, and \texttt{top\_k}=20.} For the final experiments, we decided to use deterministic decoding, which is non-parametric and conceptually more suitable for D2T generation.
+% \paragraph{Task Definition}
+% Each example in \benchmark consists of a structured data record $x$ from a domain $\mathcal{D} \in $ \{\texttt{openweather}, \texttt{gsmarena}, \texttt{ice\_hockey}, \texttt{owid}, \texttt{wikidata}\}. Given $x$ and a prompt $\mathcal{P}$, the goal is to generate natural language output $y$ faithful to the data $x$, according to the instructions in the prompt $\mathcal{P}$ (see Figure \ref{fig:prompt}).
 
-\paragraph{Prefixing the output makes parsing easier.} Even with variations of a \textit{``generate only the output''} instruction appended to the prompt, the models (especially Llama2) tended to first confirm the request. For that reason, we decided to prefix the input for all the models with \textit{``Sure! Here is the \{output\_type\}: "''}. The opening quote at the end of the prefix allowed us to robustly parse the text simply by stripping the closing quote from the model output.
 
-\paragraph{The outputs are fluent but inaccurate.} We observed that the vast majority of model outputs were grammatically and stylistically correct, capturing the output type specified in the prompt. However, we also noticed that the outputs contained many factual errors (even after emphasizing the focus on factual accuracy in the prompt, see Figure \ref{fig:prompt}). This observation led us to evaluate the model outputs using token-level annotations focused on semantic accuracy errors \cite{reiterSharedTaskEvaluating2020}.
 
 
+% % Since diversity and controllability of the output style is generally an underexplored topic in D2T generation (although see \citealp{hanGeneratingDiverseDescriptions2021}; \citealp{perlitzDiversityEnhancedTabletoText2022}), we cover three scenarios with different prompts, focusing on \textit{stylized} and \textit{topic-centric generation}:
+% % \begin{itemize}
+% %   \item $\mathcal{P}_\text{direct}$ -- Generating \texttt{output\_type} in a neutral and balanced way.
+% %   \item $\mathcal{P}_\text{stylized}$ -- Generating \texttt{output\_type} written in a specific style (\texttt{style}).
+% %   \item $\mathcal{P}_\text{topic-centric}$ -- Generating \texttt{output\_type} focusing on a given aspect (\texttt{aspect}).
+% % \end{itemize}
 
-\paragraph{Final Experiments}
-\label{sec:basic}
+% % We selected the values of the style and aspect variables manually for each domain to accomodate for their specific purposes and data formats (see Table~\ref{tab:setups}).
 
-Taking the observations in §\ref{sec:observations} into account, we proceeded to generate the outputs on the test set of \benchmark for token-level error analysis. We first preprocessed the data as mentioned: we stripped out unnecessary fields, added units, and downsampled the data to fit the context. For all the models mentioned in §\ref{sec:models}, we used the prompt in Figure \ref{fig:prompt} and deterministic decoding with a maximum length of 512 tokens.
 
-For comparison, we also generated outputs for the same inputs and identical prompts with GPT-3.5.\footnote{We did not include GPT-3.5 in our preliminary experiments since closed models are not our focus. We also did not use GPT-4 because we reserve the model for evaluation; see §\ref{sec:gpt4eval}.} Note that even though we fixed the temperature and seed to $0$, the rest of the decoding parameters are inaccessible to us and may differ from the parameters we used for the open models.
+% \section{Experiments}
+% \label{sec:experiments}
+% \paragraph{Experimental Process}
+% \label{sec:process}
+% Our goal is to avoid extensive data preprocessing and prompt engineering since these steps could harm the reproducibility and generalizability of our experiments. With this goal in mind, we decided to use the same prompt template $\mathcal{P}$ for all the domains and models.
 
+% For a set of preliminary experiments, we first wrote down the initial version of the prompt and used the data without further preprocessing.
+% We then iteratively improved our experimental setup by observing outputs on the development set.
+% We describe all the observations and modifications we made before generating the final outputs on the test set in §\ref{sec:observations}.
 
+% % https://drive.google.com/file/d/1vMj_to9BHdeX0BgD2eX_rN--Q2kl2uct/view?usp=sharing
+% \begin{figure*}[ht]
+%     \centering
+%     \includegraphics[width=\textwidth]{img/quintd_process.pdf}
+%     \caption{Our experimental setup. We first generate the outputs using \acp{llm} that are given raw data and a task-specific prompt. We annotate the token-level semantic errors in the \ac{llm} outputs with (a) an automatic metric based on GPT-4 that matches the output to the raw data, and (b) human annotators, who annotate the errors in the output given the data visualization.}\label{fig:process}
+% \end{figure*}
 
+% \paragraph{Models}
+% \label{sec:models}
+% For our experiments, we selected the following \acp{llm} available under an open license:
 
+% \begin{itemize}
+%     \item \textbf{Llama2} \cite{touvron2023llama,llama-2-7b-32k},\\ \texttt{\small together\-computer\-/Llama-2-7B\--32K-Instruct}
+%     \item \textbf{Mistral} \cite{jiangMistral7B2023},\\ \texttt{\small mistralai/Mistral-7B-Instruct-v0.1}
+%     \item \textbf{Zephyr}  \cite{tunstallZephyrDirectDistillation2023}. \\ \texttt{\small HuggingFaceH4/zephyr-7b-beta}
+% \end{itemize}
 
-\section{Evaluation}
-\label{sec:eval}
-For evaluation, we focus on \textit{semantic accuracy} errors. We compare the generated texts to the input data, looking for parts of texts that are not faithful to the input data. We annotate the errors on the token level, considering all the tokens in the output text as potential sources of errors.
+% The models are instruction-tuned, operate with 32k context, and perform well on recent benchmarks. All the models have 7B parameters and thus fit on a single NVIDIA A40 (48G VRAM) in 16-bit precision.  The models are available through HuggingFace \cite{wolf2019huggingface}.
 
-Regarding the error taxonomy, we settled on four error categories: \errinc{INCORRECT}, \errnc{NOT\_CHECKABLE}, \errmis{MISLEADING}, and \errother{OTHER}. The taxonomy is inspired by the methodology discussed in \citet{thomsonGoldStandardMethodology2020} and \citet{thomson2023evaluating}. To keep the annotation tractable, we decided not to distinguish between fine-grained categories (e.g., \textit{incorrect name} vs. \textit{incorrect number}). The descriptions of our error categories, as presented in the instructions for annotation, are included in Table \ref{tab:errors}.
+% We accessed the models via an API provided by the \texttt{text-generation-webui} framework\footnote{\url{https://github.com/oobabooga/text-generation-webui}} running locally.
+% For the final experiments, we also included GPT-3.5 (\texttt{gpt-3.5-turbo-1106}) accessed through the OpenAI API \cite{chatgpt}.
 
-\begin{table*}[t]
-    \small
-    \centering
-    \begin{tabular}{p{2.25cm}p{12.5cm}} \toprule                                                                                        \\
-        \textbf{Error}         & \textbf{Description}                                                                        \\ \midrule
-        \errinc{INCORRECT}     & The fact in the text contradicts the data.                                                  \\
-        \errnc{NOT\_CHECKABLE} & The fact in the text cannot be checked given the data.                                      \\
-        \errmis{MISLEADING}    & The fact in the text is misleading in the given context.                                    \\
-        \errother{OTHER}       & The text is problematic for another reason, e.g., grammatically or stylistically incorrect,
-        irrelevant, or repetitive.                                                                                           \\\midrule
+% \paragraph{Observations from Preliminary Experiments}
+% \label{sec:observations}
+% During development, we made several observations which we took into account for our final experimental setup:
 
-        \textbf{Example}       &                                                                                             \\
+% \paragraph{Any input field may appear in the output.} The models do not always select the most relevant fields for the given output. For example, we observed that the models commonly mention identifiers, timestamps, files, and other metadata, leading to unnatural outputs. Due to this, we decided not to include these irrelevant fields in the input.
 
-        \textit{data}          &
-        \textbf{Nokia 3310} |
-        \textit{color}: black, blue, grey |
-        \textit{display}: 320x240px                                                                                          \\
-        \textit{text}          &
-        Nokia 3310 is \errnc{produced in Finland} and features a \errinc{320x320} display. It is \errmis{misleading}{available in black color}. \errmis{other}{The data seem to provide only partial information about the phone.}
-        \vspace*{0.1cm}
-        \\ \bottomrule
-        % \textit{explanation}                             &
-        % \begin{description}[nosep]\item[produced in Finland] The country where the phone is produced is not mentioned in the data.
-        %   \item[320x320] The data mentions that the display has resolution 320x240px.
-        %   \item[available in black color] Misleadingly suggests that the phone is not available in other colors.
-        %   \item[The data seem to provide (...)] The note is irrelevant for the phone description.      \end{description}                                                                                                                                                                                                                                   \\\bottomrule
-    \end{tabular}
-    \caption{Categories of errors annotated in our evaluation and an example demonstrating the error types. See Appendix \ref{app:humeval} for an explanation of individual errors in the example.}
-    \label{tab:errors}
-\end{table*}
+% \paragraph{Units need to be specified explicitly.} If the units are not specified in the data record, the models tend to resort to their best guess. This may go unnoticed if the unit is evident from the context (e.g., the model will usually not report the temperature in Fahrenheit instead of Celsius), but it may get problematic if the value is ambiguous (e.g., wind speed in km/h versus m/s). Therefore, we explicitly add units to all data records where appropriate.
 
-We employ two complementary evaluation schemes:
-\begin{itemize}
-    \item \gptmetric{}: \textbf{an automatic metric} based on GPT-4 (§\ref{sec:gpt4eval}),
-    \item \humanmetric{}: \textbf{human evaluation} based on crowdsourcing (§\ref{sec:humaneval}).
-\end{itemize}
+% \paragraph{Understandable labels are enough.} On the flip side, we decided not to add extra descriptions to the keys if the key was understandable from the label (e.g., \texttt{homeTeam} or \texttt{dimensions}). As discussed by \citet{kasner2023mind}, pretrained models tend to interpret the fields correctly as long as the label is human-readable. We only decided to include chart metadata for the CSV files in the \texttt{owid} domain.
 
-These two schemes are based on similar instructions and produce (nearly) equivalent outputs. The main idea in introducing multiple schemes is to compensate for the shortcomings of each approach and thus increase the replicability and robustness of our results.
+% \paragraph{Long inputs can be troublesome.} The inputs in some domains can easily get longer than 10-20k tokens. This issue is amplified by the fact that the evaluated \acp{llm} tokenize numbers into individual digits. To accommodate for the long inputs, we picked models that accept up to 32k tokens.\footnote{For this reason, we use Llama-2-7B-32k with 32k token context \cite{llama-2-7b-32k} instead of the official Llama-2-7B-Instruct, which only supports 4k context \cite{touvronLlamaOpenFoundation2023}.} However, with long inputs, the GPU memory consumption also gets considerably higher, so we needed to downsample the data in \texttt{owid} and \texttt{openweather} to keep their length under \textasciitilde 8k tokens.
 
 
-\paragraph{GPT-4-based Evaluation}
-\label{sec:gpt4eval}
+% \paragraph{Few-shot experiments are infeasible.} Due to the context-length limitations described above, we were not able to conduct few-shot experiments since we could not robustly fit an additional ($x_\text{example}$, $y_\text{example}$) pair in the prompt. We attempted to include only $y_\text{example}$ (making the setup ``half-shot''), but we observed that the models then tended to use entities from the example (unrelated to the actual input) in their outputs. Therefore, we decided not to follow this line of experiments (see §\ref{sec:future} for discussion).
 
-\ac{llm}-based metrics can be customized for a particular task without the need for training data. For our experiments, we employ a metric based on GPT-4 (\texttt{gpt-4-1106-preview}, \citealp{openai2023gpt4}), which was shown to be superior in following fine-grained instructions compared to other \acp{llm} and to have high correlations with human judgment on evaluating generated texts  \cite{zhaoInvestigatingTabletoTextGeneration2023,sottanaEvaluationMetricsEra2023,kocmiGEMBAMQMDetectingTranslation2023,kocmiLargeLanguageModels2023}.
-% Compared to using fine-tuned models for token-level evaluation \cite{kasnerTextinContextTokenLevelError2021}, this allows us to customize the metric for a particular task without the need for training data.
+% \paragraph{Deterministic decoding and sampling are on par.} In our preliminary experiments, we observed a roughly similar output quality for both deterministic decoding and sampling.\footnote{We used the \texttt{text-generation-webui} default decoding parameters: \texttt{temperature}=0.7, \texttt{top\_p}=0.9, and \texttt{top\_k}=20.} For the final experiments, we decided to use deterministic decoding, which is non-parametric and conceptually more suitable for D2T generation.
 
-\gptmetric{} is instantiated using a prompt and a system message describing the task. We instruct the model to produce a JSON output with sequentially ordered errors using the following format:
+% \paragraph{Prefixing the output makes parsing easier.} Even with variations of a \textit{``generate only the output''} instruction appended to the prompt, the models (especially Llama2) tended to first confirm the request. For that reason, we decided to prefix the input for all the models with \textit{``Sure! Here is the \{output\_type\}: "''}. The opening quote at the end of the prefix allowed us to robustly parse the text simply by stripping the closing quote from the model output.
 
-\small
-\begin{verbatim}
-{
-  "errors": [{
-    "reason": [REASON],
-    "text": [TEXT_SPAN],
-    "type": [ERROR_CATEGORY]
-    }, 
-    ...]
-}.
-\end{verbatim}
-\normalsize
+% \paragraph{The outputs are fluent but inaccurate.} We observed that the vast majority of model outputs were grammatically and stylistically correct, capturing the output type specified in the prompt. However, we also noticed that the outputs contained many factual errors (even after emphasizing the focus on factual accuracy in the prompt, see Figure \ref{fig:prompt}). This observation led us to evaluate the model outputs using token-level annotations focused on semantic accuracy errors \cite{reiterSharedTaskEvaluating2020}.
 
 
-Note that we require that the model first generates the free-form text \textit{reason} for the error. Generating the reason incurs almost no extra cost, and our cursory observations suggest that requiring it leads to more precise outputs.
 
-Concerning the alignment of the model outputs with the original text, we perform matching on \texttt{TEXT\_SPAN}. We ensure that the model response is a valid JSON using OpenAI's \texttt{response\_format} parameter.  See Appendix \ref{app:gpt4eval} for more details about the metric, including the prompt and the system message.
+% \paragraph{Final Experiments}
+% \label{sec:basic}
 
+% Taking the observations in §\ref{sec:observations} into account, we proceeded to generate the outputs on the test set of \benchmark for token-level error analysis. We first preprocessed the data as mentioned: we stripped out unnecessary fields, added units, and downsampled the data to fit the context. For all the models mentioned in §\ref{sec:models}, we used the prompt in Figure \ref{fig:prompt} and deterministic decoding with a maximum length of 512 tokens.
 
-\paragraph{Human-based Evaluation}
-\label{sec:humaneval}
+% For comparison, we also generated outputs for the same inputs and identical prompts with GPT-3.5.\footnote{We did not include GPT-3.5 in our preliminary experiments since closed models are not our focus. We also did not use GPT-4 because we reserve the model for evaluation; see §\ref{sec:gpt4eval}.} Note that even though we fixed the temperature and seed to $0$, the rest of the decoding parameters are inaccessible to us and may differ from the parameters we used for the open models.
 
-An automatic metric based on a closed \ac{llm} makes the evaluation potentially non-reproducible and biased \cite{kocmiGEMBAMQMDetectingTranslation2023,wangLargeLanguageModels2023}, for which we compensate by obtaining annotations from human annotators.
 
-For the human annotation metric \humanmetric{}, we prepared a custom web interface
-%  based
-%%% TODO %%% 
-% \OD{remove cite for anonymized version?}
-%%% %%% 
-% on \textsc{TabGenie} \cite{kasner2023tabgenie}, 
-where an annotator is able to annotate a text span with a selected error category. We created custom visualizations for each data format. Unlike with \gptmetric{}, we did not ask the crowdworkers for free-form reasoning about the errors since that would make the annotation more complex.
 
-We hired annotators on the Prolific crowdsourcing platform.\footnote{\url{https://prolific.com}} In total, we hired 100 annotators, each annotating 20 examples (4 model outputs for each of the five domains). We selected annotators with at least 10 completed tasks and a 100\% approval rate, having English as their primary language. We paid the annotators \textsterling 9 per hour, according to the platform's recommendations. The median time for completing the annotations was 47 minutes. See Appendix \ref{app:humeval} for the instructions for the annotators and the annotation interface and Appendix \ref{app:outputs} for the data visualizations.
 
 
+% \section{Evaluation}
+% \label{sec:eval}
+% For evaluation, we focus on \textit{semantic accuracy} errors. We compare the generated texts to the input data, looking for parts of texts that are not faithful to the input data. We annotate the errors on the token level, considering all the tokens in the output text as potential sources of errors.
 
+% Regarding the error taxonomy, we settled on four error categories: \errinc{INCORRECT}, \errnc{NOT\_CHECKABLE}, \errmis{MISLEADING}, and \errother{OTHER}. The taxonomy is inspired by the methodology discussed in \citet{thomsonGoldStandardMethodology2020} and \citet{thomson2023evaluating}. To keep the annotation tractable, we decided not to distinguish between fine-grained categories (e.g., \textit{incorrect name} vs. \textit{incorrect number}). The descriptions of our error categories, as presented in the instructions for annotation, are included in Table \ref{tab:errors}.
 
-% \paragraph{Evaluating Controllability}
+% \begin{table*}[t]
+%     \small
+%     \centering
+%     \begin{tabular}{p{2.25cm}p{12.5cm}} \toprule                                                                                        \\
+%         \textbf{Error}         & \textbf{Description}                                                                        \\ \midrule
+%         \errinc{INCORRECT}     & The fact in the text contradicts the data.                                                  \\
+%         \errnc{NOT\_CHECKABLE} & The fact in the text cannot be checked given the data.                                      \\
+%         \errmis{MISLEADING}    & The fact in the text is misleading in the given context.                                    \\
+%         \errother{OTHER}       & The text is problematic for another reason, e.g., grammatically or stylistically incorrect,
+%         irrelevant, or repetitive.                                                                                           \\\midrule
 
-% Due to our resource limitations, we were not able to run the token-level error annotations for all the stylized outputs. Instead, we randomly selected 10 outputs for each domain on which we run the GPT-4 annotations, and two annotators (authors of the paper) rated the adherence to style along with free-form comments.
+%         \textbf{Example}       &                                                                                             \\
 
-\section{Results and Discussion}
-\label{sec:discussion}
+%         \textit{data}          &
+%         \textbf{Nokia 3310} |
+%         \textit{color}: black, blue, grey |
+%         \textit{display}: 320x240px                                                                                          \\
+%         \textit{text}          &
+%         Nokia 3310 is \errnc{produced in Finland} and features a \errinc{320x320} display. It is \errmis{misleading}{available in black color}. \errmis{other}{The data seem to provide only partial information about the phone.}
+%         \vspace*{0.1cm}
+%         \\ \bottomrule
+%         % \textit{explanation}                             &
+%         % \begin{description}[nosep]\item[produced in Finland] The country where the phone is produced is not mentioned in the data.
+%         %   \item[320x320] The data mentions that the display has resolution 320x240px.
+%         %   \item[available in black color] Misleadingly suggests that the phone is not available in other colors.
+%         %   \item[The data seem to provide (...)] The note is irrelevant for the phone description.      \end{description}                                                                                                                                                                                                                                   \\\bottomrule
+%     \end{tabular}
+%     \caption{Categories of errors annotated in our evaluation and an example demonstrating the error types. See Appendix \ref{app:humeval} for an explanation of individual errors in the example.}
+%     \label{tab:errors}
+% \end{table*}
 
-A summary of the token-level annotations is in Table \ref{tab:results_agg} and \ref{tab:results_errperex}, with detailed results per domain provided in Appendix \ref{app:full_results}.
+% We employ two complementary evaluation schemes:
+% \begin{itemize}
+%     \item \gptmetric{}: \textbf{an automatic metric} based on GPT-4 (§\ref{sec:gpt4eval}),
+%     \item \humanmetric{}: \textbf{human evaluation} based on crowdsourcing (§\ref{sec:humaneval}).
+% \end{itemize}
 
+% These two schemes are based on similar instructions and produce (nearly) equivalent outputs. The main idea in introducing multiple schemes is to compensate for the shortcomings of each approach and thus increase the replicability and robustness of our results.
 
-\begin{table*}[ht]
-    \small
-    \centering
-    \begin{tabular}{lccccccccccr}
-        \toprule
-                         & \multicolumn{2}{c}{\textbf{Incorrect}} & \multicolumn{2}{c}{\textbf{Not Checkable}} & \multicolumn{2}{c}{\textbf{Misleading}} & \multicolumn{2}{c}{\textbf{Other}} & \multicolumn{2}{c}{\textbf{All categories}} &                                                                                                     \\
-                         & \gptmetric{}                           & \humanmetric{}                             & \gptmetric{}                            & \humanmetric{}                     & \gptmetric{}                                & \humanmetric{} & \gptmetric{}  & \humanmetric{} & \gptmetric{}  & \humanmetric{} & \# \textbf{Tok.} \\\midrule
 
-        \textbf{Llama2}  & \textbf{2.46}                          & 1.57                                       & 0.90                                    & 1.25                               & \textbf{0.20}                               & 0.25           & 0.13          & \textbf{0.10}  & 3.70          & 3.18           & 83.8             \\
-        \textbf{Mistral} & 2.80                                   & 2.03                                       & 0.52                                    & 1.12                               & 0.37                                        & 0.44           & 0.11          & 0.25           & 3.80          & 3.85           & 114.9            \\
-        \textbf{Zephyr}  & 2.50                                   & \textbf{1.44}                              & \textbf{0.40}                           & \textbf{0.77}                      & 0.39                                        & \textbf{0.20}  & \textbf{0.06} & 0.16           & \textbf{3.35} & \textbf{2.58}  & 98.0             \\ \cdashlinelr{1-12}
-        \textbf{GPT-3.5} & 1.57                                   & 0.65                                       & 0.32                                    & 0.49                               & 0.42                                        & 0.18           & 0.02          & 0.07           & 2.32          & 1.39           & 84.9             \\ \bottomrule
-    \end{tabular}
-    \caption{The average \textit{numbers of errors per output} (lower is better) based on GPT-4 (\gptmetric{}) and human annotators (\humanmetric{}). We also include the average number of tokens per output in the rightmost column. The results of the best open \ac{llm}  are emphasized.}
-    \label{tab:results_agg}
-\end{table*}
+% \paragraph{GPT-4-based Evaluation}
+% \label{sec:gpt4eval}
 
+% \ac{llm}-based metrics can be customized for a particular task without the need for training data. For our experiments, we employ a metric based on GPT-4 (\texttt{gpt-4-1106-preview}, \citealp{openai2023gpt4}), which was shown to be superior in following fine-grained instructions compared to other \acp{llm} and to have high correlations with human judgment on evaluating generated texts  \cite{zhaoInvestigatingTabletoTextGeneration2023,sottanaEvaluationMetricsEra2023,kocmiGEMBAMQMDetectingTranslation2023,kocmiLargeLanguageModels2023}.
+% % Compared to using fine-tuned models for token-level evaluation \cite{kasnerTextinContextTokenLevelError2021}, this allows us to customize the metric for a particular task without the need for training data.
 
-\begin{table*}[ht]
-    \small
-    \centering
-    \begin{tabular}{lcccccccccc}
-        \toprule
-                         & \multicolumn{2}{c}{\textbf{Incorrect}} & \multicolumn{2}{c}{\textbf{Not Checkable}} & \multicolumn{2}{c}{\textbf{Misleading}} & \multicolumn{2}{c}{\textbf{Other}} & \multicolumn{2}{c}{\textbf{All categories}}                                                                                    \\
-                         & \gptmetric{}                           & \humanmetric{}                             & \gptmetric{}                            & \humanmetric{}                     & \gptmetric{}                                & \humanmetric{} & \gptmetric{}  & \humanmetric{} & \gptmetric{}  & \humanmetric{} \\\midrule
-        \textbf{Llama2}  & 0.78                                   & 0.53                                       & 0.46                                    & 0.57                               & \textbf{0.15}                               & 0.17           & 0.09          & \textbf{0.08}  & 0.92          & 0.86           \\
-        \textbf{Mistral} & 0.78                                   & 0.54                                       & 0.32                                    & 0.50                               & 0.23                                        & 0.21           & 0.08          & 0.14           & 0.93          & 0.81           \\
-        \textbf{Zephyr}  & \textbf{0.77}                          & \textbf{0.47}                              & \textbf{0.26}                           & \textbf{0.42}                      & 0.27                                        & \textbf{0.16}  & \textbf{0.04} & 0.12           & \textbf{0.88} & \textbf{0.76}  \\\cdashlinelr{1-11}
-        \textbf{GPT-3.5} & 0.64                                   & 0.38                                       & 0.21                                    & 0.29                               & 0.26                                        & 0.13           & 0.02          & 0.06           & 0.75          & 0.61           \\ \bottomrule
-    \end{tabular}
-    \caption{The ratio of \textit{outputs containing at least one error} (lower is better) based on GPT-4 (\gptmetric{}) and human annotators (\humanmetric{}). The results of the best open \ac{llm}  are emphasized.}
-    \label{tab:results_errperex}
-\end{table*}
+% \gptmetric{} is instantiated using a prompt and a system message describing the task. We instruct the model to produce a JSON output with sequentially ordered errors using the following format:
 
+% \small
+% \begin{verbatim}
+% {
+%   "errors": [{
+%     "reason": [REASON],
+%     "text": [TEXT_SPAN],
+%     "type": [ERROR_CATEGORY]
+%     }, 
+%     ...]
+% }.
+% \end{verbatim}
+% \normalsize
 
 
-\paragraph{How Accurate Are the Model Outputs?}
-Depending on the model, between 74-85\% of examples contain an error according to \humanmetric, suggesting that open \acp{llm} make semantic errors very often. According to \gptmetric, the number is as high as 88-93\%.
+% Note that we require that the model first generates the free-form text \textit{reason} for the error. Generating the reason incurs almost no extra cost, and our cursory observations suggest that requiring it leads to more precise outputs.
 
-The most common error type is \texttt{INCORRECT}. As shown in Table \ref{tab:results_agg}, all the open \acp{llm} make more than \textbf{two statements contradicting the data per output on average}. The \texttt{NOT\_CHECKABLE} errors are also relatively common: more than one per output on average according to \humanmetric, and at least one being present in more than 26\% of examples according to both metrics.
+% Concerning the alignment of the model outputs with the original text, we perform matching on \texttt{TEXT\_SPAN}. We ensure that the model response is a valid JSON using OpenAI's \texttt{response\_format} parameter.  See Appendix \ref{app:gpt4eval} for more details about the metric, including the prompt and the system message.
 
-The results vary widely according to the domain (see Appendix \ref{app:full_results}). For example, the outputs in \texttt{wikidata} contain much more \texttt{NOT\_CHECKABLE} errors on average (1.54 per output according to \humanmetric) than  \texttt{INCORRECT} errors (0.12 per output according to \humanmetric), suggesting that with simpler inputs, the models tend to introduce extra information. The \texttt{openweather} domain seems to be the most complex with the longest outputs (\textasciitilde 164 tokens), more than eight errors in the output on average, and >90\% of outputs containing an error.
 
-The differences between the open \acp{llm} are not major. Out of the open \acp{llm}, Zephyr has the best results across categories and metrics, followed by Llama2. However, the outputs of Mistral are longer on average, leaving more space for errors. GPT-3.5 (which we consider separately) does generally better according to both \gptmetric and \humanmetric, although it still makes an error in 60-75\% of examples (2 errors per example on average). In general, the results show that \acp{llm} make too many semantic errors to be usable in practice for D2T generation in a zero-shot setting.
+% \paragraph{Human-based Evaluation}
+% \label{sec:humaneval}
 
+% An automatic metric based on a closed \ac{llm} makes the evaluation potentially non-reproducible and biased \cite{kocmiGEMBAMQMDetectingTranslation2023,wangLargeLanguageModels2023}, for which we compensate by obtaining annotations from human annotators.
 
+% For the human annotation metric \humanmetric{}, we prepared a custom web interface
+% %  based
+% %%% TODO %%% 
+% % \OD{remove cite for anonymized version?}
+% %%% %%% 
+% % on \textsc{TabGenie} \cite{kasner2023tabgenie}, 
+% where an annotator is able to annotate a text span with a selected error category. We created custom visualizations for each data format. Unlike with \gptmetric{}, we did not ask the crowdworkers for free-form reasoning about the errors since that would make the annotation more complex.
 
-\paragraph{Do Evaluation Methods Agree?}
-\label{sec:metricscorr}
-To quantify the agreement of our evaluation metrics, we computed the Pearson correlation coefficient between the error counts on the level of tokens, examples, and domains (see Appendix \ref{app:corr} for details). The correlation on the level of tokens is weak ($r_{\text{token}}=0.26$) but gets better on the example-level ($r_{\text{example}}=0.55$) and even better on the domain-level ($r_{\text{domain}}=0.92$). In Table \ref{tab:errors_tokenlevel}, we show the percentage of tokens marked by individual metrics. The metrics agree on the specific tokens in less than 6\%, although they both mark around 21\% of tokens as erroneous.
-% , suggesting that the error spans may be subject to interpretation.
+% We hired annotators on the Prolific crowdsourcing platform.\footnote{\url{https://prolific.com}} In total, we hired 100 annotators, each annotating 20 examples (4 model outputs for each of the five domains). We selected annotators with at least 10 completed tasks and a 100\% approval rate, having English as their primary language. We paid the annotators \textsterling 9 per hour, according to the platform's recommendations. The median time for completing the annotations was 47 minutes. See Appendix \ref{app:humeval} for the instructions for the annotators and the annotation interface and Appendix \ref{app:outputs} for the data visualizations.
 
-We also measure inter-annotator agreement between human annotators. For that, we obtained annotations from two annotators for 100 model outputs. The results are similar: the annotators agree weakly on the token level ($r_{\text{token}}=0.36$), stronger on the example level ($r_{\text{example}}=0.53$), and even stronger on the domain level ($r_{\text{domain}}=0.85$). We conclude that while the details regarding error spans and categories may vary, the annotators as well as GPT-4 generally agree on the accuracy of model outputs for a given set of examples. In the future, the agreement could be improved by measuring errors on the phrase level \cite{vamvas2022little}.
 
-% The results show that while \gptmetric and \humanmetric do not agree much on individual token spans, they correlate well for high-level ranking of the models.
 
-\begin{table}[t]
-    \small
-    \centering
-    \begin{tabular}{lccc}
-        \toprule
-        {}                       & \gptmetric{} & \humanmetric{} & \gptmetric{} + \humanmetric{} \\
-        \midrule
-        \bfseries Incorrect      & 0.135        & 0.099          & 0.040                         \\
-        \bfseries Not checkable  & 0.039        & 0.076          & 0.016                         \\
-        \bfseries Misleading     & 0.022        & 0.022          & 0.001                         \\
-        \bfseries Other          & 0.008        & 0.018          & 0.001                         \\
-        \bfseries All categories & 0.204        & 0.214          & 0.059                         \\
-        \bottomrule
-    \end{tabular}
-    \caption{The ratio of \textit{tokens marked as erroneous} by GPT-4 (\gptmetric), human annotators (\humanmetric), and both metrics at the same time (\gptmetric + \humanmetric).}
-    \label{tab:errors_tokenlevel}
-\end{table}
 
+% % \paragraph{Evaluating Controllability}
+
+% % Due to our resource limitations, we were not able to run the token-level error annotations for all the stylized outputs. Instead, we randomly selected 10 outputs for each domain on which we run the GPT-4 annotations, and two annotators (authors of the paper) rated the adherence to style along with free-form comments.
+
+% \section{Results and Discussion}
+% \label{sec:discussion}
+
+% A summary of the token-level annotations is in Table \ref{tab:results_agg} and \ref{tab:results_errperex}, with detailed results per domain provided in Appendix \ref{app:full_results}.
+
+
+% \begin{table*}[ht]
+%     \small
+%     \centering
+%     \begin{tabular}{lccccccccccr}
+%         \toprule
+%                          & \multicolumn{2}{c}{\textbf{Incorrect}} & \multicolumn{2}{c}{\textbf{Not Checkable}} & \multicolumn{2}{c}{\textbf{Misleading}} & \multicolumn{2}{c}{\textbf{Other}} & \multicolumn{2}{c}{\textbf{All categories}} &                                                                                                     \\
+%                          & \gptmetric{}                           & \humanmetric{}                             & \gptmetric{}                            & \humanmetric{}                     & \gptmetric{}                                & \humanmetric{} & \gptmetric{}  & \humanmetric{} & \gptmetric{}  & \humanmetric{} & \# \textbf{Tok.} \\\midrule
+
+%         \textbf{Llama2}  & \textbf{2.46}                          & 1.57                                       & 0.90                                    & 1.25                               & \textbf{0.20}                               & 0.25           & 0.13          & \textbf{0.10}  & 3.70          & 3.18           & 83.8             \\
+%         \textbf{Mistral} & 2.80                                   & 2.03                                       & 0.52                                    & 1.12                               & 0.37                                        & 0.44           & 0.11          & 0.25           & 3.80          & 3.85           & 114.9            \\
+%         \textbf{Zephyr}  & 2.50                                   & \textbf{1.44}                              & \textbf{0.40}                           & \textbf{0.77}                      & 0.39                                        & \textbf{0.20}  & \textbf{0.06} & 0.16           & \textbf{3.35} & \textbf{2.58}  & 98.0             \\ \cdashlinelr{1-12}
+%         \textbf{GPT-3.5} & 1.57                                   & 0.65                                       & 0.32                                    & 0.49                               & 0.42                                        & 0.18           & 0.02          & 0.07           & 2.32          & 1.39           & 84.9             \\ \bottomrule
+%     \end{tabular}
+%     \caption{The average \textit{numbers of errors per output} (lower is better) based on GPT-4 (\gptmetric{}) and human annotators (\humanmetric{}). We also include the average number of tokens per output in the rightmost column. The results of the best open \ac{llm}  are emphasized.}
+%     \label{tab:results_agg}
+% \end{table*}
+
+
+% \begin{table*}[ht]
+%     \small
+%     \centering
+%     \begin{tabular}{lcccccccccc}
+%         \toprule
+%                          & \multicolumn{2}{c}{\textbf{Incorrect}} & \multicolumn{2}{c}{\textbf{Not Checkable}} & \multicolumn{2}{c}{\textbf{Misleading}} & \multicolumn{2}{c}{\textbf{Other}} & \multicolumn{2}{c}{\textbf{All categories}}                                                                                    \\
+%                          & \gptmetric{}                           & \humanmetric{}                             & \gptmetric{}                            & \humanmetric{}                     & \gptmetric{}                                & \humanmetric{} & \gptmetric{}  & \humanmetric{} & \gptmetric{}  & \humanmetric{} \\\midrule
+%         \textbf{Llama2}  & 0.78                                   & 0.53                                       & 0.46                                    & 0.57                               & \textbf{0.15}                               & 0.17           & 0.09          & \textbf{0.08}  & 0.92          & 0.86           \\
+%         \textbf{Mistral} & 0.78                                   & 0.54                                       & 0.32                                    & 0.50                               & 0.23                                        & 0.21           & 0.08          & 0.14           & 0.93          & 0.81           \\
+%         \textbf{Zephyr}  & \textbf{0.77}                          & \textbf{0.47}                              & \textbf{0.26}                           & \textbf{0.42}                      & 0.27                                        & \textbf{0.16}  & \textbf{0.04} & 0.12           & \textbf{0.88} & \textbf{0.76}  \\\cdashlinelr{1-11}
+%         \textbf{GPT-3.5} & 0.64                                   & 0.38                                       & 0.21                                    & 0.29                               & 0.26                                        & 0.13           & 0.02          & 0.06           & 0.75          & 0.61           \\ \bottomrule
+%     \end{tabular}
+%     \caption{The ratio of \textit{outputs containing at least one error} (lower is better) based on GPT-4 (\gptmetric{}) and human annotators (\humanmetric{}). The results of the best open \ac{llm}  are emphasized.}
+%     \label{tab:results_errperex}
+% \end{table*}
+
+
+
+% \paragraph{How Accurate Are the Model Outputs?}
+% Depending on the model, between 74-85\% of examples contain an error according to \humanmetric, suggesting that open \acp{llm} make semantic errors very often. According to \gptmetric, the number is as high as 88-93\%.
+
+% The most common error type is \texttt{INCORRECT}. As shown in Table \ref{tab:results_agg}, all the open \acp{llm} make more than \textbf{two statements contradicting the data per output on average}. The \texttt{NOT\_CHECKABLE} errors are also relatively common: more than one per output on average according to \humanmetric, and at least one being present in more than 26\% of examples according to both metrics.
+
+% The results vary widely according to the domain (see Appendix \ref{app:full_results}). For example, the outputs in \texttt{wikidata} contain much more \texttt{NOT\_CHECKABLE} errors on average (1.54 per output according to \humanmetric) than  \texttt{INCORRECT} errors (0.12 per output according to \humanmetric), suggesting that with simpler inputs, the models tend to introduce extra information. The \texttt{openweather} domain seems to be the most complex with the longest outputs (\textasciitilde 164 tokens), more than eight errors in the output on average, and >90\% of outputs containing an error.
+
+% The differences between the open \acp{llm} are not major. Out of the open \acp{llm}, Zephyr has the best results across categories and metrics, followed by Llama2. However, the outputs of Mistral are longer on average, leaving more space for errors. GPT-3.5 (which we consider separately) does generally better according to both \gptmetric and \humanmetric, although it still makes an error in 60-75\% of examples (2 errors per example on average). In general, the results show that \acp{llm} make too many semantic errors to be usable in practice for D2T generation in a zero-shot setting.
+
+
+
+% \paragraph{Do Evaluation Methods Agree?}
+% \label{sec:metricscorr}
+% To quantify the agreement of our evaluation metrics, we computed the Pearson correlation coefficient between the error counts on the level of tokens, examples, and domains (see Appendix \ref{app:corr} for details). The correlation on the level of tokens is weak ($r_{\text{token}}=0.26$) but gets better on the example-level ($r_{\text{example}}=0.55$) and even better on the domain-level ($r_{\text{domain}}=0.92$). In Table \ref{tab:errors_tokenlevel}, we show the percentage of tokens marked by individual metrics. The metrics agree on the specific tokens in less than 6\%, although they both mark around 21\% of tokens as erroneous.
+% % , suggesting that the error spans may be subject to interpretation.
+
+% We also measure inter-annotator agreement between human annotators. For that, we obtained annotations from two annotators for 100 model outputs. The results are similar: the annotators agree weakly on the token level ($r_{\text{token}}=0.36$), stronger on the example level ($r_{\text{example}}=0.53$), and even stronger on the domain level ($r_{\text{domain}}=0.85$). We conclude that while the details regarding error spans and categories may vary, the annotators as well as GPT-4 generally agree on the accuracy of model outputs for a given set of examples. In the future, the agreement could be improved by measuring errors on the phrase level \cite{vamvas2022little}.
+
+% % The results show that while \gptmetric and \humanmetric do not agree much on individual token spans, they correlate well for high-level ranking of the models.
 
 % \begin{table}[t]
-%   \small
-%   \centering
-%   \begin{tabular}{lrrrr}
-%     \toprule
-%                & \gptmetric{} & \humanmetric{} & \textbf{Both} & \textbf{None} \\
-%     \midrule
-%     Total (\%) & 11.68        & 12.72          & 5.88          & 66.89         \\    \bottomrule
-%   \end{tabular}
-%   \caption{Percentage of tokens annotated with an error (of any category) by GPT-4 (only), human annotators (only), both metrics at the same time, or none of the metrics.}
+%     \small
+%     \centering
+%     \begin{tabular}{lccc}
+%         \toprule
+%         {}                       & \gptmetric{} & \humanmetric{} & \gptmetric{} + \humanmetric{} \\
+%         \midrule
+%         \bfseries Incorrect      & 0.135        & 0.099          & 0.040                         \\
+%         \bfseries Not checkable  & 0.039        & 0.076          & 0.016                         \\
+%         \bfseries Misleading     & 0.022        & 0.022          & 0.001                         \\
+%         \bfseries Other          & 0.008        & 0.018          & 0.001                         \\
+%         \bfseries All categories & 0.204        & 0.214          & 0.059                         \\
+%         \bottomrule
+%     \end{tabular}
+%     \caption{The ratio of \textit{tokens marked as erroneous} by GPT-4 (\gptmetric), human annotators (\humanmetric), and both metrics at the same time (\gptmetric + \humanmetric).}
+%     \label{tab:errors_tokenlevel}
 % \end{table}
 
 
-\paragraph{Recommendations and Directions}
-\label{sec:future}
-\paragraph{Forget fluency, solve accuracy.} The output of \acp{llm} is satisfactory regarding the style, format, and purpose of the text. However, the amount of semantic errors remains very high. Improving the semantic accuracy of the models
-%%% TODO %%%
-% \OD{remove Pat's cite for anonymization} \cite{schmidtova2023semantic}
-%%% %%%
-\cite{li2022faithfulness}, along with new model-based evaluation metrics \cite{liuGEvalNLGEvaluation2023,xuINSTRUCTSCOREExplainableText2023}, could thus help to bring improve \ac{llm}-based D2T generation systems where it is most needed.
+% % \begin{table}[t]
+% %   \small
+% %   \centering
+% %   \begin{tabular}{lrrrr}
+% %     \toprule
+% %                & \gptmetric{} & \humanmetric{} & \textbf{Both} & \textbf{None} \\
+% %     \midrule
+% %     Total (\%) & 11.68        & 12.72          & 5.88          & 66.89         \\    \bottomrule
+% %   \end{tabular}
+% %   \caption{Percentage of tokens annotated with an error (of any category) by GPT-4 (only), human annotators (only), both metrics at the same time, or none of the metrics.}
+% % \end{table}
+
+
+% \paragraph{Recommendations and Directions}
+% \label{sec:future}
+% \paragraph{Forget fluency, solve accuracy.} The output of \acp{llm} is satisfactory regarding the style, format, and purpose of the text. However, the amount of semantic errors remains very high. Improving the semantic accuracy of the models
+% %%% TODO %%%
+% % \OD{remove Pat's cite for anonymization} \cite{schmidtova2023semantic}
+% %%% %%%
+% \cite{li2022faithfulness}, along with new model-based evaluation metrics \cite{liuGEvalNLGEvaluation2023,xuINSTRUCTSCOREExplainableText2023}, could thus help to bring improve \ac{llm}-based D2T generation systems where it is most needed.
 
 
 
-\paragraph{Use efficient models.} The memory issues with long context, making few-shot experiments infeasible, can potentially be solved by using more efficient long-context models equipped with Flash Attention \cite{dao2022flashattention} and fast inference libraries such as \texttt{llama.cpp}.\footnote{\url{https://github.com/ggerganov/llama.cpp}} A potentially suitable open \ac{llm} in this respect is the long-context Llama2 (\citealp{xiong2023effective}; model to be released).
+% \paragraph{Use efficient models.} The memory issues with long context, making few-shot experiments infeasible, can potentially be solved by using more efficient long-context models equipped with Flash Attention \cite{dao2022flashattention} and fast inference libraries such as \texttt{llama.cpp}.\footnote{\url{https://github.com/ggerganov/llama.cpp}} A potentially suitable open \ac{llm} in this respect is the long-context Llama2 (\citealp{xiong2023effective}; model to be released).
 
 
-\paragraph{Test the models in the wild.} Except for using an ad-hoc dataset of real-world data as we did in our work, the ecological validity of D2T evaluation can also be ensured by continuous evaluation with human users \cite{zheng2023judging} and evaluating the real-world impact of the systems \cite{reiter2023impact}.
+% \paragraph{Test the models in the wild.} Except for using an ad-hoc dataset of real-world data as we did in our work, the ecological validity of D2T evaluation can also be ensured by continuous evaluation with human users \cite{zheng2023judging} and evaluating the real-world impact of the systems \cite{reiter2023impact}.
 
 
-\paragraph{Multilinguality is an opportunity.}With the recent efforts in extending D2T generation to low-resource languages \cite{cripwell-etal-2023-2023}, multilingual D2T generation with open \acp{llm} seems a promising direction. Although we did not go beyond English, initial steps were already done by works such as \citet{lorandi2023data}.
+% \paragraph{Multilinguality is an opportunity.}With the recent efforts in extending D2T generation to low-resource languages \cite{cripwell-etal-2023-2023}, multilingual D2T generation with open \acp{llm} seems a promising direction. Although we did not go beyond English, initial steps were already done by works such as \citet{lorandi2023data}.
 
 
-\paragraph{Be careful about subtle bugs.} During our preliminary experiments, we uncovered subtle bugs in API calls such as incorrect instruction templates\footnote{\url{https://huggingface.co/docs/transformers/chat_templating}} or involuntary input truncation. With the apparent ease of API access and robustness of \acp{llm}, such bugs could go unnoticed and artificially skew the model performance.
+% \paragraph{Be careful about subtle bugs.} During our preliminary experiments, we uncovered subtle bugs in API calls such as incorrect instruction templates\footnote{\url{https://huggingface.co/docs/transformers/chat_templating}} or involuntary input truncation. With the apparent ease of API access and robustness of \acp{llm}, such bugs could go unnoticed and artificially skew the model performance.
 
 
 
