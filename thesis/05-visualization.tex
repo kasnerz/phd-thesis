@@ -170,3 +170,10 @@ The customizable function \texttt{get\_hf\_dataset()} linearizes the tables and 
 \paragraph{Error Analysis} \textsc{TabGenie} can help with annotating error categories in the outputs from a table-to-text generation model. The user generates the system outputs and saves the outputs for a particular dataset split in a JSONL format. Through the command-line interface, the user will then generate a XLSX file which can be imported in any suitable office software and distributed to annotators for performing error analysis.
 
 \subsection{Discussion}
+
+\paragraph{How far can we get with unifying the input format?} For some D2T generation inputs, the tabular structure may be inappropriate, such as for tree-based structures, bag-of-words, or multimodal inputs \cite{balakrishnan2019constrained,lin2019commongen,krishna2017visual}. It is also not suitable for the JSON format, which we explore as the format of the input data in \autoref{sec:quintd}.
+
+\paragraph{How can the framework be extended?} Adding new datasets adhering to the specified format to \textsc{TabGenie} is straightforward. Due to deployment issues, \textsc{TabGenie} also does not include large synthetic datasets \cite{agarwalKnowledgeGraphBased2021,jinGenWikiDatasetMillion2020}, although these datasets could be added locally. Technically, the framework could also be used for datasets which cannot be converted to tables; however, this would require adding more custom code and limit the unified processing pipelines.
+
+\section{Conclusion}
+We presented a toolkit for unified processing of \ac{d2t} generation datasets. The toolkit enables researchers to insights into the datasets by visualizing their contents in the web interface. The toolkit also allows to pre-process the datasets in a unified format, facilitating their processing with \acp{lm}. On top of that, the toolkit provides a variety of methods useful in \ac{d2t} generation research, such as sending the inputs to a \ac{d2t} generation models via an API or generating error analysis spreadsheets. As such, the framework promotes more informed and principled \ac{d2t} generation research.
