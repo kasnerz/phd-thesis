@@ -129,7 +129,7 @@ There are also limitations related to the formulation of the task itself. As we 
 \paragraph{What are the ways forward?} The 2023 WebNLG Shared Task featured our system as the baseline for the track for graph-to-text generation in Russian \cite{cripwell2023WebNLGShared2023}. The organizers of the task note that \textit{``results on Russian for the present edition provide very small improvements over the best results for 2020.''} These results suggest that (1) the WebNLG task is saturated, yielding only very small improvements regardless of the technique (at least for high-resource languages), and (2) fixing the long tail requires different, more principled approaches allowing to identify and correct unclear input cases (e.g., by human interventions based on model uncertainty). However, these interventions may yield only small improvements on automatic metrics and may not be possible in the framework of the shared task.
 
 
-In \Cref{sec:iterative,sec:pipeline}, we introduce approaches for \ac{d2t} generation which cut down on the need for extensive amount of in-domain training data. These approaches still rely on the existence of \acp{plm}, but they are given inductive bias necessary for the task at hand: namely, that the goal is to transform a disfluent input (i.e., the structured data in its original format) into a fluent output (i.e., the structured data expressed in natural language). These approaches make it possible to build data-driven approaches for \ac{d2t} generation for domains lacking high-quality training data.
+In \Cref{sec:iterative,sec:pipeline}, we introduce approaches for \ac{d2t} generation which cut down on the need for extensive amount of in-domain training data. These approaches still rely on the existence of \acp{plm}, but they are given inductive bias necessary for the task at hand: namely, that the goal is to transform a disfluent input (i.e., the structured data in its original format) into a fluent output (i.e., the structured data expressed in natural language). The approaches make it possible to build data-driven approaches for \ac{d2t} generation for domains lacking high-quality training data, while ensuring high semantic accuracy of the outputs.
 
 % There may be some limitation related to factual knowledge: the model may be prone to generating factually correct sentences \emph{regardless} of the input.
 
@@ -164,13 +164,6 @@ To generate outputs with sufficient semantic accuracy for the filtering step, we
 \label{sec:text-editing-exp}
 We focus on data structured as \ac{rdf} triples. In our approach, we start from single-triple templates and iteratively fuse them into the resulting text while filtering and reranking the results. We first detail the main components of our system (template extraction, sentence fusion, \ac{plm} scoring) and then give the overall description of the generation algorithm.
 
-\begin{figure*}[t]
-    \centering
-    \includegraphics[width=\textwidth]{img/d2t_text_editing}
-    \caption{A single iteration of our algorithm for iterative \ac{d2t} generation. In Step 1, the template for the triple is selected and filled. In Step 2, the sentence is fused with the template. In Step 3, the result for the next iteration is selected from the beam by filtering and language model scoring.}\label{fig:iterative:alg}
-\end{figure*}
-
-
 
 \paragraph{Template Extraction}
 We collect a set of templates for each unique predicate. We use two approaches: (a) handcrafting the template manually for each predicate in the training set and (b) automatically extracting the template from the lexicalizations of the examples in the training set. For unseen predicates, we add a single fallback template: \textit{The <predicate> of <subject> is <object>.}
@@ -181,6 +174,14 @@ We train a model for the task of \emph{sentence fusion}, i.e., combining sentenc
 %We train an independent in-domain sentence fusion model for each dataset. 
 To construct the training data for the model, we select pairs of examples $(X, X')$ and their corresponding text descriptions $(Y, Y')$ from the original training set such that the examples consist of $(k, k+1)$ triples and have $k$ triples in common. This leaves us with an extra triple $x_{k+1}$ present only in $X'$. For each training example, we use the concatenated sequence $Y \mathrm{lex}(x_{k+1})$ as a source and the sequence $Y'$ as a target, where $\mathrm{lex}(x_{k+1})$ denotes lexicalizing the triple $x_{k+1}$ using an appropriate template.
 As a result, the model learns to integrate $Y$ and $x_{k+1}$ into a single coherent expression.
+
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{img/d2t_text_editing}
+    \caption{A single iteration of our algorithm for iterative \ac{d2t} generation. In Step 1, the template for the triple is selected and filled. In Step 2, the sentence is fused with the template. In Step 3, the result for the next iteration is selected from the beam by filtering and language model scoring.}\label{fig:iterative:alg}
+\end{figure*}
+
 
 
 \paragraph{PLM Scoring} For re-ranking the text, we use an additional component for computing text fluency, which we refer to as \textsc{LMScorer}.
@@ -288,19 +289,14 @@ The higher number of fallbacks in the E2E dataset can be explained by a higher l
 
 \subsection{Discussion}
 
-% \textsc{LaserTagger} does not allow arbitrary reordering of words in the sentence, which can limit the expressiveness of the sentence fusion model. Consider the example in \autoref{fig:iterative:alg}: in order to create a sentence \textit{English is spoken in Dublin, the capital of Ireland}, the model has to delete and re-insert at least one of the entities, e.g., \textit{English}, which has to be present in the vocabulary.
+\paragraph{Can pre-ordering the triples help?} \textsc{LaserTagger} does not allow arbitrary reordering of words in the sentence, which can limit the output fluency. \citet{grajcar2023data} expands upon our approach by using \textsc{Felix}, a text-editing model that is capable of arbitrary reordering of words in the sentence \cite{mallinsonFelixFlexibleText2020}. As noted by \citet{grajcar2023data}, the order is indeed more flexible with \textsc{Felix}, but the quality of the outputs is still capped by limited abilities of text-editing models.\footnote{With increasing capabilities of autoregressive models, the main advantage of text-editing models lies in speed, especially for tasks where only minor edits are needed \cite{malmi2022text}.} To improve the output fluency, we use an explicit ordering module along with autoregressive \acp{plm} in \autoref{sec:pipeline}, showing that ordering leads to improvements on output quality.
 
-% Building a high-quality sentence fusion model, which lies at the core of our approach, remains a challenge \cite{lebanoff2020learning}. Our simple extractive approach relying on existing D2T datasets may not produce sufficient amount of clean data. On the other hand, the phenomena covered in the \textsc{DiscoFuse} dataset are too narrow for the fully general sentence fusion. We believe that training the sentence fusion model on a larger and more diverse sentence fusion dataset, built e.g. in an unsupervised fashion \cite{lebanoff-etal-2019-scoring}, is a way to improve the robustness of our approach.
-
-% Fluency of the output sentences may be also improved by allowing more flexibility for the order of entities, either by including an ordering step in the pipeline \citep{moryossef2019astep}, or by using a text-editing model that is capable of explicit reordering of words in the sentence \cite{mallinson2020felix}. Splitting the data into smaller batches (i.e. setting an upper bound for the number of sentences fused together) could also help to improve the consistency of results with a higher number of data items.
-
-% Our string matching heuristic is quite crude and may lead to a high number of fallbacks. Introducing a more precise heuristic, such as a semantic fidelity classifier \citep{harkous2020have}, or a model trained for natural language inference \citep{dusek2020nli} could help to promote lexical variability of the text.
-
-% Finally, we note that the text-editing paradigm allows to visualize the changes made by the model, introducing the option to accept or reject the changes at each step, and even build a set of custom rules on top of the individual edit operations based on the affected tokens. This flexibility could be useful for tweaking the model manually for a production system.
+\paragraph{Can we improve upon sentence fusion?} A major issue with sentence fusion is deciding when to apply it. In our approach, we rely on the implicit knowledge of the model learned from in-domain training data, which often led to outputs which were too compact. For this reason, we introduce an \emph{aggregation} module in \autoref{sec:pipeline}, which explicitly decides which facts should be mentioned together in a sentence. We should also note that the term \emph{sentence fusion} is not accurate as the sentences are sometimes kept separate; this is why we later opt for using a more precise---and more generally applicable---term \emph{paragraph compression}.
 
 
-% \subsection{Conclusions}
-% We proposed a simple and intuitive approach for D2T generation, splitting the process into two steps: lexicalization of data and improving the text fluency. A trivial lexicalization helps to promote fidelity and domain independence while delegating the subtle work with language to neural models allows to benefit from the power of general-domain pre-training. While a straightforward application of this approach on the WebNLG and E2E datasets does not produce state-of-the-art results in terms of automatic metrics, the results still show considerable improvements above the baseline. We provided insights into the behavior of the model, highlighted its potential benefits, and proposed the directions for further improvements.
+\paragraph{Where can our approach be advantageous?} As larger models are getting better in output fluency, the outputs of our system are getting inferior in comparison. However, certain unique features make it interesting even in the light of recent progress. Firstly, it guarantees the presence of the entities in the output, which is not guaranteed by any approach relying on a neural \ac{lm} in the final step. On top of that, our approach can help with exerting direct control over the generative process. One can imagine introducing the option to accept or reject the changes at each step, and even building a set of custom rules on top of the individual edit operations based on the affected tokens. This possibility can be useful for fine-grained hallucination control \cite{rebuffel2021controlling,chen2023converge} and increasing the robustness of the model in a production system \cite{heidari2021getting,wang2023interactive}.
+
+
 
 
 \section{Pipeline of Text-to-Text Neural Modules}
