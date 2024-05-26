@@ -143,39 +143,9 @@ Again, we consider about half of the error examples (45 out of 100) as correctly
 
 \subsection{Discussion}
 
-% \begin{table*}[t]
-%     \centering\footnotesize
-%     \begin{tabular}{@{}l c c ccc >{\hspace{3mm}} c c ccc@{}}\toprule
-%                           & \multicolumn{5}{c}{\bfseries Human-written (E2E training set)} & \multicolumn{5}{c}{\bfseries System outputs (TGen)}                                                                     \\
-%                           & \bf Af                                                         & \bf Ar                                              & \bf R & \bf P & \bf F1 & \bf Af & \bf Ar & \bf R & \bf P & \bf F1 \\\midrule
-%         Slug2Slug aligner & 0.685                                                          & 0.765                                               & 0.550 & 0.800 & 0.652  & 0.995  & 1.000  & 1.000 & 1.000 & 1.000  \\
-%         E2E script        & 0.820                                                          & 0.885                                               & 1.000 & 0.777 & 0.874  & 0.995  & 0.995  & 1.000 & 0.950 & 0.974  \\
-%         TGen reranker     & 0.110                                                          & 0.435                                               & 0.975 & 0.413 & 0.579  & 0.220  & 0.278  & 1.000 & 0.116 & 0.208  \\
-%         \midrule
-%         Default           & 0.600                                                          & 0.700                                               & 0.625 & 0.625 & 0.625  & 0.978  & 0.978  & 0.947 & 0.837 & 0.888  \\ % 005
-%         Backoff           & 0.530                                                          & 0.640                                               & 0.675 & 0.540 & 0.600  & 0.833  & 0.833  & 0.974 & 0.359 & 0.525  \\\bottomrule % 006
-%     \end{tabular}
-%     \caption{Semantic classifiers evaluated on expert human annotation on E2E data (see \autoref{tab:sem-acc:res} for metrics legend).}
-%     \label{tab:sem-acc:e2e-slot-comparison}
-% \end{table*}
+\paragraph{Are there any alternatives to our metric?} The main alternatives to our metric are mostly reference-based, which makes their use-cases different to ours \cite{zhaoMoverScoreTextGeneration2019,sellam2020bleurt,yuanBARTScoreEvaluatingGenerated2021}. Except for PARENT \cite{dhingraHandlingDivergentReference2019} and RoMe \cite{ronyRoMeRobustMetric2022}, these metrics are also not particularly targetting \ac{d2t} generation. Our metric thus remains a major alternative for evaluating semantic accuracy triple-to-text generation. In the future, it can be potentially accompanied by evaluation metrics based on large language models \cite{zhaoInvestigatingTabletoTextGeneration2023,sottanaEvaluationMetricsEra2023,kocmiLargeLanguageModels2023}.
 
-
-% % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% \paragraph{E2E MR Classifier Comparison}
-% % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% %As described in Section~\ref{sec:experiments}, there are data in the E2E restaurant domain human-annotated for accuracy (part of the training set, some TGen outputs; \citealp{dusek_semantic_2019}). 
-% We used expert-annotated E2E data samples to compare our approach to other accuracy classifiers in the E2E domain:
-% \begin{itemize}[nosep,leftmargin=10pt]
-%     \item \textbf{Slug2Slug slot aligner} \citep{juraska_deep_2018} is based on keyword matches. It is carefully tuned but not designed to detect hallucination; it only checks for presence of facts from the input MR.
-%     \item \textbf{E2E slot error script} (used in Section~\ref{sec:e2e-results}) is based on regular expressions; it is also able to detect irrelevant facts.
-%     \item \textbf{TGen reranker} is an LSTM-based model trained on the E2E training data to rerank outputs of the TGen system \cite{dusek_sequence--sequence_2016} based on their semantic accuracy.
-%           % \item TGen's reranking classifier trained on cleaned E2E data (i.e., reclassified by the slot error script)
-% \end{itemize}
-
-% The results for all classifiers (in Table~\ref{tab:e2e-slot-comparison}) are much weaker on human-written data, which exhibit much more variability than system outputs.
-% %While the TGen reranker may be useful for relative comparisons of system outputs, it 
-% The TGen reranker is very weak when required to detect all facts properly.
-% Our approach is slightly less precise than both handcrafted scripts, but the difference is small on system outputs (97.8\% vs. 99.5\% accuracy). If we disregard the value \emph{eatType=restaurant}, which is generally noisy, we get 76.5\% accuracy and 97.6\% recall on the human-written data. Moreover, our approach requires much less handcrafting and is more general.
+\paragraph{How to improve the metric?} Perhaps surprisingly, the bottleneck of the metric not in the \ac{nli} model, as out-of-the-box \ac{nli} models are generally better and more robust metrics than a specially trained approaches \cite{chenMENLIRobustEvaluation2022}. What can be a bottleneck is determining how to present the structured data to a \ac{plm} -- that is, replacing manual template generation with a more automated approach. In this respect, see the discussion on replacing template generation with \acp{plm} and \acp{llm} in \autoref{sec:pipeline:discussion}.
 
 
 \section{Token-Level Error Classification}
