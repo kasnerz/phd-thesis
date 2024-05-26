@@ -17,7 +17,7 @@ In \Cref{sec:iterative,sec:pipeline}, we present approaches that can generate te
 \end{refbox}
 
 
-This section introduces a simple approach for generating knowledge graph descriptions. Our approach is based on finetuning a multi-lingual \ac{plm} on linearized graphs and the accompanying human-written descriptions from the WebNLG dataset. In the WebNLG+ Shared Task, our model ranked in the first third of the leaderboard for English and the first or second for Russian on automatic metrics. It also made it in the best or second-best system cluster on human evaluation. We show that with a moderate amount of finetuning data, a simple \ac{plm}-based baseline can achieve satisfactory results.
+This section introduces a simple approach for generating knowledge graph descriptions. Our approach is based on finetuning a multi-lingual \ac{plm} on linearized graphs and the accompanying human-written descriptions from the WebNLG dataset. In the WebNLG+ Shared Task, our model ranked in the first third of the leaderboard for English and the first or second for Russian on automatic metrics. It also made it in the best or second-best system cluster on human evaluation. We show that with a moderate amount of in-domain finetuning data, a simple \ac{plm}-based baseline can achieve satisfactory results in generating descriptions of knowledge graphs. We also point out its limitations, namely its inability to infer semantics of ambiguous relation labels; a topic to which we will return in \autoref{sec:rel2text}.
 
 \subsection{WebNLG+ Shared Task}
 \label{sec:webnlgp}
@@ -29,7 +29,7 @@ The WebNLG Challenge 2020\footnote{\url{https://synalp.gitlabpages.inria.fr/webn
 Our input is a set of \ac{rdf} triples $x \in X$, where each triple $x = (s, p, o)$ describes the relation $p$ between the entities $s$ and $o$ in the knowledge graph. Our target output $Y$ is a fluent and semantically accurate natural language description of $X$.
 
 
-We formulate the task as \emph{sequence-to-sequence} generation. First, we linearize the input sequence in the default order. We select two arbitrary separator tokens: one to delimit the triple constituents and another to delimit individual triples. Using the linearized sequence as an input and the target text as an output, we finetune a pretrained encoder-decoder model for the cross-entropy objective (\autoref{eq:clm}). We generate the target texts from the finetuned model using autoregressive decoding (see Algorithm~\ref{alg:decoding}).
+We formulate the task as \emph{sequence-to-sequence} generation. First, we linearize the input sequence (see \autoref{sec:neural-d2t}) in the default order using two arbitrary separator tokens: one to delimit the triple constituents and another to delimit individual triples. Using the linearized sequence as an input and the target text as an output, we finetune a pretrained encoder-decoder model for the cross-entropy objective (\autoref{eq:clm}). With the finetuned model, we generate the target texts using autoregressive decoding (see Algorithm~\ref{alg:decoding}).
 
 % 
 
@@ -44,11 +44,12 @@ The model uses 12 layers for the encoder and 12 layers for the decoder ($\sim$68
 
 
 
-\paragraph{Training} We finetune the pre-trained \texttt{mbart.CC25} model from the \textsc{fairseq} toolkit \citep{ott2019fairseq} using the default parameters.\footnote{We use dropout 0.3, attention dropout 0.1, and 1024 tokens per batch; we set the initial learning rate to 0.0003 and use polynomial decay with 2500 warmup steps. We train the model using the Adam optimizer \cite{kingma2014adam} with $\beta_1=0.9, \beta_2=0.98$ and $\varepsilon=1e-06$. For the full set of training arguments, see \url{https://github.com/facebookresearch/fairseq/tree/main/examples/mbart}.} We change the total number of updates from 40k to 10k to reflect the smaller size of our data. We train a separate version of mBART for each language: $\text{mBART}_{\text{en}}$ on English inputs and English outputs, and $\text{mBART}_{\text{ru}}$ on English inputs and Russian outputs.
+\paragraph{Training} We finetune the pre-trained \texttt{mbart.CC25} model from the \textsc{fairseq} toolkit \citep{ott2019fairseq} using the default parameters,\footnote{We use dropout 0.3, attention dropout 0.1, and 1024 tokens per batch; we set the initial learning rate to 0.0003 and use polynomial decay with 2500 warmup steps. We train the model using the Adam optimizer \cite{kingma2014adam} with $\beta_1=0.9, \beta_2=0.98$ and $\varepsilon=1e-06$. For the full set of training arguments, see \url{https://github.com/facebookresearch/fairseq/tree/main/examples/mbart}.} changing only the total number of updates from 40k to 10k to reflect the smaller size of our data. We train a separate version of mBART for each language: $\text{mBART}_{\text{en}}$ on English inputs and English outputs, and $\text{mBART}_{\text{ru}}$ on English inputs and Russian outputs.
 
 
 
 \subsection{Results}
+\label{sec:finetuning:res}
 
 \begin{table*}[t]
     \footnotesize
@@ -117,12 +118,23 @@ Factual errors in Russian were less frequent (9 sentences), which is expected as
 
 We further found 10 outputs with suboptimal phrasing in English and 9 in Russian, where the model did not connect properties of the same type in a coordination (e.g., two musical genres for a record) or gave numbers without proper  units (e.g., ``runtime of 89.0'' or ``area of 250493000000.0'').
 
-\paragraph{Discussion}
-Our solution benefits from the pretrained representations of the mBART model. Multilingual pretraining allows us to use a single architecture for both English and Russian. However, English and Russian are the two most represented languages in the mBART pre-training corpora (ca. 300 GB of data each) and the performance of our model would probably be lower with low-resource languages.
+\subsection{Discussion}
+\paragraph{Why does our approach work?} Our solution benefits from the pretrained mBART model, which has absorbed vast amounts of factual world knowledge \cite{petroni2019language}. Combined with its ability of producing fluent texts, the model naturally performs well at generating short, factually-grounded sentences. Moreover, multilingual pretraining of the model allows us to use a single architecture for both English and Russian. As other solutions in the challenge also used pretrained models with similar architecture (but not consistently even performance), we should emphasize the need for a careful choice of hyperparameters.\footnote{Nevertheless, in our case, we achieved satisfactory results without departing from the default setup.}
 
-The performance of our model is also noticeably lower on categories unseen in training, and it is prone to swapping relations of entities or hallucinating relations. Even though the longest examples in the WebNLG dataset fit into the model, the length of the input sequence is still limited and the model does not generalize for inputs of arbitrary size.
+\paragraph{Where are its limitations?} Our approach is data-driven, and thus it depends on the access to the high-quality training set of in-domain data. Such data is generally not readily available for other domains, and gathering it requires substantial human effort and financial resources. The generalization to other languages also does not come cheap: English and Russian are the two most represented languages in the mBART pre-training corpora (ca. 300 GB of data each) and we can expect the performance of our model to be lower with low-resource languages.
+
+There are also limitations related to the formulation of the task itself. As we noted in \autoref{sec:finetuning:res}, the performance of our model is noticeably lower on categories unseen in training.  We show later in \autoref{sec:rel2text}, that this issue is hard to circumvent: the best solution is to leverage the model's language understanding by using human-readable labels. The size of the input examples is also somehow limited (no more than seven triples); therefore, we cannot expect the model to perform equally well for inputs of arbitrary size.
+% That being said, the current setup may still cover practical scenarios with pre-selected content.
+
+\paragraph{What are the ways forward?} The 2023 WebNLG Shared Task featured our system as the baseline for the track for graph-to-text generation in Russian \cite{cripwell2023WebNLGShared2023}. The organizers of the task note that \textit{``results on Russian for the present edition provide very small improvements over the best results for 2020.''} These results suggest that (1) the WebNLG task is saturated, yielding only very small improvements regardless of the technique (at least for high-resource languages), and (2) fixing the long tail requires different, more principled approaches allowing to identify and correct unclear input cases (e.g., by human interventions based on model uncertainty). However, these interventions may yield only small improvements on automatic metrics and may not be possible in the framework of the shared task.
 
 
+In \Cref{sec:iterative,sec:pipeline}, we introduce approaches for \ac{d2t} generation which cut down on the need for extensive amount of in-domain training data. These approaches still rely on the existence of \acp{plm}, but they are given inductive bias necessary for the task at hand: namely, that the goal is to transform a disfluent input (i.e., the structured data in its original format) into a fluent output (i.e., the structured data expressed in natural language). These approaches make it possible to build data-driven approaches for \ac{d2t} generation for domains lacking high-quality training data.
+
+% There may be some limitation related to factual knowledge: the model may be prone to generating factually correct sentences \emph{regardless} of the input.
+
+
+\paragraph{What about large language models?} Suprisingly, our findings are still valid in the era of \acp{llm}. We recommend the works of \citet{axelssonUsingLargeLanguage2023} and \citet{yuanEvaluatingGenerativeModels2023} for elucidating this topic. As shown in these works, the GPT-3.5 model \cite{chatgpt} \emph{does not} generally outperform finetuned systems on the WebNLG dataset. In particular, \citet{axelssonUsingLargeLanguage2023} compared zero-shot performance GPT-3.5 to the systems of WebNLG 2020 challenge and found the model achieves similar performance as our system on English, while not outperforming the best systems in the challenge. The model also still makes semantic errors (as we also discuss in \autoref{sec:quintd}) and performs significantly worse on Russian data than on English data. As shown in \citet{yuanEvaluatingGenerativeModels2023}, the model may be be hard to control with respect to the output format. It should be also noted that GPT-3.5 is given unfair advantage during evaluation, as it may have memorized the outputs on the WebNLG test set \cite{balloccu2024leak}.
 
 
 
