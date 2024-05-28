@@ -82,9 +82,7 @@ We retrieve triples from three open large-scale \acp{kg} encoding factual knowle
 \end{itemize}
 
 We query all \acp{kg} using their openly available endpoints to retrieve a list of relations in each \ac{kg}. For each relation, we retrieve up to five \textit{triples} that use this relation and the relation \textit{description}, i.e., a short explanatory text.
-If present, we also retrieve descriptions for the subject and the object.
-
-We apply a set of filtering heuristics, leaving out, e.g., relations describing \ac{kg} metadata or identification numbers.\footnote{Relations describing various IDs make up a large portion of relations in Wikidata. Since we focus on diversity instead of coverage, we decided not to include these relations in our dataset.} In this way, we collect 7,334 triples with 1,716 relations in total.
+If present, we also retrieve descriptions for the subject and the object. We apply a set of filtering heuristics, leaving out, e.g., relations describing \ac{kg} metadata or identification numbers.\footnote{Relations describing various IDs make up a large portion of relations in Wikidata. Since we focus on diversity instead of coverage, we decided not to include these relations in our dataset.} In this way, we collect 7,334 triples with 1,716 relations in total.
 
 \paragraph{Annotation Process}
 We collect human-written verbalizations for all input triples using Prolific.\footnote{\url{https://www.prolific.co/}} We built a web interface where human annotators are shown a single triple $t$ and asked to describe it in a single sentence. The annotators are encouraged to re-use the entities in their original form, but they can change the form if necessary. The annotators can also report noisy inputs. We employed 420 annotators in total, each of which annotated 20 examples. We set the average reward per hour according to the platform recommendations to  \textsterling{}7.29 per hour, and we accepted all the inputs that passed our built-in checks.
@@ -296,10 +294,21 @@ Given that the \BARTr{} model can describe relations from their labels with high
 Overall, we argue that training a PLM on verbalizing individual relations can potentially replace the manual effort of creating simple templates, which will have a notable impact on scaling similar approaches to larger datasets.
 
 
-\paragraph{Discussion}
+\subsection{Discussion}
+
+\paragraph{Takeaways} We showed that \acp{plm} are able to verbalize novel relations as long as the relation label is human-readable and unambiguous. However, when the cues about the relation are limited, the model will resolve to guessing. A takeaway for datasets which do not follow standard naming conventions, such as the Rotowire dataset \cite{wiseman2017challenges} which uses abbreviations for column headers (e.g.\ FG3A stands for \textit{``the number of shots the player attempted beyond the arc''}), is that rephrasing the labels to natural language may increase the quality of outputs from neural systems. It is still an open question how to handle input data with noisy labels. We suggest detecting and fixing these cases prior to generation, for example with a human-in-the-loop setup.
 
 
-\ZK{TODO: discuss ASPIRO: Any-shot Structured Parsing-error-Induced ReprOmpting for Consistent Data-to-Text Generation}
+\paragraph{Implications for Large Language Models} We focused on \acp{plm} which require at least several hundreds of examples to produce satisfactory results. With in-context learning, \acp{llm} may bring down the number of examples required close to zero. In this case, the models do not have a possibility to learn the correct verbalizations from the training data, which makes using clear and unambiguous labels even more important. A follow-up work has shown that prompting \acp{llm} can bring comparable results to using a finetuned \ac{plm} in our scenario, but requires a more complex setup for controlling the model outputs \cite{vejvarASPIROAnyshotStructured2023}.
+
+\paragraph{Efficient Use of Relation Descriptions} To achieve more notable improvements with long-form descriptions of relations, it may be necessary to include a more detailed specification regarding the relation direction, type, or acceptable values. The model also needs to be able to reason about this specification, which could be achieved with the help of \acp{llm} and chain-of-thought reasoning \cite{weiChainThoughtPrompting2022,zhaoInvestigatingTabletoTextGeneration2023}.
+
+
+\paragraph{Limitations} Our analysis is limited to verbalizing single triples, which is only a trivial case of graph-to-text generation. Nevertheless, we believe that this simplified setting allows us to distill insights which are still applicable to graph-to-text generation in general. We also focus only on the English part of the \acp{kg}: for more morphologically rich languages, an extra effort would have to be put into correctly inflecting the entities in the generated text.
+
+
+
+
 
 
 \section{Data-to-Text Generation with Large Language Models}
