@@ -2,30 +2,32 @@
 \chapter{Background}
 \label{chap:background}
 
-This chapter explains the basic concepts used throughout the thesis.
+This chapter explains the basic concepts related to neural \acp{lm} and data-to-text generation. The chapter serves as the main point of reference for the concepts and related work referenced throughout the thesis; we will only briefly revisit the most relevant concepts in the respective chapters.
 
 In \autoref{sec:lms}, we first cover \emph{neural \acp{lm}}. We start with a brief theory of neural networks and text representation for neural networks. This theoretical grounding will help us to define the task of language modeling and its connection to neural networks. We then look at specific neural architectures, particularly the transformer architecture, and show how pretraining models based on this architecture can produce models with strong \ac{nlp} capabilities.
 
 In \autoref{sec:d2t}, we turn our attention to \ac{d2t} generation, the central task explored in this thesis. To motivate the task, we start with an overview of real-world \ac{d2t} applications. We also explain the subtasks into which \ac{d2t} generation can be decomposed. We show how various approaches tackle these subtasks, starting from early rule-based approaches to recent neural-based systems. Finally, we describe \ac{d2t} datasets and evaluation metrics, focusing on the ones relevant to this thesis.
 
-We assume that the typical reader of this thesis comes from a related \ac{nlp} area and is familiar with the relevant concepts. That being said, the thesis can also be used by a beginner in the field, as the work is self-contained and provides pointers to relevant work for more details. The chapter serves as the main point of reference; we will only briefly revisit the most relevant concepts in the respective chapters.
+
+
+% We assume that the typical reader of this thesis comes from a related \ac{nlp} area and is familiar with the relevant concepts. That being said, the thesis can also be used by a beginner in the field, as the work is self-contained and provides pointers to relevant work for more details. 
 
 
 
 
 \section{Neural Language Models}
 \label{sec:lms}
-In this section, we work our way towards neural \acp{lm}. We start with the mathematical foundations of \acp{nn} on which the neural \acp{lm} are built (\autoref{sec:nns}), the ways we can represent text in neural networks (\autoref{sec:text-repr}), and the basic ideas of language modeling (\autoref{sec:lm-basics}). Equipped with the necessary theoretical background, we then introduce the transformer architecture (\autoref{sec:transformer}) and how it serves as a basis for pretrained (\autoref{sec:plms}) and large (\autoref{sec:llms}) language models.
+In this section, we work our way towards neural \acp{lm}. We start with the mathematical foundations of \acp{nn} on which neural \acp{lm} are built (\autoref{sec:nns}), the ways we can represent text in neural networks (\autoref{sec:text-repr}), and the basic ideas of language modeling (\autoref{sec:lm-basics}). Equipped with the necessary theoretical background, we then introduce the transformer architecture (\autoref{sec:transformer}) and how it serves as a basis for pretrained (\autoref{sec:plms}) and large (\autoref{sec:llms}) language models.
 
 \subsection{Neural Networks}
 \label{sec:nns}
-Neural networks are a tool for learning patterns from data.\footnote{Until we get to \ac{d2t} generation in \autoref{sec:d2t}, we use the word ``\textit{data}'' only in its abstract sense, as in ``any inputs we can apply our algorithms to''. We use the term ``structured data'' whenever it is necessary to make the distinction.} Such a tool will help us with learning language patterns from large-scale textual data, and in turn with generating text.
+Neural networks are a tool for learning patterns from data.\footnote{Until we get to \ac{d2t} generation in \autoref{sec:d2t}, we use the word ``\textit{data}'' only in its abstract sense, as in ``any inputs we can apply our algorithms to''. We use the term ``structured data'' whenever it is necessary to make the distinction.} In our case, we are interested the most in learning language patterns from large-scale textual data, which will in turn help us with generating text.
 
-To begin, let's say our goal is to predict real-number output $y \in \mathbb{R}$ for the given vector of real numbers $\mathbf{x} = (x_1, \ldots, x_d) \in \mathbb{R}^d$.
+To begin, let us say that our goal is to predict a real-number output $y \in \mathbb{R}$ for a given vector of real numbers $\mathbf{x} = (x_1, \ldots, x_d) \in \mathbb{R}^d$.
 % \footnote{We will follow the convention that vectors are denoted with boldface letters ($\mathbf{x}$), and real numbers with plain letters ($x$).} 
-We assume that the $\mathbf{x} \rightarrow y$ mapping is not arbitrary---that would leave us with memorizing all the $(\mathbf{x},y)$ pairs---but follows some regularities and underlying patterns that can be learned. This assumption is naturally satisfied if we consider $(\mathbf{x},y)$ to be representations of real-world data, e.g., documents and their labels.
+We assume that the $\mathbf{x} \rightarrow y$ mapping is not arbitrary---if it were, it would leave us with memorizing all the $(\mathbf{x},y)$ pairs---but follows some regularities and underlying patterns that can be learned. This assumption is naturally satisfied if we consider $(\mathbf{x},y)$ to be representations of real-world data, e.g., documents and their topics.
 
-We use mathematical models designed to capture the patterns in their parameters to learn the mapping. The models estimate the parameters from a set of $(\mathbf{x},y)$ examples called the \textit{training data} and use the parameters to predict the outputs on a separate set of examples (generally assumed to come from the same data-generating distribution) called the \textit{test data}.
+In machine learning, we learn the patterns using mathematical models designed to capture the patterns in their parameters. The models estimate the parameters from a set of $(\mathbf{x},y)$ examples called the \textit{training data} and use these parameters to predict the outputs on the \textit{test data}, which is a new set of examples generally coming from the same distribution.
 
 \paragraph{Perceptron Algorithm} One of the early mathematical models designed for learning patterns from data is the \emph{perceptron algorithm} (\citealp{rosenblatt1958perceptron}, \citealp[p.~192]{bishop2006pattern}). For the perceptron algorithm, we need to restrict the output to a binary class label: $y \in \{-1, 1\}$. The algorithm learns the parameters $\textbf{w} = (w_1, \ldots, w_d) \in \mathbb{R}^d$ and the bias $b \in \mathbb{R}$ describing a linear decision boundary separating the data points according to their class label. The algorithm proceeds as follows:
 

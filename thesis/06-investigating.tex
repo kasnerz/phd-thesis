@@ -296,15 +296,15 @@ Overall, we argue that training a PLM on verbalizing individual relations can po
 
 \subsection{Discussion}
 
-\paragraph{Takeaways} We showed that \acp{plm} are able to verbalize novel relations as long as the relation label is human-readable and unambiguous. However, when the cues about the relation are limited, the model will resolve to guessing. A takeaway for datasets which do not follow standard naming conventions, such as the Rotowire dataset \cite{wiseman2017challenges} which uses abbreviations for column headers (e.g.\ FG3A stands for \textit{``the number of shots the player attempted beyond the arc''}), is that rephrasing the labels to natural language may increase the quality of outputs from neural systems. It is still an open question how to handle input data with noisy labels. We suggest detecting and fixing these cases prior to generation, for example with a human-in-the-loop setup.
+\paragraph{Takeaways} We showed that \acp{plm} can verbalize novel relations as long as the relation label is human-readable and unambiguous. However, when the cues about the relation are limited, the model will resolve to guessing. A takeaway for datasets that do not follow standard naming conventions, such as the Rotowire dataset \cite{wiseman2017challenges}, which uses abbreviations for column headers (e.g., FG3A stands for \textit{``the number of shots the player attempted beyond the arc''}), is that rephrasing the labels to natural language may increase the quality of outputs from neural systems. It is still an open question how to handle input data with noisy labels. We suggest detecting and fixing these cases prior to generation, for example, with a human-in-the-loop setup.
 
 
-\paragraph{Implications for Large Language Models} We focused on \acp{plm} which require at least several hundreds of examples to produce satisfactory results. With in-context learning, \acp{llm} may bring down the number of examples required close to zero. In this case, the models do not have a possibility to learn the correct verbalizations from the training data, which makes using clear and unambiguous labels even more important. A follow-up work has shown that prompting \acp{llm} can bring comparable results to using a finetuned \ac{plm} in our scenario, but requires a more complex setup for controlling the model outputs \cite{vejvarASPIROAnyshotStructured2023}.
+\paragraph{Implications for Large Language Models} We focused on \acp{plm}, which require at least several hundred examples to produce satisfactory results. With in-context learning, \acp{llm} may bring down the number of examples required close to zero. In this case, the models cannot learn the correct verbalizations from the training data, which makes using clear and unambiguous labels even more important. A follow-up work has shown that prompting \acp{llm} can bring comparable results to using a finetuned \ac{plm} in our scenario but requires a more complex setup for controlling the model outputs \cite{vejvarASPIROAnyshotStructured2023}.
 
 \paragraph{Efficient Use of Relation Descriptions} To achieve more notable improvements with long-form descriptions of relations, it may be necessary to include a more detailed specification regarding the relation direction, type, or acceptable values. The model also needs to be able to reason about this specification, which could be achieved with the help of \acp{llm} and chain-of-thought reasoning \cite{weiChainThoughtPrompting2022,zhaoInvestigatingTabletoTextGeneration2023}.
 
 
-\paragraph{Limitations} Our analysis is limited to verbalizing single triples, which is only a trivial case of graph-to-text generation. Nevertheless, we believe that this simplified setting allows us to distill insights which are still applicable to graph-to-text generation in general. We also focus only on the English part of the \acp{kg}: for more morphologically rich languages, an extra effort would have to be put into correctly inflecting the entities in the generated text.
+\paragraph{Limitations} Our analysis is limited to verbalizing single triples, which is only a trivial case of graph-to-text generation. Nevertheless, we believe that this simplified setting allows us to distill insights that are still applicable to graph-to-text generation in general. We also focus only on the English part of the \acp{kg}: for more morphologically rich languages, an extra effort must be put into correctly inflecting the entities in the generated text.
 
 
 
@@ -315,7 +315,7 @@ Overall, we argue that training a PLM on verbalizing individual relations can po
 \label{sec:quintd}
 
 \begin{refbox}
-    This section is based on the paper \emph{Beyond Basic Benchmarks: Evaluating Open LLMs on Data-to-Text Generation} \cite{kasnerReferenceBasedMetricsAnalyzing2024}, joint work with Ondřej Dušek. The work \ZK{TODO}
+    This section is based on the paper \emph{Beyond Traditional Benchmarks: Evaluating Open LLMs on Data-to-Text Generation} \cite{kasnerReferenceBasedMetricsAnalyzing2024}, joint work with Ondřej Dušek. The work \ZK{TODO}
 \end{refbox}
 
 % We analyze the behaviors of open \acp{llm} on the task of \ac{d2t} generation. To avoid the issue of \ac{llm} training data contamination with standard benchmarks, we design \datatool{} -- a tool for collecting novel structured data records from public APIs. Using a dataset collected with \datatool and leveraging reference-free evaluation, we analyze model behaviors on five D2T generation tasks.
