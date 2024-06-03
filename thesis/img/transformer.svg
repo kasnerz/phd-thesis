@@ -14,6 +14,7 @@
    inkscape:export-ydpi="600"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
@@ -28,9 +29,9 @@
      showgrid="false"
      units="px"
      width="128px"
-     inkscape:zoom="1.8546183"
-     inkscape:cx="107.29971"
-     inkscape:cy="204.89391"
+     inkscape:zoom="1.3114132"
+     inkscape:cx="219.22915"
+     inkscape:cy="105.99253"
      inkscape:window-width="1920"
      inkscape:window-height="1020"
      inkscape:window-x="0"
@@ -45,6 +46,55 @@
      inkscape:deskcolor="#d1d1d1" />
   <defs
      id="defs2">
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#Strips1_1"
+       preserveAspectRatio="xMidYMid"
+       id="pattern128"
+       patternTransform="matrix(1.4142136,1.4142136,-1.4142136,1.4142136,0,0)"
+       x="0"
+       y="0" />
+    <pattern
+       inkscape:collect="always"
+       patternUnits="userSpaceOnUse"
+       width="2"
+       height="10"
+       patternTransform="translate(0,0) scale(2,2)"
+       preserveAspectRatio="xMidYMid"
+       id="Strips1_1"
+       style="fill:#fcedad"
+       inkscape:stockid="Stripes 01 (1:1)"
+       inkscape:isstock="true"
+       inkscape:label="Stripes 01 (1:1)">
+      <rect
+   style="stroke:none"
+   x="0"
+   y="-0.5"
+   width="1"
+   height="11"
+   id="rect134" />
+
+    </pattern>
+    <linearGradient
+       id="swatch29"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#e3d7f4;stop-opacity:1;"
+         offset="0"
+         id="stop29" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient10"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#ffeeaa;stop-opacity:1;"
+         offset="0"
+         id="stop10" />
+      <stop
+         style="stop-color:#ffeeaa;stop-opacity:0;"
+         offset="1"
+         id="stop11" />
+    </linearGradient>
     <marker
        style="overflow:visible"
        id="Arrow2Send"
@@ -395,6 +445,15 @@
          style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
          id="path98265-0-6" />
     </marker>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient10"
+       id="linearGradient11"
+       x1="31.780878"
+       y1="43.879051"
+       x2="31.862579"
+       y2="43.57309"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -411,7 +470,7 @@
        rx="0.64768404"
        ry="0.68411672" />
     <rect
-       style="opacity:1;fill:none;fill-opacity:0.168224;stroke:#808080;stroke-width:0.132292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:#cccccc;fill-opacity:0.16822402;stroke:#808080;stroke-width:0.132292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect129479"
        width="38.2286"
        height="61.781136"
@@ -484,7 +543,7 @@
          x="23.441874"
          y="108.38301">output probabilities</tspan></text>
     <rect
-       style="opacity:0.72561;fill:#f9f9f9;fill-opacity:1;stroke:#000000;stroke-width:0.132292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:0.72561;fill:#f9f9f9;fill-opacity:1;stroke:#000000;stroke-width:0.132292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:0.79375201,0.79375201;stroke-dashoffset:0;stroke-opacity:1"
        id="rect88520-6"
        width="17.480085"
        height="4.245162"
@@ -504,7 +563,7 @@
          x="27.160597"
          y="34.85717">layer norm</tspan></text>
     <rect
-       style="opacity:0.72561;fill:#f9f9f9;fill-opacity:1;stroke:#000000;stroke-width:0.132292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:0.72561;fill:#f9f9f9;fill-opacity:1;stroke:#000000;stroke-width:0.132292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:0.79375201,0.79375201;stroke-dashoffset:0;stroke-opacity:1"
        id="rect88520-6-4"
        width="17.480085"
        height="4.245162"
@@ -564,7 +623,7 @@
          x="31.904833"
          y="102.07387">softmax</tspan></text>
     <rect
-       style="opacity:0.72561;fill:#f9f9f9;fill-opacity:1;stroke:#000000;stroke-width:0.14612;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:0.72561;fill:url(#linearGradient11);fill-opacity:1;stroke:#000000;stroke-width:0.14612;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect88520-6-1"
        width="27.442772"
        height="7.8069887"
@@ -589,7 +648,7 @@
          y="45.670788"
          id="tspan5">layer</tspan></text>
     <rect
-       style="opacity:0.72561;fill:#f9f9f9;fill-opacity:1;stroke:#000000;stroke-width:0.14612;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:0.72561;fill:#afdde9;fill-opacity:1;stroke:#000000;stroke-width:0.14612;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect88520-6-1-8"
        width="21.395061"
        height="7.6649227"
@@ -720,7 +779,7 @@
          x="31.089705"
          y="50.528931">+</tspan></text>
     <rect
-       style="opacity:0.72561;fill:#f9f9f9;fill-opacity:1;stroke:#000000;stroke-width:0.132292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:0.72561;fill:#f9f9f9;fill-opacity:1;stroke:#000000;stroke-width:0.132292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:0.79375201,0.79375201;stroke-dashoffset:0;stroke-opacity:1"
        id="rect88520-6-5"
        width="17.480085"
        height="4.245162"
@@ -740,7 +799,7 @@
          x="27.160597"
          y="56.087254">layer norm</tspan></text>
     <rect
-       style="opacity:0.72561;fill:#f9f9f9;fill-opacity:1;stroke:#000000;stroke-width:0.14612;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:0.72561;fill:url(#pattern128);fill-opacity:1;stroke:#000000;stroke-width:0.14612;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect88520-6-1-1"
        width="27.442772"
        height="7.8069887"
@@ -827,7 +886,7 @@
        rx="0.6227783"
        ry="0.44260839" />
     <rect
-       style="fill:none;fill-opacity:0.168224;stroke:#808080;stroke-width:0.132292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:#cccccc;fill-opacity:0.16994154;stroke:#808080;stroke-width:0.132292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect129479-7"
        width="38.2286"
        height="41.037254"
@@ -878,7 +937,7 @@
          x="-40.200996"
          y="19.419264">encoder</tspan></text>
     <rect
-       style="opacity:0.72561;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.132292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:0.72561;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.132292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:0.79375201,0.79375201;stroke-dashoffset:0;stroke-opacity:1"
        id="rect88520-6-19"
        width="17.480085"
        height="4.245162"
@@ -906,13 +965,13 @@
        transform="rotate(-90)"><tspan
          sodipodi:role="line"
          id="tspan40584-5-8-5-9"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.11667px;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#494949;fill-opacity:0.997664;stroke-width:0.264583"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.11667px;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#494949;fill-opacity:0.997664;stroke-width:0.264583"
          x="-43.650074"
          y="-34.280579">N<tspan
-   style="font-size:65%;baseline-shift:sub"
+   style="font-weight:bold;font-size:65%;baseline-shift:sub"
    id="tspan10">e</tspan> enc. layers</tspan></text>
     <rect
-       style="opacity:0.72561;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.132292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:0.72561;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.132292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:0.79375201,0.79375201;stroke-dashoffset:0;stroke-opacity:1"
        id="rect88520-6-4-6"
        width="17.480085"
        height="4.245162"
@@ -932,7 +991,7 @@
          x="-22.64439"
          y="55.820324">layer norm</tspan></text>
     <rect
-       style="opacity:0.72561;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.14612;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:0.72561;fill:#ffeeaa;fill-opacity:1;stroke:#000000;stroke-width:0.14612;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect88520-6-1-9"
        width="27.442772"
        height="7.8069887"
@@ -957,12 +1016,12 @@
          y="45.595428"
          id="tspan4">layer</tspan></text>
     <rect
-       style="opacity:0.72561;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.14612;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect88520-6-1-8-5"
+       style="opacity:0.72561;fill:#afdde9;fill-opacity:1;stroke:#000000;stroke-width:0.14612;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect124"
        width="21.395061"
        height="7.6649227"
-       x="-28.564346"
-       y="59.006611"
+       x="-28.836601"
+       y="58.94009"
        rx="0.64768302"
        ry="0.52744299" />
     <text
@@ -1121,10 +1180,10 @@
        transform="rotate(-90)"><tspan
          sodipodi:role="line"
          id="tspan12"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.11667px;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#494949;fill-opacity:0.997664;stroke-width:0.264583"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.11667px;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#494949;fill-opacity:0.997664;stroke-width:0.264583"
          x="-43.650074"
          y="15.99026">N<tspan
-   style="font-size:65%;baseline-shift:sub"
+   style="font-weight:bold;font-size:65%;baseline-shift:sub"
    id="tspan13">d</tspan> dec. layers</tspan></text>
     <path
        style="fill:none;stroke:#4d4d4d;stroke-width:0.264581px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Send-2-3)"

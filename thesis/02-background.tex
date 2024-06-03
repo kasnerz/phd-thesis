@@ -228,9 +228,9 @@ Specifically, the transformer processes the input in a series of blocks. Each bl
           \end{align}
     \item \textbf{\ac{mlp} layer:} The \ac{mlp} layer processes the outputs of the self-attention layer with a two-layer \ac{mlp}. Specifically, it applies two linear transformations with a non-linear activation function $f$ in between:
           \begin{align}
-              \mathbf{H} = f(\mathbf{A}\mathbf{W}_1 + \mathbf{b}_1)\mathbf{W}_2 + \mathbf{b}_2,
+              \mathbf{H} = f(\mathbf{a}_j\mathbf{W}_1 + \mathbf{b}_1)\mathbf{W}_2 + \mathbf{b}_2,
           \end{align}
-          where $\mathbf{W}_1 \in \mathbb{R}^{d,d_{\text{ff}}}$, $\mathbf{W}_2 \in \mathbb{R}^{d_{\text{ff}},d}$, $\mathbf{b}_1 \in \mathbb{R}^{d_{\text{ff}}}$, and $\mathbf{b}_2 \in \mathbb{R}^{d}$ are the trainable parameters and $d_{\text{ff}}$ is the dimensionality of the hidden layer.
+          where $\mathbf{W}_1 \in \mathbb{R}^{d,d_{\text{ff}}}$, $\mathbf{W}_2 \in \mathbb{R}^{d_{\text{ff}},d}$, $\mathbf{b}_1 \in \mathbb{R}^{d_{\text{ff}}}$, and $\mathbf{b}_2 \in \mathbb{R}^{d}$ are the trainable parameters and $d_{\text{ff}}$ is the dimensionality of the hidden layer. Note that the operations in the \ac{mlp} layer are element-wise (applied separately to each $\mathbf{a}_j$), so the transformation can be computed efficiently in parallel.
 \end{itemize}
 To stabilize the training process, the input of each layer (or output, depending on the architecture variant) is normalized using \emph{layer normalization} \cite{ba2016layer}. Another feature that helps to stabilize training is the \emph{residual connection}: the fact that the output of the $i$-th layer is summed with its original input $\mathbf{H}^{(i)}$:
 \begin{align}
@@ -258,11 +258,35 @@ As shown in \autoref{fig:transformer}, which summarizes the architecture details
     \item The self-attention is \emph{masked} so that each token can collect information only from the preceding tokens, which is necessary to enable training the model for left-to-right autoregressive decoding.
 \end{itemize}
 
-\paragraph{Language modeling with a transformer} The sequence of hidden states produced by the transformer can be used for language modeling. After the last decoder layer, the hidden states are projected into a matrix of size $\mathbb{R}^{|V|\times n}$ and normalized using softmax, producing a probability distribution over the vocabulary for each input token.
+The hidden states produced by the transformer can be used for language modeling: after the last decoder layer, the hidden states are projected into a matrix of size $\mathbb{R}^{|V|\times n}$ and normalized using softmax, producing a probability distribution over the vocabulary for each input token.
+
+\paragraph{Text Generation} For generating text from a transformer decoder, we can use \textit{left-to-right autoregressive decoding} \cite[p.196]{jurafsky2024}. The decoding process starts by feeding a special \texttt{<s>} (beginning of sequence) token into the decoder and iteratively selecting the \emph{i}-th token based on the model-predicted probability distribution for the \emph{i}-th position. The decoding stops once a special \texttt{</s>} (end of sequence) token is decoded. The procedure is outlined in Algorithm \ref{alg:decoding}.
+\begin{algorithm}[ht]
+    \begin{algorithmic}[1]
+        \State{Initialize: $Y= \texttt{<s>}, y = \texttt{<s>}$ \Comment{Output sequence, current token}}
+        \While{$y \neq \texttt{</s>}$}
+        \State Predict next token probability distribution: $p(y | Y)$
+        \State Select the next token: $y \sim p(y | Y)$ \label{alg:dec:sample}
+        \State Update output sequence: $Y = Y \cup y$
+        \EndWhile
+        \State Return $Y$
+    \end{algorithmic}
+    \caption{Autoregressive decoding}
+    \label{alg:decoding}
+\end{algorithm}
+
+\noindent The token selection step (line \ref{alg:dec:sample}) can be realized in various ways, including:
+\begin{itemize}
+    \item \textbf{Greedy decoding}: Selecting the most probable token: $y_i = \argmax{y \in V} p_\theta(y|y_{<i}).$
+    \item \textbf{Beam search}: Extending the $k$ most probable sequences from the previous step with the next tokens, and selecting the $k$ most probable sequences for the next step.
+    \item \textbf{Top-$k$ sampling}: Sampling the next token from the distribution of $k$ most probable tokens.
+    \item \textbf{Top-$p$ (nucleus) sampling} \cite{holtzman2019curious}: Sampling the next token from the distribution of tokens with cumulative probability $p$.
+\end{itemize}
+While greedy decoding and beam search are used to generate more probable sequences (approximating the exact algorithm for estimating the most probable sequence overall, which has exponential complexity), sampling algorithms are used to decode more creative outputs. Notet that the list of the decoding algorithms as presented here is not exhaustive; see \citet{zarriess2021decoding} and \citet{wiher2022decoding} for an overview and further discussion.
 
 \subsection{Pretrained Language Models}
 \label{sec:plms}
-To achieve good performance on an \ac{nlp} task with a vanilla transformer model, one would need extensive amounts of labeled training data. A more efficient workflow is as follows: the models are first \emph{pretrained} on large-scale data---such as The Pile \cite{gao2020pile}, or C4 \cite{raffelExploringLimitsTransfer2019}---and then \emph{finetuned} for downstream tasks on a smaller, task-specific dataset. Crucially, the pretraining is \emph{self-supervised} (cf. \autoref{sec:lm-basics}), i.e., it can be done using general domain-data with no specific annotations. Although pretraining a model still requires significant computational resources, the checkpoints of \acp{plm} can be used for efficient finetuning on downstream tasks.
+To achieve good performance on an \ac{nlp} task with a vanilla transformer model, we need an extensive amount of labeled training data. A more efficient workflow is as follows: the models are first \emph{pretrained} on large-scale data---such as The Pile \cite{gao2020pile}, or C4 \cite{raffelExploringLimitsTransfer2019}---and then \emph{finetuned} for downstream tasks on a smaller, task-specific dataset. Crucially, the pretraining is \emph{self-supervised} (cf. \autoref{sec:lm-basics}), i.e., it can be done using general domain-data with no specific annotations. Although pretraining a model still requires significant computational resources, the checkpoints of \acp{plm} can be used for efficient finetuning on downstream tasks.
 
 
 \begin{table}[t]
@@ -325,29 +349,6 @@ As a matter of fact, only causal language modeling adheres to the strict definit
 
 \paragraph{Few-shot and Zero-shot Settings} If the size of the finetuning data is very limited (up to a few hundred examples), we talk about \emph{few-shot} setting. By limiting the finetuning data to zero, we arrive at a \emph{zero-shot} setting, where we use a model on a task which it has not been trained for. These settings are crucial for tasks with scarce data, also called \emph{low-resource scenarios}. \cite{hedderich2021survey}
 
-\paragraph{Text Generation} For generating text from a transformer decoder, we can use \textit{left-to-right autoregressive decoding} \cite[p.196]{jurafsky2024}. The decoding process starts by feeding a special \texttt{<s>} (beginning of sequence) token into the decoder and iteratively selecting the \emph{i}-th token based on the model-predicted probability distribution for the \emph{i}-th position. The decoding stops once a special \texttt{</s>} (end of sequence) token is decoded. The procedure is outlined in Algorithm \ref{alg:decoding}.
-\begin{algorithm}[ht]
-    \begin{algorithmic}[1]
-        \State{Initialize: $Y= \texttt{<s>}, y = \texttt{<s>}$ \Comment{Output sequence, current token}}
-        \While{$y \neq \texttt{</s>}$}
-        \State Predict next token probability distribution: $p(y | Y)$
-        \State Select the next token: $y \sim p(y | Y)$ \label{alg:dec:sample}
-        \State Update output sequence: $Y = Y \cup y$
-        \EndWhile
-        \State Return $Y$
-    \end{algorithmic}
-    \caption{Autoregressive decoding}
-    \label{alg:decoding}
-\end{algorithm}
-
-\noindent The token selection step (line \ref{alg:dec:sample}) can be realized in various ways, including:
-\begin{itemize}
-    \item \textbf{Greedy decoding}: Selecting the most probable token: $y_i = \argmax{y \in V} p_\theta(y|y_{<i}).$
-    \item \textbf{Beam search}: Extending the $k$ most probable sequences from the previous step with the next tokens, and selecting the $k$ most probable sequences for the next step.
-    \item \textbf{Top-$k$ sampling}: Sampling the next token from the distribution of $k$ most probable tokens.
-    \item \textbf{Top-$p$ (nucleus) sampling} \cite{holtzman2019curious}: Sampling the next token from the distribution of tokens with cumulative probability $p$.
-\end{itemize}
-While greedy decoding and beam search are used to generate more probable sequences (approximating the exact algorithm for estimating the most probable sequence overall, which has exponential complexity), sampling algorithms are used to decode more creative outputs. Notet that the list of the decoding algorithms as presented here is not exhaustive; see \citet{zarriess2021decoding} and \citet{wiher2022decoding} for an overview and further discussion.
 
 \subsection{Large Language Models}
 \label{sec:llms}
