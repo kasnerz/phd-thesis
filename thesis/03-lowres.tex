@@ -513,7 +513,7 @@ We evaluate outputs from the \textsc{\{1,2,3\}-stage} variants of our pipeline u
 
 
 
-Following prior work, we use BLEU \cite{papineni2002bleu} and METEOR \cite{banerjee-lavie-2005-meteor} to evaluate the outputs against the human references.\footnote{We use the implementation from \url{https://github.com/tuetschek/e2e-metrics}.} We also evaluate the number of omission and hallucination errors (i.e., facts missing or added, respectively) using a metric from \citet{dusekEvaluatingSemanticAccuracy2020} based on a RoBERTa model \cite{liuRoBERTaRobustlyOptimized2019} pretrained on natural language inference (see \autoref{sec:sem-acc}.
+Following prior work, we use \acs{bleu} \cite{papineni2002bleu} and METEOR \cite{banerjee-lavie-2005-meteor} to evaluate the outputs against the human references.\footnote{We use the implementation from \url{https://github.com/tuetschek/e2e-metrics}.} We also evaluate the number of omission and hallucination errors (i.e., facts missing or added, respectively) using a metric from \citet{dusekEvaluatingSemanticAccuracy2020} based on a RoBERTa model \cite{liuRoBERTaRobustlyOptimized2019} pretrained on natural language inference (see \autoref{sec:sem-acc}.
 
 We include a diverse set of baselines for comparison. \baselinecopy{} denotes the baseline of copying the facts without further processing. For WebNLG, we further compare our systems with the results of:
 \begin{itemize}
@@ -527,7 +527,7 @@ For E2E, we compare our systems with the results of:
     \item \citet{harkousHaveYourText2020} -- a state-of-the-art supervised system on the cleaned version of E2E data.
 \end{itemize}
 
-The automatic evaluation (\autoref{tab:pipeline:auto}) shows that our systems consistently outperform the \baselinecopy{} baseline (e.g., $\sim$12 BLEU points for E2E), which is already strong thanks to our manually curated set of templates.\footnote{On WebNLG, \baselinecopy{} achieves 37.18 BLEU points, compared to 24.80 BLEU points of the \textit{full system} of \citet{laha2020scalable}, which uses automatic template generation.} Automatic scores also suggest that our systems are comparable with some older supervised systems, although they underperform the state-of-the-art supervised systems.
+The automatic evaluation (\autoref{tab:pipeline:auto}) shows that our systems consistently outperform the \baselinecopy{} baseline (e.g., $\sim$12 \acs{bleu} points for E2E), which is already strong thanks to our manually curated set of templates.\footnote{On WebNLG, \baselinecopy{} achieves 37.18 \acs{bleu} points, compared to 24.80 \acs{bleu} points of the \textit{full system} of \citet{laha2020scalable}, which uses automatic template generation.} Automatic scores also suggest that our systems are comparable with some older supervised systems, although they underperform the state-of-the-art supervised systems.
 
 The \textsc{2-stage} system is generally on par with the \textsc{3-stage} system, which indicates that explicit aggregation using the \textsc{agg} model may not be necessary. However, a separate aggregation module allows one to control the aggregation step explicitly. The models using the filtered version of the corpus generally produce better results, although they also bring in a larger number of omissions.
 
