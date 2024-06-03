@@ -29,9 +29,9 @@
      showgrid="false"
      units="px"
      width="128px"
-     inkscape:zoom="1.3114132"
-     inkscape:cx="219.22915"
-     inkscape:cy="105.99253"
+     inkscape:zoom="1.8546183"
+     inkscape:cx="190.60525"
+     inkscape:cy="156.9056"
      inkscape:window-width="1920"
      inkscape:window-height="1020"
      inkscape:window-x="0"
@@ -67,13 +67,12 @@
        inkscape:isstock="true"
        inkscape:label="Stripes 01 (1:1)">
       <rect
-   style="stroke:none"
-   x="0"
-   y="-0.5"
-   width="1"
-   height="11"
-   id="rect134" />
-
+         style="stroke:none"
+         x="0"
+         y="-0.5"
+         width="1"
+         height="11"
+         id="rect134" />
     </pattern>
     <linearGradient
        id="swatch29"
@@ -969,7 +968,7 @@
          x="-43.650074"
          y="-34.280579">N<tspan
    style="font-weight:bold;font-size:65%;baseline-shift:sub"
-   id="tspan10">e</tspan> enc. layers</tspan></text>
+   id="tspan10">e</tspan> enc. blocks</tspan></text>
     <rect
        style="opacity:0.72561;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.132292;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:0.79375201,0.79375201;stroke-dashoffset:0;stroke-opacity:1"
        id="rect88520-6-4-6"
@@ -1184,7 +1183,7 @@
          x="-43.650074"
          y="15.99026">N<tspan
    style="font-weight:bold;font-size:65%;baseline-shift:sub"
-   id="tspan13">d</tspan> dec. layers</tspan></text>
+   id="tspan13">d</tspan> dec. blocks</tspan></text>
     <path
        style="fill:none;stroke:#4d4d4d;stroke-width:0.264581px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Send-2-3)"
        d="m -17.807442,12.511364 v 5.419474"
