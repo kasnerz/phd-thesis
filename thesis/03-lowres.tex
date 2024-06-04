@@ -366,10 +366,10 @@ Unlike previous works \cite{wiseman2018learning,shao-etal-2019-long,shen-etal-20
 \label{sec:pipeline:wikifluent}
 For training the modules, we need to build a corpus in which (1) the input is a set of simple, template-like sentences, (2) the output is a fluent text in natural language preserving the semantics of the input. Here, we propose a way how to build such a large-scale synthetic corpus from English Wikipedia. Our resulting corpus (\textsc{WikiFluent}) is orders of magnitude larger than the in-domain \ac{d2t} datasets and provides training data for all the modules in our pipeline.
 
-% we collect a large-scale synthetic corpus \textsc{WikiFluent}. Our goal is to build a corpus covering a broad range of domains and capturing the sentence style in D2T generation. In other words, we . As we describe below in detail, we achieve that by using human-written paragraphs in English Wikipedia and applying \textit{split-and-rephrase} and  \textit{coreference resolution} models to obtain synthetic source texts. The process is illustrated in Figure \ref{fig:wikifluent}; corpus statistics are included in Appendix \ref{app:stats}.
+% we collect a large-scale synthetic corpus \textsc{WikiFluent}. Our goal is to build a corpus covering a broad range of domains and capturing the sentence style in \ac{d2t} generation. In other words, we . As we describe below in detail, we achieve that by using human-written paragraphs in English Wikipedia and applying \textit{split-and-rephrase} and  \textit{coreference resolution} models to obtain synthetic source texts. The process is illustrated in Figure \ref{fig:wikifluent}; corpus statistics are included in Appendix \ref{app:stats}.
 
-\paragraph{Data Source} For building the \textsc{WikiFluent} corpus, we first extracted 934k first paragraphs of articles from a Wikipedia dump\footnote{\texttt{enwiki-20210401-pages-articles-multistream}} using WikiExtractor \cite{Wikiextractor2015}. Wikipedia is commonly used for large-scale pretraining of D2T generation models, as it provides a source of neutral texts based on factual data \cite{jinGenWikiDatasetMillion2020,chenKGPTKnowledgeGroundedPreTraining2020}.
-% Although it is not bias-free, it provides more balanced sample of natural language use than typical D2T generation datasets. 
+\paragraph{Data Source} For building the \textsc{WikiFluent} corpus, we first extracted 934k first paragraphs of articles from a Wikipedia dump\footnote{\texttt{enwiki-20210401-pages-articles-multistream}} using WikiExtractor \cite{Wikiextractor2015}. Wikipedia is commonly used for large-scale pretraining of \ac{d2t} generation models, as it provides a source of neutral texts based on factual data \cite{jinGenWikiDatasetMillion2020,chenKGPTKnowledgeGroundedPreTraining2020}.
+% Although it is not bias-free, it provides more balanced sample of natural language use than typical \ac{d2t} generation datasets. 
 We used the first paragraphs of Wikipedia entries with lengths between 30-430 characters, filtering out lists, disambiguations, and malformed paragraphs. To balance the lengths of inputs, we divided the paragraphs according to their length into four equally-sized bins (30-130 characters, etc.) and selected 250k examples from each bin.
 
 
@@ -519,7 +519,7 @@ We include a diverse set of baselines for comparison. \baselinecopy{} denotes th
 \begin{itemize}
     \item UPF-FORGe and \textsc{Melbourne} -- systems (grammar-based and supervised, respectively) from the first run of WebNLG Challenge \cite{gardentWebNLGChallengeGenerating2017},
     \item  \citet{keJointGTGraphTextJoint2021} -- a state-of-the-art system with a structure-aware encoder and task-specific pretraining,
-    \item \citet{laha2020scalable} -- a zero-shot D2T generation system.
+    \item \citet{laha2020scalable} -- a zero-shot \ac{d2t} generation system.
 \end{itemize}
 For E2E, we compare our systems with the results of:
 \begin{itemize}

@@ -16,7 +16,7 @@ In \autoref{sec:tok-eval}, we focus on detecting factual errors in \ac{d2t} gene
     This section is based on the paper \emph{Evaluating Semantic Accuracy of Data-to-Text Generation with Natural Language Inference} \cite{dusekEvaluatingSemanticAccuracy2020}, joint work with Ondřej Dušek, published in the Proceedings of the The 13th International Conference on Natural Language Generation (INLG 2020). The experimental part was done by Ondřej Dušek; the author of this thesis came up with the initial idea and wrote the paper. The paper has received the award for the best short paper at INLG 2020.
 \end{refbox}
 
-In this section, we propose a new metric for evaluating the semantic accuracy of D2T generation. Our metric is based on a neural model pretrained for \ac{nli}.
+In this section, we propose a new metric for evaluating the semantic accuracy of \ac{d2t} generation. Our metric is based on a neural model pretrained for \ac{nli}.
 % : the task of determing whether a hypothesis is true, false, or neutral with respect to a premise. 
 We use the \ac{nli} model to check textual entailment between the input data and the output text in both directions, allowing us to reveal omissions or hallucinations.
 We demonstrate that even without any extra model training and with minimal handcrafting, our approach achieves high accuracy (>90\%) on the E2E dataset, competitive with scripts specifically handcrafted for the domain, and produces useful results (>75\% accuracy) on the more challenging WebNLG dataset. Additionally, we show with manual error analysis that some instances marked as faults of our metric were in fact assessed correctly. The experimental code for our metric is available on GitHub.\footnote{\url{https://github.com/ufal/nlgi_eval}}

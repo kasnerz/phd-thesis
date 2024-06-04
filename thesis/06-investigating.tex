@@ -15,7 +15,7 @@ In \autoref{sec:quintd}, we investigate the abilities of open \acp{llm} for \ac{
 \end{refbox}
 We investigate how human-readable data labels help \acp{plm} with \ac{d2t} generation. We start by noticing that \acp{plm} can use labels such as column headings, keys, or relation names to generalize to out-of-domain examples. The question is (a) whether this ability is robust enough and (b) how accurate the outputs are in cases where these labels are ambiguous or incomplete. To answer this question, we focus on describing a relation between two entities.
 
-For our experiments, we collect \textsc{Rel2Text}: a novel dataset for verbalizing a diverse set of 1,522 unique relations from three large-scale knowledge graphs (Wikidata, DBPedia, YAGO). We evaluate model outputs on unseen relations using a combination of automatic metrics and manual analysis. We find that although \acp{plm} for D2T generation expectedly fail on unclear cases, models trained with a large variety of relation labels are surprisingly robust in verbalizing novel, unseen relations. We argue that using data with a diverse set of clear and meaningful labels is key to training D2T generation systems capable of generalizing to novel domains. We release the code and data for our experiments on Github.\footnote{\url{https://github.com/kasnerz/rel2text}}
+For our experiments, we collect \textsc{Rel2Text}: a novel dataset for verbalizing a diverse set of 1,522 unique relations from three large-scale knowledge graphs (Wikidata, DBPedia, YAGO). We evaluate model outputs on unseen relations using a combination of automatic metrics and manual analysis. We find that although \acp{plm} for \ac{d2t} generation expectedly fail on unclear cases, models trained with a large variety of relation labels are surprisingly robust in verbalizing novel, unseen relations. We argue that using data with a diverse set of clear and meaningful labels is key to training \ac{d2t} generation systems capable of generalizing to novel domains. We release the code and data for our experiments on Github.\footnote{\url{https://github.com/kasnerz/rel2text}}
 
 
 % 
@@ -95,7 +95,7 @@ A considerable portion of the collected verbalizations contain typos and grammat
 \label{sec:rel2text:analysis}
 In our analysis, we are interested in the following research questions:
 \begin{itemize}
-    \item \textbf{RQ1:} Are the PLMs finetuned for D2T generation able to describe relations \textit{not present in the finetuning corpus}?
+    \item \textbf{RQ1:} Are the PLMs finetuned for \ac{d2t} generation able to describe relations \textit{not present in the finetuning corpus}?
     \item \textbf{RQ2:} How many \textit{training examples} do the PLMs need to generate satisfactory outputs?
     \item \textbf{RQ3:} How do the PLMs behave when provided \textit{limited lexical cues} about the relation?
     \item \textbf{RQ4:} Can relation \textit{descriptions} help to clarify ambiguous cases and improve the semantic accuracy of the outputs?
@@ -290,7 +290,7 @@ Given that the \BARTr{} model can describe relations from their labels with high
     \caption{Lexical similarity metrics (BLEU, METEOR) and ommission (O) and hallucinaton (H) rate; following the setup in \citet{kasner2022neural}.}\label{tab:rel2text:zeroshot}
 \end{table}
 
-\paragraph{Zero-shot Data-to-Text Generation} In \autoref{sec:pipeline}, we described our approach for zero-shot D2T generation which requires transforming individual triples into text \cite{kasner2022neural}. Here, we replicate the setup on the WebNLG dataset, applying the \BARTr{} model instead of the templates. The results are summarized in Table \ref{tab:rel2text:zeroshot}.  We note that the pipeline using our model for preprocessing is able to achieve improvements of $\sim$2 \acs{bleu} points, at the cost of a slightly higher omission and hallucination rate, but crucially without needing the manual effort to create templates. A cursory examination shows that sentences produced by our model are qualitatively similar to the manual templates but more varied. Unlike the templates, our model may verbalize a relation differently depending on the context.
+\paragraph{Zero-shot Data-to-Text Generation} In \autoref{sec:pipeline}, we described our approach for zero-shot \ac{d2t} generation which requires transforming individual triples into text \cite{kasner2022neural}. Here, we replicate the setup on the WebNLG dataset, applying the \BARTr{} model instead of the templates. The results are summarized in Table \ref{tab:rel2text:zeroshot}.  We note that the pipeline using our model for preprocessing is able to achieve improvements of $\sim$2 \acs{bleu} points, at the cost of a slightly higher omission and hallucination rate, but crucially without needing the manual effort to create templates. A cursory examination shows that sentences produced by our model are qualitatively similar to the manual templates but more varied. Unlike the templates, our model may verbalize a relation differently depending on the context.
 Overall, we argue that training a PLM on verbalizing individual relations can potentially replace the manual effort of creating simple templates, which will have a notable impact on scaling similar approaches to larger datasets.
 
 
@@ -317,7 +317,7 @@ Overall, we argue that training a PLM on verbalizing individual relations can po
 \begin{refbox}
     This section is based on the paper \emph{Beyond Traditional Benchmarks: Analyzing Behaviors of Open LLMs on Data-to-Text Generation} \cite{kasnerReferenceBasedMetricsAnalyzing2024}, joint work with Ondřej Dušek. The work is accepted to the Proceedings of the 62th Annual Meeting of the Association for Computational Linguistics (ACL 2024).
 \end{refbox}
-We analyze the behaviors of open large language models (LLMs) on the task of data-to-text (D2T) generation, i.e., generating coherent and relevant text from structured data. To avoid the issue of LLM training data contamination with standard benchmarks, we design \datatool{} -- a tool for collecting novel structured data records from public APIs. Using a dataset collected with \datatool, we analyze model behaviors on five D2T generation tasks. We find that open LLMs (Llama 2, Mistral, and Zephyr) can generate fluent and coherent text from standard data formats in zero-shot settings. However, we show that the semantic accuracy of the outputs is a major issue: both according to human annotators and our reference-free metric based on GPT-4, more than 80\% of the outputs of open LLMs contain at least one semantic error. We publicly release the code, data, and model outputs.\footnote{\url{https://d2t-llm.github.io/}}
+We present an early analysis of the potential of \ac{d2t} generation with \aclp{llm} (\acsp{llm}\glsunset{llm}). To prevent bias stemming from training data contamination, we depart from standard \ac{d2t} generation benchmarks described in \autoref{sec:datasets}. Instead, we capitalize on the flexibility of \acp{llm} and evaluate the models on generating texts from structured data in standard formats such as JSON, CSV, and Markdown. To collect the data for five \ac{d2t} generation tasks (generating weather forecasts, product descriptions, game summaries, chart captions, and entity descriptions), we design \datatool{} -- a tool for downloading structured data records from public APIs. We build our analysis on referenceless metrics, focusing on evaluating semantic accuracy of model outputs. Furthermore, we put open \acp{llm} in the locus of our investigation, promoting open and reproducible research. We find that although the outputs from the open \acp{llm} are fluent, but the semantic accuracy of the outputs is a major issue: both according to human annotators and our reference-free metric based on GPT-4, more than 80\% of the outputs of open \acp{llm} contain at least one semantic error. We publicly release the code, data, and model outputs.\footnote{\url{https://d2t-llm.github.io/}}
 
 
 \begin{table*}[ht]
@@ -331,31 +331,32 @@ We analyze the behaviors of open large language models (LLMs) on the task of dat
         \texttt{owid}        & Health          & chart caption             & \href{https://ourworldindata.org}{OurWorldInData} & CSV             \\
         \texttt{wikidata}    & World facts     & entity description        & \href{https://wikidata.org}{Wikidata}             & Markdown        \\\bottomrule
     \end{tabular}
-    \caption{The domains and tasks included in the \datatool data collection tool we use for testing D2T generation with LLMs. In our experiments, we download 100 development and 100 test examples of input data for each domain.}
+    \caption{The domains and tasks included in the \datatool{} data collection tool we use for testing \ac{d2t} generation with \acp{llm}. In our experiments, we download 100 development and 100 test examples of input data for each domain.}
     \label{tab:quintd:data}
 \end{table*}
 
-Large language models (LLMs; \citealp{ouyang2022TrainingLM,touvron2023llama,touvronLlamaOpenFoundation2023,jiangMistral7B2023,tunstallZephyrDirectDistillation2023}) have already left a mark in many areas of natural language processing (NLP). Surprisingly, their applicability to the task of data-to-text (D2T) generation \cite{reiter1997building,gatt2018survey} remains underexplored, with limited evaluation on a handful of well-established benchmarks only \cite{axelssonUsingLargeLanguage2023,yuanEvaluatingGenerativeModels2023}. Generating text from structured data is arguably challenging for LLMs, given the specifics of D2T generation, such as long inputs, complex non-linear structure, and strict requirements on semantic accuracy. However, a more significant issue is the lack of testing grounds. The current D2T generation benchmarks are not only getting saturated \cite{vanmiltenburgBarriersEnablingFactors2023}, but also promote optimization towards traditional reference-based evaluation metrics, which were shown to correlate poorly with human judgment \cite{gehrmann2022repairing,vanderleeHumanEvaluationAutomatically2021,novikovaWhyWeNeed2017}. When it comes to the models, using closed LLMs \cite{openai2023gpt4,chatgpt} is increasingly considered a bad research practice due to its non-reproducibility \cite{rogers2023closed,chen2023chatgpt}. On top of that, contamination of LLM training data with standard benchmarks further restricts the space for experiments \cite{golchin2023time,aiyappa-etal-2023-trust,balloccu2024leak}.
+\subsection{Motivation}
+At the time of writing, the applicability of \acp{llm} \cite{ouyang2022TrainingLM,touvronLlamaOpenFoundation2023,jiangMistral7B2023,tunstallZephyrDirectDistillation2023} to \ac{d2t} generation remains underexplored. The only existing works evaluated proprietary models on a handful of well-established benchmarks \cite{axelssonUsingLargeLanguage2023,yuanEvaluatingGenerativeModels2023}. However, the current \ac{d2t} generation benchmarks are not only getting saturated \cite{van_miltenburg_barriers_2023}, but also promote optimization towards traditional reference-based evaluation metrics, which were shown to correlate poorly with human judgment \cite{gehgehrmannRepairingCrackedFoundation2022,vanderleeHumanEvaluationAutomatically2021,novikovaWhyWeNeed2017}. When it comes to the models, using closed \acp{llm} \cite{openai2023gpt4,chatgpt} is increasingly considered a bad research practice due to its non-reproducibility \cite{rogers2023closed,chen2023chatgpt}. On top of that, contamination of LLM training data with standard benchmarks further restricts the space for experiments \cite{golchin2023time,aiyappa-etal-2023-trust,balloccu2024leak}.
 
 
-In this paper, we propose an approach that allows us to analyze model behavior in D2T generation on novel, real-world structured data records with reference-free evaluation metrics. We begin by realizing that \textit{unlabeled data are plentiful}. To leverage the data for our experiments, we introduce \datatool\footnote{\underline{Q}uintet of \underline{U}nlabeled \underline{I}nputs for \underline{N}atural \underline{T}asks in \underline{D}ata-to-text, pronounced as ``quintet''} -- a tool for collecting structured data from five domains in standard formats: JSON,
+In this paper, we propose an approach that allows us to analyze model behavior in \ac{d2t} generation on novel, real-world structured data records with reference-free evaluation metrics. We begin by realizing that \textit{unlabeled data are plentiful}. To leverage the data for our experiments, we introduce \datatool\footnote{\underline{Q}uintet of \underline{U}nlabeled \underline{I}nputs for \underline{N}atural \underline{T}asks in \underline{D}ata-to-text, pronounced as ``quintet''} -- a tool for collecting structured data from five domains in standard formats: JSON,
 % \footnote{\url{https://www.json.org/}}
 CSV,
 % \footnote{\url{https://tools.ietf.org/rfc4180}}
 and Markdown.
 % \footnote{\url{https://www.rfc-editor.org/rfc/rfc7763.html}
-We choose the domains so that the data can be directly used as input for five distinct D2T generation tasks. Specifically, our tasks include generating weather forecasts, sports reports, product descriptions, chart captions, and entity descriptions (see \autoref{tab:data}).
+We choose the domains so that the data can be directly used as input for five distinct \ac{d2t} generation tasks. Specifically, our tasks include generating weather forecasts, sports reports, product descriptions, chart captions, and entity descriptions (see \autoref{tab:data}).
 %
-Next, we collect a set of 1,000 inputs with \datatool and use the inputs as an ad-hoc benchmark (called \benchmark) for testing the abilities of LLMs for D2T generation. We assume that the data formats in \benchmark are common in the LLMs' pretraining corpora, so we specify the task using instructions instead of standard finetuning with human-written outputs, capitalizing on the zero-shot abilities of instruction-tuned LLMs (§\ref{sec:data}).
+Next, we collect a set of 1,000 inputs with \datatool and use the inputs as an ad-hoc benchmark (called \benchmark) for testing the abilities of \acp{llm} for \ac{d2t} generation. We assume that the data formats in \benchmark are common in the \acp{llm}' pretraining corpora, so we specify the task using instructions instead of standard finetuning with human-written outputs, capitalizing on the zero-shot abilities of instruction-tuned \acp{llm} (§\ref{sec:data}).
 
-We push towards better reproducibility by \textit{focusing on open LLMs}, which -- apart from being more accessible -- also achieve increasingly better results across tasks \cite{zheng2023judging,open-llm-leaderboard}. For our experiments, we use three open LLMs with 7B parameters: Llama 2 \cite{touvronLlamaOpenFoundation2023,llama-2-7b-32k}, Mistral \cite{jiangMistral7B2023}, and Zephyr \cite{tunstallZephyrDirectDistillation2023}. We also use GPT-3.5 \cite{chatgpt} as a closed model baseline for the final experiments. Given the behavioral nature of the experiments with LLMs \cite{holtzmanGenerativeModelsComplex2023}, we put emphasis on reporting model behavior throughout the process  (§\ref{sec:experiments}).
+We push towards better reproducibility by \textit{focusing on open \acp{llm}}, which -- apart from being more accessible -- also achieve increasingly better results across tasks \cite{zheng2023judging,open-llm-leaderboard}. For our experiments, we use three open \acp{llm} with 7B parameters: Llama 2 \cite{touvronLlamaOpenFoundation2023,llama-2-7b-32k}, Mistral \cite{jiangMistral7B2023}, and Zephyr \cite{tunstallZephyrDirectDistillation2023}. We also use GPT-3.5 \cite{chatgpt} as a closed model baseline for the final experiments. Given the behavioral nature of the experiments with \acp{llm} \cite{holtzmanGenerativeModelsComplex2023}, we put emphasis on reporting model behavior throughout the process  (§\ref{sec:experiments}).
 
 Another piece of the puzzle is \textit{reference-free evaluation}: using the input data as a ground for comparison instead of reference outputs (§\ref{sec:eval}). We focus on identifying factual errors in the model outputs. To identify the errors, we use two separate evaluation schemes: manual annotations from human crowdworkers \cite{vanderleeHumanEvaluationAutomatically2021} and a custom automatic metric based on GPT-4 \cite{liuGEvalNLGEvaluation2023,chiang-lee-2023-large,kocmiGEMBAMQMDetectingTranslation2023}. We annotate the errors on the level of individual tokens, getting fine-grained annotations of error spans for each category \cite{thomsonGoldStandardMethodology2020,thomson2023evaluating}.
 
-Based on our results, we provide general recommendations about D2T generation with open LLMs across tasks and formats (§\ref{sec:discussion}). Our main findings are as follows:
+Based on our results, we provide general recommendations about \ac{d2t} generation with open \acp{llm} across tasks and formats (§\ref{sec:discussion}). Our main findings are as follows:
 \begin{itemize}
-    \item \textbf{Open LLMs can generate fluent outputs from structured data} in common formats under zero-shot settings.
-    \item \textbf{Semantic accuracy is a major obstacle}: both human annotators and GPT-4-based metric report that over 80\% of outputs of open LLMs on our data contain a semantic error.
+    \item \textbf{Open \acp{llm} can generate fluent outputs from structured data} in common formats under zero-shot settings.
+    \item \textbf{Semantic accuracy is a major obstacle}: both human annotators and GPT-4-based metric report that over 80\% of outputs of open \acp{llm} on our data contain a semantic error.
     \item \textbf{Long data inputs cause practical issues}, including the need for long-context models, increased GPU memory requirements, and unavailability of few-shot approaches.
     \item \textbf{Outputs can be empirically improved by following several rules-of-thumb} for preprocessing the model input, such as including units, removing unnecessary fields, or prefixing the model answer.
 \end{itemize}
@@ -370,7 +371,7 @@ We introduce a tool named \datatool{} for collecting ad-hoc test sets using publ
 % , and we collect one such set (\benchmark) for our experiments. 
 Our main reasons for departing from the traditional scheme of benchmarking on well-established datasets are:
 \begin{enumerate}
-    \item Any published test sets may be potentially included in the training data of LLMs.
+    \item Any published test sets may be potentially included in the training data of \acp{llm}.
     \item Public sources of structured data offer enough resources for creating ad-hoc test sets.
     \item Without human references, our data collection scheme is lightweight and replicable.
 \end{enumerate}
@@ -423,7 +424,7 @@ Each example in \benchmark consists of a structured data record $x$ from a domai
 
 
 
-% Since diversity and controllability of the output style is generally an underexplored topic in D2T generation (although see \citealp{hanGeneratingDiverseDescriptions2021}; \citealp{perlitzDiversityEnhancedTabletoText2022}), we cover three scenarios with different prompts, focusing on \textit{stylized} and \textit{topic-centric generation}:
+% Since diversity and controllability of the output style is generally an underexplored topic in \ac{d2t} generation (although see \citealp{hanGeneratingDiverseDescriptions2021}; \citealp{perlitzDiversityEnhancedTabletoText2022}), we cover three scenarios with different prompts, focusing on \textit{stylized} and \textit{topic-centric generation}:
 % \begin{itemize}
 %   \item $\mathcal{P}_\text{direct}$ -- Generating \texttt{output\_type} in a neutral and balanced way.
 %   \item $\mathcal{P}_\text{stylized}$ -- Generating \texttt{output\_type} written in a specific style (\texttt{style}).
@@ -447,12 +448,12 @@ In §\ref{sec:observations}, we describe all the observations and modifications 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=\textwidth]{img/quintd_process.pdf}
-    \caption{Our experimental setup. We first generate the outputs using LLMs that are given raw data and a task-specific prompt. We annotate the token-level semantic errors in the LLM outputs with (a) an automatic metric based on GPT-4 that matches the output to the raw data, and (b) human annotators, who annotate the errors in the output given the data visualization.}\label{fig:quintd:process}
+    \caption{Our experimental setup. We first generate the outputs using \acp{llm} that are given raw data and a task-specific prompt. We annotate the token-level semantic errors in the LLM outputs with (a) an automatic metric based on GPT-4 that matches the output to the raw data, and (b) human annotators, who annotate the errors in the output given the data visualization.}\label{fig:quintd:process}
 \end{figure*}
 
 \paragraph{Models}
 \label{sec:quintd:models}
-For our experiments, we selected the following LLMs available under an open license:
+For our experiments, we selected the following \acp{llm} available under an open license:
 
 \begin{itemize}
     \item \textbf{Llama 2} \cite{touvtouvronLlamaOpenFoundation2023,llama-2-7b-32k}: \texttt{\small together\-computer\-/Llama-2-7B\--32K-Instruct}
@@ -463,7 +464,7 @@ For our experiments, we selected the following LLMs available under an open lice
 The models are instruction-tuned, operate with 32k context, and perform well on recent benchmarks. All the models have 7B parameters and thus fit on a single NVIDIA A40 (48G VRAM) in 16-bit precision.  The models are available through HuggingFace \cite{wolf2019huggingface}.
 
 We accessed the models via an API provided by the \texttt{text-generation-webui} framework\footnote{\url{https://github.com/oobabooga/text-generation-webui}} running locally.
-For the final experiments, we also included GPT-3.5 (\texttt{gpt-3.5-turbo-1106}) accessed through the OpenAI API \cite{chatgpt}.\footnote{We did not include GPT-3.5 in our preliminary experiments since proprietary models are not our focus. We also did not generate the outputs with GPT-4 because we use the model for evaluation (see §\ref{sec:gpt4eval}) and LLMs tend to be biased towards their outputs \cite{kooBenchmarkingCognitiveBiases2023,stureborgLargeLanguageModels2024}.}
+For the final experiments, we also included GPT-3.5 (\texttt{gpt-3.5-turbo-1106}) accessed through the OpenAI API \cite{chatgpt}.\footnote{We did not include GPT-3.5 in our preliminary experiments since proprietary models are not our focus. We also did not generate the outputs with GPT-4 because we use the model for evaluation (see §\ref{sec:gpt4eval}) and \acp{llm} tend to be biased towards their outputs \cite{kooBenchmarkingCognitiveBiases2023,stureborgLargeLanguageModels2024}.}
 
 \paragraph{Observations from Preliminary Experiments}
 \label{sec:quintd:observations}
@@ -477,19 +478,19 @@ During development, we made several observations which we took into account for 
 
     \item\textbf{Understandable keys are enough.} On the flip side, we decided not to add extra descriptions to the keys if the key was understandable from its name (e.g., \texttt{homeTeam} or \texttt{dimensions}). As discussed by \citet{kasner2023mind}, pretrained models interpret the fields correctly as long as their names are human-readable. We only include chart metadata for the CSV files in the \texttt{owid} domain.
 
-    \item\textbf{Long inputs can be troublesome.} The inputs in some domains can easily get longer than 10-20k tokens. This issue is amplified by the fact that the evaluated LLMs tokenize numbers into individual digits. To accommodate for the long inputs, we picked models that accept up to 32k tokens.\footnote{For this reason, we use Llama-2-7B-32k with 32k token context \cite{llama-2-7b-32k} instead of the official Llama-2-7B-Instruct, which only supports 4k context \cite{touvronLlamaOpenFoundation2023}.} However, with long inputs, the GPU memory consumption also gets considerably higher, so we needed to downsample the data in \texttt{owid} and \texttt{openweather} to keep their length under \textasciitilde 8k tokens.
+    \item\textbf{Long inputs can be troublesome.} The inputs in some domains can easily get longer than 10-20k tokens. This issue is amplified by the fact that the evaluated \acp{llm} tokenize numbers into individual digits. To accommodate for the long inputs, we picked models that accept up to 32k tokens.\footnote{For this reason, we use Llama-2-7B-32k with 32k token context \cite{llama-2-7b-32k} instead of the official Llama-2-7B-Instruct, which only supports 4k context \cite{touvronLlamaOpenFoundation2023}.} However, with long inputs, the GPU memory consumption also gets considerably higher, so we needed to downsample the data in \texttt{owid} and \texttt{openweather} to keep their length under \textasciitilde 8k tokens.
 
 
     \item\textbf{Few-shot experiments are infeasible.} Due to the context-length limitations, we were not able to run few-shot experiments since we could not robustly fit an additional ($x_\text{example}$, $y_\text{example}$) pair in the prompt. We attempted to include only $y_\text{example}$ (making the setup ``half-shot''), but we observed that the models then tended to use entities from the example (unrelated to the actual input) in their outputs. Therefore, we decided to leave this line of experiments for future work (see §\ref{sec:future} for discussion).
 
-    \item\textbf{Deterministic decoding and sampling are on par.} In our preliminary experiments, we observed a roughly similar output quality for both deterministic decoding and sampling.\footnote{We used the \texttt{text-generation-webui} default decoding parameters: \texttt{temperature}=0.7, \texttt{top\_p}=0.9, and \texttt{top\_k}=20.} For the final experiments, we decided to use deterministic decoding, which is non-parametric and conceptually more suitable for D2T generation.
+    \item\textbf{Deterministic decoding and sampling are on par.} In our preliminary experiments, we observed a roughly similar output quality for both deterministic decoding and sampling.\footnote{We used the \texttt{text-generation-webui} default decoding parameters: \texttt{temperature}=0.7, \texttt{top\_p}=0.9, and \texttt{top\_k}=20.} For the final experiments, we decided to use deterministic decoding, which is non-parametric and conceptually more suitable for \ac{d2t} generation.
 
     \item\textbf{Prefixing the output makes parsing easier.} Even with variations of a \textit{``generate only the output''} instruction appended to the prompt, the models (especially Llama 2) tended to first confirm the request. For that reason, we decided to prefix the input for all the models with \textit{``Sure! Here is the \{output\_type\}: "''}. The opening quote at the end of the prefix allowed us to robustly parse the text simply by stripping the closing quote from the model output.
 
     \item\textbf{The outputs are fluent but inaccurate.} We observed that the vast majority of model outputs were grammatically and stylistically correct, capturing the output type specified in the prompt. However, we also noticed that the outputs contained many factual errors (even after emphasizing the focus on factual accuracy in the prompt, see \autoref{fig:prompt}). This observation led us to evaluate the model outputs using token-level annotations focused on semantic accuracy errors (see §\ref{sec:eval}).
 
 
-    \item\textbf{Be careful about subtle bugs.} During our preliminary experiments, we had to fix subtle bugs in our API calls such as incorrect instruction templates\footnote{\url{https://huggingface.co/docs/transformers/chat_templating}} or involuntary input truncation. We note that with the apparent ease of API access and robustness of LLMs, such bugs could go unnoticed and artificially skew the model performance.
+    \item\textbf{Be careful about subtle bugs.} During our preliminary experiments, we had to fix subtle bugs in our API calls such as incorrect instruction templates\footnote{\url{https://huggingface.co/docs/transformers/chat_templating}} or involuntary input truncation. We note that with the apparent ease of API access and robustness of \acp{llm}, such bugs could go unnoticed and artificially skew the model performance.
 \end{itemize}
 
 
@@ -564,7 +565,7 @@ We hired annotators on the Prolific crowdsourcing platform.\footnote{\url{https:
 \paragraph{GPT-4-based Evaluation}
 \label{sec:quintd:gpt4eval}
 
-For automatic evaluation, we leverage the fact that LLM-based metrics can be customized for a particular task without the need for training data. In our experiments, we use a metric based on GPT-4 (\texttt{gpt-4-1106-preview}, \citealp{openai2023gpt4}), which was shown to be superior to other LLMs in following fine-grained instructions and have high correlations with human judgment on evaluating generated texts \cite{zhaoInvestigatingTabletoTextGeneration2023,sottanaEvaluationMetricsEra2023,kocmiGEMBAMQMDetectingTranslation2023,kocmiLargeLanguageModels2023}.\footnote{We confirmed that GPT-3.5 and Llama 3 have lower correlations with human judgments also in our scenario, see Appendix~\ref{app:openllmeval}.}
+For automatic evaluation, we leverage the fact that LLM-based metrics can be customized for a particular task without the need for training data. In our experiments, we use a metric based on GPT-4 (\texttt{gpt-4-1106-preview}, \citealp{openai2023gpt4}), which was shown to be superior to other \acp{llm} in following fine-grained instructions and have high correlations with human judgment on evaluating generated texts \cite{zhaoInvestigatingTabletoTextGeneration2023,sottanaEvaluationMetricsEra2023,kocmiGEMBAMQMDetectingTranslation2023,kocmiLargeLanguageModels2023}.\footnote{We confirmed that GPT-3.5 and Llama 3 have lower correlations with human judgments also in our scenario, see Appendix~\ref{app:openllmeval}.}
 % Compared to using fine-tuned models for token-level evaluation \cite{kasnerTextinContextTokenLevelError2021}, this allows us to customize the metric for a particular task without the need for training data.
 
 We instantiate \gptmetric{} with a prompt and a system message describing the task. We instruct the model to produce a JSON output with sequentially ordered errors using the following format:
@@ -636,13 +637,13 @@ A summary of the token-level annotations is in \autoref{tab:results_agg} and \re
 
 
 \paragraph{How Accurate Are the Model Outputs?}
-Depending on the model, between 76-86\% of examples contain an error according to \humanmetric, suggesting that open LLMs make semantic errors very often. According to \gptmetric, the number is as high as 89-94\%.
+Depending on the model, between 76-86\% of examples contain an error according to \humanmetric, suggesting that open \acp{llm} make semantic errors very often. According to \gptmetric, the number is as high as 89-94\%.
 
-The most common error type is \errinc{INCORRECT}. As shown in \autoref{tab:results_agg}, all the open LLMs make more than \textbf{two statements contradicting the data per output on average}. The \errnc{NOT\_CHECKABLE} errors are also relatively common: more than one per output on average according to \humanmetric, and at least one being present in more than 25\% of examples according to both metrics.
+The most common error type is \errinc{INCORRECT}. As shown in \autoref{tab:results_agg}, all the open \acp{llm} make more than \textbf{two statements contradicting the data per output on average}. The \errnc{NOT\_CHECKABLE} errors are also relatively common: more than one per output on average according to \humanmetric, and at least one being present in more than 25\% of examples according to both metrics.
 
 The results vary widely according to the domain (see Appendix \ref{app:full_results}). For example, the outputs in \texttt{wikidata} contain much more \errnc{NOT\_CHECKABLE} errors on average (1.01 per output according to \humanmetric) than  \errinc{INCORRECT} errors (0.11 per output according to \humanmetric), suggesting that with simpler inputs, the models tend to introduce extra information. The \texttt{openweather} domain seems to be the most complex with the longest outputs (\textasciitilde 164 tokens), more than eight errors in the output on average, and >90\% of outputs containing an error.
 
-The differences between the open LLMs are not major. Out of the open LLMs, Zephyr has the best results across categories and metrics, followed by Llama 2. However, the outputs of Mistral are longer on average, leaving more space for errors. GPT-3.5 (which we consider separately) does generally better according to both \gptmetric and \humanmetric, although it still makes an error in 60-75\% of examples (2 errors per example on average). In general, the results show that LLMs make too many semantic errors to be usable in practice for D2T generation in a zero-shot setting.
+The differences between the open \acp{llm} are not major. Out of the open \acp{llm}, Zephyr has the best results across categories and metrics, followed by Llama 2. However, the outputs of Mistral are longer on average, leaving more space for errors. GPT-3.5 (which we consider separately) does generally better according to both \gptmetric and \humanmetric, although it still makes an error in 60-75\% of examples (2 errors per example on average). In general, the results show that \acp{llm} make too many semantic errors to be usable in practice for \ac{d2t} generation in a zero-shot setting.
 
 
 
@@ -664,11 +665,11 @@ We also measure inter-annotator agreement between human annotators. For that, we
 \label{sec:quintd:future}
 
 \begin{itemize}
-    \item \textbf{Focus on semantic accuracy.} The output of LLMs is satisfactory regarding the style, format, and purpose of the text. However, the amount of semantic errors remains very high. Improving the semantic accuracy of the models
-          \cite{li2022faithfulness}, along with new model-based evaluation metrics \cite{liuGEvalNLGEvaluation2023,xuINSTRUCTSCOREExplainableText2023}, could thus help to bring improve LLM-based D2T generation systems where it is most needed.
-          \item\textbf{Use long-context models.} The memory issues with long context, making few-shot experiments infeasible, can potentially be solved by using more efficient long-context models equipped with Flash Attention \cite{dao2022flashattention} and fast inference libraries such as \texttt{llama.cpp}\footnote{\url{https://github.com/ggerganov/llama.cpp}}, especially in the light of the recent rapid increase of the available context window size of LLMs \cite{bai2023longbench,munkhdalai2024leave}.
+    \item \textbf{Focus on semantic accuracy.} The output of \acp{llm} is satisfactory regarding the style, format, and purpose of the text. However, the amount of semantic errors remains very high. Improving the semantic accuracy of the models
+          \cite{li2022faithfulness}, along with new model-based evaluation metrics \cite{liuGEvalNLGEvaluation2023,xuINSTRUCTSCOREExplainableText2023}, could thus help to bring improve LLM-based \ac{d2t} generation systems where it is most needed.
+          \item\textbf{Use long-context models.} The memory issues with long context, making few-shot experiments infeasible, can potentially be solved by using more efficient long-context models equipped with Flash Attention \cite{dao2022flashattention} and fast inference libraries such as \texttt{llama.cpp}\footnote{\url{https://github.com/ggerganov/llama.cpp}}, especially in the light of the recent rapid increase of the available context window size of \acp{llm} \cite{bai2023longbench,munkhdalai2024leave}.
           \item\textbf{Test the models in the wild.} Except for using an ad-hoc dataset of real-world data as we did in our work, the ecological validity of D2T evaluation can also be ensured by continuous evaluation with human users \cite{zheng2023judging} and evaluating the real-world impact of the systems \cite{reiter2023impact}.
-          \item\textbf{Multilinguality is an opportunity.}With the recent efforts in extending D2T generation to low-resource languages \cite{cripwell-etal-2023-2023}, multilingual D2T generation with open LLMs seems a promising direction. Although we did not go beyond English, initial steps were already done by works such as \citet{lorandi2023data}.
+          \item\textbf{Multilinguality is an opportunity.}With the recent efforts in extending \ac{d2t} generation to low-resource languages \cite{cripwell-etal-2023-2023}, multilingual \ac{d2t} generation with open \acp{llm} seems a promising direction. Although we did not go beyond English, initial steps were already done by works such as \citet{lorandi2023data}.
 \end{itemize}
 
 
