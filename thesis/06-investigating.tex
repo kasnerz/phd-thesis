@@ -663,7 +663,7 @@ To quantify the agreement of \humanmetric{} and \gptmetric{}, we computed the Pe
     \item For $r_{\text{example}}$, we used the count of errors per example.
     \item For $r_{\text{token}}$, we used the binary indicators marking an error per token.
 \end{itemize}
-The correlation on the level of tokens is weak ($r_{\text{token}}=0.26$) but gets better on the example-level ($r_{\text{example}}=0.52$) and even better on the domain-level ($r_{\text{domain}}=0.93$). In \autoref{tab:quintd:errors_tokenlevel}, we show the percentage of tokens marked by individual metrics. The metrics agree on the specific tokens in less than 6\%, although they both mark around 21\% of tokens as erroneous.
+The correlation on the level of tokens is weak ($r_{\text{token}}=0.26$) but gets better on the example-level ($r_{\text{example}}=0.52$) and even better on the domain-level ($r_{\text{domain}}=0.93$).
 % , suggesting that the error spans may be subject to interpretation.
 
 We also measure inter-annotator agreement between human annotators. For that, we obtained annotations from two annotators for 100 model outputs. The results are similar: the annotators agree weakly on the token level ($r_{\text{token}}=0.36$), stronger on the example level ($r_{\text{example}}=0.53$), and even stronger on the domain level ($r_{\text{domain}}=0.85$). We conclude that while the details regarding error spans and categories may vary, the annotators as well as GPT-4 generally agree on the accuracy of model outputs for a given set of examples. In the future, the agreement could be improved by measuring errors on the phrase level \cite{vamvas2022little}.
@@ -681,10 +681,12 @@ We also measure inter-annotator agreement between human annotators. For that, we
 \end{itemize}
 
 \section{Conclusion}
-In \autoref{sec:quintd}, we provided an exploratory study into D2T generation with open LLMs. We proposed new directions for D2T generation, including using ad-hoc test sets, data in common formats, and reference-free evaluation. By a combination of GPT-4-based metric and human evaluation, we evaluated the performance of LLMs on five domains, providing word-level annotations of model outputs across five domains and recommendations for future directions in D2T generation.
+To improve \ac{d2t} generation systems based on neural \acp{lm}, it is important to know the \emph{input data} we are dealing with, along with the strong and weak points of the \emph{models} we are using. We had both of these points in mind when conducting the experiments described in this chapter. We analyzed the capabilities of pretrained models of various sizes, focusing on openly available models, and provided recommendations for future directions in \ac{d2t} generation with these models. Our insights are based on custom datasets, carefully assembled for the purpose of the analysis.
+
+In \autoref{sec:rel2text}, we investigated how well can \acp{plm} generalize to unseen data labels. We collected a dataset for triple-to-text generation with a large variety of unique relation labels. Using the dataset, we analyzed the performance of finetuned \acp{plm} in various scenarios, concluding that for flawless generalization, it is important to equip the data with unambiguous, human-readable labels.
 
 
-
+In \autoref{sec:quintd}, we presented an exploratory study into \ac{d2t} generation with open \acp{llm}. We used ad-hoc collected data in standard formats from five domains, prompting \acp{llm} to generate texts based on the data. By a combination of GPT-4-based metric and human evaluation, we found out that the outputs contain unnacceptably large amounts of factual errors. Therefore, we recommended improving semantic accuracy as the main future direction for \ac{d2t} generation with \acp{llm}.
 
 
 
