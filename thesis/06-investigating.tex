@@ -346,7 +346,6 @@ However, the current \ac{d2t} generation benchmarks are not only getting saturat
 
 Our analysis circumvents these issues by (1) collecting ad-hoc structured data without human-written references, (2) using reference-free evaluation methods for annotating errors on the level of individual tokens, and (3) focusing on open \acp{llm}, which -- apart from being more accessible -- also achieve increasingly better results across tasks \cite{zheng2023judging,open-llm-leaderboard}.
 
-% Here, we propose an approach that allows us to analyze model behavior in \ac{d2t} generation on novel, real-world structured data records. We focus on identifying factual errors in the model outputs. To identify the errors, we use two separate evaluation schemes: manual annotations from human crowdworkers \cite{vanderleeHumanEvaluationAutomatically2021} and a custom automatic metric based on GPT-4 \cite{liuGEvalNLGEvaluation2023,chiang-lee-2023-large,kocmiGEMBAMQMDetectingTranslation2023}. We annotate the errors on the level of individual tokens, getting fine-grained annotations of error spans for each category \cite{thomsonGoldStandardMethodology2020,thomson2023evaluating}. We also push towards better reproducibility by \textit{focusing on open \acp{llm}}, which -- apart from being more accessible -- also achieve increasingly better results across tasks \cite{zheng2023judging,open-llm-leaderboard}. For our experiments, we use three open \acp{llm} with 7B parameters: Llama 2 \cite{touvronLlamaOpenFoundation2023,llama-2-7b-32k}, Mistral \cite{jiangMistral7B2023}, and Zephyr \cite{tunstallZephyrDirectDistillation2023}.
 
 
 
@@ -360,17 +359,7 @@ Our analysis circumvents these issues by (1) collecting ad-hoc structured data w
 % %
 % Next, we collect a set of 1,000 inputs with \datatool and use the inputs as an ad-hoc benchmark (called \benchmark) for testing the abilities of \acp{llm} for \ac{d2t} generation. We assume that the data formats in \benchmark are common in the \acp{llm}' pretraining corpora, so we specify the task using instructions instead of standard finetuning with human-written outputs, capitalizing on the zero-shot abilities of instruction-tuned \acp{llm} (§\ref{sec:data}).
 
-%  For our experiments, we use three open \acp{llm} with 7B parameters: Llama 2 \cite{touvronLlamaOpenFoundation2023,llama-2-7b-32k}, Mistral \cite{jiangMistral7B2023}, and Zephyr \cite{tunstallZephyrDirectDistillation2023}. We also use GPT-3.5 \cite{chatgpt} as a closed model baseline for the final experiments. Given the behavioral nature of the experiments with \acp{llm} \cite{holtzmanGenerativeModelsComplex2023}, we put emphasis on reporting model behavior throughout the process  (§\ref{sec:experiments}).
 
-% Another piece of the puzzle is \textit{reference-free evaluation}: using the input data as a ground for comparison instead of reference outputs (§\ref{sec:eval}). We focus on identifying factual errors in the model outputs. To identify the errors, we use two separate evaluation schemes: manual annotations from human crowdworkers \cite{vanderleeHumanEvaluationAutomatically2021} and a custom automatic metric based on GPT-4 \cite{liuGEvalNLGEvaluation2023,chiang-lee-2023-large,kocmiGEMBAMQMDetectingTranslation2023}. We annotate the errors on the level of individual tokens, getting fine-grained annotations of error spans for each category \cite{thomsonGoldStandardMethodology2020,thomson2023evaluating}.
-
-% Based on our results, we provide general recommendations about \ac{d2t} generation with open \acp{llm} across tasks and formats (§\ref{sec:discussion}). Our main findings are as follows:
-% \begin{itemize}
-%     \item \textbf{Open \acp{llm} can generate fluent outputs from structured data} in common formats under zero-shot settings.
-%     \item \textbf{Semantic accuracy is a major obstacle}: both human annotators and GPT-4-based metric report that over 80\% of outputs of open \acp{llm} on our data contain a semantic error.
-%     \item \textbf{Long data inputs cause practical issues}, including the need for long-context models, increased GPU memory requirements, and unavailability of few-shot approaches.
-%     \item \textbf{Outputs can be empirically improved by following several rules-of-thumb} for preprocessing the model input, such as including units, removing unnecessary fields, or prefixing the model answer.
-% \end{itemize}
 
 
 \subsection{Reference-Free D2T Generation}
@@ -496,7 +485,7 @@ Here, we describe all the observations and modifications we made before generati
 
     \item\textbf{Prefixing the output makes parsing easier.} Even with variations of a \textit{``generate only the output''} instruction appended to the prompt, the models (especially Llama 2) tended to first confirm the request. For that reason, we decided to prefix the input for all the models with \textit{``Sure! Here is the \{output\_type\}: "''}. The opening quote at the end of the prefix allowed us to robustly parse the text simply by stripping the closing quote from the model output.
 
-    \item\textbf{The outputs are fluent but inaccurate.} We observed that the vast majority of model outputs were grammatically and stylistically correct, capturing the output type specified in the prompt. However, we also noticed that the outputs contained many factual errors (even after emphasizing the focus on factual accuracy in the prompt, see \autoref{fig:quintd:prompt}). This observation led us to evaluate the model outputs using word-level annotations focused on semantic accuracy errors (see \autoref{sec:quintd:eval}).
+    \item\textbf{The outputs are fluent but inaccurate.} We observed that the vast majority of model outputs were grammatically and stylistically correct, capturing the output type specified in the prompt. However, we also noticed that the outputs contained many semantic errors (even after emphasizing the focus on semantic accuracy in the prompt, see \autoref{fig:quintd:prompt}). This observation led us to evaluate the model outputs using word-level annotations focused on semantic accuracy errors (see \autoref{sec:quintd:eval}).
 
 
     \item\textbf{Be careful about subtle bugs.} During our preliminary experiments, we had to fix subtle bugs in our API calls such as incorrect instruction templates\footnote{\url{https://huggingface.co/docs/transformers/chat_templating}} or involuntary input truncation. We note that with the apparent ease of API access and robustness of LLMs, such bugs could go unnoticed and artificially skew the model performance.
@@ -515,7 +504,7 @@ For comparison, we also generated outputs for the same inputs and identical prom
 
 \subsection{Evaluation}
 \label{sec:quintd:eval}
-For evaluation, we focus on identifying \emph{factual errors} in model outputs. We compare the generated texts to the input data, looking for parts of texts that are not faithful to the input data. We annotate the errors on the token level, considering all the tokens in the output text as potential sources of errors.
+For evaluation, we focus on identifying \emph{semantic errors} in model outputs. We compare the generated texts to the input data, looking for parts of texts that are not faithful to the input data. We annotate the errors on the token level, considering all the tokens in the output text as potential sources of errors.
 
 
 We use two complementary referenceless evaluation methods:
@@ -686,7 +675,7 @@ To improve \ac{d2t} generation systems based on neural \acp{lm}, it is important
 In \autoref{sec:rel2text}, we investigated how well can \acp{plm} generalize to unseen data labels. We collected a dataset for triple-to-text generation with a large variety of unique relation labels. Using the dataset, we analyzed the performance of finetuned \acp{plm} in various scenarios, concluding that for flawless generalization, it is important to equip the data with unambiguous, human-readable labels.
 
 
-In \autoref{sec:quintd}, we presented an exploratory study into \ac{d2t} generation with open \acp{llm}. We used ad-hoc collected data in standard formats from five domains, prompting \acp{llm} to generate texts based on the data. By a combination of GPT-4-based metric and human evaluation, we found out that the outputs contain unnacceptably large amounts of factual errors. Therefore, we recommended improving semantic accuracy as the main future direction for \ac{d2t} generation with \acp{llm}.
+In \autoref{sec:quintd}, we presented an exploratory study into \ac{d2t} generation with open \acp{llm}. We used ad-hoc collected data in standard formats from five domains, prompting \acp{llm} to generate texts based on the data. By a combination of GPT-4-based metric and human evaluation, we found out that the outputs contain unnacceptably large amounts of semantic errors. Therefore, we recommended improving semantic accuracy as the main future direction for \ac{d2t} generation with \acp{llm}.
 
 
 
