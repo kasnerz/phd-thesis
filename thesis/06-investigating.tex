@@ -38,7 +38,7 @@ For our experiments, we collect \textsc{Rel2Text}: a novel dataset for verbalizi
         % \textit{country}  & \href{https://www.wikidata.org/wiki/Property:P17}{P17}     & \eh{} was born in \et{}. \newline \eh{} is located in \et{}.         & semantics depends on entities       \\\cdashlinelr{1-4}
         \textit{parent}   & \href{https://www.wikidata.org/wiki/Property:P8810}{P8810} & \eh{} is the parent of \et{}. \newline \et{} is the parent of \eh{}. & ambiguous relation direction        \\\bottomrule
     \end{tabular}
-    \captionof{table}{Example relation labels and the variability in their verbalizations. \eh{} and \et{} denote subject and object in the triple, respectively. The Wikidata page for each relation is available at \url{https://www.wikidata.org/wiki/Property:<property_id>}.}
+    \captionof{table}[Example relation labels and their verbalizations.]{Example relation labels and the variability in their verbalizations. \eh{} and \et{} denote subject and object in the triple, respectively. The Wikidata page for each relation is available at \url{https://www.wikidata.org/wiki/Property:<property_id>}.}
     \label{tab:rel2text:example}
 \end{table}
 
@@ -172,7 +172,7 @@ For error analysis, we select 100 random examples together with their correspond
          & \textsc{Lbl}   & \emph{(General Motors Epsilon platform, vehicle, Cadillac XTS)} \newline \red{\xmark} General Motors Epsilon is a vehicle similar to the Cadillac XTS. [\BARTw] \newline  \green{\cmark} General Motors Epsilon platform is used in the Cadillac XTS. [\emph{desc-cat}] \\
         \bottomrule
     \end{tabular}
-    \caption{Error categories used in manual analysis, with examples of errors found and corresponding correct verbalizations (square brackets denote the model).
+    \caption[Error categories used in manual analysis.]{Error categories used in manual analysis, with examples of errors found and corresponding correct verbalizations (square brackets denote the model).
         Model error types (top):
         \textsc{Sem} -- The output is semantically incorrect,
         \textsc{Dir} -- The direction of the relation is swapped,
@@ -212,7 +212,7 @@ For error analysis, we select 100 random examples together with their correspond
         \it desc-cat      & 53.07                                & 45.04                                  & 0.55                                       & 4.72   & 3.46  & 4.66  & 91.88 & 0.87   & 1668    & 1.91     & 0.59    & 5.92    & 9.11    \\
         \bottomrule
     \end{tabular}
-    \caption{The summary of evaluation using automatic metrics on \textsc{Rel2text} test set. \textbf{MET} = METEOR, \textbf{BLR} = BLEURT, \textbf{TTR} = MSTTR. See \autoref{sec:rel2text:analysis} for the descriptions of the models and metrics.}
+    \caption[Results of automatic metrics on \textsc{Rel2text} test set]{The summary of evaluation using automatic metrics on \textsc{Rel2text} test set. \textbf{MET} = METEOR, \textbf{BLR} = BLEURT, \textbf{TTR} = MSTTR. See \autoref{sec:rel2text:analysis} for the descriptions of the models and metrics.}
     \label{tab:rel2text:auto}
 \end{table*}
 \autoref{tab:rel2text:auto} shows automatic scores for all our models.
@@ -231,7 +231,7 @@ For error analysis, we select 100 random examples together with their correspond
 \begin{figure}[t]
     \centering
     \includegraphics[width=\textwidth]{img/rel2text-fewshot.pdf}
-    \caption{Boxplots for selected metrics from \autoref{tab:rel2text:auto} w.r.t. the number of examples (displayed on the \textit{x}-axis, $\textit{full} = 1522$), taking into account variance from individual random seeds.}\label{fig:rel2text:fewshot}
+    \caption[Selected automatic metrics on few-shot generation.]{Boxplots for selected metrics from \autoref{tab:rel2text:auto} w.r.t. the number of examples (displayed on the \textit{x}-axis, $\textit{full} = 1522$), taking into account variance from individual random seeds.}\label{fig:rel2text:fewshot}
 \end{figure}
 
 \subsection{Findings from Manual Error Analysis}
@@ -240,7 +240,7 @@ For error analysis, we select 100 random examples together with their correspond
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.7\textwidth]{img/rel2text-graph.pdf}
-    \caption{Number of annotated errors per model (see \autoref{tab:rel2text:cat} for the description of error categories and \autoref{sec:rel2text:analysis} for the models). The striped part signifies that the label of the input was marked as unclear.}
+    \caption[Manually annotated errors per model.]{Number of annotated errors per model (see \autoref{tab:rel2text:cat} for the description of error categories and \autoref{sec:rel2text:analysis} for the models). The striped part signifies that the label of the input was marked as unclear.}
     \label{fig:rel2text:manual}
 \end{figure}
 Results are summarized in \autoref{fig:rel2text:manual}; examples of model outputs for each error type are shown in \autoref{tab:rel2text:cat}.
@@ -268,7 +268,7 @@ Given that the \BARTr{} model can describe relations from their labels with high
         \BARTr{} (ours)                     & 74.44        & 74.31      & 64.59      & 63.46      \\
         \bottomrule
     \end{tabular}
-    \caption{Accuracy for the dev set and test sets  $\alpha_{1,2,3}$ from the \textsc{InfoTabS} dataset. The results are averaged over 3 random seeds.}
+    \caption[NLI accuracy on the \textsc{InfoTabS} dataset.]{\ac{nli} accuracy for the dev set and test sets  $\alpha_{1,2,3}$ from the \textsc{InfoTabS} dataset. The results are averaged over 3 random seeds.}
     \label{tab:rel2text:nli}
 \end{table}
 
@@ -287,10 +287,10 @@ Given that the \BARTr{} model can describe relations from their labels with high
                                            & \BARTr{}       & 44.63         & 38.93           & 0.058      & 0.166      \\
         \bottomrule
     \end{tabular}
-    \caption{Lexical similarity metrics (BLEU, METEOR) and ommission (O) and hallucinaton (H) rate; following the setup in \citet{kasner2022neural}.}\label{tab:rel2text:zeroshot}
+    \caption[Automatic metrics on the zero-shot pipeline setup.]{Lexical similarity metrics (BLEU, METEOR) and omission (O) and hallucinaton (H) rate; following the setup from \autoref{sec:pipeline}.}\label{tab:rel2text:zeroshot}
 \end{table}
 
-\paragraph{Zero-shot Data-to-Text Generation} In \autoref{sec:pipeline}, we described our approach for zero-shot \ac{d2t} generation which requires transforming individual triples into text \cite{kasner2022neural}. Here, we replicate the setup on the WebNLG dataset, applying the \BARTr{} model instead of the templates. The results are summarized in Table \ref{tab:rel2text:zeroshot}.  We note that the pipeline using our model for preprocessing is able to achieve improvements of $\sim$2 \acs{bleu} points, at the cost of a slightly higher omission and hallucination rate, but crucially without needing the manual effort to create templates. A cursory examination shows that sentences produced by our model are qualitatively similar to the manual templates but more varied. Unlike the templates, our model may verbalize a relation differently depending on the context.
+\paragraph{Zero-shot Data-to-Text Generation} In \autoref{sec:pipeline}, we described our approach for zero-shot \ac{d2t} generation which requires transforming individual triples into text. Here, we replicate the setup on the WebNLG dataset, applying the \BARTr{} model instead of the templates. The results are summarized in Table \ref{tab:rel2text:zeroshot}.  We note that the pipeline using our model for preprocessing is able to achieve improvements of $\sim$2 \acs{bleu} points, at the cost of a slightly higher omission and hallucination rate, but crucially without needing the manual effort to create templates. A cursory examination shows that sentences produced by our model are qualitatively similar to the manual templates but more varied. Unlike the templates, our model may verbalize a relation differently depending on the context.
 Overall, we argue that training a PLM on verbalizing individual relations can potentially replace the manual effort of creating simple templates, which will have a notable impact on scaling similar approaches to larger datasets.
 
 
@@ -335,7 +335,7 @@ We find that although the outputs from the \acp{llm} are fluent, the semantic ac
         \texttt{owid}        & Health          & chart caption             & \href{https://ourworldindata.org}{OurWorldInData} & CSV             \\
         \texttt{wikidata}    & World facts     & entity description        & \href{https://wikidata.org}{Wikidata}             & Markdown        \\\bottomrule
     \end{tabular}
-    \caption{The domains and tasks included in the \datatool{} data collection tool we use for testing \ac{d2t} generation with \acp{llm}. In our experiments, we download 100 development and 100 test examples of input data for each domain.}
+    \caption[The domains and tasks included in \textsc{Quintd}.]{The domains and tasks included in the \datatool{} data collection tool we use for testing \ac{d2t} generation with \acp{llm}. In our experiments, we download 100 development and 100 test examples of input data for each domain.}
     \label{tab:quintd:data}
 \end{table*}
 
@@ -405,7 +405,7 @@ Given the available public sources of data, we settled on the five tasks which a
 
         "
     \end{verbatimbox}
-    \caption{The prompt $\mathcal{P}$ and the model output prefix we used for the experiments in this paper. \texttt{data} is filled with the data record  $x$ and \texttt{output\_type} is filled accordingly for each domain $\mathcal{D}$ (see \autoref{tab:quintd:data}).}
+    \caption[The prompt and the model output prefix.]{The prompt $\mathcal{P}$ and the model output prefix we used for the experiments in this paper. \texttt{data} is filled with the data record  $x$ and \texttt{output\_type} is filled accordingly for each domain $\mathcal{D}$ (see \autoref{tab:quintd:data}).}
     \label{fig:quintd:prompt}
 \end{figure}
 
@@ -441,7 +441,7 @@ Each example in \benchmark{} consists of a structured data record $x$ from a dom
 \begin{figure*}[t]
     \centering
     \includegraphics[width=\textwidth]{img/quintd_process.pdf}
-    \caption{Our experimental setup. We first generate the outputs using \acp{llm} that are given raw data and a task-specific prompt. We annotate the token-level semantic errors in the LLM outputs with (a) an automatic metric based on GPT-4 that matches the output to the raw data, and (b) human annotators, who annotate the errors in the output given the data visualization.}\label{fig:quintd:process}
+    \caption[Our experimental setup for data-to-text with large language models.]{Our experimental setup. We first generate the outputs using \acp{llm} that are given raw data and a task-specific prompt. We annotate the token-level semantic errors in the LLM outputs with (a) an automatic metric based on GPT-4 that matches the output to the raw data, and (b) human annotators, who annotate the errors in the output given the data visualization.}\label{fig:quintd:process}
 \end{figure*}
 
 \paragraph{Models}
@@ -542,7 +542,7 @@ Our error taxonomy and its notation are inspired by \citet{thomsonGoldStandardMe
         \vspace*{0.1cm}
         \\ \bottomrule
     \end{tabular}
-    \caption{Categories of errors annotated in our evaluation and an example demonstrating the error types.}
+    \caption[Categories of errors used for evaluation.]{Categories of errors annotated in our evaluation and an example demonstrating the error types.}
     \label{tab:quintd:errors}
 \end{table*}
 
@@ -610,7 +610,7 @@ A summary of the token-level annotations is in \autoref{tab:quintd:results_agg} 
         \textbf{Zephyr}  & \textbf{1.44}                          & 2.84                                       & \textbf{0.77}                           & \textbf{0.40}                      & \textbf{0.20}                         & 0.29          & 0.16           & \textbf{0.05} & \textbf{2.58}  & \textbf{3.58} & 98.0          \\ \cdashlinelr{1-12}
         \textbf{GPT-3.5} & 0.65                                   & 1.76                                       & 0.49                                    & 0.38                               & 0.18                                  & 0.26          & 0.07           & 0.02          & 1.39           & 2.42          & 84.9          \\ \bottomrule
     \end{tabular}
-    \caption{The average \textit{numbers of errors per output} (lower is better) based on human annotators (\humanmetric{}) and GPT-4 (\gptmetric{}). We also include the average number of tokens per output in the rightmost column. The results of the best open LLM  are emphasized.}
+    \caption[The average number of errors per output.]{The average \textit{number of errors per output} (lower is better) based on human annotators (\humanmetric{}) and GPT-4 (\gptmetric{}). We also include the average number of tokens per output in the rightmost column. The results of the best open LLM  are emphasized.}
     \label{tab:quintd:results_agg}
 \end{table*}
 
@@ -627,7 +627,7 @@ A summary of the token-level annotations is in \autoref{tab:quintd:results_agg} 
         \textbf{Zephyr}  & \textbf{46.8\%}                        & \textbf{78.0\%}                            & \textbf{42.2\%}                         & \textbf{25.0\%}                    & \textbf{16.2\%}                       & 20.6\%         & 11.6\%         & \textbf{4.2\%} & \textbf{75.6\%} & \textbf{89.4\%} \\\cdashlinelr{1-11}
         \textbf{GPT-3.5} & 38.0\%                                 & 65.0\%                                     & 28.8\%                                  & 19.6\%                             & 12.6\%                                & 16.2\%         & 6.2\%          & 2.2\%          & 60.6\%          & 75.8\%          \\\bottomrule
     \end{tabular}
-    \caption{The percentage of \textit{outputs containing at least one error} (lower is better) based on human annotators (\humanmetric{}) and  GPT-4 (\gptmetric{}). The results of the best open LLM  are emphasized.}
+    \caption[The percentage of outputs containing at least one error.]{The percentage of \textit{outputs containing at least one error} (lower is better) based on human annotators (\humanmetric{}) and  GPT-4 (\gptmetric{}). The results of the best open LLM  are emphasized.}
     \label{tab:quintd:results_errperex}
 \end{table*}
 

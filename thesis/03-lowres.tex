@@ -66,7 +66,7 @@ The model uses 12 layers for the encoder and 12 layers for the decoder ($\sim$68
         \textbf{transcr.} & Franzhipan - odin iz ingredientov tarta Bejkvell.                                                                     \\
         \textbf{transl.}  & Frangipane is one of the ingredients of the Bakewell tart.                                                            \\
     \end{tabular}
-    \caption{Example outputs from the mBART model(s) finetuned for \ac{rdf}-to-text generation. (1) The model can work with unseen entities, dates, and numbers. (2) The label deviates too much from its meaning for the unseen property \texttt{populationMetro}, leading to incorrect output. (3) The model trained on Russian targets can use English data to form sentences in Russian, transcribing the entities to Cyrillic.}
+    \caption[Example outputs from the mBART model.]{Example outputs from the mBART model finetuned for \ac{rdf}-to-text generation. (1) The model can work with unseen entities, dates, and numbers. (2) The label deviates too much from its meaning for the unseen property \texttt{populationMetro}, leading to incorrect output. (3) The model trained on Russian targets can use English data to form sentences in Russian, transcribing the entities to Cyrillic.}
     \label{tab:mbart:examples}
 \end{table*}
 
@@ -95,7 +95,7 @@ Our systems made it into the top clusters (1 or 2) for both English and Russian.
         \multirow{2}{*}{Unseen Ent.} & Ours     & 51.23                        & (4)                            & 0.406                          & (8)                               & 0.687                          & (7)  & 0.959 & (8)  & 0.63 & (8)  \\
                                      & Baseline & 40.22                        & (17)                           & 0.384                          & (15)                              & 0.648                          & (15) & 0.949 & (13) & 0.55 & (12) \\\bottomrule
     \end{tabular}
-    \caption{Results of $\text{mBART}_{\text{en}}$ (all data, seen categories, unseen categories, unseen entities), compared to the baseline from the organizers. The numbers in brackets show the rank of each model (out of 35 submissions) with respect to the given metric.}
+    \caption[Results of our English model compared to the baseline.]{Results of $\text{mBART}_{\text{en}}$ (all data, seen categories, unseen categories, unseen entities), compared to the baseline from the organizers. The numbers in brackets show the rank of each model (out of 35 submissions) with respect to the given metric.}
     \label{tab:mbart:results-en}
 \end{table*}
 \begin{table*}[t]
@@ -105,7 +105,7 @@ Our systems made it into the top clusters (1 or 2) for both English and Russian.
         Ours     & 52.93                        & (1)                            & 0.672                          & (2)                               & 0.677 & (2)  & 0.909 & (1)  \\
         Baseline & 23.53                        & (12)                           & 0.461                          & (12)                              & 0.511 & (12) & 0.836 & (12) \\\bottomrule
     \end{tabular}
-    \caption{Results of $\text{mBART}_{\text{ru}}$, compared to the baseline. The numbers in brackets show the rank of each model (out of 12 submissions) if ordered by the given metric.}
+    \caption[Results of our Russian model compared to the baseline.]{Results of $\text{mBART}_{\text{ru}}$, compared to the baseline. The numbers in brackets show the rank of each model (out of 12 submissions) if ordered by the given metric.}
     \label{tab:mbart:results-ru}
 \end{table*}
 
@@ -175,7 +175,7 @@ As a result, the model learns to integrate $Y$ and $x_{k+1}$ into a single coher
 \begin{figure*}[t]
     \centering
     \includegraphics[width=\textwidth]{img/d2t_text_editing}
-    \caption{A single iteration of our algorithm for iterative \ac{d2t} generation. In Step 1, the template for the triple is selected and filled. In Step 2, the sentence is fused with the template. In Step 3, the result for the next iteration is selected from the beam by filtering and language model scoring.}\label{fig:iterative:alg}
+    \caption[Iterative data-to-text generation.]{A single iteration of our algorithm for iterative \ac{d2t} generation. In Step 1, the template for the triple is selected and filled. In Step 2, the sentence is fused with the template. In Step 3, the result for the next iteration is selected from the beam by filtering and language model scoring.}\label{fig:iterative:alg}
 \end{figure*}
 
 
@@ -212,7 +212,7 @@ In each of the following steps $i=(1, \ldots, T-1)$, we lexicalize the triple $x
         E2E              & extracted       & \texttt{area}+\texttt{food} & \eh{} offers $\ets$ cuisine in the $\etf$. & \eh{} in $\etf$ serves $\ets$ food. \\
         E2E              & manual          & \texttt{near}               & \eh{} is located near \et{}.               & \et{} is close to \eh{}.
     \end{tabular}
-    \caption{Examples of templates we used in our experiments. The markers \eh{} and \et{} are placeholders for the subject and the object, respectively. The templates for the single predicates in the WebNLG dataset and the pairs of predicates in the E2E dataset are extracted automatically from the training data; the templates for the single predicates in E2E are created manually.}
+    \caption[Examples of templates used for our experiments.]{Examples of templates we used in our experiments. The markers \eh{} and \et{} are placeholders for the subject and the object, respectively. The templates for the single predicates in the WebNLG dataset and the pairs of predicates in the E2E dataset are extracted automatically from the training data; the templates for the single predicates in E2E are created manually.}
     \label{tab:iterative:templates_ex}
 \end{table}
 
@@ -253,7 +253,7 @@ For the beam filtering heuristic, we check for the presence of entities by simpl
         {\bf SFC }       & 0.524                          & -          & 0.424                                  & 0.660                                     &  & 0.436      & -          & 0.390                                  & 0.575                                     \\
         {\bf T5 }        & 0.571                          & -          & 0.440                                  & -                                         &  & -          & -          & -                                      & -                                         \\ \bottomrule
     \end{tabular}
-    \caption{Results of automatic metrics on the WebNLG and E2E test sets.}
+    \caption[Results of automatic metrics on WebNLG and E2E]{Results of automatic metrics on the WebNLG and E2E test sets.}
     \label{tab:results}
     % \end{adjustbox}
 \end{table*}
@@ -272,7 +272,7 @@ The higher number of fallbacks in the E2E dataset can be explained by a higher l
         \textbf{Step \#2}  & Albert Jennings Fountain, who died in New Mexico Territory, was born in New York City, \greenund{Staten Island}.                                                                    \\ \midrule
         \textbf{Reference} & Albert Jennings Fountain was born in Staten Island, New York City and died in the New Mexico Territory.
     \end{tabular}
-    \caption{An example of correct behavior of the algorithm on the WebNLG dataset. Newly added entities are underlined, the output from Step \#2 is the output text.}\label{tab:iterative:output}
+    \caption[An example of outputs on the WebNLG dataset.]{An example of correct behavior of the algorithm on the WebNLG dataset. Newly added entities are underlined, the output from Step \#2 is the output text.}\label{tab:iterative:output}
 \end{table*}
 
 \paragraph{Templates} On average, there are 12.4 templates per predicate in WebNLG and 8.3 in the E2E dataset. In cases where the set of templates is more diverse, e.g., if the template for the predicate \textit{country} has to be selected from \{\textit{<subject> is situated within <object>, <subject> is a dish found in <object>}\}, \textsc{LMScorer} helps to select the semantically accurate template for the specific entities. The literal copying of entities can be too rigid in some cases, e.g., \textit{Atatürk Monument (İzmir) is made of ``Bronze''}.
@@ -325,7 +325,7 @@ In contrast to previous approaches, our pipeline is fully trainable on general-d
 \begin{figure}[t]
     \centering
     \includegraphics[width=\textwidth]{img/zeroshot_pipeline.pdf}
-    \caption{A scheme of our approach for zero-shot data-to-text generation from RDF triples. After a simple transformation of triples to facts, we apply the pipeline of modules for (1) ordering, (2) aggregation, (3) paragraph compression. Individual modules are trained on a large general-domain text corpus and operate over text in natural language.}\label{fig:zeroshot:pipeline}
+    \caption[Zero-shot data-to-text generation.]{A scheme of our approach for zero-shot data-to-text generation from RDF triples. After a simple transformation of triples to facts, we apply the pipeline of modules for (1) ordering, (2) aggregation, (3) paragraph compression. Individual modules are trained on a large general-domain text corpus and operate over text in natural language.}\label{fig:zeroshot:pipeline}
 \end{figure}
 Here, we provide a formal description of our approach. Similarly to \Cref{sec:finetuning,sec:iterative}, we focus on the task of producing a natural language description $Y$ a set of \ac{rdf} triples $x \in X$, where each triple $x = (s, p, o)$ describes the relation $p$ between the entities $s$ and $o$ in the knowledge graph.
 
@@ -377,7 +377,7 @@ We used the first paragraphs of Wikipedia entries with lengths between 30-430 ch
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.7\textwidth]{img/wikifluent.pdf}
-    \caption{The building process of the \textsc{WikiFluent} corpus. We apply a split-and-rephrase model on each sentence in the paragraph and resolve coreferences in the split sentences. The result is a set of simple sentences that convey the same meaning as the original paragraph. The synthesized sentences are used as \textit{input} in our models; the original human-written texts are used as \textit{ground truth}.}\label{fig:wikifluent}
+    \caption[Building the \textsc{WikiFluent} corpus.]{The building process of the \textsc{WikiFluent} corpus. We apply a split-and-rephrase model on each sentence in the paragraph and resolve coreferences in the split sentences. The result is a set of simple sentences that convey the same meaning as the original paragraph. The synthesized sentences are used as \textit{input} in our models; the original human-written texts are used as \textit{ground truth}.}\label{fig:wikifluent}
 \end{figure}
 
 \begin{table*}[t]
@@ -390,7 +390,7 @@ We used the first paragraphs of Wikipedia entries with lengths between 30-430 ch
         \textsc{WikiFluent}-\textit{full}     & 915,855      & 9,346     & 9,346      & 52.9        & 41.1        & 3.9          & 2.0          \\
         \textsc{WikiFluent}-\textit{filtered} & 700,517      & 7,149     & 7,149      & 45.6        & 35.4        & 3.4          & 1.8          \\ \bottomrule
     \end{tabular}
-    \caption{Number of examples (train / dev / test), average number of tokens per source and target, average number of sentences per source and target (after filling the templates for the D2T datasets), total number of templates.}
+    \caption[Statistics of \textsc{WikiFluent} and data-to-text datasets.]{Number of examples (train / dev / test), average number of tokens per source and target, average number of sentences per source and target (after filling the templates for the D2T datasets), total number of templates.}
     \label{tab:stats}
 \end{table*}
 
@@ -445,7 +445,7 @@ We train our pipeline modules on the \textsc{WikiFluent} corpus as described in 
     \centering
     \includegraphics[width=\textwidth]{img/pipeline-variants.pdf}
 
-    \caption{An example illustrating how the individual modules are trained and subsequently applied as the parts of the pipeline. See \autoref{sec:pipeline:implementation} for the description of the ordering model (\textsc{ord}), the aggregation model (\textsc{agg}), and the variants of the paragraph compression model (\textsc{PC, PC+agg, PC+ord+agg}).}
+    \caption[Pipeline variants.]{An example illustrating how the individual modules are trained and subsequently applied as the parts of the pipeline. See \autoref{sec:pipeline:implementation} for the description of the ordering model (\textsc{ord}), the aggregation model (\textsc{agg}), and the variants of the paragraph compression model (\textsc{PC, PC+agg, PC+ord+agg}).}
     \label{fig:pipeline:variants}
 \end{figure*}
 
@@ -480,7 +480,7 @@ We evaluate outputs from the \textsc{\{1,2,3\}-stage} variants of our pipeline u
         \textbf{Model}  & \lightblue{Wildwood is a restaurant serving French food. It is in the riverside near Raja Indian Cuisine.}                         \\
         \textbf{Human}  & A amazing French restaurant is called the Wildwood. The restaurant is near the Raja Indian Cuisine in riverside. They love kids.   \\ \bottomrule
     \end{tabular}
-    \caption{Example outputs of our model (\textsc{3-stage}, filtered). For each example, we show the input triples, the intermediate templates, the output from the model, and the corresponding human reference.}
+    \caption[Example outputs of our model (\textsc{3-stage}, filtered)]{Example outputs of our model (\textsc{3-stage}, filtered). For each example, we show the input triples, the intermediate templates, the output from the model, and the corresponding human reference.}
     \label{tab:pipeline:ex1}
 \end{table*}
 
@@ -507,7 +507,7 @@ We evaluate outputs from the \textsc{\{1,2,3\}-stage} variants of our pipeline u
                                                                                        & \textsc{2-stage} & \textbf{43.49}                      & \textbf{39.32}                   & 0.146          & 0.096          & 36.01          & \textbf{36.99} & \textbf{0.001} & \textbf{0.001} \\
                                                                                        & \textsc{1-stage} & 42.99                               & 38.81                            & 0.202          & 0.093          & 34.08          & 36.32          & 0.012          & 0.050          \\ \bottomrule
     \end{tabular}
-    \caption{Automatic metrics on the WebNLG and E2E datasets. B = BLEU, M = METEOR, O = omissions / \# facts, H = hallucinations / \# examples. The systems marked with asterisk (*) are trained on the in-domain data. The results for the systems marked with $\dagger$ are taken from the respective works. \textbf{Boldface} denotes the best variant of our zero-shot system.}
+    \caption[Automatic metrics on the WebNLG and E2E datasets]{Automatic metrics on the WebNLG and E2E datasets. B = BLEU, M = METEOR, O = omissions / \# facts, H = hallucinations / \# examples. The systems marked with asterisk (*) are trained on the in-domain data. The results for the systems marked with $\dagger$ are taken from the respective works. \textbf{Boldface} denotes the best variant of our zero-shot system.}
     \label{tab:pipeline:auto}
 \end{table}
 
@@ -548,7 +548,7 @@ The \textsc{2-stage} system is generally on par with the \textsc{3-stage} system
          & \textsc{2-stage} & 5                              & 32                          & 1          & 2          & 14         & 0          & 0          & 0          & 0          & 11         \\
          & \textsc{1-stage} & 8                              & 40                          & 6          & 6          & 16         & 11         & 2          & 1          & 41         & 22         \\\bottomrule
     \end{tabular}
-    \caption{Number of manually annotated errors on 100 examples: H = hallucinations, I = incorrect fact merging, O = omissions, R = redundancies, G = grammar errors or disfluencies.}
+    \caption[Number of manually annotated errors on 100 examples]{Number of manually annotated errors on 100 examples: H = hallucinations, I = incorrect fact merging, O = omissions, R = redundancies, G = grammar errors or disfluencies.}
     \label{tab:pipeline:manual}
 \end{table}
 We manually examined 100 model outputs, counting the number of semantic (hallucinations, omissions, incorrect fact merging, redundancies) and grammatical errors. The results are summarized in Table \ref{tab:pipeline:manual}.

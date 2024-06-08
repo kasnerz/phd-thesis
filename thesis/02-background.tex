@@ -17,7 +17,7 @@ In \autoref{sec:d2t}, we turn our attention to \ac{d2t} generation, the central 
 
 \section{Neural Language Models}
 \label{sec:lms}
-In this section, we work our way towards neural \acp{lm}. We start with the mathematical foundations of \acp{nn} on which neural \acp{lm} are built (\autoref{sec:nns}), the ways we can represent text in neural networks (\autoref{sec:text-repr}), and the basic ideas of language modeling (\autoref{sec:lm-basics}). Equipped with the necessary theoretical background, we then introduce the transformer architecture (\autoref{sec:transformer}) and how it serves as a basis for pretrained (\autoref{sec:plms}) and large (\autoref{sec:llms}) language models.
+In this section, we work our way towards neural \acp{lm}. We start with the mathematical foundations of neural networks on which neural \acp{lm} are built (\autoref{sec:nns}), the ways we can represent text in neural networks (\autoref{sec:text-repr}), and the basic ideas of language modeling (\autoref{sec:lm-basics}). Equipped with the necessary theoretical background, we then introduce the transformer architecture (\autoref{sec:transformer}) and how it serves as a basis for pretrained (\autoref{sec:plms}) and large (\autoref{sec:llms}) language models.
 
 \subsection{Neural Networks}
 \label{sec:nns}
@@ -116,7 +116,7 @@ In the context of neural networks, this idea is used in the Word2Vec algorithm \
             \label{fig:skipgram}
         \end{subfigure}
     \end{subfigure}
-    \caption{The objectives employed by the Word2Vec algorithm \cite{mikolov2013distributed}. The algorithm here uses a context window of size $k=5$. In the (a) \emph{continuous bag-of-words} algorithm, we sum the embeddings of $k-1$ surrounding tokens and predict the original token. In the (b) \emph{skip-gram} algorithm, we use the original token for predicting the $k-1$ surrounding tokens.}
+    \caption[Word2Vec objectives.]{The objectives employed by the Word2Vec algorithm \cite{mikolov2013distributed}. The algorithm here uses a context window of size $k=5$. In the (a) \emph{continuous bag-of-words} algorithm, we sum the embeddings of $k-1$ surrounding tokens and predict the original token. In the (b) \emph{skip-gram} algorithm, we use the original token for predicting the $k-1$ surrounding tokens.}
     \label{fig:word2vec}
 \end{figure*}
 
@@ -245,7 +245,7 @@ To get the input representation $\mathbf{H}^{(0)}$, we sum the token embeddings 
 \begin{figure*}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/transformer.pdf}
-    \caption{An encoder-decoder variant of the transformer architecture. The encoder has $N_{e}$ blocks, each consisting of a \emph{self-attention} and \emph{MLP layer}. The decoder has $N_{d}$ blocks with \emph{masked self-attention} and \emph{encoder-decoder attention}, again followed by an \emph{MLP layer}. The input to each layer is normalized using \emph{layer norm}. After the last decoder block, the output probabilities are computed using a linear projection and softmax. The figure is adapted from \href{https://github.com/bbycroft/llm-viz/blob/main/src/llm/intro-image.svg}{https://github.com/bbycroft/llm-viz}.}
+    \caption[The transformer architecture.]{An encoder-decoder variant of the transformer architecture. The encoder has $N_{e}$ blocks, each consisting of a \emph{self-attention} and \emph{MLP layer}. The decoder has $N_{d}$ blocks with \emph{masked self-attention} and \emph{encoder-decoder attention}, again followed by an \emph{MLP layer}. The input to each layer is normalized using \emph{layer norm}. After the last decoder block, the output probabilities are computed using a linear projection and softmax. The figure is adapted from \href{https://github.com/bbycroft/llm-viz/blob/main/src/llm/intro-image.svg}{https://github.com/bbycroft/llm-viz}.}
     \label{fig:transformer}
 \end{figure*}
 
@@ -310,7 +310,7 @@ To achieve good performance on an \ac{nlp} task with a vanilla transformer model
                                  & Zephyr \cite{tunstallZephyrDirectDistillation2023}   &                         &                                                          \\
         \bottomrule
     \end{tabular}
-    \caption{Types of transformer architectures and specific models used in this work. The number of parameters may vary based on the model variant.}
+    \caption[Transformer architectures and models.]{Types of transformer architectures and specific models used in this work. The number of parameters may vary based on the model variant.}
     \label{tab:pretrained_models}
 \end{table}
 
@@ -331,7 +331,7 @@ To achieve good performance on an \ac{nlp} task with a vanilla transformer model
 
 \begin{itemize}
     \item \textbf{Masked Language Modeling}: The goal is to predict a token at a masked position given both its left and right context. This objective is inspired by the Cloze task in psychology, where a similar task is given to human subjects \cite{taylor1953cloze}. The objective is commonly used for encoder-only models such as BERT \cite{devlinBERTPretrainingDeep2019}.
-    \item \textbf{Text Denoising}: The goal is generally to predict the original sequence from its corrupted version. This objective combines \ac{mlm} with other tasks such as predicting a deleted token or predicting a number of missing tokens. It is used for pretraining encoder-decoder models such as BART \cite{lewisBARTDenoisingSequencetoSequence2019} or T5 \cite{raffelExploringLimitsTransfer2019}.
+    \item \textbf{Text Denoising}: The goal is generally to predict the original sequence from its corrupted version. This objective combines masked language modeling with other tasks such as predicting a deleted token or predicting a number of missing tokens. It is used for pretraining encoder-decoder models such as BART \cite{lewisBARTDenoisingSequencetoSequence2019} or T5 \cite{raffelExploringLimitsTransfer2019}.
     \item \textbf{Causal language modeling}: The goal is to predict the next token given the previous sequence of tokens, as described in \autoref{eq:clm}. This objective is used for pretraining decoder-only models, including GPT-2 \cite{radford2019language} and most of \acp{llm}.
 \end{itemize}
 
@@ -340,7 +340,7 @@ As a matter of fact, only causal language modeling adheres to the strict definit
 \begin{figure*}[t]
     \centering
     \includegraphics[width=0.9\textwidth]{img/objectives.pdf}
-    \caption{A scheme of the common objectives used by pretrained models: (1) masked language modeling, (2) text denoising, (3)  causal language modeling. The special symbol \texttt{<s>} (beginning of a sentence) is used to bootstrap the decoding process.}\label{fig:objectives}
+    \caption[Pretraining objectives.]{A scheme of the common objectives used by pretrained models: (1) masked language modeling, (2) text denoising, (3)  causal language modeling. The special symbol \texttt{<s>} (beginning of a sentence) is used to bootstrap the decoding process.}\label{fig:objectives}
 \end{figure*}
 
 
@@ -411,7 +411,7 @@ Until recently, \ac{d2t} generation was decomposed into approximately 4-6 subtas
     \centering
     \includegraphics[width=\textwidth]{img/pipeline.pdf}
 
-    \caption{A five-step \ac{d2t} generation pipeline on the example of generating a weather forecast. (1) The relevant fields for the forecast are selected from the data table. (2) The fields are ordered. (3) The ordered fields are aggregated into sentences. (4) Each field is transformed into a text segment. (5) The text segments are combined into the final text.}\label{fig:pipeline}
+    \caption[A data-to-text generation pipeline.]{A five-step \ac{d2t} generation pipeline on the example of generating a weather forecast. (1) The relevant fields for the forecast are selected from the data table. (2) The fields are ordered. (3) The ordered fields are aggregated into sentences. (4) Each field is transformed into a text segment. (5) The text segments are combined into the final text.}\label{fig:pipeline}
 
 \end{figure*}
 
@@ -462,7 +462,7 @@ Building upon the previous data-driven approaches, neural networks (see \autoref
     \centering
     \includegraphics[width=\textwidth]{img/linearization.pdf}
 
-    \caption{Representations of a simple knowledge graph: (a) the original knowledge graph, (b) JSON representation, (c) linearized representation.}\label{fig:linearization}
+    \caption[Knowledge graph representations.]{Representations of a simple knowledge graph: (a) the original knowledge graph, (b) JSON representation, (c) linearized representation.}\label{fig:linearization}
 
 \end{figure*}
 
@@ -519,14 +519,14 @@ In this section, we outline the format and structure of \ac{d2t} generation data
         WikiTableText \cite{bao2018table}                                                          & Key-value            & Wikipedia$^\lozenge$    & 13,318          \\
         \bottomrule
     \end{tabular}
-    \caption{The list of \ac{d2t} datasets used in this work. All listed datasets are included in the \textsc{TabGenie} framework (\autoref{sec:tabgenie}), except for Rotowire, where we include an updated version dubbed SportSett:Basketball instead \cite{thomson2020sportsett}. Our main focus is on the datasets in \textbf{boldface}. Glossary of data types: \textit{Key-value}: key-value pairs, \textit{Table}: tabular data (\textit{w/hl}: with highlighted cells),  \textit{SQL}: strings with SQL queries. $\blacklozenge$ indicates that the dataset is multi-domain; $\lozenge$ indicates that the dataset is open-domain.}
+    \caption[The list of data-to-text datasets used in this work.]{The list of \ac{d2t} datasets used in this work. All listed datasets are included in the \textsc{TabGenie} framework (\autoref{sec:tabgenie}), except for Rotowire, where we include an updated version dubbed SportSett:Basketball instead \cite{thomson2020sportsett}. Our main focus is on the datasets in \textbf{boldface}. Glossary of data types: \textit{Key-value}: key-value pairs, \textit{Table}: tabular data (\textit{w/hl}: with highlighted cells),  \textit{SQL}: strings with SQL queries. $\blacklozenge$ indicates that the dataset is multi-domain; $\lozenge$ indicates that the dataset is open-domain.}
     \label{tab:datasets}.
 \end{table*}
 
 \paragraph{Data Formats} The following formats of structured data are present in the datasets which we employ in this thesis (and at the same time, representative of \ac{d2t} generation datasets in general):
 
 \begin{itemize}
-    \item \textbf{Key-value pairs}: The input is a set of tuples $(k, v)$, where $k$ is a key (also called a slot), which is typically a descriptive text string, and $v$ is a generic value such as a text string, a number, or a boolean. The format is used for example as a \emph{\ac{mr}} for representing dialogue states in dialogue systems \cite{rastogiScalableMultiDomainConversational2020,budzianowskiMultiWOZLargeScaleMultiDomain2020}.
+    \item \textbf{Key-value pairs}: The input is a set of tuples $(k, v)$, where $k$ is a key (also called a slot), which is typically a descriptive text string, and $v$ is a generic value such as a text string, a number, or a boolean. The format is used for example as a \emph{meaning representation} for representing dialogue states in dialogue systems \cite{rastogiScalableMultiDomainConversational2020,budzianowskiMultiWOZLargeScaleMultiDomain2020}.
     \item \textbf{\acs{rdf} (\Acl{rdf}\glsunset{rdf})\footnote{See \url{https://www.w3.org/TR/PR-rdf-syntax/}.} triples}: The input is a set of triples $(s, p, o)$, where $s$ is a \emph{subject},  $p$ is a \emph{predicate}, and $o$ is an \textit{object}. This formalism directly translates to a \emph{directed graph}, where $s$ and $o$ are nodes, and $p$ is a directed edge between these nodes. In a knowledge graph such as Wikidata or DBPedia, the subject is usually an entity with a given identifier (e.g., a person, an object, or a place), the object is either another entity or a generic value (a text string or a number), and the predicate expresses the relation between the subject and the object.
     \item \textbf{Tabular}: The input is structured as a \textit{table}, i.e., a two-dimensional cell matrix of $m$ columns and $n$ rows. A table cell can contain a textual or a numerical value. If a cell is marked as a heading, it contains a ``key'' (a label) for the respective row or column. In some datasets, a subset of cells is \emph{pre-highlighted} -- in that case, the output text should describe only that particular subset of cells.
           % In certain cases, a table can also contain merged cells, nested headings, or multiple disjoint table regions, analogically to real-world phenomena.
@@ -545,7 +545,7 @@ The definition is more clear for the term \emph{multi-domain}. Most commonly, a 
 \begin{figure*}[ht]
     \centering
     \includegraphics[width=\textwidth]{img/datasets.pdf}
-    \caption{Example inputs and reference outputs from the WebNLG, E2E, and Rotowire datasets.}\label{fig:datasets}
+    \caption[Examples from WebNLG, E2E, and Rotowire.]{Example inputs and reference outputs from the WebNLG, E2E, and Rotowire datasets.}\label{fig:datasets}
 \end{figure*}
 
 \paragraph{Datasets} The following \ac{d2t} generation datasets (highlighted in \autoref{tab:datasets}) are the most relevant for the thesis:

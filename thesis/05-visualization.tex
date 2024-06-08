@@ -38,7 +38,7 @@ To address these gaps, we present \textsc{TabGenie} -- a multi-purpose toolkit f
 \begin{figure*}[t]
     \centering
     \setlength{\fboxsep}{0pt}\fcolorbox{gray!20}{white}{\includegraphics[width=1.0\textwidth]{img/tabgenie_web.png}}
-    \caption{The web interface of \textsc{TabGenie}. The \emph{left panel} and the \emph{navigation bar} contain user controls; the \emph{center panel} shows table properties and table content; the \emph{right panel} contains system outputs.}
+    \caption[The web interface of \textsc{TabGenie}.]{The web interface of \textsc{TabGenie}. The \emph{left panel} and the \emph{navigation bar} contain user controls; the \emph{center panel} shows table properties and table content; the \emph{right panel} contains system outputs.}
     \label{fig:tabgenie:web}
 \end{figure*}
 Input data in \textsc{TabGenie} is in tabular format. We define a \textit{table} as a two-dimensional matrix with $m$ columns and $n$ rows, which together define a grid of $m \times n$ cells. Each cell contains a (possibly empty) text string. A continuous sequence of cells $\{c_{i}, \ldots, c_{i+k}\}$ from the same row or column may be merged, in which case the values of $\{c_{i+1},\ldots,c_{i+k}\}$ are linked to the value of $c_{i}$.  A cell may be optionally marked as a \textit{heading}, which is represented as an additional property of the cell.\footnote{The headings are typically located in the first row or column but may also span multiple rows or columns and may not be adjacent.}
