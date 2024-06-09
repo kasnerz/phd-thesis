@@ -2,17 +2,17 @@
 \chapter{Conclusions}
 \label{chap:conclusions}
 
-In this thesis, we set out to explore how to efficiently employ neural \acp{lm} in \ac{d2t} generation systems 
-to improve their fluency and flexibility. 
-Although the capabilities of \acp{lm} have increased rapidly, the issues that we were trying to solve---semantic inaccuracies in the generated texts, lack of automatic evaluation metrics, heterogeneous input data format, and unknown scope of \acp{lm} abilities---are still pressing. That is not to say that there has not been any progress on these topic, quite the opposite. We listed numerous research works which pushed the progress in these topics forward in \autoref{chap:background}.
+In this thesis, we set out to explore how to efficiently employ neural \acp{lm} in \ac{d2t} generation systems
+to improve their fluency and flexibility.
+Although the capabilities of \acp{lm} have increased rapidly, the issues that we were trying to solve---semantic inaccuracies in the generated texts, lack of automatic evaluation metrics, heterogeneous input data format, and unknown scope of \acp{lm} abilities---are still pressing. That is not to say that there has not been any progress on these topics, as evidenced by numerous research works in \autoref{chap:background}.
 
 
 Hopefully, we also contributed to the progress with our findings, including:
 \begin{itemize}
     \item Our approaches for efficient employment of \acp{plm} in \ac{d2t} generation systems by constraining their role to improving text fluency (\autoref{chap:low-res}),
-    \item Our automatic metrics for evaluating semantic accuracy of generated texts based on \acp{plm} (\autoref{chap:evaluation}),
-    \item Our toolkit for unified processing and visualization of existing benchmarks (\autoref{chap:tabgenie}),
+    \item Our approaches using \acp{plm} for automatic evaluation of semantic accuracy of generated texts (\autoref{chap:evaluation}),
+    \item Our toolkit for unified processing and visualization of existing \ac{d2t} generation benchmarks (\autoref{chap:tabgenie}),
     \item Our analyses of generalization abilities of \acp{plm} to new data labels and \acp{llm} to common data formats.
 \end{itemize}
 
-As neural \acp{lm} proliferate in \ac{nlp}, we can now safely say that systems based on neural models are here to stay. Our best bet is therefore to devise ways to safely employ them in the existing systems. \ac{d2t} generation is a specific area that goes contrary to what \acp{lm} offer.
+Neural \acp{lm} currently proliferate in natural language processing and we can safely say that the \ac{lm}-based systems are here to stay. How can \ac{d2t} generation benefit from these systems? We need to tread carefully: as the requirements on text generated from data often go against what neural \acp{lm} have to offer: preferring accuracy over fluency, interpretability over flexibility, speed over conceptual simplicity.
