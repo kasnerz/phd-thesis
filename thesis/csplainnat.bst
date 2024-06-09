@@ -289,12 +289,13 @@ FUNCTION {format.authors}
 FUNCTION {format.editors}
 { editor empty$
     { "" }
-    { editor format.names
-      editor num.names$ #1 >
-        { " (Ed.)" * } % CHANGE mudrd8mz 2005-10-12
-        { " (Ed.)" * }
-      if$
-    }
+    { "" }
+    % { editor format.names
+    %   editor num.names$ #1 >
+    %     { " (Ed.)" * } % CHANGE mudrd8mz 2005-10-12
+    %     { " (Ed.)" * }
+    %   if$
+    % }
   if$
 }
 
