@@ -2,17 +2,29 @@
 \chapter{Conclusions}
 \label{chap:conclusions}
 
-In this thesis, we set out to explore how to efficiently employ neural \acp{lm} in \ac{d2t} generation systems
-to improve their fluency and flexibility.
-Although the capabilities of \acp{lm} have increased rapidly, the issues that we were trying to solve---semantic inaccuracies in the generated texts, lack of automatic evaluation metrics, heterogeneous input data format, and unknown scope of \acp{lm} abilities---are still pressing. That is not to say that there has not been any progress on these topics, as evidenced by numerous research works in \autoref{chap:background}.
+In this thesis, we set out to explore how to employ neural \acp{lm} in \ac{d2t} generation systems. The issues we tackled---semantic inaccuracies in the generated texts, lack of suitable automatic evaluation metrics, heterogeneous input data format, and unknown scope of \acp{lm} abilities---are as pressing as ever, in spite of the rapid increase in \ac{lm} capabilities over the past few years. That is not to say that there has not been any progress, as evidenced by numerous works introduced in \autoref{chap:background}, along with many others.
 
 
 Hopefully, we also contributed to the progress with our findings, including:
 \begin{itemize}
-    \item Our approaches for efficient employment of \acp{plm} in \ac{d2t} generation systems by constraining their role to improving text fluency (\autoref{chap:low-res}),
-    \item Our approaches using \acp{plm} for automatic evaluation of semantic accuracy of generated texts (\autoref{chap:evaluation}),
+    \item Our approaches for efficient employment of \acp{plm} in \ac{d2t} generation systems (\autoref{chap:low-res}),
+    \item Our \acp{plm}-based automatic metrics for evaluating semantic accuracy of generated texts (\autoref{chap:evaluation}),
     \item Our toolkit for unified processing and visualization of existing \ac{d2t} generation benchmarks (\autoref{chap:tabgenie}),
-    \item Our analyses of generalization abilities of \acp{plm} to new data labels and \acp{llm} to common data formats.
+    \item Our custom benchmarks for analyzing generalization abilities of neural \acp{lm} to novel domains and formats (\autoref{chap:investigating}).
 \end{itemize}
 
-Neural \acp{lm} currently proliferate in natural language processing and we can safely say that the \ac{lm}-based systems are here to stay. How can \ac{d2t} generation benefit from these systems? We need to tread carefully: as the requirements on text generated from data often go against what neural \acp{lm} have to offer: preferring accuracy over fluency, interpretability over flexibility, speed over conceptual simplicity.
+Now it is a good time to pause and ponder. Where does \ac{d2t} generation stand in the current research landscape and how do \acp{lm} relate to it? Is there any value in developing \ac{lm}-based \ac{d2t} generation systems? Or are all the problems of the field going to be solved (or made irrelevant) by using ever larger models?
+
+% Or will the problems perhaps not be even relevant anymore?
+
+First, it is clear that \ac{lm}-based systems are here to stay. As neural \acp{lm} proliferate in \ac{nlp}, it is hard to imagine that an \ac{nlp} subfield would be left intact by their impact. And there is a good reason for that: with \acp{lm}, certain things that were unimaginable during previous decades of research (such as fine-grained steering of a system using free-form natural language instructions) are now becoming possible. Or, to put it more bluntly, \ac{d2t} \emph{without \acp{lm}} would start to feel awkward quite soon. People are already becoming used to consuming fluent texts and seamlessly interacting with language generation systems, aspects that are hard to replace by any non-\ac{lm} approach. And---as we stated in the introduction---\ac{d2t} generation is primarily simplifying interactions of end users with large amounts of structured data, so these aspects cannot be neglected.
+
+At the same time, the users (hopefully, along with us researchers) are becoming aware of limitations of \ac{lm}-based systems. Even the most powerful \acp{lm} nowadays cannot reliably count words in a sentence, multiply larger numbers, or recognize unplausible requests. Although the progress is ongoing, it is not very plausible that these issues will be satisfactorily solved with further scaling or minor improvements such as better tokenizers. These issues are more pronounced in \ac{d2t} generation, with its focus on deriving conclusions from structured information and producing outputs which are accurate and relevant, which tells us that we need to tread carefully.
+
+It would be, however, counter-productive to dismiss \acp{lm} by likening them to a ``black box''. It is better to acknowledge that even the \emph{black boxes} are still \emph{boxes}: components that can be embedded in a larger system. And, as we have showed throughout the thesis, such a component can be helpful when used wisely. We can, for example, select only relevant outputs from the \ac{lm} (\autoref{sec:iterative}), train the \ac{lm} in a way that its outputs are more predictable (\autoref{sec:pipeline}), or make use of a state-of-the-art performance of an \ac{lm} on a certain task to build a powerful component (\autoref{sec:sem-acc}).
+
+Moreover, the recent developments suggest that we only scratched the surface of what is possible. There currently seems to be no limit in surrounding \acp{lm} with data preprocessors, filters, re-rankers, Python interpreters and other tools to build more powerful data processing systems. Besides the tools, we can expect the creation of an ecosystems of \acp{lm}, each specialized for a certain purpose.
+
+These developments suggest that \ac{d2t} generation itself is dissolving and becoming transparent. We can envisage powerful data analytics tools combining components for data mining, natural language understanding, text-to-SQL, table question answering, many of which may be tackled by the same model (or rather, ecosystem of tools).
+
+Evaluating such systems will, admittedly, get more difficult. Iterating over improving \acs{bleu} is not a thing driving a research forward even nowadays. Recent years have witnessed the decline of classical evaluation metrics; future years will perhaps witness the decline of classical benchmarks. Similarly as we , we will need to focus on extrinsic evaluation and ecological validity.

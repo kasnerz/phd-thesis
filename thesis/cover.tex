@@ -1,0 +1,86 @@
+\documentclass[12pt,notitlepage,a4paper,openright]{report}
+\pagestyle{plain}
+\usepackage{etoolbox}
+\usepackage[usenames,dvipsnames,svgnames,table,rgb]{xcolor}
+\usepackage[a-2u]{pdfx}
+\usepackage{fontspec}
+\usepackage[czech,english]{babel}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\usepackage[defaultlines=4,all]{nowidow}
+\usepackage{microtype}
+
+\usepackage{graphicx}
+\usepackage[twoside, inner=3.7cm, outer=2.9cm, top=2.6cm, bottom=3.4cm]{geometry}
+\usepackage{thesis}
+\usepackage[round]{natbib}
+\usepackage{multirow}
+\usepackage{arydshln} % dashed lines in tables
+\usepackage{array}
+\usepackage{amssymb,latexsym,pifont}
+\usepackage{amsmath}
+\usepackage{enumitem} % custom lists
+\usepackage[normalem]{ulem} % underlining
+\usepackage{setspace} % line spacing
+\usepackage{varioref} % nice references (above/below)
+\usepackage[above,section]{placeins} % avoid figures pushed at end of chapters
+\usepackage{listings}
+\usepackage{tabularx}
+\usepackage{booktabs} % nicer lines in table
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{gnuplot-lua-tikz}
+\usetikzlibrary{shapes.geometric}
+\usepackage{epstopdf}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{mathtools}
+\usepackage{quoting,xparse}
+\usepackage{tikz}
+\usepackage{cleveref}
+\usepackage{lua-ul}
+
+% \setmainfont[Ligatures=Common]{Libertinus Serif}
+\setmainfont[Ligatures=Common]{Linux Libertine O}
+\setsansfont[Scale=MatchLowercase]{DejaVu Sans}
+\setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
+
+\setstretch{2} % line spacing
+
+
+\begin{document}
+\renewcommand{\thepage}{\roman{page}}
+\selectlanguage{english}
+\begin{titlepage}
+    \begin{center}
+        \ \\
+        \vspace{10mm}
+        {\Large\bf \uppercase{Charles University}}
+
+        % \vspace{5mm}
+
+        {\Large Faculty of Mathematics and Physics}
+        \vspace{5mm}
+
+        \includegraphics[height=40mm]{logo-uk.pdf}
+
+        \vspace{25mm}
+
+        {\Huge\bf \uppercase{Doctoral Thesis}}
+
+        \vspace{10mm}
+
+
+        {\LARGE\bf Data-to-Text Generation with\\Neural Language Models}\\
+    \end{center}
+    \vspace{50mm}
+
+    {\Large Prague 2024}\hfill{\Large Zdeněk Kasner}
+\end{titlepage}
+
+\pagestyle{plain}
+\normalsize
+
+\end{document}

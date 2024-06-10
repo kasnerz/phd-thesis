@@ -236,9 +236,9 @@
 \newcommand*{\gptmetric}{$\mathcal{E}_{\text{gpt}}$}
 \newcommand*{\humanmetric}{$\mathcal{E}_{\text{hum}}$}
 
-\usepackage{pifont}% http://ctan.org/pkg/pifont
-\newcommand{\cmark}{\ding{51}}%
-\newcommand{\xmark}{\ding{55}}%
+% \usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\includegraphics[width=0.23cm]{img/cmark.png}}%
+\newcommand{\xmark}{\includegraphics[width=0.23cm]{img/xmark.png}}%
 
 
 
@@ -355,8 +355,8 @@ da-ta-set
 \setcounter{secnumdepth}{2}
 
 %% cutting down warnings
-%\hfuzz=2pt
-%\hbadness=10000
+\hfuzz=2pt
+\hbadness=10000
 
 % force-ordering citations according to dummy keys
 \newcommand{\dummybiborderkey}[1]{}

@@ -25,7 +25,7 @@ Neural networks are a tool for learning patterns from data.\footnote{Until we ge
 
 To begin, let us say that our goal is to predict a real-number output $y \in \mathbb{R}$ for a given vector of real numbers $\mathbf{x} = (x_1, \ldots, x_d) \in \mathbb{R}^d$.
 % \footnote{We will follow the convention that vectors are denoted with boldface letters ($\mathbf{x}$), and real numbers with plain letters ($x$).} 
-We assume that the $\mathbf{x} \rightarrow y$ mapping is not arbitrary---if it were, it would leave us with memorizing all the $(\mathbf{x},y)$ pairs---but follows some regularities and underlying patterns that can be learned. This assumption is naturally satisfied if we consider $(\mathbf{x},y)$ to be representations of real-world data, e.g., documents and their topics.
+We assume that the $\mathbf{x} \rightarrow y$ mapping is not arbitrary---if it were, it would leave us with memorizing all the $(\mathbf{x},y)$ pairs---but follows some regularities and underlying patterns that can be learned. This assumption is naturally satisfied if we consider $(\mathbf{x},y)$ to be representations of real-world data, e.g., documents and their topics we want to classify.
 
 In machine learning, we approximate the mapping using mathematical models designed to capture the patterns in their parameters. The models estimate the parameters from a set of $(\mathbf{x},y)$ examples called the \textit{training data} and use these parameters to predict the outputs on the \textit{test data}, which is a new set of examples generally coming from the same distribution.
 
@@ -296,15 +296,15 @@ To achieve good performance on an \ac{nlp} task with a vanilla transformer model
         \toprule
         \textbf{Type}            & \textbf{Example Models}                              & \textbf{\# Parameters}  & \textbf{Note}                                            \\
         \midrule
-        \multirow{3}{*}{Encoder} & BERT \cite{devlinBERTPretrainingDeep2019}            & 110M-340M               & landmark pretrained encoder                              \\
+        \multirow{3}{*}{Encoder} & BERT \cite{devlinBERTPretrainingDeep2019}            & 110M-340M               & pretrained encoder                                       \\
                                  & RoBERTa \cite{liuRoBERTaRobustlyOptimized2019}       & 125M-355M               & improves BERT pretraining                                \\
                                  & \textsc{LaserTagger} \cite{malmi2019lasertagger}     & 110M                    & text-editing model                                       \\
         \midrule
-        \multirow{3}{*}{Enc-Dec} & BART \cite{lewisBARTDenoisingSequencetoSequence2019} & 139M-406M               & \multirow{2}{*}{landmark encoder-decoders}               \\
+        \multirow{3}{*}{Enc-Dec} & BART \cite{lewisBARTDenoisingSequencetoSequence2019} & 139M-406M               & \multirow{2}{*}{encoder-decoders}                        \\
                                  & T5 \cite{raffelExploringLimitsTransfer2019}          & 220M-11B                &                                                          \\
                                  & mBART \cite{liuMultilingualDenoisingPretraining2020} & 680M                    & multilingual version of BART                             \\
         \midrule
-        \multirow{3}{*}{Decoder} & GPT-2 \cite{radfordLanguageModelsAre2019}            & 117M-1.5B               & landmark pretrained decoder                              \\
+        \multirow{3}{*}{Decoder} & GPT-2 \cite{radfordLanguageModelsAre2019}            & 117M-1.5B               & pretrained decoder                                       \\
                                  & Llama2 \cite{touvronLlamaOpenFoundation2023}         & \multirow{3}{*}{7B-70B} & \multirow{3}{*}{large language models (§\ref{sec:llms})} \\
                                  & Mistral \cite{jiangMistral7B2023}                    &                         &                                                          \\
                                  & Zephyr \cite{tunstallZephyrDirectDistillation2023}   &                         &                                                          \\
