@@ -500,26 +500,26 @@ In this section, we outline the format and structure of \ac{d2t} generation data
     \centering\small
     \begin{tabular}{@{}lllr@{}}
         \toprule
-        \textbf{Dataset}                                                                           & \textbf{Data Format} & \textbf{Domain(s)}      & \textbf{\# Ex.} \\  \midrule
-        CACAPO \cite{vanderleeCACAPODatasetMultilingual2020}                                       & Key-value            & News$^\blacklozenge$    & 20,149          \\
-        DART \cite{nan2021dart}                                                                    & \acs{rdf} triples    & Wikipedia$^\lozenge$    & 70,524          \\
-        \textbf{E2E} \cite{dusekSemanticNoiseMatters2019,dusekEvaluatingStateoftheartEndtoEnd2020} & Key-value            & Restaurants             & 36,856          \\
-        EventNarrative \cite{colas2021eventnarrative}                                              & \acs{rdf} triples    & Events$^\lozenge$       & 224,428         \\
-        HiTab \cite{chengHiTabHierarchicalTable2021}                                               & Table w/hl           & Statistics$^\lozenge$   & 10,672          \\
-        Chart-To-Text \cite{kantharajCharttoTextLargeScaleBenchmark2022}                           & Table                & Statistics$^\lozenge$   & 34,811          \\
-        Logic2Text \cite{chenLogic2TextHighFidelityNatural2020}                                    & Table w/hl           & Wikipedia$^\lozenge$    & 10,753          \\
-        LogicNLG \cite{chenLogicalNaturalLanguage2020}                                             & Table                & Wikipedia$^\lozenge$    & 37,015          \\
-        NumericNLG \cite{suadaaTabletoTextGenerationNumerical2021}                                 & Table                & Science$^\lozenge$      & 1,355           \\
-        SciGen \cite{moosaviLearningReasonText2021}                                                & Table                & Science$^\lozenge$      & 17,551          \\
-        \textbf{Rotowire}$^*$ \cite{wiseman2017challenges}                                         & Table                & Basketball              & 6,150           \\
-        ToTTo \cite{parikhToTToControlledTableToText2020}                                          & Table w/hl           & Wikipedia$^\lozenge$    & 136,553         \\
-        \textbf{WebNLG} \cite{gardentWebNLGChallengeGenerating2017}                                & \acs{rdf} triples    & DBPedia$^\blacklozenge$ & 42,873          \\
-        WikiBio \cite{lebretNeuralTextGeneration2016}                                              & Key-value            & Biographies$^\lozenge$  & 728,321         \\
-        WikiSQL \cite{zhong2017seq2sql}                                                            & Table + SQL          & Wikipedia$^\lozenge$    & 80,654          \\
-        WikiTableText \cite{bao2018table}                                                          & Key-value            & Wikipedia$^\lozenge$    & 13,318          \\
+        \textbf{Dataset}                                                                           & \textbf{Data Format} & \textbf{Domain(s)}      & \textbf{\# Total Ex.} \\  \midrule
+        CACAPO \cite{vanderleeCACAPODatasetMultilingual2020}                                       & Key-value            & News$^\blacklozenge$    & 20,149                \\
+        DART \cite{nan2021dart}                                                                    & \acs{rdf} triples    & Wikipedia$^\lozenge$    & 70,524                \\
+        \textbf{E2E} \cite{dusekSemanticNoiseMatters2019,dusekEvaluatingStateoftheartEndtoEnd2020} & Key-value            & Restaurants             & 36,856                \\
+        EventNarrative \cite{colas2021eventnarrative}                                              & \acs{rdf} triples    & Events$^\lozenge$       & 224,428               \\
+        HiTab \cite{chengHiTabHierarchicalTable2021}                                               & Table w/hl           & Statistics$^\lozenge$   & 10,672                \\
+        Chart-To-Text \cite{kantharajCharttoTextLargeScaleBenchmark2022}                           & Table                & Statistics$^\lozenge$   & 34,811                \\
+        Logic2Text \cite{chenLogic2TextHighFidelityNatural2020}                                    & Table w/hl           & Wikipedia$^\lozenge$    & 10,753                \\
+        LogicNLG \cite{chenLogicalNaturalLanguage2020}                                             & Table                & Wikipedia$^\lozenge$    & 37,015                \\
+        NumericNLG \cite{suadaaTabletoTextGenerationNumerical2021}                                 & Table                & Science$^\lozenge$      & 1,355                 \\
+        SciGen \cite{moosaviLearningReasonText2021}                                                & Table                & Science$^\lozenge$      & 17,551                \\
+        \textbf{Rotowire}$^*$ \cite{wiseman2017challenges}                                         & Table                & Basketball              & 6,150                 \\
+        ToTTo \cite{parikhToTToControlledTableToText2020}                                          & Table w/hl           & Wikipedia$^\lozenge$    & 136,553               \\
+        \textbf{WebNLG} \cite{gardentWebNLGChallengeGenerating2017}                                & \acs{rdf} triples    & DBPedia$^\blacklozenge$ & 42,873                \\
+        WikiBio \cite{lebretNeuralTextGeneration2016}                                              & Key-value            & Biographies$^\lozenge$  & 728,321               \\
+        WikiSQL \cite{zhong2017seq2sql}                                                            & Table + SQL          & Wikipedia$^\lozenge$    & 80,654                \\
+        WikiTableText \cite{bao2018table}                                                          & Key-value            & Wikipedia$^\lozenge$    & 13,318                \\
         \bottomrule
     \end{tabular}
-    \caption[The list of data-to-text datasets used in this work.]{The list of \ac{d2t} datasets used in this work. All listed datasets are included in the \textsc{TabGenie} framework (\autoref{sec:tabgenie}), except for Rotowire, where we include an updated version dubbed SportSett:Basketball instead \cite{thomson2020sportsett}. Our main focus is on the datasets in \textbf{boldface}. Glossary of data types: \textit{Key-value}: key-value pairs, \textit{Table}: tabular data (\textit{w/hl}: with highlighted cells),  \textit{SQL}: strings with SQL queries. $\blacklozenge$ indicates that the dataset is multi-domain; $\lozenge$ indicates that the dataset is open-domain.}
+    \caption[The list of data-to-text datasets used in this work.]{The list of \ac{d2t} datasets used in this work. All listed datasets are included in the \textsc{TabGenie} framework (\autoref{sec:tabgenie}), except for Rotowire, where we include an updated version dubbed SportSett:Basketball instead \cite{thomson2020sportsett}. Our main focus is on the datasets in \textbf{boldface}. Glossary of data types: \textit{Key-value}: key-value pairs, \textit{Table}: tabular data (\textit{w/hl}: with highlighted cells),  \textit{SQL}: strings with SQL queries. $\blacklozenge$ indicates that the dataset is multi-domain; $\lozenge$ indicates that the dataset is open-domain. For brevity, we report only the total number of examples in the datasets (i.e., aggregating \emph{train}, \emph{dev}, and \emph{test}).}
     \label{tab:datasets}.
 \end{table*}
 

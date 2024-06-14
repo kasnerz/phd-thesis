@@ -40,7 +40,6 @@ We formulate the task as \emph{sequence-to-sequence} generation. First, we linea
 
 \paragraph{Model}
 We use mBART \cite{liuMultilingualDenoisingPretraining2020}, a multilingual \ac{plm} based on BART, a transformer model pretrained on text denoising (see \autoref{sec:plms}).
-% In pretraining, the noise function of mBART replaces text spans of arbitrary length with a mask token (35\% of the words in each instance) and permutes the order of sentences. 
 The model uses 12 layers for the encoder and 12 layers for the decoder ($\sim$680M parameters), and it is pretrained on the large-scale CC25 corpus extracted from Common Crawl, which contains data in 25 languages \citep{wenzek2020ccnet}.
 
 
@@ -114,7 +113,6 @@ Our systems made it into the top clusters (1 or 2) for both English and Russian.
 To better understand the nature of errors made by our system, we manually inspected a sample of 50 outputs in each language.\footnote{Automatic back-translation to English was used to facilitate understanding of Russian.} We found semantic errors in 12 English outputs, mostly concentrated along the unseen categories (\emph{Scientist}, \emph{Movie}, \emph{Musical Record}). The model tends to describe musical works and movies in terms of written works (``written'', ``published'' etc.), i.e., the closest seen category. There are also several swaps in roles of the entities (e.g., ``is to southeast'' instead of ``has to its southeast'', ``follows'' instead of ``is followed by'' etc.).
 
 In a few cases, the model hallucinates a relation not specified in the data (e.g., ``born on January 1, 1934 in Istanbul'' when a date of birth and current residence is given, not the birthplace) or is not able to infer background knowledge not given on the input (it talks about a dead person in the present tense).
-% The swaps in roles and hallucinated relations also occured in Russian; in addition, we found a hallucinated (correct) airport name and a few forgotten ingredients for a dish from a long list. 
 Factual errors in Russian were less frequent (9 sentences), which is expected as there are no unseen categories. Moreover, the system shows an impressive performance at translating entity names from the English \ac{rdf} into Russian.
 
 We further found 10 outputs with suboptimal phrasing in English and 9 in Russian, where the model did not connect properties of the same type in coordination (e.g., two musical genres for a record) or gave numbers without proper units (e.g., ``runtime of 89.0'' or ``area of 250493000000.0'').
@@ -152,11 +150,6 @@ We aim to improve the semantic accuracy \ac{d2t} generation. Other works have pu
 
 To generate outputs with sufficient semantic accuracy for the filtering step, we take advantage of three facts: (1) we can lexicalize individual data items using trivial templates, (2) concatenating the lexicalizations tends to produce an unnatural sounding but semantically accurate output, and (3) a \ac{plm} trained on improving the output fluency can be used for combining the lexicalizations.
 
-% \textsc{LaserTagger} \cite{malmi2019lasertagger}, which we use in our approach, is a sequence tagging model based on the transformer architecture with BERT \cite{devlinBERTPretrainingDeep2019} as the encoder backbone. Other recent text-editing models without a pre-trained backbone include EditNTS \citep{dong} and Levenshtein Transformer \citep{gu2019levenshtein}.
-
-% Concurrently with our work, \citet{kale2020few} explored using templates for dialogue response generation. %\ODdel{Unlike our work,} 
-% They use the sequence-to-sequence T5 model \citep{raffel2019exploring} to generate the output text from scratch instead of iteratively editing the intermediate outputs, which leaves less control over the model.
-
 
 \subsection{Method}
 \label{sec:text-editing-exp}
@@ -169,7 +162,6 @@ We collect a set of templates for each unique predicate. We use two approaches: 
 
 \paragraph{Sentence Fusion}
 We train a model for the task of \emph{sentence fusion}, i.e., combining sentences into a coherent text \cite{barzilay2005sentence}.
-%We train an independent in-domain sentence fusion model for each dataset. 
 To construct the training data for the model, we select pairs of examples $(X, X')$ and their corresponding text descriptions $(Y, Y')$ from the original training set such that the examples consist of $(k, k+1)$ triples and have $k$ triples in common. This leaves us with an extra triple $x_{k+1}$ present only in $X'$. For each training example, we use the concatenated sequence $Y \mathrm{lex}(x_{k+1})$ as a source and the sequence $Y'$ as a target, where $\mathrm{lex}(x_{k+1})$ denotes lexicalizing the triple $x_{k+1}$ using an appropriate template.
 As a result, the model learns to integrate $Y$ and $x_{k+1}$ into a single coherent expression.
 
@@ -193,14 +185,10 @@ As described in \autoref{sec:evaluation}, we use perplexity of the text under a 
 
 \paragraph{Generation Algorithm}
 The input of the algorithm (\autoref{fig:iterative:alg}) is a set of $T$ ordered triples. First, we lexicalize the triple $x_0$ to get the output text $Y_0$ by filling the available templates and using the template with the best score from \textsc{LMScorer}.
-% This promotes templates which sound more natural for particular values.
 In each of the following steps $i=(1, \ldots, T-1)$, we lexicalize the triple $x_i$ and concatenate it with $Y_{i-1}$.  To improve the fluency of the text, we use the sentence fusion model with beam search to produce $k$ hypotheses. We filter and re-rank the hypotheses (see the next paragraph), getting $Y_{i}$ for the next step. The output is the text $Y_{T-1}$ from the final step.
 
 
 \paragraph{Filtering and Re-ranking} In each decoding step, we remove hypotheses in the beam missing any entity from the input data using a simple heuristic based on string matching. We rescore the remaining hypotheses in the beam with \textsc{LMScorer} and set the hypothesis with the best score as $Y_{i}$. In case there are no sentences left in the beam after the filtering step, we let $Y_{i}$ be the text in which the lexicalized $x_i$ is appended after $Y_{i-1}$ without sentence fusion, ensuring the semantic accuracy of the text.
-
-%For the E2E dataset, we first try to find a pair of predicates for which there is a template extracted from the data, and only use the handcrafted templates for the single predicates in the subsequent steps. 
-%The final beam filtering step is a simple heuristic, checking if all entities from the input triples are present in the output.
 
 
 \subsection{Implementation}
@@ -219,9 +207,9 @@ In each of the following steps $i=(1, \ldots, T-1)$, we lexicalize the triple $x
 \end{table}
 
 
-\paragraph{Template Extraction} We experiment with the WebNLG and E2E datasets (see \autoref{sec:datasets}). For WebNLG, we extract the templates from the training examples containing only a \textit{single} triple. In the E2E dataset, there are no such examples; therefore, we first extract the templates for \textit{pairs} of predicates, using them as a starting point for the algorithm to leverage the lexical variability in the data (manually filtering out the templates with semantic noise). We also create a small set of templates for each \textit{single} predicate manually, using them in the subsequent steps of the algorithm.\footnote{In the E2E dataset, the data is in the form of key-value pairs. We transform the data to \ac{rdf} triples by using the name of the restaurant as a \textit{subject} and the rest of the pairs as \textit{predicate} and \textit{object}. This creates \textit{n-1} triples for \textit{n} pairs.} See \autoref{tab:iterative:templates_ex} for examples of templates we used in our experiments.
+\paragraph{Template Extraction} We experiment with the WebNLG and E2E datasets (see \autoref{sec:datasets}). For WebNLG, we extract the templates from the training examples containing only a single triple. In the E2E dataset, there are no such examples; therefore, we first extract the templates for pairs of predicates, using them as a starting point for the algorithm to leverage the lexical variability in the data (manually filtering out the templates with semantic noise). We also create a small set of templates for each single predicate manually, using them in the subsequent steps of the algorithm.\footnote{In the E2E dataset, the data is in the form of key-value pairs. We transform the data to \ac{rdf} triples by using the name of the restaurant as a \emph{subject} and the rest of the pairs as \emph{predicate} and \emph{object}. This creates $n-1$ triples for $n$ pairs.} See \autoref{tab:iterative:templates_ex} for examples of templates we used in our experiments.
 
-\paragraph{Sentence Fusion Model} We base our sentence fusion model on the text-editing model \textsc{LaserTagger} \cite{malmi2019lasertagger}. \textsc{LaserTagger} generates outputs by tagging inputs with edit operations (\texttt{KEEP} a token, \texttt{DELETE} a token, and \texttt{ADD} a phrase before the token), which makes it suitable for tasks where the output highly overlaps with the input. An important feature of \textsc{LaserTagger} is its limited vocabulary size, consisting of $k$ most frequent (possibly multi-token) phrases used to transform inputs to outputs in the training data. After the vocabulary is precomputed, all infeasible examples in the training data are filtered out. At the cost of limiting the number of training examples, this filtering makes the training data cleaner by removing outliers. The limited vocabulary also makes the model less prone to hallucination errors.
+\paragraph{Sentence Fusion Model} We base our sentence fusion model on the text-editing model \textsc{LaserTagger} \cite{malmi2019lasertagger}, which is a \ac{plm} based on BERT \cite{devlinBERTPretrainingDeep2019}. \textsc{LaserTagger} generates outputs by tagging inputs with edit operations (\texttt{KEEP} a token, \texttt{DELETE} a token, and \texttt{ADD} a phrase before the token), which makes it suitable for tasks where the output highly overlaps with the input. An important feature of \textsc{LaserTagger} is its limited output vocabulary size, consisting of $k$ most frequent (possibly multi-token) phrases used to transform inputs to outputs in the training data. After the vocabulary is precomputed, all infeasible examples in the training data are filtered out. At the cost of limiting the number of training examples, this filtering makes the training data cleaner by removing outliers. The limited vocabulary also makes the model less prone to hallucination errors.
 
 \paragraph{LMScorer} As the \textsc{LMScorer} backend, we use the pre-trained GPT-2 language model \citep{radford2019language} from the Huggingface Transformers \citep{wolf2019HuggingFacesTS}. We compute the perplexity scores using the \textit{lm-scorer}\footnote{\url{https://github.com/simonepri/lm-scorer}} package.
 
@@ -233,36 +221,36 @@ In each of the following steps $i=(1, \ldots, T-1)$, we lexicalize the triple $x
 
 
 \subsection{Experiments}
-\paragraph{Base Experiments} As a \emph{baseline}, we generate the best templates according to \textsc{LMScorer} without applying the sentence fusion (i.e., always using the fallback). For the \emph{sentence fusion} experiments, we use \textsc{LaserTagger} with the autoregressive decoder with a beam of size 10. We use all reference lexicalizations and the vocabulary size $V=100$, following our preliminary experiments. We finetune the model for 10,000 updates with batch size 32 and learning rate $2 \times 10^{-5}$.
+\paragraph{Baseline} For the \emph{baseline}, we concatenate the best templates according to \textsc{LMScorer} without applying the sentence fusion (i.e., always using the fallback).
+
+\paragraph{Sentence Fusion} For the \emph{sentence fusion} experiments, we use \textsc{LaserTagger} with the autoregressive decoder with a beam of size 10. We use all reference lexicalizations from WebNLG and E2E datasets and the vocabulary size $V=100$, following our preliminary experiments. We finetune the model for 10,000 updates with batch size 32 and learning rate $2 \times 10^{-5}$.
 For the beam filtering heuristic, we check for the presence of entities by simple string matching in WebNLG; for the E2E dataset, we use a set of regular expressions from \citet{dusekSemanticNoiseMatters2019}. We process the triples in their default order.
 
-\paragraph{Zero-shot Generation} Additionally, we conduct a \textit{zero-shot} experiment. We train the sentence fusion model with the same setup, but instead of the in-domain datasets, we use a subset of the \emph{balanced-Wikipedia} portion of the \textsc{DiscoFuse} dataset \cite{geva-etal-2019-discofuse}. In particular, we use the discourse types frequently occurring in our datasets, filtering the discourse types irrelevant to our use case.
+\paragraph{Zero-shot Generation} Additionally, we conduct a \textit{zero-shot} experiment. We train the sentence fusion model with the same setup, but instead of the in-domain datasets, we use a subset of the \emph{balanced-Wikipedia} portion of the \textsc{DiscoFuse} dataset \cite{geva-etal-2019-discofuse}. We keep only the discourse types relevant to our use case\footnote{The types we keep are \texttt{PAIR\_ANAPHORA}, \texttt{PAIR\_NONE}, \texttt{SINGLE\_APPOSITION}, \texttt{SINGLE\_RELATIVE}, \texttt{SINGLE\_S\_COORD}*, \texttt{SINGLE\_S\_COORD\_ANAPHORA}*, \texttt{SINGLE\_VP\_COORD}*. For the discourse types with asterisk, we only keep the examples with the connectives \emph{"and"} or \emph{", and"}.}, which leaves us with >2M examples, i.e., two orders of magnitude more than in our \ac{d2t} generation datasets.
 
 
-% \vspace{-3mm}
 \subsection{Results}
 
 
-\begin{table*}[t]% \begin{adjustbox}{max width=\textwidth}
+\begin{table*}[t]
     \centering\footnotesize
-    \begin{tabular}{lcccc<{\hspace{2mm}}c>{\hspace{2mm}}cccc} \toprule
-                         & \multicolumn{4}{c}{\bf WebNLG} &            & \multicolumn{4}{c}{\bf E2E}                                                                                                                                                                          \\
+    \begin{tabular}{lcccc<{\hspace{1mm}}c>{\hspace{1mm}}cccc} \toprule
+                           & \multicolumn{4}{c}{\bf WebNLG} &        & \multicolumn{4}{c}{\bf E2E}                                                                                                                                                  \\
         \cmidrule{2-5} \cmidrule{7-10}
-                         & {\it BLEU}                     & {\it NIST} & \hspace{-1mm}{\it METEOR}\hspace{-1mm} & \hspace{-1mm}{\it ROUGE$_L$}\hspace{-1mm} &  & {\it BLEU} & {\it NIST} & \hspace{-1mm}{\it METEOR}\hspace{-1mm} & \hspace{-1mm}{\it ROUGE$_L$}\hspace{-1mm} \\
-        {\bf baseline}   & 0.277                          & 6.328      & 0.379                                  & 0.524                                     &  & 0.207      & 3.679      & 0.334                                  & 0.401                                     \\
-        {\bf zero-shot } & 0.288                          & 6.677      & 0.385                                  & 0.530                                     &  & 0.220      & 3.941      & 0.340                                  & 0.408                                     \\
-        {\bf w/fusion }  & 0.353                          & 7.923      & 0.386                                  & 0.555                                     &  & 0.252      & 4.460      & 0.338                                  & 0.436                                     \\
-        {\bf SFC }       & 0.524                          & -          & 0.424                                  & 0.660                                     &  & 0.436      & -          & 0.390                                  & 0.575                                     \\
-        {\bf T5 }        & 0.571                          & -          & 0.440                                  & -                                         &  & -          & -          & -                                      & -                                         \\ \bottomrule
+                           & {BLEU}                         & {NIST} & \hspace{-1mm}{METEOR}\hspace{-1mm} & \hspace{-1mm}{ROUGE$_L$}\hspace{-1mm} &  & {BLEU} & {NIST} & \hspace{-1mm}{METEOR}\hspace{-1mm} & \hspace{-1mm}{ROUGE$_L$}\hspace{-1mm} \\
+        {\bf baseline}     & 0.277                          & 6.328  & 0.379                              & 0.524                                 &  & 0.207  & 3.679  & 0.334                              & 0.401                                 \\
+        {\bf sent. fusion} & 0.353                          & 7.923  & 0.386                              & 0.555                                 &  & 0.252  & 4.460  & 0.338                              & 0.436                                 \\
+        {\bf zero-shot }   & 0.288                          & 6.677  & 0.385                              & 0.530                                 &  & 0.220  & 3.941  & 0.340                              & 0.408                                 \\
+        {\bf SFC }         & 0.524                          & -      & 0.424                              & 0.660                                 &  & 0.436  & -      & 0.390                              & 0.575                                 \\
+        {\bf T5 }          & 0.571                          & -      & 0.440                              & -                                     &  & -      & -      & -                                  & -                                     \\ \bottomrule
     \end{tabular}
     \caption[Results of automatic metrics on WebNLG and E2E]{Results of automatic metrics on the WebNLG and E2E test sets.}
-    \label{tab:results}
-    % \end{adjustbox}
+    \label{tab:iterative:results}
 \end{table*}
 \paragraph{Accuracy vs.\ Fluency}
-On lexical similarity metrics (\autoref{tab:iterative:output}), our system lags behind the state-of-the-art approaches selected for comparison: the Semantic Fidelity Classifier (SFC; \citealp{harkousHaveYourText2020}) and the finetuned T5 model (T5; \citealp{kaleTexttoTextPreTrainingDatatoText2020}). However, both the fusion and the zero-shot approaches show improvements over the baseline. It is also important to note that our approach ensures zero entity errors: the entities are filled verbatim into the templates, and if an entity is missing in the whole beam, a fallback is used instead (although semantic inconsistencies can still occur, e.g., if a verb or function words are missing).
+On lexical similarity metrics (\autoref{tab:iterative:results}), our system lags behind the state-of-the-art approaches selected for comparison: the Semantic Fidelity Classifier (SFC; \citealp{harkousHaveYourText2020}) and the finetuned T5 model (T5; \citealp{kaleTexttoTextPreTrainingDatatoText2020}). However, both the fusion and the zero-shot approaches show improvements over the baseline. It is also important to note that our approach ensures zero entity errors by definition: we fill the entities verbatim into the templates, and if an entity is missing in the whole beam, we use a fallback instead (although semantic inconsistencies can still occur, e.g., if a verb or function words are missing).
 
-\paragraph{Error Analysis} The fused sentences in the E2E dataset, where all the objects are related to a single subject, often lean towards compact forms, e.g., \textit{Aromi is a family friendly chinese coffee shop with a low customer rating in riverside}. On the contrary, the sentence structure in WebNLG mostly follows the structure from the templates, and the model makes minimal changes to fuse the sentences. See \autoref{tab:iterative:output} an example of the system output. Of all steps, 28\% are fallbacks (no fusion is performed) in WebNLG and 54\% in the E2E dataset.
+\paragraph{Error Analysis} The fused sentences in the E2E dataset, where all the objects are related to a single subject, often lean towards compact forms, e.g., \textit{Aromi is a family friendly chinese coffee shop with a low customer rating in riverside}. On the contrary, the sentence structure in WebNLG mostly follows the structure from the templates, and the model makes minimal changes to fuse the sentences. See \autoref{tab:iterative:output} for an example of the system output. Of all steps, 28\% are fallbacks (no fusion is performed) in WebNLG and 54\% in the E2E dataset.
 The higher number of fallbacks in the E2E dataset can be explained by a higher lexical variability of the references, together with a higher number of data items per example. This variability makes it harder for the model to maintain the text coherency over multiple steps.
 
 
@@ -277,7 +265,7 @@ The higher number of fallbacks in the E2E dataset can be explained by a higher l
     \caption[An example of outputs on the WebNLG dataset.]{An example of correct behavior of the algorithm on the WebNLG dataset. Newly added entities are underlined, the output from Step \#2 is the output text.}\label{tab:iterative:output}
 \end{table*}
 
-\paragraph{Templates} On average, there are 12.4 templates per predicate in WebNLG and 8.3 in the E2E dataset. In cases where the set of templates is more diverse, e.g., if the template for the predicate \textit{country} has to be selected from \{\textit{<subject> is situated within <object>, <subject> is a dish found in <object>}\}, \textsc{LMScorer} helps to select the semantically accurate template for the specific entities. The literal copying of entities can be too rigid in some cases, e.g., \textit{Atatürk Monument (İzmir) is made of ``Bronze''}.
+\paragraph{Templates} On average, there are 12.4 templates per predicate in WebNLG and 8.3 in the E2E dataset. In cases where the set of templates is more diverse, e.g., if the template for the predicate \textit{country} has to be selected from \{\textit{<subject> is situated within <object>, <subject> is a dish found in <object>}\}, \textsc{LMScorer} helps to select the semantically accurate template for the specific entities. We note that the literal insertion of entities into the templates can be too rigid in some cases, e.g., \textit{Atatürk Monument (İzmir) is made of ``Bronze''}.
 
 \paragraph{Zero-shot Experiments} The zero-shot model trained on \textsc{DiscoFuse} is able to correctly pronominalize or delete repeated entities and join the sentences with conjunctives, e.g.\ \textit{William Anders was born in British Hong Kong\underline{, and was} a member of the crew of Apollo 8}. While the model makes only a limited use of sentence fusion, it makes the output more fluent while keeping strong guarantees of the output accuracy.
 
@@ -290,10 +278,10 @@ The higher number of fallbacks in the E2E dataset can be explained by a higher l
 
 \paragraph{Fixed Triple Order} \textsc{LaserTagger} does not allow arbitrary reordering of words in the sentence, which can limit the output fluency. \citet{grajcar2023data} expands upon our approach by using \textsc{Felix}, a text-editing model that is capable of arbitrary reordering of words in the sentence \cite{mallinsonFelixFlexibleText2020}. As noted by \citet{grajcar2023data}, the order is indeed more flexible with \textsc{Felix}, but the quality of the outputs is still limited by the abilities of text-editing models.\footnote{With increasing capabilities of autoregressive models, the main advantage of text-editing models is their speed, especially for tasks where only minor edits are needed \cite{malmi2022text}.} In \autoref{sec:pipeline}, we use an ordering module along with autoregressive \acp{plm}, showing that the explicit ordering step leads to improvements in output quality.
 
-\paragraph{Sentence Fusion} A major issue with sentence fusion is deciding when to apply it. In our approach, we rely on the implicit knowledge of the model learned from in-domain training data, which often leads to outputs that are too compact. In \autoref{sec:pipeline}, we thus introduce an \emph{aggregation} module which explicitly decides which facts should be mentioned together in a sentence. We also note that the term \emph{sentence fusion} is not accurate as the sentences are sometimes kept separate; this is why we opt for using a more generally applicable term \emph{paragraph compression}.
+\paragraph{Sentence Fusion} A major issue with sentence fusion is deciding when to apply it. In our approach, we rely on the implicit knowledge of the model learned from in-domain training data, which often leads to outputs that are too compact. In \autoref{sec:pipeline}, we thus introduce an \emph{aggregation} module which explicitly decides which facts should be mentioned together in a sentence. We also note that the term \emph{sentence fusion} is not accurate as the sentences are sometimes kept separate; this is why we later opt for using a more generally applicable term \emph{paragraph compression} (cf. \autoref{sec:pipeline}).
 
 
-\paragraph{Benefits of Our Approach} Our system generates outputs that are suboptimal in fluency when compared with larger models. However, certain unique features make our approach attractive even nowadays. Firstly, the approach guarantees the presence of the entities in the output, which is not guaranteed by any approach relying on a \ac{lm} in the final step. Our approach also helps with direct control over the generative process. For example, one can accept or reject the changes at each step or build a set of custom rules for individual edit operations on specific tokens. This possibility can be useful for fine-grained hallucination control \cite{rebuffel2021controlling,chen2023converge} and increasing the robustness of the model in a production system \cite{heidari2021getting,wang2023interactive}.
+\paragraph{Benefits of Our Approach} Our system generates outputs that are suboptimal in fluency when compared with larger models. However, certain unique features make our approach still attractive. Firstly, the approach guarantees the presence of the entities in the output, which is not guaranteed by any approach relying on a \ac{lm} in the final step. Our approach also helps with direct control over the generative process. For example, one can accept or reject the changes at each step or build a set of custom rules for individual edit operations on specific tokens. This possibility can be useful for fine-grained hallucination control \cite{rebuffel2021controlling,chen2023converge} and increasing the robustness of the model in a production system \cite{heidari2021getting,wang2023interactive}.
 
 
 
@@ -304,7 +292,7 @@ The higher number of fallbacks in the E2E dataset can be explained by a higher l
     This section is based on the paper \emph{Neural Pipeline for Zero-Shot Data-to-Text Generation} \cite{kasner2022neural}, joint work with Ondřej Dušek, published in the Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (ACL 2022).
 \end{refbox}
 
-In this section, we further develop the approach from \autoref{sec:iterative} for generating semantically accurate text from structured data. The main limitation of the previous approach, based on iterative transformations of simple templates, was the limited fluency of the output texts. To improve text fluency, we propose adding modules for ordering and aggregation, making the process a three-step pipeline. We also propose a way to make each of these steps trainable on a generic synthetic corpus. We confirm that on WebNLG and E2E datasets, our approach can get lower rates of omissions and hallucinations than prior approaches according to a semantic accuracy metric while achieving levels of lexical similarity comparable to some of the prior systems; all of this without the need for in-domain training data. Our code and data is available on Github.\footnote{\url{https://github.com/kasnerz/zeroshot-d2t-pipeline}}
+In this section, we further develop the approach from \autoref{sec:iterative} for generating semantically accurate text from structured data. The main limitation of the previous approach, based on iterative transformations of simple templates, was the limited fluency of the output texts. To improve text fluency, we propose using autoregressive \acp{plm} and adding modules for ordering and aggregation, turning the generation process into a three-step pipeline (\Cref{sec:pipeline:method,sec:pipeline:implementation}). We also propose a way to make each of these steps trainable on a generic synthetic corpus (\autoref{sec:pipeline:wikifluent}). We confirm that on WebNLG and E2E datasets, our approach can get lower rates of omissions and hallucinations than prior approaches according to a semantic accuracy metric while achieving levels of lexical similarity comparable to some of the prior systems; all of this without the need for in-domain training data (\Cref{sec:pipeline:experiments,sec:pipeline:eval}). Our code and data is available on Github.\footnote{\url{https://github.com/kasnerz/zeroshot-d2t-pipeline}}
 
 
 \subsection{Motivation}
@@ -319,9 +307,9 @@ Our experiments in \autoref{sec:iterative} with iterative sentence fusion led to
 Following these observations, we improve our approach by (1) inserting a triple-ordering step in the process, (2) replacing the sentence fusion with paragraph compression, and (3) basing the approach on trainable autoregressive models.
 
 
-Our approach follows the idea of pipeline-based approaches (see \autoref{sec:d2t-pipeline}). In particular, our pipeline follows the concept of pipelines based on iterative improvements of simple templates  \cite{laha2020scalable} and neural modules \cite{ferreiraNeuralDatatotextGeneration2019}. We focus on the \emph{ordering} and \emph{aggregation} steps, which were shown to improve the quality of \ac{d2t} generation outputs in domain-specific setups \cite{moryossef2019improving,moryossef2019step,trisedyaSentenceGenerationEntity2020,su2021plan}.
+Our approach follows the idea of pipeline-based approaches (see \autoref{sec:d2t-pipeline}). In particular, our pipeline is inspired by the concept of pipelines based on iterative improvements of simple templates  \cite{laha2020scalable} and neural modules \cite{ferreiraNeuralDatatotextGeneration2019}. We focus on the \emph{ordering} and \emph{aggregation} steps, which were shown to improve the quality of \ac{d2t} generation outputs in domain-specific setups \cite{moryossef2019improving,moryossef2019step,trisedyaSentenceGenerationEntity2020,su2021plan}.
 
-In contrast to previous approaches, our pipeline is fully trainable on general-domain data, i.e., without using any training data from target \ac{d2t} datasets. By eliminating the need for human references, we get rid of the costly and time-consuming data collection process. At the same time, we also avoid the brittleness of few-shot approaches, which are sensitive to the choice of finetuning examples \cite{chenFewShotNLGPreTrained2019,suFewShotTabletoTextGeneration2021,changSelectGenChallengeFinding2021}.
+In contrast to previous approaches, our pipeline is fully trainable on general-domain data, i.e., without using any training data from target \ac{d2t} datasets. By eliminating the need for human references, we remove the costly and time-consuming data collection process. At the same time, we also avoid the brittleness of few-shot approaches, which are sensitive to the choice of finetuning examples \cite{chenFewShotNLGPreTrained2019,suFewShotTabletoTextGeneration2021,changSelectGenChallengeFinding2021}.
 
 \subsection{Method}
 \label{sec:pipeline:method}
@@ -340,7 +328,7 @@ Given a set of triples $X$ on the input, we:
     \item input the ordered sequence of facts with delimiters into a \textit{paragraph compression} module, which generates the final description $Y$.
 \end{enumerate}
 
-In \Cref{sec:pipeline:wikifluent,sec:pipeline:implementation}, we show how to implement all these steps without the need for \emph{any in-domain training data}.
+In \Cref{sec:pipeline:wikifluent,sec:pipeline:implementation}, we show how to implement all these steps without the need for any in-domain training data.
 
 \paragraph{Transforming Triples to Facts}
 
@@ -348,16 +336,12 @@ The first step in our pipeline involves transforming each of the input triples $
 The transformation serves two purposes: (a) preparing the data for the subsequent text-to-text operations and (b) introducing in-domain knowledge about the semantics of individual predicates.
 
 
-% This step can be realized e.g. using a simple template for each predicate (cf. §\ref{sec:templates_model}).
-% Several neural methods for this task were proposed, using either interactions between pairs of sentences \cite{chen2016neural,li2017neural}, global interactions \cite{gong2016end,wang2019hierarchical}, or combination of both \cite{cui2020bert}. We base our ordering module (§\ref{sec:ord_model}) on the recent work of \citet{calizzano2021ordering}, who use a pointer network \cite{wang2019hierarchical,vinyals2015pointer} on top of a PLM.
 
-
-\paragraph{Ordering} We assume that the default order of triples $X$ is random. Note, however, that $F$ is a set of meaningful sentences. We can use this to our advantage and apply a sentence ordering module \cite{barzilay2001sentence,lapata2003probabilistic} to maximize the coherency of the paragraph resulting from their concatenation. The sentence ordering module $O(F)$ produces an ordered sequence of facts: $F_o = \{f_{o_1}, \ldots, f_{o_n}\}$, where $o_{1:n}$ is a permutation of fact indices. An example outcome of such operation may be grouping together facts mentioning \textit{birth date} and \textit{birth place} of a person, followed by their \textit{occupation}, as it is shown in \autoref{fig:zeroshot:pipeline}. The ordering module allows downstream modules to focus only on operations over neighboring sentences.
+\paragraph{Ordering} We assume that the default order of triples $X$ is random. Note, however, that $F$ from the previous step is a set of meaningful sentences. We can use this to our advantage and apply a sentence ordering module \cite{barzilay2001sentence,lapata2003probabilistic} to maximize the coherency of the paragraph resulting from their concatenation. The sentence ordering module $O(F)$ produces an ordered sequence of facts: $F_o = \{f_{o_1}, \ldots, f_{o_n}\}$, where $o_{1:n}$ is a permutation of fact indices. An example outcome of such operation may be ordering adjacently facts mentioning \textit{birth date} and \textit{birth place} of a person, followed by their \textit{occupation}, as it is shown in \autoref{fig:zeroshot:pipeline}. The ordering module allows downstream modules to focus only on operations over neighboring facts.
 
 
 \paragraph{Aggregation} Some facts will be typically mentioned together in a single sentence. Considering the previous example, \textit{occupation} is likely to be mentioned separately, while \textit{birth date} and \textit{birth place} are likely to be mentioned together. We make these decisions using the aggregation module, which takes a sequence of ordered facts $F_o$ as input and produces a sequence of sentence delimiters $A(F_o) = \{\delta_{o_1}, \delta_{o_2}, \ldots, \delta_{o_{n-1}}\}$; $\delta_{i} \in \{0, 1\}$.
-% The output $\delta_{i}=1$ means that the neighboring facts should be mentioned separately, i.e. the neighboring sentences should \textit{not} be fused. Conversely, 
-Unlike previous works \cite{wiseman2018learning,shao-etal-2019-long,shen-etal-2020-neural,xuAGGGENOrderingAggregating2021}, which capture the segments corresponding to individual parts of the input as latent variables, we simply insert delimiters into the ordered sequence of facts to mark sentence boundaries. The output $\delta_{i}=0$ means that the facts should be aggregated, and their corresponding sentences should be fused. Note that the markers serve only as a hint for the paragraph compression module, i.e., the sentences are not fused in this step.
+Unlike previous works \cite{wiseman2018learning,shao-etal-2019-long,shen-etal-2020-neural,xuAGGGENOrderingAggregating2021}, which capture the segments corresponding to individual parts of the input as latent variables, we simply insert delimiters into the ordered sequence of facts to mark sentence boundaries. The output $\delta_{i}=0$ means that the facts should be aggregated, and their corresponding sentences should be fused. Note that the markers serve only as a hint for the paragraph compression module, i.e., the sentences are not actually yet fused in this step.
 
 
 
@@ -367,11 +351,10 @@ Unlike previous works \cite{wiseman2018learning,shao-etal-2019-long,shen-etal-20
 
 \subsection{\textsc{WikiFluent} Corpus}
 \label{sec:pipeline:wikifluent}
-For training the modules, we need to build a corpus in which (1) the input is a set of simple, template-like sentences, (2) the output is a fluent text in natural language preserving the semantics of the input. Here, we propose a way how to build such a large-scale synthetic corpus from English Wikipedia. Our resulting corpus (\textsc{WikiFluent}) is orders of magnitude larger than the in-domain \ac{d2t} datasets and provides training data for all the modules in our pipeline.
+For training the modules, we need to build a corpus where (1) the input is a set of simple, template-like sentences, (2) the output is a fluent text in natural language preserving the semantics of the input. Here, we propose a way to build such a large-scale synthetic corpus from English Wikipedia. Our resulting corpus (\textsc{WikiFluent}) is orders of magnitude larger than in-domain \ac{d2t} datasets (see \autoref{tab:pipeline:wikifluent}) and provides training data for all the modules in our pipeline.
 
-% we collect a large-scale synthetic corpus \textsc{WikiFluent}. Our goal is to build a corpus covering a broad range of domains and capturing the sentence style in \ac{d2t} generation. In other words, we . As we describe below in detail, we achieve that by using human-written paragraphs in English Wikipedia and applying \textit{split-and-rephrase} and  \textit{coreference resolution} models to obtain synthetic source texts. The process is illustrated in Figure \ref{fig:wikifluent}; corpus statistics are included in Appendix \ref{app:stats}.
 
-\paragraph{Data Source} For building the \textsc{WikiFluent} corpus, we first extracted 934k first paragraphs of articles from a Wikipedia dump\footnote{\texttt{enwiki-20210401-pages-articles-multistream}} using WikiExtractor \cite{Wikiextractor2015}. Wikipedia is commonly used for large-scale pretraining of \ac{d2t} generation models, as it provides a source of neutral texts based on factual data \cite{jinGenWikiDatasetMillion2020,chenKGPTKnowledgeGroundedPreTraining2020}.
+\paragraph{Data Source} For building the \textsc{WikiFluent} corpus (\autoref{fig:wikifluent}), we first extracted 934k first paragraphs of articles from a Wikipedia dump\footnote{\texttt{enwiki-20210401-pages-articles-multistream}} using WikiExtractor \cite{Wikiextractor2015}. Wikipedia is commonly used for large-scale pretraining of \ac{d2t} generation models, as it provides a source of neutral texts based on factual data \cite{jinGenWikiDatasetMillion2020,chenKGPTKnowledgeGroundedPreTraining2020}.
 % Although it is not bias-free, it provides more balanced sample of natural language use than typical \ac{d2t} generation datasets. 
 We used the first paragraphs of Wikipedia entries with lengths between 30-430 characters, filtering out lists, disambiguations, and malformed paragraphs. To balance the lengths of inputs, we divided the paragraphs according to their length into four equally-sized bins (30-130 characters, etc.) and selected 250k examples from each bin.
 
@@ -394,17 +377,13 @@ We used the first paragraphs of Wikipedia entries with lengths between 30-430 ch
         \textsc{WikiFluent}-\textit{filtered} & 700,517      & 7,149     & 7,149      & 45.6        & 35.4        & 3.4          & 1.8          \\ \bottomrule
     \end{tabular}
     \caption[Statistics of \textsc{WikiFluent} and data-to-text datasets.]{Number of examples (train / dev / test), average number of tokens per source and target, average number of sentences per source and target (after filling the templates for the D2T datasets), total number of templates.}
-    \label{tab:stats}
+    \label{tab:pipeline:wikifluent}
 \end{table*}
 
-\paragraph{Split-and-Rephrase} Split-and-rephrase is the task of splitting a complex sentence into a sequence of shorter sentences preserving the original meaning \citep{narayan-etal-2017-split}. We train\footnote{Following the same setup as for a paragraph compression model (\autoref{sec:pipeline:implementation}).} BART-base \cite{lewisBARTDenoisingSequencetoSequence2019} for the split-and-rephrase task on the WikiSplit corpus, containing human-made sentence splits from Wikipedia edit history \cite{botha-etal-2018-learning}.  We split each paragraph into sentences using NLTK \cite{bird2006nltk} and apply the split-and-rephrase model to each sentence. To ensure that the splits are not deterministic, we choose uniformly randomly choosing between 0-2 recursive calls. If the sentence cannot be meaningfully split, the model tends to duplicate the sentence on the output; in that case, we use only the original sentence and do not proceed with the splitting.
+\paragraph{Split-and-Rephrase} Split-and-rephrase is the task of splitting a complex sentence into a sequence of shorter sentences preserving the original meaning \citep{narayan-etal-2017-split}. We train\footnote{Following the same setup as for a paragraph compression model (\autoref{sec:pipeline:implementation}).} BART-base \cite{lewisBARTDenoisingSequencetoSequence2019} for the split-and-rephrase task on the WikiSplit corpus, containing human-made sentence splits from Wikipedia edit history \cite{botha-etal-2018-learning}.  We split each paragraph into sentences using NLTK \cite{bird2006nltk} and apply the split-and-rephrase model to each sentence. To ensure that the splits are not deterministic, we choose uniformly randomly between 0-2 recursive calls. If the sentence cannot be meaningfully split, the model tends to duplicate the sentence on the output; in that case, we use only the original sentence and do not proceed with any splitting.
 
 
-%  apply a \textit{split-and-rephrase} on each sentence in our paragraph paragraph into sentences and apply a  model on each sentence.  To generate a set of simple template-like sentences from the Wikipedia paragraphs, we divide each  The process is illustrated in the upper part of Figure \ref{fig:wikifluent}.
-
-
-
-\paragraph{Coreference Replacement} Unlike \ac{d2t} templates, that always mention a single fact, the split sentences heavily use referring expressions. To match the style of the sentences, we apply a coreference resolution model \cite{Lee2018HigherorderCR} from the AllenNLP framework \cite{gardner2018allennlp}. We replace referring expressions with their antecedents (e.g., pronouns with noun phrases). Note that we replace the referring expressions only in the synthesized sentences, not in the original paragraphs, so that the paragraph compression module is later implicitly trained to generate referring expressions in the final description.
+\paragraph{Coreference Replacement} The split sentences heavily use referring expressions, while the facts are presumably self-contained. Therefore, we apply a coreference resolution model \cite{Lee2018HigherorderCR} from the AllenNLP framework \cite{gardner2018allennlp} and we replace referring expressions with their antecedents (e.g., pronouns with noun phrases). Note that we replace the referring expressions only in the synthesized sentences, not in the original paragraphs, so that the paragraph compression module is later implicitly trained to generate referring expressions in the final description.
 
 \paragraph{Filtering} To ensure that the generated sentences convey the same semantics as the original paragraph, we use the RoBERTa model\footnote{\url{https://huggingface.co/roberta-large-mnli}} \cite{liuRoBERTaRobustlyOptimized2019} finetuned on the MultiNLI dataset \cite{williams2018mnli} for checking the semantic accuracy of the generated text. Following \citet{dusekEvaluatingSemanticAccuracy2020} (see \autoref{sec:sem-acc}), we test if the original paragraph entails each of the synthesized sentences (checking for omissions) and if the set of concatenated synthesized sentences entails the original paragraph (checking for hallucinations). In a filtered version of the \textsc{WikiFluent} corpus, we include only the examples without omissions or hallucinations (as computed by the model), reducing it to 714k examples (approximately 75\% of the original size).
 
@@ -414,10 +393,10 @@ We used the first paragraphs of Wikipedia entries with lengths between 30-430 ch
 This section describes how we implement our pipeline using simple template transformations and neural models trained on the \textsc{WikiFluent} dataset.
 
 \paragraph{Templates}
-We transform triples into facts using a single-triple template $t_i$ for each predicate, analogically to our approach in \autoref{sec:iterative:implementation}. Compared to more complex rule-based template generation engines \cite{laha2020scalable,heidari2021getting,mehta2021improving}, the approach minimizes manual workload and makes it easier to control the quality of the input for the subsequent steps.
+We transform triples into facts using a single-triple template $t_i$ for each predicate, analogically to our approach in \autoref{sec:iterative:implementation}, i.e., using the templates extracted from the training data. Compared to more complex rule-based template generation engines \cite{laha2020scalable,heidari2021getting,mehta2021improving}, the approach minimizes manual workload and makes it easier to control the quality of the input for the subsequent steps.
 
 \paragraph{Ordering Model}
-For our ordering model, we use the \emph{Simple Pointer} model from \citet{calizzano2021ordering}\footnote{For details about the model, please refer to \citet{calizzano2021ordering}.}. The model is based on a pretrained BART-base model \cite{lewisBARTDenoisingSequencetoSequence2019} extended with a pointer network from \citet{wang2019hierarchical}. We train the model using the synthesized simple sentences in the \textsc{WikiFluent} corpus, randomly shuffling the order of the sentences and training the model to restore their original order.
+For our ordering model, we use the \emph{Simple Pointer} model from \citet{calizzano2021ordering}.\footnote{For details about the model, please refer to \citet{calizzano2021ordering}.} The model is based on a pretrained BART-base model \cite{lewisBARTDenoisingSequencetoSequence2019} extended with a pointer network from \citet{wang2019hierarchical}. We train the model using the synthesized simple sentences in the \textsc{WikiFluent} corpus, randomly shuffling the order of the sentences and training the model to restore their original order.
 
 % In the encoding phase, facts $F$ are concatenated and tokenized. Each fact is surrounded by special tokens denoting the beginning (\texttt{<s>}) and the end (\texttt{</s>}) of the fact. The sequence is processed by the BART encoder, generating a sequence of encoder states $E$ for each end token \texttt{</s>} representing the preceding fact.
 
@@ -434,9 +413,9 @@ For our ordering model, we use the \emph{Simple Pointer} model from \citet{caliz
 
 
 \paragraph{Aggregation Model}
-We base our aggregation model on RoBERTa-large \cite{liuRoBERTaRobustlyOptimized2019} with a token classification head. We input the sequence of ordered facts $F_o$ into the model, separating each pair of facts $f_{o_i}$ with a separator token. The token classification layer classifies each separator token into two classes $\{0,1\}$ corresponding to the delimiter $\delta_i$. We ignore the outputs for the non-separator tokens while computing cross-entropy loss. We create the training examples using the synthesized sentences in the \textsc{WikiFluent} corpus, in which we set $\delta_i=0$ for the sentences $i,i+1$ which are the result of splitting a single sentence and $\delta_i=1$ otherwise.
+We base our aggregation model on RoBERTa-large \cite{liuRoBERTaRobustlyOptimized2019} with a token classification head. We input the sequence of ordered facts $F_o$ into the model, separating each pair of facts $f_{o_i}$ with a separator token. The token classification layer classifies each separator token into two classes $\{0,1\}$ corresponding to the delimiter $\delta_i$. We ignore the outputs for the non-separator tokens while computing cross-entropy loss. We create training examples for aggregation using the synthesized sentences in the \textsc{WikiFluent} corpus, in which we set $\delta_i=0$ for the sentences $i,i+1$ which are the result of splitting a single sentence and $\delta_i=1$ otherwise.
 
-\paragraph{Paragraph Compression Model} For the paragraph compression model, we finetune BART-base \cite{lewisBARTDenoisingSequencetoSequence2019} on the \textsc{WikiFluent} corpus, concatenating the synthesized sentences on the input. We add delimiters between the sentences $i$ and $i+1$ where $\delta_i=1$ using a special token \texttt{<sep>}, which we add to the model vocabulary. We expect that the model learns to fuse the sentences between which there are no delimiters on the input. We evaluate how the model learns to respect the order and aggregation markers in \autoref{sec:pipeline:eval}.
+\paragraph{Paragraph Compression Model} For the paragraph compression model, we finetune BART-base \cite{lewisBARTDenoisingSequencetoSequence2019} on the \textsc{WikiFluent} corpus, concatenating the split sentences on the input and training the model to produce the original, human-written complex sentences on the output. We add delimiters between the sentences $i$ and $i+1$ where $\delta_i=1$ using a special token \texttt{<sep>}, which we add to the model vocabulary. We expect that the model learns to fuse the sentences between which there are no delimiters on the input. We evaluate how the model learns to respect the order and aggregation markers in \autoref{sec:pipeline:eval}.
 
 
 \subsection{Experiments}
@@ -448,7 +427,7 @@ We train our pipeline modules on the \textsc{WikiFluent} corpus as described in 
     \centering
     \includegraphics[width=\textwidth]{img/pipeline-variants.pdf}
 
-    \caption[Pipeline variants.]{An example illustrating how the individual modules are trained and subsequently applied as the parts of the pipeline. See \autoref{sec:pipeline:implementation} for the description of the ordering model (\textsc{ord}), the aggregation model (\textsc{agg}), and the variants of the paragraph compression model (\textsc{PC, PC+agg, PC+ord+agg}).}
+    \caption[Pipeline variants.]{An example illustrating how the individual modules are trained and subsequently applied as the parts of the pipeline. See \autoref{sec:pipeline:experiments} for the description of the ordering model (\textsc{ord}), the aggregation model (\textsc{agg}), and the variants of the paragraph compression model (\textsc{PC, PC+agg, PC+ord+agg}).}
     \label{fig:pipeline:variants}
 \end{figure*}
 
@@ -470,29 +449,15 @@ Correspondingly, we test three versions of the pipeline for the ablation study:
 
 \subsection{Evaluation}
 \label{sec:pipeline:eval}
-We evaluate outputs from the \textsc{\{1,2,3\}-stage} variants of our pipeline using automatic metrics, and we perform a detailed manual error analysis of the model outputs. We also evaluate the performance of the content planning modules and the ability of the PC module to follow the content plan. Finally, we include an intrinsic evaluation of our modules on the \textsc{WikiFluent} test set.
+We evaluate outputs from the \textsc{\{1,2,3\}-stage} variants of our pipeline using automatic metrics, and we perform a detailed manual error analysis of the model outputs. We also evaluate the performance of the ordering and aggregation modules and the ability of the PC module to follow the content plan. Finally, we include an intrinsic evaluation of our modules on the \textsc{WikiFluent} test set.
 
-\begin{table*}[t]\centering\footnotesize
-    \begin{tabular}{l p{12.2cm}} \toprule
-        \textbf{Input}  & \textit{(Allen Forrest; background; solo singer), (Allen Forrest; genre; Pop music), (Allen Forrest; birthPlace; Dothan, Alabama)} \\
-        \textbf{Templ.} & Allen Forrest is a solo singer. Allen Forrest performs Pop music. Allen Forrest was born in Dothan, Alabama.                       \\
-        \textbf{Model}  & \lightblue{Allen Forrest is a solo singer who performs Pop music. He was born in Dothan, Alabama.}                                 \\
-        \textbf{Human}  & Born in Dothan, Alabama, Allen Forrest has a background as a solo singer and was a pop artist.                                     \\\cdashlinelr{1-2}
-        \textbf{Input}  & \textit{name[Wildwood], eatType[restaurant], food[French], area[riverside], near[Raja Indian Cuisine]}                             \\
-        \textbf{Templ.} & Wildwood is a restaurant. Wildwood serves French food. Wildwood is in the riverside. Wildwood is near Raja Indian Cuisine.         \\
-        \textbf{Model}  & \lightblue{Wildwood is a restaurant serving French food. It is in the riverside near Raja Indian Cuisine.}                         \\
-        \textbf{Human}  & A amazing French restaurant is called the Wildwood. The restaurant is near the Raja Indian Cuisine in riverside. They love kids.   \\ \bottomrule
-    \end{tabular}
-    \caption[Example outputs of our model (\textsc{3-stage}, filtered)]{Example outputs of our model (\textsc{3-stage}, filtered). For each example, we show the input triples, the intermediate templates, the output from the model, and the corresponding human reference.}
-    \label{tab:pipeline:ex1}
-\end{table*}
 
 \paragraph{Automatic Metrics}
 
 
 \begin{table}[t]
 
-    \centering \small
+    \centering \footnotesize
     \begin{tabular}{llcccccccc} \toprule
                                                                                        &                  & \multicolumn{4}{c}{\textbf{WebNLG}} & \multicolumn{4}{c}{\textbf{E2E}}                                                                                                       \\
                                                                                        &                  & \textbf{B}                          & \textbf{M}                       & \textbf{O}     & \textbf{H}     & \textbf{B}     & \textbf{M}     & \textbf{O}     & \textbf{H}     \\\midrule
@@ -510,7 +475,7 @@ We evaluate outputs from the \textsc{\{1,2,3\}-stage} variants of our pipeline u
                                                                                        & \textsc{2-stage} & \textbf{43.49}                      & \textbf{39.32}                   & 0.146          & 0.096          & 36.01          & \textbf{36.99} & \textbf{0.001} & \textbf{0.001} \\
                                                                                        & \textsc{1-stage} & 42.99                               & 38.81                            & 0.202          & 0.093          & 34.08          & 36.32          & 0.012          & 0.050          \\ \bottomrule
     \end{tabular}
-    \caption[Automatic metrics on the WebNLG and E2E datasets]{Automatic metrics on the WebNLG and E2E datasets. B = BLEU, M = METEOR, O = omissions / \# facts, H = hallucinations / \# examples. The systems marked with asterisk (*) are trained on the in-domain data. The results for the systems marked with $\dagger$ are taken from the respective works. \textbf{Boldface} denotes the best variant of our zero-shot system.}
+    \caption[Automatic metrics on the WebNLG and E2E datasets]{Automatic metrics on the WebNLG and E2E datasets. B = BLEU, M = METEOR, O = omissions / \# facts, H = hallucinations / \# examples. The systems marked with asterisk (*) are trained on in-domain data. The results for the systems marked with $\dagger$ are taken from the respective works. \textbf{Boldface} denotes the best variant of our zero-shot system.}
     \label{tab:pipeline:auto}
 \end{table}
 
@@ -538,7 +503,7 @@ The \textsc{2-stage} system is generally on par with the \textsc{3-stage} system
 \paragraph{Manual Error Analysis}
 
 \begin{table}[t]
-    \centering\small
+    \centering\footnotesize
     \begin{tabular}{l l ccccc >{\hspace{3mm}}ccccc} \toprule
          &                  & \multicolumn{5}{c}{\bf WebNLG} & \multicolumn{5}{c}{\bf E2E}                                                                                                         \\
          &                  & \textbf{H}                     & \textbf{I}                  & \textbf{O} & \textbf{R} & \textbf{G} & \textbf{H} & \textbf{I} & \textbf{O} & \textbf{R} & \textbf{G} \\\midrule
@@ -554,26 +519,43 @@ The \textsc{2-stage} system is generally on par with the \textsc{3-stage} system
     \caption[Number of manually annotated errors on 100 examples]{Number of manually annotated errors on 100 examples: H = hallucinations, I = incorrect fact merging, O = omissions, R = redundancies, G = grammar errors or disfluencies.}
     \label{tab:pipeline:manual}
 \end{table}
-We manually examined 100 model outputs, counting the number of semantic (hallucinations, omissions, incorrect fact merging, redundancies) and grammatical errors. The results are summarized in Table \ref{tab:pipeline:manual}.
+
+
+\begin{table*}[t]\centering\footnotesize
+    \begin{tabular}{l p{12.2cm}} \toprule
+        \textbf{Input}  & \textit{(Allen Forrest; background; solo singer), (Allen Forrest; genre; Pop music), (Allen Forrest; birthPlace; Dothan, Alabama)} \\
+        \textbf{Templ.} & Allen Forrest is a solo singer. Allen Forrest performs Pop music. Allen Forrest was born in Dothan, Alabama.                       \\
+        \textbf{Model}  & \lightblue{Allen Forrest is a solo singer who performs Pop music. He was born in Dothan, Alabama.}                                 \\
+        \textbf{Human}  & Born in Dothan, Alabama, Allen Forrest has a background as a solo singer and was a pop artist.                                     \\\cdashlinelr{1-2}
+        \textbf{Input}  & \textit{name[Wildwood], eatType[restaurant], food[French], area[riverside], near[Raja Indian Cuisine]}                             \\
+        \textbf{Templ.} & Wildwood is a restaurant. Wildwood serves French food. Wildwood is in the riverside. Wildwood is near Raja Indian Cuisine.         \\
+        \textbf{Model}  & \lightblue{Wildwood is a restaurant serving French food. It is in the riverside near Raja Indian Cuisine.}                         \\
+        \textbf{Human}  & A amazing French restaurant is called the Wildwood. The restaurant is near the Raja Indian Cuisine in riverside. They love kids.   \\ \bottomrule
+    \end{tabular}
+    \caption[Example outputs of our model (\textsc{3-stage}, filtered)]{Example outputs of our model (\textsc{3-stage}, filtered). For each example, we show the input triples, the intermediate templates, the output from the model, and the corresponding human reference. Note that in contrast to the model output, the reference contains a typo (``A amazing'') and its style is generally less constrained.}
+    \label{tab:pipeline:ex1}
+\end{table*}
+
+We manually examined 100 model outputs, counting the number of semantic errors (hallucinations, omissions, incorrect fact merging, redundancies) and grammatical errors. The results are summarized in Table \ref{tab:pipeline:manual}.
 
 The \textsc{1-stage} model (which has to order the facts implicitly) tends to repeat the facts in the text (especially in E2E) and produces frequent hallucinations. These problems are largely eliminated with the \textsc{2-stage} and \textsc{3-stage} models, which produce almost no hallucinations or omissions.
 
-However, the outputs on WebNLG for all systems suffer from semantic errors resulting from merging unrelated facts. This mostly happens with unrelated predicates connected to the same subject/object (e.g., ``X was born in Y'', ``X worked as Z'' expressed as ``X worked as Z in Y''). On the E2E data, where predicates share the same subject, the outputs are generally consistent, and the \textsc{2-stage} and \textsc{3-stage} models exhibit almost no semantic errors. Grammar errors and disfluencies stem mainly from over-eager paragraph compression or from artifacts in our templates and are relatively minor (e.g., missing ``is'' in ``serves French food and family-friendly'').
+However, the outputs on WebNLG for all systems suffer from semantic errors resulting from merging unrelated facts. This mostly happens with unrelated predicates connected to the same subject/object (e.g., ``X was born in Y'', ``X worked as Z'' expressed as ``X worked as Z in Y''). On the E2E data, where predicates share the same subject, the outputs are generally consistent, and the \textsc{2-stage} and \textsc{3-stage} models exhibit almost no semantic errors. Grammar errors and disfluencies stem mainly from over-eager paragraph compression or from artifacts in our templates and are relatively minor (e.g., missing ``is'' in ``serves French food and family-friendly''). See also \autoref{tab:pipeline:ex1} for an example of model output.
 
 
 \paragraph{Content Planning} We manually evaluate how the \ac{pc} model follows the content plan (i.e., keeping the predefined order and aggregating the sentences according to the delimiters) using 100 randomly chosen examples with more than one triple on WebNLG and E2E. We find that the model follows the content plan in 95\% and 100\% of cases, respectively. The incorrect cases include mainly a fact not properly mentioned or an extra boundary between sentences without a separator. We can thus conclude that the pretraining task successfully teaches the PC model to follow a given content plan.
 
 \subsection{Discussion}
 \label{sec:pipeline:discussion}
-\paragraph{Ordering and Aggregation} As we have shown, reducing the task to fusing neighboring sentences (by pre-ordering the triples with a dedicated module) makes the model less prone to producing omissions or hallucinations. The claim may hold even with larger language models, although additional experiments are needed to confirm it. As shown in \citet{suPlanthenGenerateControlledDatatoText2021}, another advantage of having an explicit order is that we can manually change the order to control the output on a fine-grained level. We have also shown that explicit aggregation may not necessarily improve output fluency, although it can still help with more explicit controllability.
+\paragraph{Ordering and Aggregation} As we have shown, reducing the task to fusing neighboring sentences (by pre-ordering the triples with a dedicated module) makes the model less prone to producing omissions or hallucinations. The claim may hold even with larger language models, although additional experiments are needed to confirm this hypothesis. As shown in \citet{suPlanthenGenerateControlledDatatoText2021}, another advantage of having an explicit order is that we can manually change the order to control the output on a fine-grained level. We have also shown that explicit aggregation may not necessarily improve output fluency, although it can still help with more explicit controllability.
 
 
 \paragraph{Possible Extensions} Beyond generating factual information from English knowledge graphs, one can imagine applying the approach to more complex cases of factual \ac{d2t} generation, for example by prepending a context selection module for table-to-text generation \cite{parikhToTToControlledTableToText2020,chengHiTabHierarchicalTable2021} or by using templates for logical formulas in logical table-to-text generation \cite{chenLogicalNaturalLanguage2020,chenLogic2TextHighFidelityNatural2020}. That being said, we are unaware of a follow-up work that would go in this direction, perhaps due to the harder scalability of such a modularized system. For applying the approach to other languages, a go-to approach would be using the respective language edition of Wikipedia to train a sentence splitting model along the lines of \citet{botha-etal-2018-learning}, followed by building the respective language variant of the WikiFluent corpus.
 
 
-\paragraph{Can we do without the templates?} Hand-crafting the templates as the first step somehow lessens the advantages of our data-driven approach. For this reason, we show in \autoref{sec:rel2text} that we \emph{can replace this step} with a model finetuned on a suitable dataset and get better results on lexical similarity metrics. Alternatively, we can also replace this step by prompting a \ac{llm}, as shown in \citet{xiangASDOTAnyShotDatatoText2022} and \citet{sahaMURMURModularMultiStep2022}. In this case, however, special care needs to be given to ensure a consistent style of the model outputs.
+\paragraph{Can we do without the templates?} Hand-crafting the templates as the first step somewhat lessens the advantages of our data-driven approach. For this reason, we show in \autoref{sec:rel2text} that we can replace this step with a model finetuned on a suitable dataset and get better results on lexical similarity metrics. Alternatively, we can also replace this step by prompting an \ac{llm}, as shown in \citet{xiangASDOTAnyShotDatatoText2022} and \citet{sahaMURMURModularMultiStep2022}. In this case, however, special care needs to be taken to ensure a consistent style and semantic accuracy of model outputs (cf. \autoref{sec:quintd}).
 
 
 
 \section{Conclusion}
-We introduced three approaches for data-driven \ac{d2t} generation focused on generating descriptions of a knowledge graph. In \autoref{sec:finetuning}, we showed that finetuning of a \ac{plm} can achieve satisfactory results with minimal effort given a moderate amount of in-domain training data. Subsequently, we identified the shortcomings of such an approach, which we addressed in \Cref{sec:iterative,sec:pipeline}. First, we focused on improving the need for costly in-domain training data. We reduced the amount of data necessary in \autoref{sec:iterative} by limiting the model vocabulary and eliminated the need for in-domain data completely in \autoref{sec:pipeline} by using general-domain training data. Second, we focused on improving the semantic accuracy of the system: we ensured the presence of entities in the output (\autoref{sec:iterative}) and showed how to balance semantic accuracy with fluency (\autoref{sec:pipeline}). We also discussed the benefits of our approaches in the light of recent progress.
+We introduced three approaches for data-driven \ac{d2t} generation focused on generating descriptions of a knowledge graph. In \autoref{sec:finetuning}, we showed that finetuning of a \ac{plm} can achieve satisfactory results with minimal effort given a moderate amount of in-domain training data. Subsequently, we identified the shortcomings of such an approach, which we addressed in \Cref{sec:iterative,sec:pipeline}. First, we focused on improving the need for costly in-domain training data. We reduced the amount of data necessary in \autoref{sec:iterative} by limiting the model vocabulary and eliminated the need for in-domain data completely in \autoref{sec:pipeline} by using general-domain training data. Second, we focused on improving the semantic accuracy of the system: we ensured the presence of entities in the output (\autoref{sec:iterative}) and showed how to balance semantic accuracy with fluency (\autoref{sec:pipeline}). We also discussed the benefits of our approaches in the light of recent progress, such as better controllability and output consistency.
