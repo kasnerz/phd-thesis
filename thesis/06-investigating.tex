@@ -2,7 +2,7 @@
 \chapter{Examining Model Behavior}
 \label{chap:investigating}
 
-In this chapter, we observe behaviors of neural \acp{lm} in specific \ac{d2t} generation scenarios, building upon custom datasets.
+In this chapter, we analyze generalization abilities of neural \acp{lm}, an issue that we outlined in \ref{rq:5}. Specifically, we investigate how well \acp{lm} used for \ac{d2t} generation generalize to out-of-domain data -- i.e., the data with domains or formats that the models were not specifically trained for. To help us with the investigation, we introduce custom datasets that we collect for the purposes of our experiments.
 
 In \autoref{sec:rel2text}, we examine the capabilities of \acp{plm} to describe unseen relations between entities in knowledge graphs. For this problem, existing \ac{d2t} datasets are not able to discern memorization from generalization. We thus collect a custom dataset with a large variety of relation labels, including unseen labels in the test set. Using our dataset, we investigate whether the models can correctly describe the relations they have not seen in the training data. We find out that the models can generalize unseen labels as long as the labels are human-readable and unambiguous, which is often (but not always) fulfilled in real-world data.
 
