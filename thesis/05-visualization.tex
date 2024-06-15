@@ -13,7 +13,7 @@ In this chapter, we present a single experiment in \autoref{sec:tabgenie}: an ap
 \end{refbox}
 
 
-We present \textsc{TabGenie} -- a toolkit that enables researchers to explore, preprocess, and analyze a variety of \ac{d2t} generation datasets as tables with associated metadata. The web interface of \textsc{TabGenie} provides an interactive mode for debugging table-to-text generation models, facilitates side-by-side comparison of generated system outputs, and allows easy exports for manual analysis. \textsc{TabGenie} is also equipped with command line processing tools and Python bindings for unified dataset loading and processing. We release \textsc{TabGenie} as a Python package\footnote{\url{https://pypi.org/project/tabgenie/}} and provide its open-source code and a live demo through Github.\footnote{\url{https://github.com/kasnerz/tabgenie}}
+We present \textsc{TabGenie} -- a toolkit that enables researchers to explore, preprocess, and analyze a variety of \ac{d2t} generation datasets as tables with associated metadata. The web interface of \textsc{TabGenie} (introduced in \autoref{sec:tabgenie:web}) provides an interactive mode for debugging table-to-text generation models, facilitates side-by-side comparison of generated system outputs, and allows easy exports for manual analysis. \textsc{TabGenie} is also equipped with command line processing tools and Python bindings for unified dataset loading and processing (\autoref{sec:tabgenie:developer}). We release \textsc{TabGenie} as a Python package\footnote{\url{https://pypi.org/project/tabgenie/}} and provide its open-source code and a live demo through Github.\footnote{\url{https://github.com/kasnerz/tabgenie}}
 
 \subsection{Motivation}
 \label{sec:tabgenie:motivation}
@@ -147,25 +147,18 @@ from transformers import AutoTokenizer
 import tabgenie as tg
 
 # instantiate a tokenizer
-tokenizer = AutoTokenizer.from_pretrained(...)
-
+t = AutoTokenizer.from_pretrained(...)
 # load the dataset
-tg_dataset = tg.load_dataset(
-    dataset_name="totto"
-)
-
+tg_dataset = tg.load_dataset(dataset_name="totto")
 # preprocess the dataset
-hf_dataset = tg_dataset.get_hf_dataset(
-    split="train",
-    tokenizer=tokenizer
-)
+hf_dataset = tg_dataset.get_hf_dataset(split="train", tokenizer=t)
 \end{python}
 % \end{noindent}
 
 
 % For training a single model on multiple datasets in a multi-task learning setting \cite{xieUnifiedSKGUnifyingMultiTasking2022}, the user may preprocess each dataset individually, prepending a dataset-specific task description to each example. The datasets may then be combined using the methods provided by the \texttt{datasets} package.
 
-\paragraph{Interactive Prompting} \textsc{TabGenie} can be used for observing the impact of various prompts during table-to-text generation. The user customizes the provided \texttt{model\_api} pipeline to communicate with an \ac{llm} through an API. The API can communicate either with an external model (using e.g. OpenAI API\footnote{\url{https://openai.com/api/}}), or with a model running locally (using libraries such as FastAPI\footnote{\url{https://fastapi.tiangolo.com}}). The user then interacts with the model through the \textsc{TabGenie} web interface, where they are able to modify prompts or table contents as well as highlight specific cells.
+\paragraph{Interactive Prompting} \textsc{TabGenie} can be used for observing the impact of various prompts during table-to-text generation. The user customizes the provided \texttt{model\_api} pipeline to communicate with the model through an API. The API can communicate either with an external model (using e.g. OpenAI API\footnote{\url{https://openai.com/api/}}), or with a model running locally (using libraries such as FastAPI\footnote{\url{https://fastapi.tiangolo.com}}). The user then interacts with the model through the \textsc{TabGenie} web interface, where they are able to modify prompts or table contents as well as highlight specific cells.
 
 \paragraph{Error Analysis} \textsc{TabGenie} can help with annotating error categories in the outputs of a table-to-text generation model. The user generates system outputs on a test set and saves them in a JSONL format. Through the command-line interface, the user will then generate a XLSX file which can be imported in any suitable office software and distributed to annotators for performing error analysis.
 

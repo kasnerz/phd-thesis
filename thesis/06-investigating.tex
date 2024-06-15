@@ -4,25 +4,26 @@
 
 In this chapter, we analyze generalization abilities of neural \acp{lm}, an issue that we outlined in \ref{rq:5}. Specifically, we investigate how well \acp{lm} used for \ac{d2t} generation generalize to out-of-domain data -- i.e., the data with domains or formats that the models were not specifically trained for. To help us with the investigation, we introduce custom datasets that we collect for the purposes of our experiments.
 
-In \autoref{sec:rel2text}, we examine the capabilities of \acp{plm} to describe unseen relations between entities in knowledge graphs. For this problem, existing \ac{d2t} datasets are not able to discern memorization from generalization. We thus collect a custom dataset with a large variety of relation labels, including unseen labels in the test set. Using our dataset, we investigate whether the models can correctly describe the relations they have not seen in the training data. We find out that the models can generalize unseen labels as long as the labels are human-readable and unambiguous, which is often (but not always) fulfilled in real-world data.
+In \autoref{sec:rel2text}, we examine the capabilities of \acp{plm} to describe unseen relations between entities in knowledge graphs. For this problem, existing \ac{d2t} datasets are not able to discern memorization from generalization. We thus collect a custom dataset with a large variety of relation labels, including unseen labels in the test set. Using our dataset, we investigate whether the models can correctly describe the relations they have not seen in the training data. We find that the models can generalize unseen labels as long as the labels are human-readable and unambiguous, which is often (but not always) fulfilled in real-world data.
 
-In \autoref{sec:quintd}, we investigate the abilities of open \acp{llm} for \ac{d2t} generation from common formats such as JSON, CSV, and Markdown. To prevent data contamination, we scrape unlabeled data from public sources across five domains. Using \ac{llm}-based referenceless metric and human annotators, we quantify the semantic accuracy of the generated texts with respect to the input data. We find out that although the descriptions are fluent, most of them contain semantic errors.
+In \autoref{sec:quintd}, we investigate the abilities of open \acp{llm} for \ac{d2t} generation from common formats such as JSON, CSV, and Markdown. To prevent data contamination, we scrape unlabeled data from public sources across five domains. Using an automatic metric and human annotators, we quantify the semantic accuracy of the generated texts with respect to the input data. We find that although the generated descriptions are fluent, most of them contain semantic errors.
 
 \section{Describing Relations in Knowledge Graphs}
 \label{sec:rel2text}
 \begin{refbox}
-    This section is based on the paper \emph{Mind the Labels: Describing Relations in Knowledge Graphs With Pretrained Models} \cite{kasnerMindLabelsDescribing2022}, joint work with Ioannis Konstas and Ondřej Dušek. The work was published in the Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics (EACL 2023). The project was led by the author of the thesis; Ioannis Konstas and Ondřej Dušek supervised the project.
+    This section is based on the paper \emph{Mind the Labels: Describing Relations in Knowledge Graphs With Pretrained Models} \cite{kasnerMindLabelsDescribing2022}, joint work with Ioannis Konstas and Ondřej Dušek. The work was published in the Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics (EACL 2023). The project was led by the author of the thesis; Ioannis Konstas and Ondřej Dušek co-supervised the project.
 \end{refbox}
-We investigate how human-readable data labels help \acp{plm} with \ac{d2t} generation. We start by noticing that \acp{plm} can use labels such as column headings, keys, or relation names to generalize to out-of-domain examples. The question is (a) whether this ability is robust enough and (b) how accurate the outputs are in cases where these labels are ambiguous or incomplete. To answer this question, we focus on describing a relation between two entities.
+In this section, we investigate how human-readable data labels help \acp{plm} with \ac{d2t} generation. We start by noticing that \acp{plm} can use labels such as column headings, keys, or relation names to generalize to out-of-domain examples (\autoref{sec:rel2text:motivation}). The question is (a) whether this ability is robust enough and (b) how accurate the outputs are in cases where these labels are ambiguous or incomplete. To answer this question, we focus on describing a relation between two entities.
 
-For our experiments, we collect \textsc{Rel2Text}: a novel dataset for verbalizing a diverse set of 1,522 unique relations from three large-scale knowledge graphs (Wikidata, DBPedia, YAGO). We evaluate model outputs on unseen relations using a combination of automatic metrics and manual analysis. We find that although \acp{plm} for \ac{d2t} generation expectedly fail on unclear cases, models trained with a large variety of relation labels are surprisingly robust in verbalizing novel, unseen relations. We argue that using data with a diverse set of clear and meaningful labels is key to training \ac{d2t} generation systems capable of generalizing to novel domains. We release the code and data for our experiments on Github.\footnote{\url{https://github.com/kasnerz/rel2text}}
+For our experiments, we collect \textsc{Rel2Text} (\autoref{sec:rel2text:data}): a novel dataset for verbalizing a diverse set of 1,522 unique relations from three large-scale knowledge graphs (Wikidata, DBPedia, YAGO). We evaluate model outputs on unseen relations using a combination of automatic metrics and manual analysis (\Cref{sec:rel2text:analysis,sec:rel2text:eval,sec:rel2text:automatic,sec:rel2text:manual}). We find that although \acp{plm} for \ac{d2t} generation expectedly fail on unclear cases, models trained with a large variety of relation labels are surprisingly robust in verbalizing novel, unseen relations. We argue that using data with a diverse set of clear and meaningful labels is key to training \ac{d2t} generation systems capable of generalizing to novel domains. We release the code and data for our experiments on Github.\footnote{\url{https://github.com/kasnerz/rel2text}}
 
 
 % 
 % In this paper, 
 
 \subsection{Motivation}
-\ac{d2t} generation systems need to accurately capture the semantics of relations between values in the data. However, the data labels such as relation names \cite{farber2018linked,haller2022analysis}, table headings \cite{parikhToTToControlledTableToText2020}, or meaning representation keys \cite{dusekEvaluatingStateoftheartEndtoEnd2020} may provide only superficial or---if the labels are abbreviations, such as in the Rotowire dataset \cite{wiseman2017challenges}---no usable hints about the data semantics.
+\label{sec:rel2text:motivation}
+\ac{d2t} generation systems need to accurately capture the semantics of relations between values in the data. However, the data labels such as relation names \cite{farber2018linked,haller2022analysis}, table headings \cite{parikhToTToControlledTableToText2020}, or meaning representation keys \cite{dusekEvaluatingStateoftheartEndtoEnd2020} may provide only superficial or---if the labels are abbreviations, such as in the Rotowire dataset \cite[cf. \autoref{sec:tok-eval}]{wiseman2017challenges}---no usable hints about the data semantics.
 
 
 % \begin{figure}[t]
@@ -42,28 +43,16 @@ For our experiments, we collect \textsc{Rel2Text}: a novel dataset for verbalizi
     \label{tab:rel2text:example}
 \end{table}
 
-\acp{plm} such as BART \cite{lewisBARTDenoisingSequencetoSequence2019} or T5 \cite{raffelExploringLimitsTransfer2019} can quickly adapt to new domains and exhibit robustness to out-of-domain inputs. We investigate to what extent are \acp{plm} limited by the expressivity of the data labels. A suitable testing ground is the task of describing individual \acs{rdf}\glsunset{rdf} triples in a \ac{kg}, as shown in \autoref{tab:rel2text:example}. In this task, there is a wide range of lexical choices for the relation label, while the entities can be copied verbatim or with only minor morphological changes. To illustrate the problem, consider the last example in \autoref{tab:rel2text:example}: the model can use its representation of \emph{``parent''} to understand there is a \emph{``is-a-parent-of''} relation between the entities, but it has to infer (or guess) who is the parent of whom. Even in less ambiguous cases, the model still has to correctly capture the intended semantics of the relation (e.g. \emph{``occupant''} meaning \emph{``home team''}).
+\acp{plm} such as BART \cite{lewisBARTDenoisingSequencetoSequence2019} or T5 \cite{raffelExploringLimitsTransfer2019} can quickly adapt to new domains and exhibit robustness to out-of-domain inputs. We investigate to what extent \acp{plm} are limited by the expressivity of the data labels. A suitable testing ground is the task of describing \acs{rdf}\glsunset{rdf} triples in a \ac{kg}, which we already tackled in \Cref{chap:low-res}. However, this time we focus on individual triples. Since even for a single triple, there is a wide range of lexical choices for the relation label, while the entities can be copied verbatim or with only minor morphological changes. For instance, consider the last example in \autoref{tab:rel2text:example}: the model can use its representation of \emph{``parent''} to understand there is a \emph{``is-a-parent-of''} relation between the entities, but it has to infer (or guess) who is the parent of whom. Even in less ambiguous cases, the model still has to correctly capture the intended semantics of the relation (e.g. \emph{``occupant''} meaning \emph{``home team''}).
 
 
 Current human-annotated datasets for \ac{d2t} generation are not suitable for investigating this problem, as they contain only a small number of relations and rarely contain any unseen relations in the test set \cite{mille2021automatic}. The only existing datasets covering verbalizations of a wider range of \ac{kg} relations are based on \emph{model-generated outputs} \cite{agarwalKnowledgeGraphBased2021,amaral2022wdv}. For this reason, we collect a novel human-annotated dataset for the task.
 
 Our aim is also to investigate whether incorporating long-form \emph{descriptions} of data labels helps improve model outputs. Previous works have reached contradictory conclusions: \citet{wang2021kepler} use descriptions of relations instead of their labels for relation embeddings, concluding that it results in worse performance on downstream tasks. Conversely, \citet{kale-rastogi-2020-template} and \citet{lee2021dialogue} improve the performance of their systems by including schema descriptions on the input for the dialogue state tracking and dialogue response generation systems.
 
-Lastly, we investigate \emph{verbalizing single triples} as a stand-alone task. As we have shown (\Cref{sec:iterative,sec:pipeline,sec:sem-acc}), in line with other works \cite{xiangASDOTAnyShotDatatoText2022,kale-rastogi-2020-template,gupta2020infotabs,neeraja2021incorporating}, transforming triples to text helps for \acp{plm}-based data processing. The works above use various methods for converting individual triples to text, ranging from simple templates and rule-based systems to prompting \acp{plm}; however, none of them investigate how to apply these approaches to novel relations.
+Lastly, we investigate \emph{verbalizing single triples} as a stand-alone task. As we have repeatedly shown (\Cref{sec:iterative,sec:pipeline,sec:sem-acc}), in line with other works \cite{xiangASDOTAnyShotDatatoText2022,kale-rastogi-2020-template,gupta2020infotabs,neeraja2021incorporating}, transforming triples to text helps for \acp{plm}-based data processing. We train a model for verbalizing single relations and use it to replace manual templates in our system described in \autoref{sec:pipeline}.
 
-
-% 
-
-% Using the \textsc{Rel2Text} dataset, we evalute the ability of \acp{plm} to verbalize relations which were not present in the training set. We consider both models finetuned on other relations in our dataset and models finetuned on datasets from a related domain. We also experiment with scenarios involving few-shot finetuning, training on masked labels, and extending the labels with descriptions (§\ref{sec:analysis},~\ref{sec:results}).
-
-% We find that the \acp{plm} are quite robust in verbalizing a diverse set of relations based on their label (achieving \textasciitilde 90\% of overall entailment probability). We show that semantically unfaithful model outputs are often caused by incomplete, ambiguous, or noisy input data.
-
-
-
-% Somewhat suprisingly, we also show that longer relation descriptions do not provide substantial improvements over using short labels.  
-
-% However, even for data using short relation labels, the model trained on verbalizing relations can achieve results comparable to verbalizing relations using manual templates in two downstream tasks (§\ref{sec:downstream}).
-
+% The works above use various methods for converting individual triples to text, ranging from simple templates and rule-based systems to prompting \acp{plm}; however, none of them investigate how to apply these approaches to novel relations.
 
 
 \subsection{\textsc{Rel2Text} dataset}
@@ -76,7 +65,7 @@ An \acs{rdf} triple is a tuple $t = (s, r, o)$, where $r$ denotes the relation\f
 We retrieve triples from three open large-scale \acp{kg} encoding factual knowledge:
 
 \begin{itemize}
-    \item \textbf{Wikidata} \cite{vrandevcic2014wikidata} is a large-scale Wikipedia-based \ac{kg} created using collaborative editing. With approximately 10,000 human-created relations equipped with descriptions\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Database_reports/List_of_properties/all}}, it is by far the largest source of variety in relation labels.
+    \item \textbf{Wikidata} \cite{vrandevcic2014wikidata} is a large-scale Wikipedia-based \ac{kg} created using collaborative editing. With approximately 10,000 human-created relations equipped with descriptions,\footnote{\url{https://www.wikidata.org/wiki/Wikidata:Database_reports/List_of_properties/all}} it is by far the largest source of variety in relation labels.
     \item \textbf{YAGO} \cite{pellissier2020yago} is a \ac{kg} which builds upon factual knowledge from Wikidata, but uses a limited set of 116 pre-defined relations from \texttt{schema.org} \cite{guha2016schema} mapped to a subset of Wikidata relations.
     \item \textbf{DBPedia} \cite{auer2007dbpedia,lehmann2015dbpedia} is a \ac{kg} that maps Wikipedia infotables to a predefined ontology containing 1,355 relations, about 350 of which are accompanied by a description.
 \end{itemize}
@@ -95,30 +84,31 @@ A considerable portion of the collected verbalizations contain typos and grammat
 \label{sec:rel2text:analysis}
 In our analysis, we are interested in the following research questions:
 \begin{itemize}
-    \item \textbf{RQ1:} Are the PLMs finetuned for \ac{d2t} generation able to describe relations \textit{not present in the finetuning corpus}?
-    \item \textbf{RQ2:} How many \textit{training examples} do the PLMs need to generate satisfactory outputs?
-    \item \textbf{RQ3:} How do the PLMs behave when provided \textit{limited lexical cues} about the relation?
-    \item \textbf{RQ4:} Can relation \textit{descriptions} help to clarify ambiguous cases and improve the semantic accuracy of the outputs?
+    \item \textbf{(a)} Are PLMs finetuned for \ac{d2t} generation able to describe relations \textit{not present in the finetuning corpus}?
+    \item \textbf{(b)} How many \textit{training examples} do the PLMs need to generate satisfactory outputs?
+    \item \textbf{(c)} How do the PLMs behave when provided \textit{limited lexical cues} about the relation?
+    \item \textbf{(d)} Can relation \textit{descriptions} help to clarify ambiguous cases and improve the semantic accuracy of the outputs?
 \end{itemize}
 
-\paragraph*{Datasets}  We experiment with the following datasets, all of which focus on verbalizing factual information from \acp{kg} and use the same triple-based input data format:
+\paragraph*{Datasets}  To answer the research questions, we divide our \textsc{Rel2text} dataset into a training and test split. We then use the \textsc{Rel2Text} \emph{test set} to evaluate a finetuned BART model \cite{lewisBARTDenoisingSequencetoSequence2019}. We train the models on the following datasets, all of which focus on verbalizing factual information from \acp{kg} and use the same triple-based input data format:
 \begin{itemize}
     \item \textsc{Rel2Text}: Our dataset with single triples from three \acp{kg} with 4,097 examples, 1,522 relations, and \textit{human-annotated} outputs.
     \item WebNLG \cite{ferreira20202020,gardentWebNLGChallengeGenerating2017}: A DBPedia-based triple-to-text dataset with 38k examples, 411 relations, up to 7 triples per example, and \textit{human-annotated} outputs. We use the English part of version 3.0 from HuggingFace.\footnote{\url{https://huggingface.co/datasets/web_nlg}}
-    \item KeLM \cite{agarwalKnowledgeGraphBased2021}: A Wikidata-based dataset with 11M examples, 1,519 relations, up to 13 triples per example, and \textit{model-generated} outputs. We use the dataset released by the authors, splitting it into a 1:100 ratio for validation and training data.
+    \item KeLM \cite{agarwalKnowledgeGraphBased2021}: A Wikidata-based dataset with 11M examples, 1,519 relations, up to 13 triples per example, and \textit{model-generated} outputs.
+          % We use the dataset released by the authors , splitting it into a 1:100 ratio for validation and training data.
 \end{itemize}
-To answer the research questions, we divide our \textsc{Rel2text} dataset into a training and test split. We then use the \textsc{Rel2Text} \emph{test set} to evaluate a finetuned BART model \cite{lewisBARTDenoisingSequencetoSequence2019}. To answer \emph{RQ1}, we compare the performance of BART finetuned on the \textsc{Rel2Text} training set with BART finetuned on WebNLG and KeLM. Using \textsc{Rel2text} only, we then prepare various setups for answering \emph{RQ2}, \emph{RQ3}, and \emph{RQ4}.
+To answer the question (a), we compare the performance of BART finetuned on the \textsc{Rel2Text} training set with BART finetuned on WebNLG and KeLM. Using \textsc{Rel2text} only, we then prepare various setups for answering (b), (c), and (d).
 
 
 \paragraph{Rel2Text Data Split} We use approximately 15\% of the \textsc{Rel2Text} examples for the \emph{test set}. To ensure maximum fairness and focus on model generalization to unseen relations, we do not include in the \textsc{Rel2Text} test set any relations that have an exact string match with a relation in KeLM, WebNLG, or the \textsc{Rel2Text} training set. We also exclude any relations for which the maximum semantic similarity\footnote{Computed as cosine similarity between embeddings of the labels, which are encoded using \texttt{all-distilroberta-v1} from SBERT \cite{reimers-gurevych-2019-sentence}.} to any KeLM/WebNLG/\textsc{Rel2Text} training relation exceeds a threshold of $0.9$. We set this threshold empirically to exclude relations that are almost synonymous, but slightly lexically different.
 We use 90\% of the remaining examples for the training set and 10\% for the validation set.
 
-\paragraph{Experimental Setup} We split the camel case in the relation labels. For finetuning the models, we linearize the input triples by marking the triple constituents with special tokens that we add to the model vocabulary. In a default scenario, we finetune BART-base \cite{lewisBARTDenoisingSequencetoSequence2019} for 10 epochs and select the best checkpoint using validation \acs{bleu} score, then use greedy decoding to produce outputs. We repeat each experiment with five random seeds, averaging the results.
+\paragraph{Experimental Setup} We split the camel-cased multi-word expressions in the relation labels. For finetuning the models, we linearize the input triples by prepending the individual triple constituents (subject, relation, object) with special tokens that we add to the model vocabulary. In a default scenario, we finetune BART-base \cite{lewisBARTDenoisingSequencetoSequence2019} for 10 epochs and select the best checkpoint using validation \acs{bleu} score, then use greedy decoding to produce outputs. We repeat each experiment with five random seeds, averaging the results.
 
 
 \paragraph{Compared Systems} We compare the following systems:
 \begin{itemize}
-    \item \textbf{Copy Baseline}: We introduce a simple \textit{copy} baseline by outputting the triple constituents separated by space: ``$s\text{ }r\text{ }o$''.
+    \item \textbf{Copy Baseline}: We introduce a simple \textit{copy} baseline by outputting the triple constituents separated by space: ``\texttt{subject relation object}''.
 
 
 
@@ -142,6 +132,7 @@ We use 90\% of the remaining examples for the training set and 10\% for the vali
 \end{itemize}
 
 \subsection{Evaluation Setup}
+\label{sec:rel2text:eval}
 \paragraph{Automatic Metrics}
 
 
@@ -149,8 +140,21 @@ We evaluate generated outputs using an extensive set of automatic metrics from t
 
 
 
-\paragraph{Manual Error Analysis} Based on our preliminary observations, we identify four sources of model errors: semantic errors (\textsc{Sem}), with a swap of the relation direction (\textsc{Dir}) as a special case, too literal (\textsc{Lit}), i.e., containing awkward or misleading phrasing, and grammar/lexical errors (\textsc{Lex}). We further identified two types of input data errors: ambiguous relations (\textsc{Ent}) and relations with unclear labels (\textsc{Lbl}). Examples are shown in \autoref{tab:rel2text:cat}.
-For error analysis, we select 100 random examples together with their corresponding outputs from the \textit{\BARTr}, \textit{\BARTw}, \textit{\BARTk}, \textit{fewshot-100}, \textit{mask-all} and \textit{desc-cat} models. Without revealing the output sources, we mark all error categories that apply.
+\paragraph{Manual Error Analysis} Based on our preliminary observations, we identify four sources of model errors:
+\begin{itemize}
+    \item \textsc{Sem}: semantic errors (text not corresponding to the input data),
+    \item \textsc{Dir}: swap of the relation direction (a special case of a semantic error),
+    \item \textsc{Lit}: too literal (containing awkward or misleading phrasing),
+    \item \textsc{Lex}: grammar/lexical errors.
+\end{itemize}
+We further identified two types of input data errors:
+\begin{itemize}
+    \item \textsc{Ent}: relations that need to be disambiguated using entities,
+    \item \textsc{Lbl}: relations with unclear labels.
+\end{itemize}
+Examples are shown in \autoref{tab:rel2text:cat}.
+For error analysis, we select 100 random examples together with their corresponding outputs from the \textit{\BARTr}, \textit{\BARTw}, \textit{\BARTk}, \textit{fewshot-100}, \textit{mask-all} and \textit{desc-cat} models. Without revealing the sources of annotated outputs, we mark all error categories that apply.
+
 \begin{table*}[t]
     \centering\footnotesize
     % \setlength{\tabcolsep}{4pt}
@@ -187,8 +191,8 @@ For error analysis, we select 100 random examples together with their correspond
 \end{table*}
 
 
-\subsection{Findings from Automatic Metrics}
-\label{sec:rel2text:results}
+\subsection{Automatic Metrics}
+\label{sec:rel2text:automatic}
 
 \begin{table*}[t]\centering
     \footnotesize
@@ -220,11 +224,11 @@ For error analysis, we select 100 random examples together with their correspond
 \paragraph{Lexical and Semantic Similarity}
 \BARTr{} is the best among the fully trained models regarding lexical overlap metrics, which is expected, as it is trained on the most similar reference distribution. \BARTw{} and \BARTk{} models are almost equal in terms of semantic consistency, achieving around 90\% average entailment probability, which is on par with the copy baseline.
 
-\paragraph{Few-shot Models} For the few-shot models, semantic similarity is much lower (e.g., the average entailment probability is between 65\% and 85\%), showing that there is a certain minimum amount of data needed to achieve consistent outputs. As we show in \autoref{fig:rel2text:fewshot}, using more examples to train the model generally helps decrease variance and increase performance across various metrics.
+\paragraph{Few-shot Models} For the few-shot models, semantic consistency is much lower (e.g., the average entailment probability is between 65\% and 85\%), showing that there is a certain minimum amount of data needed to achieve consistent outputs. As we show in \autoref{fig:rel2text:fewshot}, using more examples to train the model generally helps decrease variance and increase performance across various metrics.
 
-\paragraph{Masked Relations} Interestingly, the models which do not see the relations during test time (\textit{mask-test} and \textit{mask-all}) still achieve around 60\% average entailment probability, similarly to the worst few-shot model. Although their rate of contradictions is higher than for other models, the results suggest that in many cases, the guessed relation is semantically consisten with the correct relation. Another interesting observation is that the \textit{mask-train} model (trained not to use the labels) can use the labels provided at test time to improve the outputs considerably (contradiction rate drops from 17\% to 5\% compared to \textit{mask-all}).
+\paragraph{Masked Relations} Interestingly, models that do not see the relations during test time (\textit{mask-test} and \textit{mask-all}) still achieve around 60\% average entailment probability, similarly to the worst few-shot model. Although their rate of contradictions is higher than for other models, the results suggest that in many cases, the guessed relation is semantically consistent with the correct relation. Another interesting observation is that the \textit{mask-train} model (trained not to use the labels) can use the labels provided at test time to improve the outputs considerably (contradiction rate drops from 17\% to 5\% compared to \textit{mask-all}).
 
-\paragraph{Influence of Descriptions} The fact that the short labels are both sufficient and necessary for successful verbalization is emphasized by the fact that the \textit{desc-repl} model is worse than \BARTr{} (although the descriptions are longer and supposedly explain the relation semantics). Moreover, the benefits of concatenating the descriptions alongside the relation labels (\textit{desc-cat}) are negligible, only slightly improving lexical similarity metrics (0.5 \acs{bleu} point gain over \BARTr{}).
+\paragraph{Influence of Descriptions} The fact that short labels are both sufficient and necessary for successful verbalization is emphasized by the fact that the \textit{desc-repl} model is worse than \BARTr{} (although the descriptions are longer and supposedly explain the relation semantics). Moreover, the benefits of concatenating the descriptions alongside the relation labels (\textit{desc-cat}) are negligible, only slightly improving lexical similarity metrics (0.5 \acs{bleu} point gain over \BARTr{}).
 
 \paragraph{Lexical Diversity} In terms of lexical diversity, human references use more unique n-grams, but the model outputs are very similar in other aspects. It remains to be seen if the model outputs can stay semantically consistent with diversity-focused decoding techniques such as nucleus sampling \cite{holtzman2019curious}.
 
@@ -234,8 +238,8 @@ For error analysis, we select 100 random examples together with their correspond
     \caption[Selected automatic metrics on few-shot generation.]{Boxplots for selected metrics from \autoref{tab:rel2text:auto} w.r.t. the number of examples (displayed on the \textit{x}-axis, $\textit{full} = 1522$), taking into account variance from individual random seeds.}\label{fig:rel2text:fewshot}
 \end{figure}
 
-\subsection{Findings from Manual Error Analysis}
-
+\subsection{Manual Error Analysis}
+\label{sec:rel2text:manual}
 
 \begin{figure}[t]
     \centering
@@ -248,32 +252,16 @@ Results are summarized in \autoref{fig:rel2text:manual}; examples of model outpu
 \paragraph{Naturalness of Expressions} The \BARTk{} and \BARTw{} models use expressions that are too literal (\textsc{Lit}) in 23 and 29 cases, respectively, while the \BARTr{} and \textit{desc-cat} models do the same only in 11 cases (5 out of which are marked as \textsc{Lbl}, i.e., with an unclear label). This suggests that the variability of our dataset helps models to apply more natural expressions, especially if the relation is understandable from its label.
 
 \paragraph{Semantic Errors} There is a near-constant portion of examples where the models make a semantic error (\textsc{Sem}) \textit{and} the input is marked as needing an extra description (\textsc{Lbl}). The models also make relatively many semantic errors, most prominently in the case of the \textit{fewshot-100} and the \textit{mask-all} models. The \textit{mask-all} model made a semantic error in 78 cases, suggesting that guessing the exact relation just from the entities is difficult (although still possible in 22 cases). Moreover, the outcomes from this model are fluent (only 4 \textsc{Lex} errors), making it hard to detect faulty cases.
-The case of swapping the relation direction (\textsc{Dir}) is surprisingly not that common, which is probably down to having only a few examples in our dataset prone to this kind of error.
+The case of swapping the relation direction (\textsc{Dir}) is not that common, which is probably down to having only a few examples in our dataset prone to this kind of error.
 
 \paragraph{Additional Clues} There were only 12 out of 100 examples annotated as \textsc{Ent}, which suggests that the verbalization of the relation can be mostly decided irrespective of the entities in the triple. Notably, the results for \BARTr{} and \textit{desc-cat} are very similar, rendering the impact of extra descriptions negligible.
 
 
 \subsection{Applications to Downstream Tasks}
 \label{sec:rel2text:downstream}
-Given that the \BARTr{} model can describe relations from their labels with high accuracy, we investigate if we can use the model to replace manually created templates in downstream tasks. We select two qualitatively different tasks, both using the idea of transforming individual input triples to simple sentences as a preprocessing step: tabular reasoning and zero-shot data-to-text generation.
+Given that the \BARTr{} model can describe relations from their labels with high accuracy, we investigate if we can use the model to replace manually created templates in downstream tasks. We select two qualitatively different tasks, both using the idea of transforming individual input triples to simple sentences as a preprocessing step: zero-shot data-to-text generation (introduced in \autoref{sec:pipeline}) and tabular reasoning \cite{gupta2020infotabs,neeraja2021incorporating}.
 
 
-\begin{table}[t]\centering
-    \small
-    \setlength{\tabcolsep}{4pt}
-    \begin{tabular}{lcccc}\toprule
-        \textbf{premise repr.}              & \textbf{dev} & $\alpha_1$ & $\alpha_2$ & $\alpha_3$ \\\midrule
-        OPR \cite{gupta2020infotabs}        & 76.78        & 75.30      & 68.46      & 64.63      \\
-        BPR \cite{neeraja2021incorporating} & 77.04        & 74.44      & 67.46      & 63.17      \\
-        \BARTr{} (ours)                     & 74.44        & 74.31      & 64.59      & 63.46      \\
-        \bottomrule
-    \end{tabular}
-    \caption[NLI accuracy on the \textsc{InfoTabS} dataset.]{\ac{nli} accuracy for the dev set and test sets  $\alpha_{1,2,3}$ from the \textsc{InfoTabS} dataset. The results are averaged over 3 random seeds.}
-    \label{tab:rel2text:nli}
-\end{table}
-
-
-\paragraph{Tabular Reasoning} For the task of \ac{nli} from a table, \citet{gupta2020infotabs} represent each table cell using a simple template \text{``The \textit{key} of \textit{title} are \textit{value}.''}. \citet{neeraja2021incorporating} extend their approach by preparing a fine-grained set of rules\footnote{Formalized using more than 250 lines of Python code: \url{https://github.com/utahnlp/knowledge\_infotabs/blob/main/scripts/preprocess/bpr.py\#L120}} for individual entity categories. We replicate the setup of \citet{neeraja2021incorporating} for the original (OPR) and better (BPR) paragraph representation using their public codebase. We then replace their templates with our \BARTr{} model, verbalizing the triple (\textit{title}, \textit{key}, \textit{value}). The results are summarized in Table \ref{tab:rel2text:nli}. Our manual evaluation suggests that the sentences from our model are indeed more grammatical (even compared to BPR), but we observe comparable performance across all three test sets. In line with \citet{mccoy2019right}, we conclude that for classification tasks such as NLI, the input content appears to be more important than the input form.
 
 
 \begin{table}[t]\centering
@@ -290,21 +278,38 @@ Given that the \BARTr{} model can describe relations from their labels with high
     \caption[Automatic metrics on the zero-shot pipeline setup.]{Lexical similarity metrics (BLEU, METEOR) and omission (O) and hallucinaton (H) rate; following the setup from \autoref{sec:pipeline}.}\label{tab:rel2text:zeroshot}
 \end{table}
 
-\paragraph{Zero-shot Data-to-Text Generation} In \autoref{sec:pipeline}, we described our approach for zero-shot \ac{d2t} generation which requires transforming individual triples into text. Here, we replicate the setup on the WebNLG dataset, applying the \BARTr{} model instead of the templates. The results are summarized in Table \ref{tab:rel2text:zeroshot}.  We note that the pipeline using our model for preprocessing is able to achieve improvements of $\sim$2 \acs{bleu} points, at the cost of a slightly higher omission and hallucination rate, but crucially without needing the manual effort to create templates. A cursory examination shows that sentences produced by our model are qualitatively similar to the manual templates but more varied. Unlike the templates, our model may verbalize a relation differently depending on the context.
+\paragraph{Zero-shot Data-to-Text Generation} In \autoref{sec:pipeline}, we described our approach for zero-shot \ac{d2t} generation, where we handcrafted a template for each individual relation. Here, we replicate this setup on the WebNLG dataset, applying the \BARTr{} model instead of the handcrafted templates. The results are summarized in Table \ref{tab:rel2text:zeroshot}.  We note that the pipeline using our model for preprocessing is able to achieve improvements of $\sim$2 \acs{bleu} points, at the cost of a slightly higher omission and hallucination rate, but crucially without needing the manual effort to create templates. A cursory examination shows that sentences produced by our model are qualitatively similar to the manual templates but more varied. Unlike the templates, our model may verbalize a relation differently depending on the entities.
 Overall, we argue that training a PLM on verbalizing individual relations can potentially replace the manual effort of creating simple templates, which will have a notable impact on scaling similar approaches to larger datasets.
+
+\begin{table}[t]\centering
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{lcccc}\toprule
+        \textbf{premise repr.}              & \textbf{dev} & $\alpha_1$ & $\alpha_2$ & $\alpha_3$ \\\midrule
+        OPR \cite{gupta2020infotabs}        & 76.78        & 75.30      & 68.46      & 64.63      \\
+        BPR \cite{neeraja2021incorporating} & 77.04        & 74.44      & 67.46      & 63.17      \\
+        \BARTr{} (ours)                     & 74.44        & 74.31      & 64.59      & 63.46      \\
+        \bottomrule
+    \end{tabular}
+    \caption[NLI accuracy on the \textsc{InfoTabS} dataset.]{\ac{nli} accuracy for the dev set and test sets  $\alpha_{1,2,3}$ from the \textsc{InfoTabS} dataset. The results are averaged over 3 random seeds.}
+    \label{tab:rel2text:nli}
+\end{table}
+
+
+\paragraph{Tabular Reasoning} For the task of \ac{nli} from a table, \citet{gupta2020infotabs} represent each table cell using a simple template \text{``The \textit{key} of \textit{title} are \textit{value}.''} (similarly to our fallback template in \autoref{sec:sem-acc}). \citet{neeraja2021incorporating} extend their approach by preparing a fine-grained set of rules\footnote{Formalized using more than 250 lines of Python code: \url{https://github.com/utahnlp/knowledge\_infotabs/blob/main/scripts/preprocess/bpr.py\#L120}} for individual entity categories. We replicate the setup of \citet{neeraja2021incorporating} for the original (OPR) and better (BPR) paragraph representation using their public codebase. We then replace their templates with our \BARTr{} model, verbalizing the triple (\textit{title}, \textit{key}, \textit{value}). We compute the accuracy of the 3-way \ac{nli} outcome on the dev set and three provided test sets ($\alpha_{1,2,3}$). The results are summarized in Table \ref{tab:rel2text:nli}. Our manual evaluation suggests that sentences generated by our model are indeed more grammatical (even compared to BPR), but for the tabular \ac{nli} task, we observe a performance comparable to OPR and BPR across all three test sets. In line with \citet{mccoy2019right}, we conclude that for classification tasks such as NLI, the input content appears to be more important than the input form.
 
 
 \subsection{Discussion}
 
-\paragraph{Takeaways} We showed that \acp{plm} can verbalize novel relations as long as the relation label is human-readable and unambiguous. However, when the cues about the relation are limited, the model will resolve to guessing. A takeaway for datasets that do not follow standard naming conventions, such as the Rotowire dataset \cite{wiseman2017challenges}, which uses abbreviations for column headers (e.g., FG3A stands for \textit{``the number of shots the player attempted beyond the arc''}), is that rephrasing the labels to natural language may increase the quality of outputs from neural systems. It is still an open question how to handle input data with noisy labels. We suggest detecting and fixing these cases prior to generation, for example, with a human-in-the-loop setup.
+\paragraph{Takeaways} We showed that \acp{plm} can verbalize novel relations as long as the relation label is human-readable and unambiguous. However, when the cues about the relation are limited, the model will resolve to guessing. A takeaway for datasets that do not follow standard naming conventions, such as the Rotowire dataset (see \autoref{sec:datasets}) which uses abbreviations for column headers (e.g., FG3A stands for \textit{``the number of shots the player attempted beyond the arc''}), is that rephrasing the labels to natural language may increase the quality of outputs from neural systems. How to handle input data with noisy labels is still an open question. We suggest detecting and fixing these cases prior to generation, for example, with a human-in-the-loop setup.
 
 
-\paragraph{Implications for Large Language Models} We focused on \acp{plm}, which require at least several hundred examples to produce satisfactory results. With in-context learning, \acp{llm} may bring down the number of examples required close to zero. In this case, the models cannot learn the correct verbalizations from the training data, which makes using clear and unambiguous labels even more important. A follow-up work has shown that prompting \acp{llm} can bring comparable results to using a finetuned \ac{plm} in our scenario but requires a more complex setup for controlling the model outputs \cite{vejvarASPIROAnyshotStructured2023}.
+\paragraph{Implications for Large Language Models} We focused on \acp{plm}, which require at least several hundred examples to produce satisfactory results. With in-context learning, \acp{llm} may bring down the number of examples required close to zero. In the latter case, the models cannot learn correct verbalizations from the training data, which makes using clear and unambiguous labels even more important. A follow-up work has shown that prompting \acp{llm} can bring comparable results to using a finetuned \ac{plm} in our scenario but requires a more complex setup for controlling the model outputs \cite{vejvarASPIROAnyshotStructured2023}.
 
 \paragraph{Efficient Use of Relation Descriptions} To achieve more notable improvements with long-form descriptions of relations, it may be necessary to include a more detailed specification regarding the relation direction, type, or acceptable values. The model also needs to be able to reason about this specification, which could be achieved with the help of \acp{llm} and chain-of-thought reasoning \cite{weiChainThoughtPrompting2022,zhaoInvestigatingTabletoTextGeneration2023}.
 
 
-\paragraph{Limitations} Our analysis is limited to verbalizing single triples, which is only a trivial case of graph-to-text generation. Nevertheless, we believe that this simplified setting allows us to distill insights that are still applicable to graph-to-text generation in general. We also focus only on the English part of the \acp{kg}: for more morphologically rich languages, an extra effort must be put into correctly inflecting the entities in the generated text.
+\paragraph{Limitations} Our analysis is limited to verbalizing single triples, which is only a trivial case of graph-to-text generation. Nevertheless, we believe that this simplified setting allows us to distill insights that are still applicable to graph-to-text generation in general (cf. \autoref{sec:pipeline}). We also focus only on the English part of the \acp{kg}: for more morphologically rich languages, an extra effort must be put into correctly inflecting the entities in the generated text.
 
 
 
@@ -317,14 +322,14 @@ Overall, we argue that training a PLM on verbalizing individual relations can po
 \begin{refbox}
     This section is based on the paper \emph{Beyond Traditional Benchmarks: Analyzing Behaviors of Open LLMs on Data-to-Text Generation} \cite{kasnerReferenceBasedMetricsAnalyzing2024}, joint work with Ondřej Dušek. The work is accepted to the Proceedings of the 62th Annual Meeting of the Association for Computational Linguistics (ACL 2024).
 \end{refbox}
-We investigate the specifics of \ac{d2t} generation with \aclp{llm} (\acsp{llm}\glsunset{llm}). To avoid benchmarking the models on data seen during pretraining, we do not use standard \ac{d2t} datasets described in \autoref{sec:datasets}. Instead, we capitalize on the ability of \acp{llm} to process structured data in standard formats such as JSON, CSV, and Markdown without task-specific finetuning. To collect the data, we design a tool for downloading structured data records from public APIs.
+In this section, we investigate the specifics of \ac{d2t} generation with \aclp{llm} (\acsp{llm}\glsunset{llm}). To avoid benchmarking the models on data seen during pretraining (\autoref{sec:quintd:data_collection}), we do not use standard \ac{d2t} datasets described in \autoref{sec:datasets}. Instead, we capitalize on the ability of \acp{llm} to process structured data in standard formats such as JSON, CSV, and Markdown without task-specific finetuning. To collect new data, we design a tool for downloading structured data records from public APIs (\Cref{sec:quintd:data_collection,sec:quintd:dataset}).
 % We prepare the data for five \ac{d2t} generation tasks: generating weather forecasts, product descriptions, game summaries, chart captions, and entity descriptions. 
-Using reference-free evaluation methods based on human annotators and GPT-4, we evaluate semantic accuracy of model outputs on the word level.
+Using reference-free evaluation methods based on human annotators and GPT-4, we evaluate semantic accuracy of model outputs on the word level (\Cref{sec:quintd:experiments,sec:quintd:eval}).
 % Furthermore, we put open \acp{llm} in the locus of our investigation, promoting open and reproducible research. 
 We find that although the outputs from the \acp{llm} are fluent, the semantic accuracy of the outputs is a major issue: both according to human annotators and GPT-4, more than 80\% of the outputs of open \acp{llm} contain at least one semantic error. We publicly release the code, data, and model outputs.\footnote{\url{https://d2t-llm.github.io/}}
 
 
-\begin{table*}[ht]
+\begin{table*}[t]
     \small
     \centering
     \begin{tabular}{@{}llllll@{}} \toprule                                                                                                                  \\
@@ -344,7 +349,7 @@ At the time of writing, the applicability of \acp{llm} \cite{ouyang2022TrainingL
 
 However, the current \ac{d2t} generation benchmarks are not only getting saturated \cite{van_miltenburg_barriers_2023}, but also promote optimization towards traditional reference-based evaluation metrics, which were shown to correlate poorly with human judgment \cite{gehrmannRepairingCrackedFoundation2022,vanderleeHumanEvaluationAutomatically2021,novikovaWhyWeNeed2017}. When it comes to the models, using closed \acp{llm} \cite{openai2023gpt4,chatgpt} is increasingly considered a bad research practice due to its non-reproducibility \cite{rogers2023closed,chen2023chatgpt}, and contamination of LLM training data with standard benchmarks further restricts the space for experiments \cite{golchin2023time,aiyappa-etal-2023-trust,balloccu2024leak}.
 
-Our analysis circumvents these issues by (1) collecting ad-hoc structured data without human-written references, (2) using reference-free evaluation methods for annotating errors on the level of individual tokens, and (3) focusing on open \acp{llm}, which -- apart from being more accessible -- also achieve increasingly better results across tasks \cite{zheng2023judging,open-llm-leaderboard}.
+Our analysis circumvents these issues by (1) collecting ad-hoc structured data without human-written references, (2) using reference-free evaluation methods for annotating errors on the level of individual tokens, and (3) focusing on open \acp{llm}, which -- apart from being more accessible -- are also getting more competitive with proprietary models \cite{zheng2023judging,open-llm-leaderboard}.
 
 
 
@@ -376,8 +381,19 @@ Our main reasons for departing from the traditional scheme of benchmarking on we
     \item Without human references, our data collection scheme is lightweight and replicable.
 \end{enumerate}
 
-Given the available public sources of data, we settled on the five tasks which are described in \autoref{tab:quintd:data}. The tasks are based on structured data in common formats: JSON, CSV, and Markdown.
+Given the available public sources of data, we settled on the five tasks shown in \autoref{tab:quintd:data}: generating a five-day weather forecast, a product description, an ice hockey game summary, a chart caption, and an entity description. The tasks are based on structured data in common formats: JSON, CSV, and Markdown.
 
+
+\paragraph{\benchmark{} Dataset}
+\label{sec:quintd:dataset}
+Using \datatool{}, we collected the dataset for our experiments in this paper (\datatool{}-1). The dataset contains 500 examples in the development set and 500 examples in the test set (100 examples per domain for each split).
+%  We kept the size of the dataset moderate for a quick experimental turnaround.
+We downloaded the data between November 2023 and January 2024. Note that the dataset contains only \emph{unlabeled} data without any reference outputs (e.g., weather data, but not a textual weather forecast), so the outputs need to be evaluated in a reference-free setup.
+
+
+
+\paragraph{Task Definition}
+Each example in \benchmark{} consists of a structured data record $x$ from a domain $\mathcal{D} \in $ \{\texttt{openweather}, \texttt{gsmarena}, \texttt{ice\_hockey}, \texttt{owid}, \texttt{wikidata}\}. Given $x$ and a prompt $\mathcal{P}$, the goal is to generate natural language output $y$ faithful to the data $x$, according to the instructions in the prompt $\mathcal{P}$ (see \autoref{fig:quintd:prompt}).
 
 \begin{figure}[t]
     \centering
@@ -410,20 +426,6 @@ Given the available public sources of data, we settled on the five tasks which a
 \end{figure}
 
 
-\paragraph{\benchmark{} Dataset}
-\label{sec:quintd:dataset}
-Using \datatool{}, we collected the dataset for our experiments in this paper (\datatool{}-1). The dataset contains 500 examples in the development set and 500 examples in the test set (100 examples per domain for each split).
-%  We kept the size of the dataset moderate for a quick experimental turnaround.
-We downloaded the data between November 2023 and January 2024. Note that the dataset contains only \emph{unlabeled} data without any reference outputs (e.g., weather data, but not a textual weather forecast), so the outputs need to be evaluated using reference-free metrics.
-
-
-
-\paragraph{Task Definition}
-Each example in \benchmark{} consists of a structured data record $x$ from a domain $\mathcal{D} \in $ \{\texttt{openweather}, \texttt{gsmarena}, \texttt{ice\_hockey}, \texttt{owid}, \texttt{wikidata}\}. Given $x$ and a prompt $\mathcal{P}$, the goal is to generate natural language output $y$ faithful to the data $x$, according to the instructions in the prompt $\mathcal{P}$ (see \autoref{fig:quintd:prompt}).
-
-
-
-
 % Since diversity and controllability of the output style is generally an underexplored topic in \ac{d2t} generation (although see \citealp{hanGeneratingDiverseDescriptions2021}; \citealp{perlitzDiversityEnhancedTabletoText2022}), we cover three scenarios with different prompts, focusing on \textit{stylized} and \textit{topic-centric generation}:
 % \begin{itemize}
 %   \item $\mathcal{P}_\text{direct}$ -- Generating \texttt{output\_type} in a neutral and balanced way.
@@ -446,20 +448,14 @@ Each example in \benchmark{} consists of a structured data record $x$ from a dom
 
 \paragraph{Models}
 \label{sec:quintd:models}
-For our experiments, we selected the following \acp{llm} available under an open license:
-
-\begin{itemize}
-    \item \textbf{Llama 2} \cite{touvronLlamaOpenFoundation2023,llama-2-7b-32k} -- \texttt{\small together\-computer\-/Llama-2-7B\--32K-Instruct}
-    \item \textbf{Mistral} \cite{jiangMistral7B2023} -- \texttt{\small mistralai/Mistral-7B-Instruct-v0.1}
-    \item \textbf{Zephyr}  \cite{tunstallZephyrDirectDistillation2023} -- \texttt{\small HuggingFaceH4/zephyr-7b-beta}
-\end{itemize}
+For our experiments, we selected the following \acp{llm} available under an open license: Llama 2 \cite{touvronLlamaOpenFoundation2023,llama-2-7b-32k},\footnote{\url{https://huggingface.co/togethercomputer/Llama-2-7B-32K-Instruct}} Mistral \cite{jiangMistral7B2023},\footnote{\url{https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1}} and Zephyr \cite{tunstallZephyrDirectDistillation2023}.\footnote{\url{https://huggingface.co/HuggingFaceH4/zephyr-7b-beta}}
 
 The models are instruction-tuned, operate with 32k context, and perform well on recent benchmarks. All the models have 7B parameters and thus fit on a single NVIDIA A40 (48G VRAM) in 16-bit precision. We accessed the models via an API provided by the \texttt{text-generation-webui} framework\footnote{\url{https://github.com/oobabooga/text-generation-webui}} running locally.
 For the final experiments, we also included GPT-3.5 (\texttt{gpt-3.5-turbo-1106}) accessed through the OpenAI API \cite{chatgpt}.\footnote{We only included GPT-3.5 in our final experiments since proprietary models were not our focus. We did not include GPT-4 since we use the model for evaluation (see §\ref{sec:quintd:gpt4eval}) and LLMs tend to be biased towards their outputs \cite{kooBenchmarkingCognitiveBiases2023,stureborgLargeLanguageModels2024}.}
 
 \paragraph{Experimental Process}
 \label{sec:quintd:process}
-To extensive prompt engineering, we use the same prompt template $\mathcal{P}$ for all the domains and models. For our preliminary experiments, we first wrote down the initial version of the prompt and used the data without further preprocessing.
+To avoid extensive prompt engineering, we use the same prompt template $\mathcal{P}$ for all the domains and models. For our preliminary experiments, we first wrote down the initial version of the prompt and used the data without further preprocessing.
 We then iteratively improved our experimental setup by observing outputs on the development set.
 
 
@@ -470,18 +466,18 @@ Here, we describe all the observations and modifications we made before generati
 \begin{itemize}
 
 
-    \item\textbf{Any input field may appear in the output.} The models do not always select the most relevant fields for the given output. For example, we observed that the models commonly mention identifiers, timestamps, files, and other metadata, leading to unnatural outputs. To mitigate these issues, we manually filtered out the irrelevant fields from the input.
+    \item\textbf{Any input field may appear in the output.} The models do not always select the most relevant fields for the given output. For example, we observed that the models commonly mention identifiers, timestamps, files, and other metadata, leading to unnatural outputs. To mitigate these issues, we manually picked irrelevant fields and filtered them out.
 
-    \item\textbf{Units need to be specified explicitly.} If the units are not specified in the data record, the models tend to resort to their best guess. This may go unnoticed if the unit is evident from the context (e.g., the model will usually not report the temperature in Fahrenheit instead of Celsius), but it may get problematic if the value is ambiguous (e.g., wind speed in km/h versus m/s). Therefore, we explicitly add units to all data records where appropriate.
+    \item\textbf{Units need to be specified explicitly.} If measurement units are not specified in the data record, the models tend to resort to their best guess. This may go unnoticed if the unit is evident from the context (e.g., the model will usually not report the temperature in Fahrenheit instead of Celsius), but it may get problematic if the value is ambiguous (e.g., wind speed in km/h versus m/s). Therefore, we explicitly add units to all data records where appropriate.
 
     \item\textbf{Understandable keys are enough.} On the flip side, we decided not to add extra descriptions to the keys if the key was understandable from its name (e.g., \texttt{homeTeam} or \texttt{dimensions}). As we discussed in \autoref{sec:rel2text}, pretrained models interpret field names correctly as long as they are human-readable. We only include chart metadata for the CSV files in the \texttt{owid} domain.
 
     \item\textbf{Long inputs can be troublesome.} The inputs in some domains can easily get longer than 10-20k tokens. This issue is amplified by the fact that the evaluated LLMs tokenize numbers into individual digits. To accommodate for the long inputs, we picked models that accept up to 32k tokens.\footnote{For this reason, we use Llama-2-7B-32k with 32k token context \cite{llama-2-7b-32k} instead of the official Llama-2-7B-Instruct, which only supports 4k context \cite{touvronLlamaOpenFoundation2023}.} However, with long inputs, the GPU memory consumption also gets considerably higher, so we needed to downsample the data in \texttt{owid} and \texttt{openweather} to keep their length under \textasciitilde 8k tokens.
 
 
-    \item\textbf{Few-shot experiments are infeasible.} Due to the context-length limitations, we were not able to run few-shot experiments since we could not robustly fit an additional ($x_\text{example}$, $y_\text{example}$) pair in the prompt. We attempted to include only $y_\text{example}$ (making the setup ``half-shot''), but we observed that the models then used entities from the example (unrelated to the actual input) in their outputs. Therefore, we decided to leave this line of experiments for future work (see \autoref{sec:quintd:future} for discussion).
+    \item\textbf{Few-shot experiments are infeasible.} Due to the context-length limitations, we were not able to run few-shot experiments since we could not robustly fit an additional ($x_\text{example}$, $y_\text{example}$) pair in the prompt. We attempted to include only $y_\text{example}$ (making the setup ``half-shot''), but we observed that the models then used entities from the example (unrelated to the actual input) in their outputs. Therefore, we decided to leave this line of experiments for future work.
 
-    \item\textbf{Deterministic decoding and sampling are on par.} In our preliminary experiments, we observed a roughly similar output quality for both deterministic decoding and sampling.\footnote{We used the \texttt{text-generation-webui} default decoding parameters: \texttt{temperature}=0.7, \texttt{top\_p}=0.9, and \texttt{top\_k}=20.} For the final experiments, we decided to use deterministic decoding, which is non-parametric and conceptually more suitable for D2T generation.
+    \item\textbf{Deterministic decoding and sampling are on par.} In our preliminary experiments, we observed a roughly similar output quality for both greedy decoding and sampling.\footnote{We used the \texttt{text-generation-webui} default decoding parameters: \texttt{temperature}=0.7, \texttt{top\_p}=0.9, and \texttt{top\_k}=20.} For the final experiments, we decided to use greedy decoding, which is non-parametric and conceptually more suitable for D2T generation.
 
     \item\textbf{Prefixing the output makes parsing easier.} Even with variations of a \textit{``generate only the output''} instruction appended to the prompt, the models (especially Llama 2) tended to first confirm the request. For that reason, we decided to prefix the input for all the models with \textit{``Sure! Here is the \{output\_type\}: "''}. The opening quote at the end of the prefix allowed us to robustly parse the text simply by stripping the closing quote from the model output.
 
@@ -497,7 +493,7 @@ Here, we describe all the observations and modifications we made before generati
 \paragraph{Final Experiments}
 \label{sec:quintd:basic}
 
-Taking the observations from our preliminary experiments into account, we proceeded to generate the outputs on the test set of \benchmark{} for token-level error analysis. We first preprocessed the data as mentioned: we stripped out unnecessary fields, added units, and downsampled the data to fit the context. For all the models, we used the prompt in \autoref{fig:quintd:prompt} and deterministic decoding with a maximum length of 512 tokens.
+Taking the observations from our preliminary experiments into account, we proceeded to generate the outputs on the test set of \benchmark{} for token-level error analysis. We first preprocessed the data as mentioned: we stripped out unnecessary fields, added units, and downsampled the data to fit the context. For all the models, we used the prompt in \autoref{fig:quintd:prompt} and greedy decoding with a maximum of 512 output tokens.
 
 For comparison, we also generated outputs for the same inputs and identical prompts with GPT-3.5. Note that even though we fixed the temperature and seed to $0$, the rest of the decoding parameters are inaccessible to us and may differ from the parameters we used for the open models.
 
@@ -513,12 +509,12 @@ We use two complementary referenceless evaluation methods:
     \item \gptmetric{}: \textbf{an automatic metric} based on GPT-4.
 \end{itemize}
 
-The methods use similar instructions and produce outputs with equivalent format. The main idea is to compensate for the shortcomings of each approach: while human evaluation is costly (about 10$\times$ more expensive than automatic evaluation), using only an automatic metric based on a closed LLM would make the evaluation potentially non-reproducible and biased \cite{kocmiGEMBAMQMDetectingTranslation2023,wangLargeLanguageModels2023}. Assuming that the methods are interchangeable, reporting the results of both methods should hopefully increase the robustness and replicability of our results.
+The methods use similar instructions and produce outputs with equivalent format. The main idea is to compensate for the shortcomings of each approach: while human evaluation is costly (about 10$\times$ more expensive than automatic evaluation in out setup), using only an automatic metric based on a closed LLM would make the evaluation potentially non-reproducible and biased \cite{kocmiGEMBAMQMDetectingTranslation2023,wangLargeLanguageModels2023}. Reporting the results of both methods should hopefully increase the robustness and replicability of our results.
 
 
 
 
-Our error taxonomy and its notation are inspired by \citet{thomsonGoldStandardMethodology2020}, similarly as in \autoref{sec:tok-eval}. After preliminary examination of the outputs, we settled on four error categories: \errinc{INCORRECT}, \errnc{NOT\_CHECKABLE}, \errmis{MISLEADING}, and \errother{OTHER}. To set a clear boundary between the categories and reach better inter-annotator agreement, we decided to keep our taxonomy more high-level this time and not to distinguish between fine-grained categories (e.g., \textit{incorrect name} vs. \textit{incorrect number}). The descriptions of our error categories, as presented in the instructions for annotation, are included in \autoref{tab:quintd:errors}.
+We use similar error taxonomy and notation are we did in \autoref{sec:tok-eval}, inspired by \citet{thomsonGoldStandardMethodology2020}. After preliminary examination of the outputs, we settled on four error categories: \errinc{INCORRECT}, \errnc{NOT\_CHECKABLE}, \errmis{MISLEADING}, and \errother{OTHER}. To set a clear boundary between the categories and reach better inter-annotator agreement, we decided to keep our taxonomy more high-level this time and not to distinguish between fine-grained categories (e.g., \textit{incorrect name} vs. \textit{incorrect number}). The descriptions of our error categories, as presented in the instructions for annotation, are included in \autoref{tab:quintd:errors}.
 
 \begin{table*}[t]
     \footnotesize
@@ -552,9 +548,10 @@ Our error taxonomy and its notation are inspired by \citet{thomsonGoldStandardMe
 
 % An automatic metric based on a closed LLM makes the evaluation potentially non-reproducible and biased \cite{kocmiGEMBAMQMDetectingTranslation2023,wangLargeLanguageModels2023}, for which we compensate by obtaining annotations from human annotators.
 
-For the human annotation metric, we prepared a custom web interface using \texttt{factgenie}\footnote{\url{https://github.com/kasnerz/factgenie}}. In the web interface, an annotator is instructed to annotate text spans with respective error categories. We created custom visualizations for each data format, as illustrated in \autoref{fig:quintd:process}.
+For the human annotation metric, we prepared a custom web interface, where
+an annotator is instructed to annotate text spans with the respective error categories. We created custom visualizations for each input data format, as illustrated in \autoref{fig:quintd:process}.\footnote{We open-sourced our annotation framework as a stand-alone software package, see \url{https://github.com/kasnerz/factgenie}.}
 
-We hired annotators on the Prolific crowdsourcing platform.\footnote{\url{https://prolific.com}} In total, we hired 100 annotators, each annotating 20 examples (4 model outputs for each of the five domains). We selected annotators with at least 10 completed tasks and a 100\% approval rate, having English as their primary language. We paid the annotators \textsterling{}9 per hour, according to the platform's recommendations. The median time for completing the annotations was 47 minutes.
+We hired annotators on the Prolific crowdsourcing platform.\footnote{\url{https://prolific.com}} In total, we hired 100 annotators, each annotating 20 examples (4 model outputs for each of the five domains). We selected annotators with at least 10 completed tasks, a 100\% approval rate, and having English as their primary language. We paid the annotators \textsterling{}9 per hour, according to the platform's recommendations. The median time for completing the annotations was 47 minutes.
 
 
 
@@ -562,23 +559,13 @@ We hired annotators on the Prolific crowdsourcing platform.\footnote{\url{https:
 \paragraph{GPT-4-based Evaluation}
 \label{sec:quintd:gpt4eval}
 
-For automatic evaluation, we leverage the fact that LLM-based metrics can be customized for a particular task without the need for training data. In our experiments, we use a metric based on GPT-4 (\texttt{gpt-4-1106-preview}, \citealp{openai2023gpt4}), which was shown to be superior to other \acp{llm} in following fine-grained instructions and have high correlations with human judgment on evaluating generated texts \cite{zhaoInvestigatingTabletoTextGeneration2023,sottanaEvaluationMetricsEra2023,kocmiGEMBAMQMDetectingTranslation2023,kocmiLargeLanguageModels2023}.
+For automatic evaluation, we leverage the fact that LLM-based metrics can be customized for a particular task without the need for training data. In our experiments, we use a metric based on GPT-4 (\texttt{gpt-4-1106-preview}, \citealp{openai2023gpt4}), which was shown to be superior to other \acp{llm} in following fine-grained instructions, reaching high correlations with human judgment on evaluating generated texts \cite{zhaoInvestigatingTabletoTextGeneration2023,sottanaEvaluationMetricsEra2023,kocmiGEMBAMQMDetectingTranslation2023,kocmiLargeLanguageModels2023}.\footnote{We confirmed that GPT-3.5 and Llama 3 have lower correlations with human judgments also in our scenario, see Appendix~D of \citet{kasnerReferenceBasedMetricsAnalyzing2024}.}
 % Compared to using fine-tuned models for token-level evaluation \cite{kasnerTextinContextTokenLevelError2021}, this allows us to customize the metric for a particular task without the need for training data.
 
-We instantiate \gptmetric{} with a prompt and a system message describing the task. We instruct the model to produce a JSON output with sequentially ordered errors using the following format:
-
-\small
-\begin{verbatim}
-{
-  "errors": [{
-    "reason": [REASON],
-    "text": [TEXT_SPAN],
-    "type": [ERROR_CATEGORY]
-    }, 
-    ...]
-}.
+We instantiate \gptmetric{} with a prompt and a system message describing the task. We instruct the model to produce a JSON output with sequentially ordered errors using the following format: \begin{verbatim}{ "errors": [{ "reason": [REASON], "text": [TEXT_SPAN], 
+  "type": [ERROR_CATEGORY] }, ...]}.
 \end{verbatim}
-\normalsize
+% \normalsize
 
 
 Note that we require that the model first generates the free-form text \textit{reason} for the error.\footnote{We did not ask the crowdworkers for free-form reasoning about the errors since that would make the annotation notably more complex.} Generating the reason comes at almost no extra cost and our cursory observations suggest that requiring it leads to more precise outputs.
@@ -595,10 +582,10 @@ We align the model outputs with the original text by string matching on \texttt{
 \subsection{Results and Discussion}
 \label{sec:quintd:discussion}
 
-A summary of the token-level annotations is in \autoref{tab:quintd:results_agg} and \ref{tab:quintd:results_errperex}.
+A summary of the token-level annotations is given in \Cref{tab:quintd:results_agg,tab:quintd:results_errperex}.
 
 
-\begin{table*}[ht]
+\begin{table*}[t]
     \footnotesize
     \centering
     \begin{tabular}{lccccccccccr}
@@ -615,7 +602,7 @@ A summary of the token-level annotations is in \autoref{tab:quintd:results_agg} 
 \end{table*}
 
 
-\begin{table*}[ht]
+\begin{table*}[t]
     \footnotesize
     \centering
     \begin{tabular}{lrrrrrrrrrr}
@@ -640,39 +627,37 @@ The most common error type is \errinc{INCORRECT}. As shown in \autoref{tab:quint
 
 % The results vary widely according to the domain (see Appendix \ref{app:full_results}). For example, the outputs in \texttt{wikidata} contain much more \errnc{NOT\_CHECKABLE} errors on average (1.01 per output according to \humanmetric) than  \errinc{INCORRECT} errors (0.11 per output according to \humanmetric), suggesting that with simpler inputs, the models tend to introduce extra information. The \texttt{openweather} domain seems to be the most complex with the longest outputs (\textasciitilde 164 tokens), more than eight errors in the output on average, and >90\% of outputs containing an error.
 
-The differences between the open \acp{llm} are not major. Out of the open \acp{llm}, Zephyr has the best results across categories and metrics, followed by Llama 2. However, the outputs of Mistral are longer on average, leaving more space for errors. GPT-3.5 (which we consider separately) does generally better according to both \gptmetric and \humanmetric, although it still makes an error in 60-75\% of examples (2 errors per example on average). In general, the results show that \acp{llm} make too many semantic errors to be usable in practice for \ac{d2t} generation in a zero-shot setting.
+The differences between the open \acp{llm} are not major. Out of the open \acp{llm}, Zephyr has the best results across categories and metrics, followed by Llama 2. However, the outputs of Mistral are longer on average, leaving more space for errors. GPT-3.5 (which we consider separately) does generally better according to both \gptmetric and \humanmetric, although it still makes an error in 60-75\% of examples (more than 1 error per example on average). In general, the results show that \acp{llm} make too many semantic errors to be usable in practice for \ac{d2t} generation in a zero-shot setting.
 
 
 
 \paragraph{Do Evaluation Methods Agree?}
-\label{sec:quintd:metricscorr}
 To quantify the agreement of \humanmetric{} and \gptmetric{}, we computed the Pearson correlation coefficient between the error counts on the level of tokens, examples, and domains as follows (note that each error category was considered separately):
 \begin{itemize}
     \item For $r_{\text{domain}}$, we used the average error counts per domain.
     \item For $r_{\text{example}}$, we used the count of errors per example.
-    \item For $r_{\text{token}}$, we used the binary indicators marking an error per token.
+    \item For $r_{\text{token}}$, we used binary indicators marking whether each word is labeled as an error.
 \end{itemize}
-The correlation on the level of tokens is weak ($r_{\text{token}}=0.26$) but gets better on the example-level ($r_{\text{example}}=0.52$) and even better on the domain-level ($r_{\text{domain}}=0.93$).
+The correlation on the level of words is weak ($r_{\text{token}}=0.26$) but gets better on the example level ($r_{\text{example}}=0.52$) and even better on the domain level ($r_{\text{domain}}=0.93$).
 % , suggesting that the error spans may be subject to interpretation.
 
 We also measure inter-annotator agreement between human annotators. For that, we obtained annotations from two annotators for 100 model outputs. The results are similar: the annotators agree weakly on the token level ($r_{\text{token}}=0.36$), stronger on the example level ($r_{\text{example}}=0.53$), and even stronger on the domain level ($r_{\text{domain}}=0.85$). We conclude that while the details regarding error spans and categories may vary, the annotators as well as GPT-4 generally agree on the accuracy of model outputs for a given set of examples. In the future, the agreement could be improved by measuring errors on the phrase level \cite{vamvas2022little}.
 
 
 \paragraph{Recommendations for Future Work}
-\label{sec:quintd:future}
-
+Based on the above results, we formulate a few recommendations for future works exploring \ac{d2t} generation with \acp{llm}:
 \begin{itemize}
     \item \textbf{Focus on semantic accuracy.} The output of \acp{llm} is satisfactory regarding the style, format, and purpose of the text. However, the amount of semantic errors remains very high. Improving the semantic accuracy of the models
           \cite{li2022faithfulness}, along with new model-based evaluation metrics \cite{liuGEvalNLGEvaluation2023,xuINSTRUCTSCOREExplainableText2023}, could thus help to bring improve LLM-based \ac{d2t} generation systems where it is most needed.
-          \item\textbf{Use long-context models.} The memory issues with long context, making few-shot experiments infeasible, can potentially be solved by using more efficient long-context models equipped with Flash Attention \cite{dao2022flashattention} and fast inference libraries such as \texttt{llama.cpp}\footnote{\url{https://github.com/ggerganov/llama.cpp}}, especially in the light of the recent rapid increase of the available context window size of \acp{llm} \cite{bai2023longbench,munkhdalai2024leave}.
-          \item\textbf{Test the models in the wild.} Except for using an ad-hoc dataset of real-world data as we did in our work, the ecological validity of D2T evaluation can also be ensured by continuous evaluation with human users \cite{zheng2023judging} and evaluating the real-world impact of the systems \cite{reiter2023impact}.
-          \item\textbf{Multilinguality is an opportunity.} With the recent efforts in extending \ac{d2t} generation to low-resource languages \cite{cripwell2023WebNLGShared2023}, multilingual \ac{d2t} generation with open \acp{llm} seems a promising direction. Although we did not go beyond English, initial steps were already done by works such as \citet{lorandi2023data}.
+          \item\textbf{Use long-context models.} The memory issues with long context, making few-shot experiments infeasible, can potentially be solved by using more efficient long-context models equipped with Flash Attention \cite{dao2022flashattention} and fast inference libraries such as \texttt{llama.cpp},\footnote{\url{https://github.com/ggerganov/llama.cpp}} especially in the light of the recent rapid increase of the available context window size of \acp{llm} \cite{bai2023longbench,munkhdalai2024leave}.
+          \item\textbf{Test the models in the wild.} Except for using an ad-hoc dataset of real-world data as we did in our work, the ecological validity of \ac{d2t} evaluation can also be ensured by continuous evaluation with human users \cite{zheng2023judging} and evaluating the real-world impact of the systems \cite{reiter2023impact}.
+          \item\textbf{Multilinguality is an opportunity.} With the recent efforts in extending \ac{d2t} generation to low-resource languages \cite{cripwell2023WebNLGShared2023}, multilingual \ac{d2t} generation with open \acp{llm} seems a promising direction. Although we did not go beyond English, initial steps were already taken by works such as \citet{lorandi2023data} and \citet{lorandi-belz-2024-high}.
 \end{itemize}
 
 \section{Conclusion}
 To improve \ac{d2t} generation systems based on neural \acp{lm}, it is important to know the \emph{input data} we are dealing with, along with the strong and weak points of the \emph{models} we are using. We had both of these points in mind when conducting the experiments described in this chapter. We analyzed the capabilities of pretrained models of various sizes, focusing on openly available models, and provided recommendations for future directions in \ac{d2t} generation with these models. Our insights are based on custom datasets, carefully assembled for the purpose of the analysis.
 
-In \autoref{sec:rel2text}, we investigated how well can \acp{plm} generalize to unseen data labels. We collected a dataset for triple-to-text generation with a large variety of unique relation labels. Using the dataset, we analyzed the performance of finetuned \acp{plm} in various scenarios, concluding that for flawless generalization, it is important to equip the data with unambiguous, human-readable labels.
+In \autoref{sec:rel2text}, we investigated how well \acp{plm} can generalize to unseen data labels. We collected a dataset for triple-to-text generation with a large variety of unique relation labels. Using the dataset, we analyzed the performance of finetuned \acp{plm} in various scenarios, concluding that for good generalization, it is important to equip the data with unambiguous, human-readable labels.
 
 
 In \autoref{sec:quintd}, we presented an exploratory study into \ac{d2t} generation with open \acp{llm}. We used ad-hoc collected data in standard formats from five domains, prompting \acp{llm} to generate texts based on the data. Using a combination of GPT-4-based metric and human evaluation, we found out that the outputs contain unnacceptably large amounts of semantic errors. In the light of these findings, we recommended improving semantic accuracy as the main future direction for \ac{d2t} generation with \acp{llm}.
