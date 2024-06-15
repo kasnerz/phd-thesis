@@ -17,7 +17,6 @@ In \autoref{sec:tok-eval}, we focus on detecting semantic errors in \ac{d2t} gen
 \end{refbox}
 
 In this section, we propose a new metric for evaluating the semantic accuracy of \ac{d2t} generation. Our metric is based on a neural model pretrained for \ac{nli}.
-% : the task of determing whether a hypothesis is true, false, or neutral with respect to a premise. 
 We use the \ac{nli} model to check textual entailment between the input data and the output text in both directions, allowing us to reveal omissions or hallucinations (\Cref{sec:sem-acc:method,sec:sem-acc:experiments}).
 We demonstrate that even without any extra model training and with minimal handcrafting, our approach achieves high accuracy (>90\%) on the E2E dataset and produces useful results (>75\% accuracy) on the more challenging WebNLG dataset. Additionally, we show with manual error analysis that some instances marked as faults of our metric were in fact assessed correctly by our metric (\autoref{sec:sem-acc:evaluation}). The experimental code for our metric is available on GitHub.\footnote{\url{https://github.com/ufal/nlgi_eval}}
 
@@ -39,8 +38,6 @@ We are given a set of \acs{rdf}\glsunset{rdf} triples $x \in X$, where each trip
 \end{enumerate}
 
 \paragraph{Natural Language Inference} \ac{nli} is a sequence classification task that takes two inputs---a \textit{hypothesis} and a \textit{premise}---and produces one of the possible outputs: the hypothesis is \textit{entailed} by (follows from) the premise, \textit{contradicts} the premise, or their relation is \textit{neutral}. Neural models for \ac{nli} \cite{zhang2019semantics,liu-etal-2019-multi,liuRoBERTaRobustlyOptimized2019} have already reached near-human levels of performance, making them suitable for evaluating the output of abstractive summarization systems \cite{maynezFaithfulnessFactualityAbstractive2020}.
-
-% Unlike previous works \cite{nie-etal-2019-simple,tian2019sticking,kedzie-mckeown-2019-good}, we use a pretrained neural model finetuned for \ac{nli} which we do not further train on any domain-specific data.
 
 \begin{figure*}[t]
     \centering
@@ -79,8 +76,6 @@ We experiment with the WebNLG and E2E datasets, similarly as in \autoref{chap:lo
     \item For WebNLG, we compare our metric with crowdsourced human ratings of semantic adequacy \cite{shimorinaWebNLGChallengeHuman2019}. In particular, we use the answers for the question: \textit{``Does the text correctly represent the meaning in the data?''}, where the human annotators used a three-point Likert scale (1 = Incorrect, 2 = Medium, 3 = Correct). The answers are averaged over multiple annotators. In our experiments, we consider a sentence correct if it achieved a human rating 2.5 or higher.\footnote{We also tried a threshold of 2.0, with slightly worse results.}
     \item For E2E, we compare our metric to the results of the handcrafted automatic script which was used in the E2E challenge \cite{dusekEvaluatingStateoftheartEndtoEnd2020}.\footnote{While the E2E challenge did include crowdsourced evaluation of semantic accuracy, the results were unreliable, overestimating the number of errors \cite{dusekEvaluatingStateoftheartEndtoEnd2020}.}
 
-
-          % We further use small sets of system outputs and human-written texts with expert annotation \citep[provided by][]{dusekSemanticNoiseMatters2019} to evaluate our approach against gold-standard annotation and to compare to existing semantic accuracy classifiers for E2E data.
 \end{itemize}
 
 We experiment with the \emph{Default} and \emph{Backoff} approaches to transforming triples to facts, as described in \autoref{sec:sem-acc:method}. For WebNLG, we obtained templates by delexicalizing human references for single-triple examples from the WebNLG training data. For E2E, we handcrafted eight templates for each predicate in the dataset.\footnote{For each predicate in WebNLG, we choose randomly if more templates are found and use the backoff if no templates are found. Note that for E2E, we did \emph{not} use the complex templates extracted from the training data (cf. \autoref{chap:low-res}).}
@@ -107,12 +102,6 @@ We evaluate our metric in terms of accuracy (\textbf{A}), precision (\textbf{P})
 We additionally perform a manual error analysis on a random sample of 100 error examples for each dataset, i.e., examples where our metric gave a different assessment from the ground truth.
 
 
-% The results for the E2E dataset are better, probably due to the lower lexical variability of the dataset.
-% \OD{a možná kvůli tomu, že human eval pro webnlg je trochu zašuměný, ale nevim, jestli se to sem hodí}
-
-
-% recall is probably more important than precision (not that there are differences)
-
 \paragraph{WebNLG Analysis}  The overall scores (between 77-80\% for all measures) show that our metric deviates quite a lot from the human judgments. Our manual error analysis indicates several potential sources of discrepancies:
 \begin{enumerate}
     \item The human annotation is somewhat noisy---many correctly rendered outputs do not reach the 2.5 threshold, while some incorrect ones do.
@@ -123,18 +112,6 @@ We additionally perform a manual error analysis on a random sample of 100 error 
 The Spearman correlation of our model's confidence scores with the average human scores is around 0.63 ($p<$1e-10). This is similar to n-gram-based metrics on this data (\citealp{shimorina2018human} reports 0.59 for BLEU and 0.73 for METEOR), but unlike these metrics, our approach does not require human-written reference texts.
 
 Moreover, our re-examination shows that almost half of the error examples (42 out of 100) were in fact correctly classified by our metric (i.e., their crowdsourced human annotation was incorrect),  so the true performance is most likely higher than the reported numbers.
-
-%  This is similar to $n$-gram-based metrics on this data (\citealp{shimorinaWebNLGChallengeHuman2019} reports 0.59 for \acs{bleu} and 0.73 for METEOR), but unlike these metrics, our approach does not require human-written reference texts.
-
-% To further check whether the size of the input affects performance, we computed Spearman correlation of the number of input triples with metric errors. The resulting very low value of -0.05 ($p=$\,0.02, \emph{Default} setting) shows that the metric holds its performance even for more complex WebNLG examples.
-%
-% On the other hand, heck for different information 
-
-
-%Third, we note that many examples are dubious, e.g. there are typos in the text or the text interprets the data too loosely. In these cases, the notion of semantic accuracy can differ between the annotators.
-
-
-
 
 
 \paragraph{E2E Analysis} The results for the E2E dataset are very good compared to the WebNLG dataset, with over 90\% agreement with the handcrafted script. This can be attributed to lower lexical variability and less noisy texts, as well as to the better quality of the handcrafted templates (the difference between the \emph{Default} and \emph{Backoff} setups is much more pronounced here). The main issues identified by our error analysis are:
@@ -150,7 +127,6 @@ Again, we consider about half of the error examples (45 out of 100) as correctly
 \subsection{Discussion}
 
 \paragraph{Comparison to Other Metrics} Automatic metrics for assessing semantic accuracy of text are mostly reference-based \cite{zhaoMoverScoreTextGeneration2019,dhingraHandlingDivergentReference2019,sellam2020bleurt,ronyRoMeRobustMetric2022} or targetting tasks with non-structured inputs such as summarization, paraphrasing, or fact verification \cite{honovich2022true,zha2023alignscore}, which makes their use-cases different from ours. The closest alternative to our metric is Data-QuestEval \cite{rebuffel2021data}: a metric based on a question generation and question answering model, which is trained on a synthetic dataset containing structured data on the input.
-% Our metric remains one of the major options for evaluating the semantic accuracy of data-to-text generation, especially with \ac{rdf} triples on the input. 
 In the future, a more flexible metric for evaluating semantic accuracy could be based on large language models \cite{zhaoInvestigatingTabletoTextGeneration2023,sottanaEvaluationMetricsEra2023,kocmiLargeLanguageModels2023}, a topic to which we return in \autoref{sec:quintd}.
 
 \paragraph{Limitations} Perhaps surprisingly, the main bottleneck of the metric is not in the capabilities in \ac{nli} model. Although the \ac{nli} model is not perfect, \citet{chenMENLIRobustEvaluation2022} have shown that out-of-the-box \ac{nli} models are generally better and more robust metrics than specially trained approaches. In many cases, however, converting the structured data to a format suitable to \ac{plm} can be non-trivial. In this respect, we would like to refer to the discussion on automating template generation with \acp{plm} and \acp{llm} in \autoref{sec:pipeline:discussion}.
@@ -222,11 +198,6 @@ The goal of the Shared Task on Evaluating Accuracy in Generated Texts at INLG 20
 An example of an annotated system output is provided in \autoref{fig:tok-eval:example}. The objective of the shared task was to either implement an automatic metric for creating the same type of annotations automatically, or to develop a human evaluation scenario capable of producing the same annotations while requiring fewer resources.
 
 
-% Our submission for the shared task falls into the first category:
-% we developed an automatic metric for token-level error annotation which combines a rule-based generation system with a neural retrieval model and a pretrained neural LM used for error tagging.
-% We evaluated our approach in a cross-validation scenario to select the best configuration for the shared task. Overall, our system is able to reach 65\% error detection F1 score and ranked first out of four automatic submissions in the shared task.
-
-
 
 \subsection{Our System}
 \label{sec:tok-eval:system}
@@ -244,14 +215,6 @@ An example of an annotated system output is provided in \autoref{fig:tok-eval:ex
 
 Our submission for the shared task falls into the first category: we developed an automatic metric based on a \ac{plm}, which marks each token in the output text for the presence of errors. To make the tabular input data understandable for the \ac{plm}, we use a rule-based system to exhaustively generate all the facts that can be derived from the data.\footnote{Similarly to \Cref{sec:pipeline,sec:sem-acc}, we represent the fact as short sentences.} Since the context window of the \ac{plm} underlying the metric is limited, we also use a neural-based retrieval system to retrieve only $c$ relevant facts, which are added into the context window of the \ac{plm} to support its decisions. We describe individual components of our system below.
 
-% We developed an automatic metric for token-level error annotation which combines (1) a rule-based sentence generation system, (2) a neural retrieval model, and (3) a pretrained encoder \ac{lm} used for error tagging. The idea behind our system is that the pretrained encoder will compare the output with the relevant context retrieved from the data, tagging errors on the token level.
-
-% Our system is composed of three steps, which we describe below:
-% \begin{enumerate}
-% \item A rule-based generator for fact descriptions,
-% \item A retrieval system for selecting facts relevant for a given sentence,
-% \item A token-level error tagger.
-% \end{enumerate}
 
 
 \paragraph{Rule-based Fact Descriptions}
@@ -286,8 +249,6 @@ As our error tagger, we use RoBERTa \cite{liuRoBERTaRobustlyOptimized2019} with 
     \item \emph{gold-standard annotated data} from the shared task (which contains all error types),
     \item \emph{synthetic data} created by perturbing the human-written summaries from Rotowire (which contains only \errent{NAME} and \errnum{NUMBER} errors).
 \end{itemize}
-% For our submission, we use two-stage finetuning: first we finetune on synthetic data, then we finetune on the annotated data. 
-% \ODdel{A cross-validation on the development set gives us 65\% F1-score (61\% precision and 69\% recall).}\OD{I'd include at least bits of the mega-table instead.}
 
 \paragraph{Synthetic Data} The gold-standard data contains only 60 games, as opposed to 3,395 games in the Rotowire training set. This led us to the idea of using the training set as a source of synthetic data, introducing errors into human-written descriptions. We focus only on the \errent{NAME} and \errnum{NUMBER} errors, i.e., the categories that are the most represented and also easiest to generate. In each sentence, we identify named entities in the text using \emph{spaCy}.\footnote{\url{https://spacy.io}} We modify only a certain portion of entities according to the \emph{entity modification rate} (EMR), which we treat as a hyperparameter. We introduce the \errent{NAME} errors by:
 \begin{enumerate}
@@ -303,11 +264,10 @@ For \errnum{NUMBER} errors, we take an integer $n$ identified in the text, sampl
 \label{sec:tok-eval:experiments}
 
 For the error tagger, we train a PyTorch version of RoBERTa from the Huggingface Transfomers repository \cite{wolf2019HuggingFacesTS} using the AdamW optimizer \cite{loshchilov2018fixing}, learning rate $5\times10^{-5}$ and linear warmup.
-% $\beta_1=0.9, \beta_2=0.997, \epsilon=10^{-8}$, 
 We finetune the model for 10 epochs and select the model with the highest validation score.
-We experiment with several hyperparameters: % regarding our training data: 
+We experiment with several hyperparameters:
 \begin{itemize}
-    \item \emph{simple} vs.~\emph{compact} sentences in $G$, % (Section \ref{sec:rule-based-system})
+    \item \emph{simple} vs.~\emph{compact} sentences in $G$,
     \item  \textit{number of sentences} retrieved for the context: $c$ = 5, 10, 20 or 40;
     \item \textit{entity modification rate} (EMR): proportion of entities modified in the synthetic data: 0.25, 0.5, or 0.75.
 \end{itemize}

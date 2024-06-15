@@ -393,7 +393,10 @@ da-ta-set
 \begin{document}
 
 %
-%
+% \makeatletter
+% \long\def\@secondoffive#1#2#3#4#5{#2}
+% \long\def\@fifthoffive#1#2#3#4#5{#5}
+% \makeatother
 %
 \renewcommand{\thepage}{\roman{page}}
 \renewcommand\cite{\citep}
@@ -436,19 +439,19 @@ pursuant to Section~60 paragraph~1 of the Copyright Act.
 
 %\selectlanguage{english}
 \begin{description}[leftmargin=7.5em,labelwidth=7em,labelindent=0em,labelsep=0.5em]
-    \item[Title:] \thetitle{}
-    \item[Author:] \theauthor{}
-    \item[Department:] \thedept{}
-    \item[Supervisor:] \thesupervisor{},\\ \thedept{}
+  \item[Title:] \thetitle{}
+  \item[Author:] \theauthor{}
+  \item[Department:] \thedept{}
+  \item[Supervisor:] \thesupervisor{},\\ \thedept{}
 \end{description}
 \subsubsection{Abstract:}
 
 \input{abstract_en}
 
 \begin{description}[leftmargin=7.5em,labelwidth=7em,labelindent=0em,labelsep=0.5em]
+  %
+  \item[Keywords:] data-to-text generation, natural language generation, natural language processing, transformer architecture, pretrained language models, large language models
     %
-    \item[Keywords:] data-to-text generation, natural language generation, natural language processing, transformer architecture, pretrained language models, large language models
-        %
 \end{description}
 
 
@@ -456,10 +459,10 @@ pursuant to Section~60 paragraph~1 of the Copyright Act.
 \addcontentsline{toc}{chapter}{Czech Abstract}
 \selectlanguage{czech}
 \begin{description}[leftmargin=7.5em,labelwidth=7em,labelindent=0em,labelsep=0.5em]
-    \item[Název práce:] Generování textu z dat s neuronovými jazykovými modely
-    \item[Autor:] \theauthor{}
-    \item[Katedra:] Ústav formální a aplikované lingvistiky
-    \item[Vedoucí práce:] \thesupervisor,\\ Ústav formální a aplikované lingvistiky
+  \item[Název práce:] Generování textu z dat s neuronovými jazykovými modely
+  \item[Autor:] \theauthor{}
+  \item[Katedra:] Ústav formální a aplikované lingvistiky
+  \item[Vedoucí práce:] \thesupervisor,\\ Ústav formální a aplikované lingvistiky
 \end{description}
 
 \subsubsection{Abstrakt:}
@@ -467,9 +470,9 @@ pursuant to Section~60 paragraph~1 of the Copyright Act.
 \input{abstract_cs}
 
 \begin{description}[leftmargin=7.5em,labelwidth=7em,labelindent=0em,labelsep=0.5em]
+  %
+  \item[Klíčová slova:] generování textu z dat, generování přirozeného jazyka, zpracování přirozeného jazyka, architektura transformer, předtrénované jazykové modely, velké jazykové modely
     %
-    \item[Klíčová slova:] generování textu z dat, generování přirozeného jazyka, zpracování přirozeného jazyka, architektura transformer, předtrénované jazykové modely, velké jazykové modely
-        %
 \end{description}
 
 \selectlanguage{english}
@@ -484,28 +487,28 @@ pursuant to Section~60 paragraph~1 of the Copyright Act.
 
 \subsection*{Acknowledgements}
 {
-    What a ride this has been. When I signed up for the Natural Language Processing course during my Erasmus+ stay at KU Leuven back in 2017, little did I know it would be \emph{the} flap of a butterfly wing. With my fondness for reading, writing, and learning languages, it feels tempting to say that I have been drawn towards language processing since then. But that is just hindsight bias: were it not for a couple of other life episodes, I still might have ended up doing something completely different.
+  What a ride this has been. When I signed up for the Natural Language Processing course during my Erasmus+ stay at KU Leuven back in 2017, little did I know it would be \emph{the} flap of a butterfly wing. With my fondness for reading, writing, and learning languages, it feels tempting to say that I have been drawn towards language processing since then. But that is just hindsight bias: were it not for a couple of other life episodes, I still might have ended up doing something completely different.
 
-    One such episode brought me to the Institute of Formal and Applied Linguistics---ÚFAL. There, I met Jindřich Helcl and Jindřich Libovický, my current colleagues and friends. Thanks to your course, I learned how research feels like, how strong is the link between \acs{ai} and \acs{nlp}, and most importantly, how friendly are the people at ÚFAL. Interacting and working with you just felt right. After Jindřich~H. became my Master's thesis supervisor, I started to consider doing research in NLP---but for that, I first needed a PhD supervisor.
+  One such episode brought me to the Institute of Formal and Applied Linguistics---ÚFAL. There, I met Jindřich Helcl and Jindřich Libovický, my current colleagues and friends. Thanks to your course, I learned how research feels like, how strong is the link between \acs{ai} and \acs{nlp}, and most importantly, how friendly are the people at ÚFAL. Interacting and working with you just felt right. After Jindřich~H. became my Master's thesis supervisor, I started to consider doing research in NLP---but for that, I first needed a PhD supervisor.
 
-    I once read that the PhD supervisor/student relationship is akin to marriage, as it leads to intense personal interactions over several years. If that is the case, what are the chances that you find a perfect person for that during a random encounter in the hallway?
-    However, that is essentially what happened to me.
-    Sincerely, I could not have wished for a better advisor than Ondřej Dušek. Thank you for teaching me how to think and write properly, for all the discussions during our meetings about the quirks of doing research (which were often off-topic but always insightful and fun), for the intense exchanges before paper deadlines that made me feel supported and motivated, and in general for always being there, from the very beginning up till the write-up of this thesis. Without you, I would not be where I am now.
+  I once read that the PhD supervisor/student relationship is akin to marriage, as it leads to intense personal interactions over several years. If that is the case, what are the chances that you find a perfect person for that during a random encounter in the hallway?
+  However, that is essentially what happened to me.
+  Sincerely, I could not have wished for a better advisor than Ondřej Dušek. Thank you for teaching me how to think and write properly, for all the discussions during our meetings about the quirks of doing research (which were often off-topic but always insightful and fun), for the intense exchanges before paper deadlines that made me feel supported and motivated, and in general for always being there, from the very beginning up till the write-up of this thesis. Without you, I would not be where I am now.
 
-    Looking back at my five years at ÚFAL, my initial instincts were correct -- you became not only my colleagues but my friends.
-    As colleagues, you inspired me with your approach to research: working on what feels exciting and meaningful instead of chasing research throughput, but always aiming for top-notch quality. Still, life at ÚFAL meant more to me than research. Right after our first autumn retreat---where we cycled eighty kilometers, climbed to the peak of Sněžka, and then played guitar the whole evening---I knew this was the right place for me. To name just a few out of many: thank you, Vojta Hudeček for becoming my friend and outdoor buddy, Rudolf Rosa for inviting me to your wedding, Tomáš Musil for our co-teaching and train rides, people from our NG-NLG team (Simone Balloccu, Mateusz Lango, Sourabrata Mukherjee, Ondřej Plátek, Patrícia Schmidtová) for our lively and supportive discussions full of jokes, Tomasz Limisiewicz for our random encounters and conference travels, Tea Vojtěchová for taking part in my ventures to Irish dancing, and all of you that made our monthly ``community activity outside of workplace'' a pleasant experience.
+  Looking back at my five years at ÚFAL, my initial instincts were correct -- you became not only my colleagues but my friends.
+  As colleagues, you inspired me with your approach to research: working on what feels exciting and meaningful instead of chasing research throughput, but always aiming for top-notch quality. Still, life at ÚFAL meant more to me than research. Right after our first autumn retreat---where we cycled eighty kilometers, climbed to the peak of Sněžka, and then played guitar the whole evening---I knew this was the right place for me. To name just a few out of many: thank you, Vojta Hudeček for becoming my friend and outdoor buddy, Rudolf Rosa for inviting me to your wedding, Tomáš Musil for our co-teaching and train rides, people from our NG-NLG team (Simone Balloccu, Mateusz Lango, Sourabrata Mukherjee, Ondřej Plátek, Patrícia Schmidtová) for our lively and supportive discussions full of jokes, Tomasz Limisiewicz for our random encounters and conference travels, Tea Vojtěchová for taking part in my ventures to Irish dancing, and all of you that made our monthly ``community activity outside of workplace'' a pleasant experience.
 
-    After two years of covid, my three months at Heriot-Watt University in Edinburgh felt almost miraculous. Thank you, Ioannis Konstas, for volunteering to be my mentor, and Xinnuo Xu, for being my local guide and friend. Yet another dream of mine became true a year later when I was accepted to a research internship at the Mila - AI Research Institute in Montréal. My gratefulness goes to Siva Reddy and the rest of the team for inviting me to your group and keeping in touch later on. Special thanks to Xing Han Lù for your enthusiasm, cool ideas, and being my friend in Montréal and abroad. Our pair programming was an enriching experience, especially with your thoughtful process of making coffee.
+  After two years of covid, my three months at Heriot-Watt University in Edinburgh felt almost miraculous. Thank you, Ioannis Konstas, for volunteering to be my mentor, and Xinnuo Xu, for being my local guide and friend. Yet another dream of mine became true a year later when I was accepted to a research internship at the Mila - AI Research Institute in Montréal. My gratefulness goes to Siva Reddy and the rest of the team for inviting me to your group and keeping in touch later on. Special thanks to Xing Han Lù for your enthusiasm, cool ideas, and being my friend in Montréal and abroad. Our pair programming was an enriching experience, especially with your thoughtful process of making coffee.
 
-    If I were not able to enjoy my life outside of research, none of this would matter. Luckily, I was blessed to have many friends that made these years a real joyride. Thanks to my close friends (Dan, Tomáš, Michal, Jan, and others) for our continuous interactions, the X-Challenge community for teaching me (nothing less than) how to live, Vlakfest and Expedition Club for taking me to unorthodox adventures, and people from the Board of European Students of Technology for staying in my life way beyond our student years. And thanks to all the other people that I did not get a chance to mention, but your name belongs here.
+  If I were not able to enjoy my life outside of research, none of this would matter. Luckily, I was blessed to have many friends that made these years a real joyride. Thanks to my close friends (Dan, Tomáš, Michal, Jan, and others) for our continuous interactions, the X-Challenge community for teaching me (nothing less than) how to live, Vlakfest and Expedition Club for taking me to unorthodox adventures, and people from the Board of European Students of Technology for staying in my life way beyond our student years. And thanks to all the other people that I did not get a chance to mention, but your name belongs here.
 
-    The list would not be complete without you, Lenka. You became such an essential element in my life that I cannot imagine it differently now. Thank you for all the affection and support that I got from you while writing this thesis, the time spent together, our internal jokes and moments of understanding, and most of all, our common horizons I am looking forward to. You give sense to all of this.
+  The list would not be complete without you, Lenka. You became such an essential element in my life that I cannot imagine it differently now. Thank you for all the affection and support that I got from you while writing this thesis, the time spent together, our internal jokes and moments of understanding, and most of all, our common horizons I am looking forward to. You give sense to all of this.
 
-    All those years that got me here, I have been constantly supported by my family. Thanks to my parents, Zdeněk and Dana, for always welcoming me with open arms and caring about my life. Thanks to my brother Marek for our discussions, friendship, and many adventures. Lastly, thanks to my grandmother Zdeňka, who---besides raising me as a kid---supported my vague childhood idea of becoming a university teacher ``since I will have three months of holidays''. Learning about the reality of academia, I am sure she would be proud nevertheless.
+  All those years that got me here, I have been constantly supported by my family. Thanks to my parents, Zdeněk and Dana, for always welcoming me with open arms and caring about my life. Thanks to my brother Marek for our discussions, friendship, and many adventures. Lastly, thanks to my grandmother Zdeňka, who---besides raising me as a kid---supported my vague childhood idea of becoming a university teacher ``since I will have three months of holidays''. Learning about the reality of academia, I am sure she would be proud nevertheless.
 
 
-    \vspace{1\baselineskip}
-    \noindent If you are the village, I am the child. And out of all of you, there must have been somebody who made me enjoy writing so much that I do not know when to stop\ldots
+  \vspace{1\baselineskip}
+  \noindent If you are the village, I am the child. And out of all of you, there must have been somebody who made me enjoy writing so much that I do not know when to stop\ldots
 
 
 
@@ -516,8 +519,8 @@ pursuant to Section~60 paragraph~1 of the Copyright Act.
 
 
 {\noindent\footnotesize %
-    \par\noindent\rule{\textwidth}{0.4pt}
-    The work has been supported by the European Union (ERC, NG-NLG, 101039303) and by the Charles University projects GAUK 140320 and SVV 260 698. This work has been using language resources and tools developed and/or stored and/or distributed by the  LINDAT/CLARIN project of the Ministry of Education, Youth and Sports of the Czech Republic (project LM2015071).
+  \par\noindent\rule{\textwidth}{0.4pt}
+  The work has been supported by the European Union (ERC, NG-NLG, 101039303) and by the Charles University projects GAUK 140320 and SVV 260 698. This work has been using language resources and tools developed and/or stored and/or distributed by the  LINDAT/CLARIN project of the Ministry of Education, Youth and Sports of the Czech Republic (project LM2015071).
 }
 
 \cleardoublepage{}

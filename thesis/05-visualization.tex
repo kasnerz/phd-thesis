@@ -2,14 +2,14 @@
 \chapter{Unified Data Processing}
 \label{chap:tabgenie}
 
-In this chapter, we present an approach for unified processing of \ac{d2t} generation datasets. We first convert the input data in 16 \ac{d2t} generation datasets of various formats and provenance into a standard tabular format. On top of the unified format, we build \textsc{TabGenie}: a toolkit combining web interface, command-line interface and Python bindings for simplifying data visualization and processing. While data visualization helps us to present the contents of individual datasets, a unified format opens up the possibility of streamlining datasets into \acp{plm} for multi-task training. Interactive mode, in which the model input can be modified on the fly, then helps us to gain insights into the system behavior. At the end of the section, we present multiple real-world use cases of our framework.
+In this chapter, we present a single experiment in \autoref{sec:tabgenie}: an approach for unified processing of \ac{d2t} generation datasets. We first convert the input data in 16 \ac{d2t} generation datasets of various formats and provenance into a standard tabular format. On top of the unified format, we build \textsc{TabGenie}: a toolkit combining web interface, command-line interface and Python bindings for simplifying data visualization and processing. While data visualization helps us to present the contents of individual datasets, a unified format helps with streamlining the process of multi-task training. An interactive mode, in which the model input can be modified on the fly, then helps us to gain insights into model behavior. At the end of the section, we present multiple real-world use cases of our framework.
 
 
 \section{TabGenie Toolkit}
 \label{sec:tabgenie}
 
 \begin{refbox}
-    This section is based on the paper \emph{\textsc{TabGenie}: A Toolkit for Table-to-Text Generation} \cite{kasnerTabGenieToolkitTabletoText2023}, joint work with Ekaterina Garanina, Ondřej Plátek, and Ondřej Dušek. The work was published as a system demonstration in the Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (ACL 2023). The project was led by the author of the thesis; the other authors helped with implementing the framework and writing the paper.
+    This section is based on the paper \emph{\textsc{TabGenie}: A Toolkit for Table-to-Text Generation} \cite{kasnerTabGenieToolkitTabletoText2023}, joint work with Ekaterina Garanina, Ondřej Plátek, and Ondřej Dušek. The work was published as a system demonstration in the Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (ACL 2023). The project was led by the author of the thesis; the other authors helped with minor implementation tasks and paper writing.
 \end{refbox}
 
 
@@ -17,15 +17,15 @@ We present \textsc{TabGenie} -- a toolkit that enables researchers to explore, p
 
 \subsection{Motivation}
 \label{sec:tabgenie:motivation}
-In \autoref{tab:datasets}, we provided a representative, although not comprehensive, overview of research datasets for \ac{d2t} generation. As the number of datasets keeps growing and research keeps accelerating, researchers need to streamline their interactions with these datasets. However, each dataset comes with a different input format and task description, and the input data may not be easy to access and visualize.  Platforms such as HuggingFace Datasets \cite{lhoest2021datasets} or the GEM benchmark \cite{gehrmannGEMBenchmarkNatural2021}  provide a unified way to access the datasets, but they platforms still leave the majority of the data processing load on the user.
+In \autoref{tab:datasets}, we provided a representative, although not comprehensive, overview of research datasets for \ac{d2t} generation. As the number of datasets keeps growing and research keeps accelerating, researchers need to streamline their interactions with these datasets. However, each dataset comes with a different input format and task description, and the input data may not be easy to access and visualize.  Platforms such as HuggingFace Datasets \cite{lhoest2021datasets} or the GEM benchmark \cite{gehrmannGEMBenchmarkNatural2021}  provide a unified way to access the datasets, but they still leave the majority of the data processing load on the user.
 
-A key component missing from current \ac{d2t} tools is the possibility to visualize the input data and generated outputs. Visualization plays an important role in examining and evaluating scientific data \cite{Kehrer2013VisualizationAV} and can help researchers to make more informed design choices. A suitable interface can also encourage researchers to step away from unreliable automatic metrics \cite{gehrmannRepairingCrackedFoundation2022} and focus on manual error analysis \cite{van_miltenburg_underreporting_2021,van_miltenburg_barriers_2023}.
+A key component missing from current \ac{d2t} tools is the possibility to visualize input data and generated outputs. Visualization plays an important role in examining and evaluating scientific data \cite{Kehrer2013VisualizationAV} and can help researchers to make more informed design choices. A suitable interface can also encourage researchers to step away from unreliable automatic metrics \cite{gehrmannRepairingCrackedFoundation2022} and focus on manual error analysis \cite{van_miltenburg_underreporting_2021,van_miltenburg_barriers_2023}.
 
 Along with that, demands for a \textit{unified input data format} have recently been raised with multi-task training for large language models (LLMs) \citep[\textit{inter alia}]{sanh2021multitask,scao2022bloom,ouyang2022TrainingLM}. Some works have used simple data linearization techniques for converting structured data into a textual format to align it with the format used for other tasks \cite{xieUnifiedSKGUnifyingMultiTasking2022,tang2022mvp}. However, they use custom preprocessing code for the linearization, leading to discrepancies between individual works.
 
-To address these gaps, we present \textsc{TabGenie} -- a multi-purpose toolkit for interacting with \ac{d2t} generation datasets. The cornerstone of \textsc{TabGenie} is a \emph{unified data representation}. Each input is represented as a matrix of $m$ columns and $n$ rows consisting of individual cells accompanied with metadata. Building upon this representation, \textsc{TabGenie} then provides multiple features for unified workflows with table-to-text datasets, including:
+To address these gaps, we present \textsc{TabGenie} -- a multi-purpose toolkit for interacting with \ac{d2t} generation datasets. The cornerstone of \textsc{TabGenie} is a \emph{unified data representation}. Each input is represented as a matrix of $m$ columns and $n$ rows consisting of individual cells accompanied with metadata. Building upon this representation, \textsc{TabGenie} provides multiple features for unified workflows with table-to-text datasets, including:
 \begin{enumerate}
-    \item visualizing individual dataset examples in the tabular format,
+    \item visualizing individual dataset examples in a tabular format,
     \item interacting with table-to-text generation systems in real time,
     \item comparing generated system outputs,
     \item loading and preprocessing data for downstream tasks,
@@ -38,41 +38,39 @@ To address these gaps, we present \textsc{TabGenie} -- a multi-purpose toolkit f
 \begin{figure*}[t]
     \centering
     \setlength{\fboxsep}{0pt}\fcolorbox{gray!20}{white}{\includegraphics[width=1.0\textwidth]{img/tabgenie_web.png}}
-    \caption[The web interface of \textsc{TabGenie}.]{The web interface of \textsc{TabGenie}. The \emph{left panel} and the \emph{navigation bar} contain user controls; the \emph{center panel} shows table properties and table content; the \emph{right panel} contains system outputs.}
+    \caption[The web interface of \textsc{TabGenie}.]{The web interface of \textsc{TabGenie}. The \emph{left panel} and the \emph{top navigation bar} contain user controls; the \emph{center panel} shows table properties and table content; the \emph{right panel} contains system outputs.}
     \label{fig:tabgenie:web}
 \end{figure*}
 Input data in \textsc{TabGenie} is in tabular format. We define a \textit{table} as a two-dimensional matrix with $m$ columns and $n$ rows, which together define a grid of $m \times n$ cells. Each cell contains a (possibly empty) text string. A continuous sequence of cells $\{c_{i}, \ldots, c_{i+k}\}$ from the same row or column may be merged, in which case the values of $\{c_{i+1},\ldots,c_{i+k}\}$ are linked to the value of $c_{i}$.  A cell may be optionally marked as a \textit{heading}, which is represented as an additional property of the cell.\footnote{The headings are typically located in the first row or column but may also span multiple rows or columns and may not be adjacent.}
 
-To better accommodate the format of datasets such as ToTTo \cite{parikhToTToControlledTableToText2020} or HiTab \cite{chengHiTabHierarchicalTable2021}, we also allow individual cells to be \textit{highlighted}. Highlighted cells are assumed to be preselected for generating the output description. The tables may be accompanied by an additional set of properties (see \autoref{fig:tabgenie:web})\footnote{An example of such a property is a \textit{``title''} of the table in WikiBio \cite{lebretNeuralTextGeneration2016} or a \textit{``category''} in WebNLG \cite{gardentWebNLGChallengeGenerating2017}.}, which we represent as key-value pairs alongside the table. The properties may be used for generating the table description.
+To better accommodate the format of datasets such as ToTTo \cite{parikhToTToControlledTableToText2020} or HiTab \cite{chengHiTabHierarchicalTable2021}, we also allow individual cells to be \textit{highlighted}. Highlighted cells are assumed to be preselected for generating an output description. The tables may be accompanied by an additional set of properties (see the \texttt{properties} block in \autoref{fig:tabgenie:web}),\footnote{The properties usually represent table metadata. An example of such a property is a \textit{``title''} of the table in WikiBio \cite{lebretNeuralTextGeneration2016} or a \textit{``category''} in WebNLG \cite{gardentWebNLGChallengeGenerating2017}.} which we represent as key-value pairs alongside the table. These properties may be used for generating the table description.
 
 \paragraph{Unifying Data Format} Our \ac{d2t} generation datasets contain three high-level input data formats: tables, \acs{rdf}\glsunset{rdf} triples, and key-value pairs. We note that converting the latter two to tabular format requires only minimal changes to the data structure while allowing a unified data representation and visualization. We make a few minor changes to datasets that do not immediately adhere to the tabular format:
 
 \begin{itemize}
     \item For graph-to-text datasets, we format each triple as a row, using three columns labeled \textit{subject}, \textit{predicate}, and \textit{object}.
-    \item For key-value datasets, we use a two-column format, with keys used as row headings in the first column.
-    \item For SportSett:Basketball \cite{thomson2020sportsett}, we merge the \textit{box score} and \textit{line score} tables and add appropriate headings where necessary.
+    \item For key-value datasets, we use a two-column format, where the first column contains the keys and is marked as heading, and the second column contains the values.
+    \item For SportSett:Basketball \cite{thomson2020sportsett},\footnote{A derivative of Rotowire (\citealp{wiseman2017challenges}, see \Cref{sec:datasets,sec:tok-eval}).} we merge its two tables \textit{box score} and \textit{line score} and add appropriate headings where necessary.
 \end{itemize}
-
-% Moreover, for ToTTo \citep{parikhToTToControlledTableToText2020}, we also provide our custom, improved header cells highlighting (details are given in Appendix \ref{appendix:totto_highlights}).
 
 
 \paragraph{Datasets}
-We include 16 datasets listed in \autoref{tab:datasets} in \textsc{TabGenie}, covering many subtasks of \ac{d2t} generation. All the datasets are available under a permissive open-source license. To ease the data distribution, we load all the datasets using the Huggingface \texttt{datasets} package \cite{lhoest2021datasets}, which comes equipped with a data downloader. We publicly added to Huggingface \texttt{datasets} 9 out of 16 datasets that were not yet available.\footnote{See \url{https://huggingface.co/datasets?search=kasnerz}.} A custom dataset can be added to \textsc{TabGenie} by simply sub-classing the data loader class and overriding the method for processing individual entries.
+We include the 16 datasets listed in \autoref{tab:datasets} in \textsc{TabGenie}, covering many subtasks of \ac{d2t} generation. All the datasets are available under a permissive open-source license. To ease the data distribution, we load all the datasets using the Huggingface \texttt{datasets} package \cite{lhoest2021datasets}, which comes equipped with a data downloader. We publicly added to Huggingface \texttt{datasets} 9 out of 16 datasets that were not yet available.\footnote{See \url{https://huggingface.co/datasets?search=kasnerz}.} A custom dataset can be added to \textsc{TabGenie} by simply sub-classing the data loader class and overriding the method for processing individual entries.
 
 \subsection{Web Interface}
 \label{sec:tabgenie:web}
 
-\textsc{TabGenie} offers a way to interact with the datasets through the \textit{web interface}. The interface features a single-page layout with three panels containing user controls, input data, and system outputs (see \autoref{fig:tabgenie:web}).
+\textsc{TabGenie} offers a way to interact with datasets through a \textit{web interface}. The interface features a single-page layout with three panels containing user controls, input data, and system outputs (see \autoref{fig:tabgenie:web}).
 
-\paragraph{Content Exploration} \textsc{TabGenie} renders input data as HTML tables, providing better visualizations than existing data viewers, especially in the case of large and hierarchical tables.\footnote{Compare, e.g., with the ToTTo dataset in Huggingface Datasets for which the table is provided in a single field called \textit{``table''}: \url{https://huggingface.co/datasets/totto}.} Users can navigate through individual examples in the dataset sequentially, access an example using its index, or go to a random example. Users can add notes to examples and mark examples as favorites to access later. The interface also shows information about the dataset (such as its description, version, homepage, and license) and provides an option to export individual examples.
+\paragraph{Content Exploration} \textsc{TabGenie} renders input data as HTML tables, providing better visualizations than existing data viewers, especially in the case of large and hierarchical tables.\footnote{Compare, e.g., with the ToTTo dataset on Huggingface Datasets where the table is provided in a single field called \textit{``table''}: \url{https://huggingface.co/datasets/totto}.} Users can navigate through individual examples in the dataset sequentially, access an example using its index, or go to a random example. Users can add notes to examples and mark examples as favorites to access later. The interface also shows information about the dataset (such as its description, version, homepage, and license) and provides an option to export individual examples.
 
-\paragraph{Interactive Mode} In the interactive mode, the user can modify the input data and observe how changes influence model outputs. We assume that the model runs externally and provides access through an \acs{api} queried by \textsc{TabGenie}. The user can highlight different cells, edit cell contents, and edit the parameters of the downstream processor.
+\paragraph{Interactive Mode} In the interactive mode, the user can modify the input data and observe how changes influence model outputs. We assume that model provides access through a simple \acs{api} queried by \textsc{TabGenie}. The user can highlight different cells, edit cell contents, and edit the parameters of the downstream processor.
 
 % For example,  The contents of a table are processed by a processing \textit{pipeline}. This pipeline takes table contents and properties as input, processes them with a sequence of modules, and outputs HTML code. The modules are custom Python programs which may be re-used across the pipelines.
 
 % \textsc{TabGenie} currently provides two basic pipelines: (1) calling a generative language model through an API with a custom prompt, and (2) generating graph visualizations of RDF triples. We describe a case-study for the model API pipeline in §\ref{sec:cs:prompting}. Users can easily add custom pipelines by following the instructions in the project repository.
 
-\paragraph{Pre-generated Outputs} \textsc{TabGenie} also allows to visualize static pre-generated outputs, which are loaded in the JSONL\footnote{\url{https://jsonlines.org}} format from a specified directory. Multiple outputs can be displayed alongside a specific example for comparing outputs from multiple systems.
+\paragraph{Pre-generated Outputs} \textsc{TabGenie} also allows to visualize static pre-generated outputs, which are loaded in a JSONL\footnote{\url{https://jsonlines.org}} format from a specified directory. Multiple outputs can be displayed alongside a specific example for comparing outputs from multiple systems.
 
 
 \subsection{Developer Tools}
@@ -86,7 +84,7 @@ Besides the web interface, \textsc{TabGenie} also provides developer-friendly ac
     \item load a dataset from the Huggingface Datasets or a local folder,
     \item access individual table cells and their properties,
     \item linearize tables using pre-defined or custom functions,
-    \item prepare the Huggingface \texttt{Dataset} objects for downstream processing.
+    \item prepare Huggingface \texttt{Dataset} objects for downstream processing.
 \end{itemize}
 \textsc{TabGenie} can be installed as a Python package, making the integration simple and intuitive.
 
@@ -111,7 +109,7 @@ tabgenie export --dataset "webnlg" \
     --export_format "xlsx"
 \end{bash}
 % \end{noindent}
-          \noindent Export can also be done in the web interface.
+          \noindent Exports can also be done in the web interface.
     \item \textbf{Spreadsheet} For error analysis, it is common to select $N$ random examples from the dataset along with the system outputs and manually annotate them with error categories. The \texttt{tabgenie sheet} command generates a suitable spreadsheet for this procedure.
 
           \noindent Example usage:
@@ -142,7 +140,7 @@ tabgenie sheet --dataset "webnlg" \
 
 We present several case studies for using \textsc{TabGenie} in \ac{d2t} generation research. The instructions and code samples for these tasks are available in the project repository.
 
-\paragraph{Table-To-Text Generation} \textsc{TabGenie} can serve for finetuning a sequence-to-sequence language model for table-to-text generation in PyTorch \cite{paszke2019pytorch} using the Huggingface Transformers \cite{wolf2019HuggingFacesTS} framework. In a typical finetuning procedure, the user needs to prepare a \texttt{Dataset} object with tokenized input and output sequences. Using \textsc{TabGenie}, preprocessing a specific dataset is simplified to the following:
+\paragraph{Table-To-Text Generation} \textsc{TabGenie} can serve for finetuning a sequence-to-sequence language model for table-to-text generation in PyTorch \cite{paszke2019pytorch} using the Huggingface Transformers \cite{wolf2019HuggingFacesTS} framework. In a typical finetuning procedure, the user needs to prepare a \texttt{Dataset} object with tokenized input and output sequences. \textsc{TabGenie} provides a customizable function \texttt{get\_hf\_dataset()}, which linearizes the tables and tokenizes the inputs and references with the provided tokenizer, simplifying preprocessing a dataset to the following:
 % \begin{noindent}
 \begin{python}
 from transformers import AutoTokenizer
@@ -163,19 +161,21 @@ hf_dataset = tg_dataset.get_hf_dataset(
 )
 \end{python}
 % \end{noindent}
-The customizable function \texttt{get\_hf\_dataset()} linearizes the tables and tokenizes the inputs and references. For training a single model on multiple datasets in a multi-task learning setting \cite{xieUnifiedSKGUnifyingMultiTasking2022}, the user may preprocess each dataset individually, prepending a dataset-specific task description to each example. The datasets may then be combined using the methods provided by the \texttt{datasets} package.
 
-\paragraph{Interactive Prompting} \textsc{TabGenie} can be used for observing the impact of various inputs on the outputs of a \ac{llm} prompted for a table-to-text generation. The user customizes the provided \texttt{model\_api} pipeline to communicate with a \ac{llm} through an API. The API can communicate either with an external model (using e.g. OpenAI API\footnote{\url{https://openai.com/api/}}), or with a model running locally (using libraries such as FastAPI\footnote{\url{https://fastapi.tiangolo.com}}). The user then interacts with the model through \textsc{TabGenie} web interface, modifying the prompts, highlighted cells, and table content.
 
-\paragraph{Error Analysis} \textsc{TabGenie} can help with annotating error categories in the outputs from a table-to-text generation model. The user generates the system outputs and saves the outputs for a particular dataset split in a JSONL format. Through the command-line interface, the user will then generate a XLSX file which can be imported in any suitable office software and distributed to annotators for performing error analysis.
+% For training a single model on multiple datasets in a multi-task learning setting \cite{xieUnifiedSKGUnifyingMultiTasking2022}, the user may preprocess each dataset individually, prepending a dataset-specific task description to each example. The datasets may then be combined using the methods provided by the \texttt{datasets} package.
+
+\paragraph{Interactive Prompting} \textsc{TabGenie} can be used for observing the impact of various prompts during table-to-text generation. The user customizes the provided \texttt{model\_api} pipeline to communicate with an \ac{llm} through an API. The API can communicate either with an external model (using e.g. OpenAI API\footnote{\url{https://openai.com/api/}}), or with a model running locally (using libraries such as FastAPI\footnote{\url{https://fastapi.tiangolo.com}}). The user then interacts with the model through the \textsc{TabGenie} web interface, where they are able to modify prompts or table contents as well as highlight specific cells.
+
+\paragraph{Error Analysis} \textsc{TabGenie} can help with annotating error categories in the outputs of a table-to-text generation model. The user generates system outputs on a test set and saves them in a JSONL format. Through the command-line interface, the user will then generate a XLSX file which can be imported in any suitable office software and distributed to annotators for performing error analysis.
 
 \subsection{Discussion}
 
-\paragraph{Limitations} For some \ac{d2t} inputs, the tabular structure may be inappropriate, such as for tree-based structures \cite{balakrishnan2019constrained}, bag-of-words \cite{lin2019commongen}, or multimodal inputs \cite{krishna2017visual}. It is also not suitable for the JSON format, which we explore as the format of the input data in \autoref{sec:quintd}. As the framework targets the research community, it requires some programming skills (e.g., for integrating the model API).
+\paragraph{Limitations} For some \ac{d2t} inputs, the tabular structure may be inappropriate, such as for tree-based structures \cite{balakrishnan2019constrained}, bag-of-words \cite{lin2019commongen}, or multimodal inputs \cite{krishna2017visual}. It is also not well-suited for the heavily nested JSON format, which we explore as the input format in \autoref{sec:quintd}. As the framework targets the research community, its use requires some programming skills (e.g., for integrating the model API).
 
-\paragraph{Extending the Framework} Adding new datasets to \textsc{TabGenie} is straightforward as long as the dataset is convertible to the specified format. Due to deployment issues, \textsc{TabGenie} does not include large synthetic datasets \cite{agarwalKnowledgeGraphBased2021,jinGenWikiDatasetMillion2020}, but these datasets could be added locally.
+\paragraph{Extending the Framework} Adding new datasets to \textsc{TabGenie} is straightforward as long as the dataset is convertible to the unified format. Due to deployment issues, \textsc{TabGenie} does not include large synthetic datasets \cite{agarwalKnowledgeGraphBased2021,jinGenWikiDatasetMillion2020}, but these datasets could be added locally.
 
 % Technically, the framework could also be used for datasets which cannot be converted to tables; however, this would require adding more custom code and limit the unified processing pipelines.
 
 \section{Conclusion}
-We presented a toolkit for unified processing of \ac{d2t} generation datasets. The toolkit enables researchers to gain insights into the datasets by visualizing their contents in the web interface. The toolkit also allows to pre-process the datasets in a unified format, facilitating their processing with \acp{lm}. On top of that, the toolkit provides various practical methods for in \ac{d2t} generation research, such as sending the inputs to a \ac{d2t} generation models via an API or generating error analysis spreadsheets. As such, the framework promotes more informed and principled \ac{d2t} generation research.
+We presented a toolkit for unified processing of \ac{d2t} generation datasets. The toolkit enables researchers to gain insights into the datasets by visualizing their contents in a web interface. The toolkit also allows to pre-process the datasets in a unified format, facilitating their processing with \acp{lm}. On top of that, the toolkit provides various practical methods for in \ac{d2t} generation research, such as sending the inputs to a \ac{d2t} generation models via an API or generating error analysis spreadsheets. As such, the framework promotes more informed and principled \ac{d2t} generation research.

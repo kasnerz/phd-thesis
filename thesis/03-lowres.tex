@@ -355,7 +355,6 @@ For training the modules, we need to build a corpus where (1) the input is a set
 
 
 \paragraph{Data Source} For building the \textsc{WikiFluent} corpus (\autoref{fig:wikifluent}), we first extracted 934k first paragraphs of articles from a Wikipedia dump\footnote{\texttt{enwiki-20210401-pages-articles-multistream}} using WikiExtractor \cite{Wikiextractor2015}. Wikipedia is commonly used for large-scale pretraining of \ac{d2t} generation models, as it provides a source of neutral texts based on factual data \cite{jinGenWikiDatasetMillion2020,chenKGPTKnowledgeGroundedPreTraining2020}.
-% Although it is not bias-free, it provides more balanced sample of natural language use than typical \ac{d2t} generation datasets. 
 We used the first paragraphs of Wikipedia entries with lengths between 30-430 characters, filtering out lists, disambiguations, and malformed paragraphs. To balance the lengths of inputs, we divided the paragraphs according to their length into four equally-sized bins (30-130 characters, etc.) and selected 250k examples from each bin.
 
 
@@ -398,20 +397,6 @@ We transform triples into facts using a single-triple template $t_i$ for each pr
 \paragraph{Ordering Model}
 For our ordering model, we use the \emph{Simple Pointer} model from \citet{calizzano2021ordering}.\footnote{For details about the model, please refer to \citet{calizzano2021ordering}.} The model is based on a pretrained BART-base model \cite{lewisBARTDenoisingSequencetoSequence2019} extended with a pointer network from \citet{wang2019hierarchical}. We train the model using the synthesized simple sentences in the \textsc{WikiFluent} corpus, randomly shuffling the order of the sentences and training the model to restore their original order.
 
-% In the encoding phase, facts $F$ are concatenated and tokenized. Each fact is surrounded by special tokens denoting the beginning (\texttt{<s>}) and the end (\texttt{</s>}) of the fact. The sequence is processed by the BART encoder, generating a sequence of encoder states $E$ for each end token \texttt{</s>} representing the preceding fact.
-
-% The decoding proceeds autoregressively. To bootstrap the decoding process, the pair of tokens \texttt{<s></s>} is fed into the decoder, producing the decoder state $d_1$. The pointer network (attending to $d_1$ and $E$), selects the first ordered fact $f_{o_1}$, which is fed into the decoder in the next step ($d_2 = $\texttt{<s>$f_{o_1}$</s>}). The process is repeated until the all the facts are decoded in a particular order.
-
-% The pointer network computes the probability of a fact to be on the $j$-th position, using the encoder output $E$ and the decoder output state $d_j$. The network is based on the scaled dot product attention, where $d_j$ is the query and encoder outputs $E_i$ are the keys:
-% \begin{gather*}
-%     Q = d_j W_Q \\
-%     K = E W_K \\
-%     P_{j} = \operatorname{softmax}\left(\frac{QK^T}{\sqrt{b}}\right).
-% \end{gather*}
-% Here $W_Q$ and $W_K \in \mathbb{R}^{b\times b}$, $b$ is the dimension of BART hidden states, and $P_{j} \in \mathbb{R}^{n+1}$ is the probability distribution for the $j$-th position (i.e., $P_{ji}$ is the probability that fact $f_i$ is on the $j$-th position).
-
-
-
 \paragraph{Aggregation Model}
 We base our aggregation model on RoBERTa-large \cite{liuRoBERTaRobustlyOptimized2019} with a token classification head. We input the sequence of ordered facts $F_o$ into the model, separating each pair of facts $f_{o_i}$ with a separator token. The token classification layer classifies each separator token into two classes $\{0,1\}$ corresponding to the delimiter $\delta_i$. We ignore the outputs for the non-separator tokens while computing cross-entropy loss. We create training examples for aggregation using the synthesized sentences in the \textsc{WikiFluent} corpus, in which we set $\delta_i=0$ for the sentences $i,i+1$ which are the result of splitting a single sentence and $\delta_i=1$ otherwise.
 
@@ -444,7 +429,6 @@ Correspondingly, we test three versions of the pipeline for the ablation study:
     \item \textsc{2-stage} -- a pipeline consisting of the \textsc{ord} model and the \textsc{\ac{pc}+agg} model,
     \item \textsc{1-stage} -- a single stage consisting of the \textsc{\ac{pc}+ord+agg} model.
 \end{itemize}
-% We evaluate all versions of the pipeline with PC models trained on the \textit{full} and \textit{filtered} versions of the \textsc{WikiFluent} dataset (see §\ref{sec:pipeline:wikifluent}).
 
 
 \subsection{Evaluation}
