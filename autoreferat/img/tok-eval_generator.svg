@@ -1,0 +1,916 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="161.04271mm"
+   height="37.602757mm"
+   viewBox="0 0 161.04271 37.602755"
+   version="1.1"
+   id="svg1305"
+   sodipodi:docname="tok-eval_generator.svg"
+   inkscape:version="1.3.2 (1:1.3.2+202311252150+091e20ef0f)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs1299">
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker2557"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lstart">
+      <path
+         transform="matrix(0.8,0,0,0.8,10,0)"
+         style="fill:#d40000;fill-opacity:1;fill-rule:evenodd;stroke:#d40000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path2555"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <symbol
+       viewBox="0 0 24 24"
+       id="ic_forward_24px">
+      <path
+         style="stroke-width:0.264583"
+         inkscape:connector-curvature="0"
+         d="M 3.175,2.1166667 V 1.0583333 L 5.2916667,3.175 3.175,5.2916667 V 4.2333333 H 1.0583333 V 2.1166667 Z"
+         id="path73355" />
+    </symbol>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.64311"
+     inkscape:cx="274.78379"
+     inkscape:cy="4.2602138"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1020"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     showguides="false"
+     inkscape:showpageshadow="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
+  <metadata
+     id="metadata1302">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0.13171034,-7.0132163)">
+    <rect
+       style="opacity:1;fill:#f7a56f;fill-opacity:1;stroke:none;stroke-width:0.150077;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.94902"
+       id="rect6170"
+       width="48.107693"
+       height="4.9204526"
+       x="111.47799"
+       y="-11.61274"
+       ry="0" />
+    <rect
+       style="opacity:1;fill:#ffe05e;fill-opacity:1;stroke:none;stroke-width:0.0745324;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.94902"
+       id="rect6286"
+       width="51.054482"
+       height="4.7832723"
+       x="57.581451"
+       y="-12.347285"
+       ry="0" />
+    <text
+       id="text74805"
+       y="28.697931"
+       x="62.076141"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;line-height:1.06;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.245934"
+       xml:space="preserve"><tspan
+         id="tspan74811"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934"
+         y="28.697931"
+         x="62.076141"
+         sodipodi:role="line">• Patrick Patterson scored 14 points.</tspan><tspan
+         id="tspan74825"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934"
+         y="31.478619"
+         x="62.076141"
+         sodipodi:role="line">• Patrick Patterson provided 5 rebounds.</tspan><tspan
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934"
+         y="34.259304"
+         x="62.076141"
+         sodipodi:role="line"
+         id="tspan4928">• Patrick Patterson provided 3 defensive rebounds.</tspan><tspan
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934"
+         y="37.039993"
+         x="62.076141"
+         sodipodi:role="line"
+         id="tspan4932">• Patrick Patterson provided 2 offensive rebounds.</tspan><tspan
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934"
+         y="39.820679"
+         x="62.076141"
+         sodipodi:role="line"
+         id="tspan4930">• Patrick Patterson provided 1 assists.</tspan><tspan
+         id="tspan74827"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934"
+         y="42.601368"
+         x="62.076141"
+         sodipodi:role="line">...</tspan></text>
+    <g
+       id="g6284"
+       transform="translate(-6.3500003,-1.0583333)">
+      <g
+         transform="matrix(1.0352815,0,0,1.0352815,-48.564215,-160.857)"
+         style="stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none"
+         id="g91988">
+        <g
+           style="stroke-width:0.34112;stroke-miterlimit:4;stroke-dasharray:none"
+           id="g149331"
+           transform="matrix(0.29315197,0,0,-0.29315197,33.264431,389.34455)">
+          <path
+             d="M 138.104,764.361 V 725.272"
+             style="fill:none;stroke:#000000;stroke-width:0.34112;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             id="path149333"
+             inkscape:connector-curvature="0" />
+        </g>
+        <g
+           id="g149335"
+           transform="matrix(0.29315197,0,0,-0.29315197,33.264431,389.34455)"
+           style="stroke-width:0.34112;stroke-miterlimit:4;stroke-dasharray:none">
+          <path
+             d="M 168.548,764.361 V 725.272"
+             style="fill:none;stroke:#000000;stroke-width:0.34112;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             id="path149337"
+             inkscape:connector-curvature="0" />
+        </g>
+        <g
+           id="g149339"
+           transform="matrix(0.29315197,0,0,-0.29315197,33.264431,389.34455)"
+           style="stroke-width:0.34112;stroke-miterlimit:4;stroke-dasharray:none">
+          <path
+             d="M 197.235,764.361 V 725.272"
+             style="fill:none;stroke:#000000;stroke-width:0.34112;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             id="path149341"
+             inkscape:connector-curvature="0" />
+        </g>
+        <g
+           id="g149355"
+           transform="matrix(0.24401431,0,0,-0.29315197,39.436696,389.34455)"
+           style="stroke-width:0.366125;stroke-miterlimit:4;stroke-dasharray:none">
+          <path
+             d="M 56.296,751.209 H 243.865"
+             style="fill:none;stroke:#000000;stroke-width:0.366125;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             id="path149357"
+             inkscape:connector-curvature="0" />
+        </g>
+        <g
+           id="g149359"
+           transform="matrix(0.24401431,0,0,-0.29315197,39.436696,389.34455)"
+           style="stroke-width:0.366125;stroke-miterlimit:4;stroke-dasharray:none">
+          <path
+             d="M 56.296,738.424 H 243.865"
+             style="fill:none;stroke:#000000;stroke-width:0.366125;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             id="path149361"
+             inkscape:connector-curvature="0" />
+        </g>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-11.357045,242.08246)"
+         id="g149419">
+        <text
+           transform="matrix(1,0,0,-1,85.011,754.894)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149423"
+           y="0"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+             sodipodi:role="line"
+             id="tspan149421"
+             x="0"
+             y="0">Team</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-13.474231,242.2242)"
+         id="g149425">
+        <text
+           transform="matrix(1,0,0,-1,143.802,754.894)"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149429"
+           y="0"><tspan
+             sodipodi:role="line"
+             id="tspan149427"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+             x="0"
+             y="0">Win</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-13.9966,242.2242)"
+         id="g149431">
+        <text
+           transform="matrix(1,0,0,-1,173.112,754.894)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149435"
+           y="0"><tspan
+             sodipodi:role="line"
+             id="tspan149433"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+             x="0"
+             y="0">Loss</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-13.922295,242.2242)"
+         id="g149437">
+        <text
+           transform="matrix(1,0,0,-1,203.499,754.894)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149441"
+           y="0"><tspan
+             y="0"
+             x="0"
+             sodipodi:role="line"
+             id="tspan149439"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">Pts</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-12.379089,242.41319)"
+         id="g149449">
+        <text
+           y="-742.30115"
+           x="80.328751"
+           transform="scale(1,-1)"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149453"><tspan
+             y="-742.30115"
+             x="80.328751"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+             sodipodi:role="line"
+             id="tspan149451">Mavericks</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-13.827801,242.2242)"
+         id="g149455">
+        <text
+           transform="matrix(1,0,0,-1,148.309,742.081)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149459"
+           y="0"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+             x="0"
+             y="0"
+             sodipodi:role="line"
+             id="tspan149457">31</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-13.816554,242.2242)"
+         id="g149461">
+        <text
+           transform="matrix(1,0,0,-1,177.902,742.081)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149465"
+           y="0"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+             sodipodi:role="line"
+             id="tspan149463"
+             x="0"
+             y="0">41</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-13.335406,242.2242)"
+         id="g149467">
+        <text
+           transform="matrix(1,0,0,-1,202.791,742.081)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149471"
+           x="4.4876814"
+           y="0"><tspan
+             sodipodi:role="line"
+             id="tspan149469"
+             x="4.4876814"
+             y="0"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle">86</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-11.938586,242.17695)"
+         id="g149473">
+        <text
+           y="0"
+           x="13.758249"
+           transform="matrix(1,0,0,-1,83.31,729.297)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149477"><tspan
+             y="0"
+             x="13.758249"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+             sodipodi:role="line"
+             id="tspan149475">Raptors</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-13.890537,242.3055)"
+         id="g149479">
+        <text
+           transform="scale(1,-1)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149483"
+           x="154.61938"
+           y="-729.297"><tspan
+             x="152.30299"
+             y="-729.297"
+             id="tspan149481"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle">44</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-14.312039,242.2242)"
+         id="g149485">
+        <text
+           transform="scale(1,-1)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149489"
+           x="187.69792"
+           y="-729.297"><tspan
+             x="182.94165"
+             y="-729.297"
+             id="tspan149487"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle">29</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-14.191932,242.2242)"
+         id="g149491">
+        <text
+           transform="matrix(1,0,0,-1,205.313,729.297)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149495"
+           y="0"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+             x="0"
+             y="0"
+             sodipodi:role="line"
+             id="tspan149493">94</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.26220155,0,0,-0.26220155,30.56158,188.80597)"
+         id="g149575-1">
+        <text
+           transform="matrix(1,0,0,-1,92.409,665.376)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149579-4"><tspan
+             x="0"
+             y="0"
+             id="tspan149577-0">…</tspan></text>
+      </g>
+    </g>
+    <g
+       id="g6232"
+       transform="translate(-6.3500003,-1.0583333)">
+      <g
+         style="stroke-width:0.34112;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="matrix(0.30349481,0,0,-0.30349481,-14.393431,243.82785)"
+         id="g149375">
+        <path
+           inkscape:connector-curvature="0"
+           id="path149377"
+           style="fill:none;stroke:#000000;stroke-width:0.34112;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 138.104,713.224 V 661.35" />
+      </g>
+      <g
+         style="stroke-width:0.34112;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="matrix(0.30349481,0,0,-0.30349481,-14.393431,243.82785)"
+         id="g149379">
+        <path
+           inkscape:connector-curvature="0"
+           id="path149381"
+           style="fill:none;stroke:#000000;stroke-width:0.34112;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 168.548,713.224 V 661.35" />
+      </g>
+      <g
+         style="stroke-width:0.34112;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="matrix(0.30349481,0,0,-0.30349481,-14.393431,243.82785)"
+         id="g149383">
+        <path
+           inkscape:connector-curvature="0"
+           id="path149385"
+           style="fill:none;stroke:#000000;stroke-width:0.34112;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 197.235,713.224 V 661.35" />
+      </g>
+      <g
+         style="stroke-width:0.366125;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="matrix(0.2526235,0,0,-0.30349481,-8.0034026,243.82785)"
+         id="g149399">
+        <path
+           inkscape:connector-curvature="0"
+           id="path149401"
+           style="fill:none;stroke:#000000;stroke-width:0.366125;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 56.296,700.072 H 243.865" />
+      </g>
+      <g
+         style="stroke-width:0.366125;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="matrix(0.2526235,0,0,-0.30349481,-8.0034026,243.82785)"
+         id="g149403">
+        <path
+           inkscape:connector-curvature="0"
+           id="path149405"
+           style="fill:none;stroke:#000000;stroke-width:0.366125;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 56.296,687.287 H 243.865" />
+      </g>
+      <g
+         style="stroke-width:0.366125;stroke-miterlimit:4;stroke-dasharray:none"
+         transform="matrix(0.2526235,0,0,-0.30349481,-8.0034026,243.82785)"
+         id="g149407">
+        <path
+           inkscape:connector-curvature="0"
+           id="path149409"
+           style="fill:none;stroke:#000000;stroke-width:0.366125;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 56.296,674.503 H 243.865" />
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-12.153792,243.92232)"
+         id="g149497">
+        <text
+           transform="matrix(1,0,0,-1,84.104,703.7)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149501"
+           y="0"><tspan
+             y="0"
+             x="0"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+             sodipodi:role="line"
+             id="tspan149499">Player</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-14.006367,243.82783)"
+         id="g149503">
+        <text
+           transform="matrix(1,0,0,-1,146.806,703.7)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149507"
+           y="0"><tspan
+             y="0"
+             x="0"
+             sodipodi:role="line"
+             id="tspan149505"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">AS</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-13.924494,243.82783)"
+         id="g149509">
+        <text
+           transform="matrix(1,0,0,-1,175.691,703.7)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149513"
+           y="0"><tspan
+             y="0"
+             x="0"
+             sodipodi:role="line"
+             id="tspan149511"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">RB</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-13.929934,243.82783)"
+         id="g149515">
+        <text
+           transform="matrix(1,0,0,-1,203.414,703.7)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149519"
+           y="0"><tspan
+             y="0"
+             x="0"
+             sodipodi:role="line"
+             id="tspan149517"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">PT</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-12.271716,243.96957)"
+         id="g149527">
+        <text
+           transform="matrix(1,0,0,-1,68.91,691.001)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149531"
+           x="28.485319"
+           y="0"><tspan
+             sodipodi:role="line"
+             id="tspan149529"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+             x="28.485319"
+             y="0">Patrick Patterson</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-14.115569,243.82783)"
+         id="g149533">
+        <text
+           transform="matrix(1,0,0,-1,150.803,691.001)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149537"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+             x="0"
+             y="0"
+             id="tspan149535">1</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-14.469039,243.82783)"
+         id="g149539">
+        <text
+           transform="matrix(1,0,0,-1,180.397,691.001)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149543"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+             x="0"
+             y="0"
+             id="tspan149541">5</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-14.11908,243.82783)"
+         id="g149545">
+        <text
+           transform="matrix(1,0,0,-1,205.313,691.001)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149549"
+           y="0"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+             sodipodi:role="line"
+             id="tspan149547"
+             x="0"
+             y="0">14</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-12.301773,243.73334)"
+         id="g149551">
+        <text
+           transform="scale(1,-1)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149555"
+           x="97.354271"
+           y="-678.18799"><tspan
+             sodipodi:role="line"
+             id="tspan149553"
+             x="97.354271"
+             y="-678.18799"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle">Delon Wright</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-14.393434,243.82783)"
+         id="g149557">
+        <text
+           transform="matrix(1,0,0,-1,150.803,678.188)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149561"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+             x="0"
+             y="0"
+             id="tspan149559">4</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-14.393434,243.82783)"
+         id="g149563">
+        <text
+           transform="matrix(1,0,0,-1,177.902,678.188)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149567"
+           x="4.5672884"
+           y="0"><tspan
+             sodipodi:role="line"
+             id="tspan149565"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+             x="4.5672884"
+             y="0">3</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-14.393434,243.82783)"
+         id="g149569">
+        <text
+           transform="matrix(1,0,0,-1,205.313,678.188)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149573"
+           x="4.6562295"
+           y="0"><tspan
+             sodipodi:role="line"
+             id="tspan149571"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle"
+             x="4.6562295"
+             y="0">8</tspan></text>
+      </g>
+      <g
+         transform="matrix(0.30349481,0,0,-0.30349481,-14.393434,242.91735)"
+         id="g149575">
+        <text
+           transform="matrix(1,0,0,-1,92.409,665.376)"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           id="text149579"><tspan
+             x="0"
+             y="0"
+             id="tspan149577">…</tspan></text>
+      </g>
+      <g
+         id="g84603"
+         transform="matrix(0.26220155,0,0,-0.26220155,30.236825,205.94717)">
+        <text
+           id="text84601"
+           style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           transform="matrix(1,0,0,-1,92.409,665.376)"><tspan
+             id="tspan84599"
+             y="0"
+             x="0">…</tspan></text>
+      </g>
+    </g>
+    <g
+       id="g149575-1-9"
+       transform="matrix(0.26220155,0,0,-0.26220155,79.337019,251.03625)">
+      <text
+         id="text149579-4-1"
+         style="font-variant:normal;font-weight:normal;font-size:10.006px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         transform="matrix(1,0,0,-1,92.409,665.376)"><tspan
+           id="tspan149577-0-0"
+           y="0"
+           x="0" /></text>
+    </g>
+    <text
+       id="text74805-2"
+       y="28.697931"
+       x="114.95611"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;line-height:1.06;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.245934"
+       xml:space="preserve"><tspan
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934"
+         y="28.697931"
+         x="114.95611"
+         sodipodi:role="line"
+         id="tspan4868">• Patrick Patterson provided 14 points </tspan><tspan
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934"
+         y="31.478619"
+         x="114.95611"
+         sodipodi:role="line"
+         id="tspan4893">  on 5/6 shooting, 5 rebounds, 3 defensive </tspan><tspan
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934"
+         y="34.259304"
+         x="114.95611"
+         sodipodi:role="line"
+         id="tspan6293">  rebounds, 2 offensive rebounds and 1 assist.</tspan><tspan
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934"
+         y="37.039993"
+         x="114.95611"
+         sodipodi:role="line"
+         id="tspan6328">...</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4880"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.4776px;line-height:1.25;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       transform="scale(0.26458333)"><flowRegion
+         id="flowRegion4882"><rect
+           id="rect4884"
+           width="81.317284"
+           height="21.213203"
+           x="452.54834"
+           y="263.89001" /></flowRegion><flowPara
+         id="flowPara4886" /></flowRoot>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;line-height:1.06;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.245934"
+       x="114.95611"
+       y="14.747256"
+       id="text6139"><tspan
+         id="tspan6129"
+         sodipodi:role="line"
+         x="114.95611"
+         y="14.747256"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934">• The Toronto Raptors, which were leading </tspan><tspan
+         id="tspan6131"
+         sodipodi:role="line"
+         x="114.95611"
+         y="17.527943"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934">  at halftime by 10 points (54-44), defeated </tspan><tspan
+         sodipodi:role="line"
+         x="114.95611"
+         y="20.30863"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934"
+         id="tspan6303">  the Dallas Mavericks by 8 points (94-86).</tspan><tspan
+         id="tspan6137"
+         sodipodi:role="line"
+         x="114.95611"
+         y="23.089317"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934">…</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;line-height:1.06;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.245934"
+       x="62.115299"
+       y="14.747256"
+       id="text6079"><tspan
+         sodipodi:role="line"
+         x="62.115299"
+         y="14.747256"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934"
+         id="tspan6061">• Toronto Raptors won the first half </tspan><tspan
+         sodipodi:role="line"
+         x="62.115299"
+         y="17.527943"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934"
+         id="tspan6295">  by 10 points (54-44).</tspan><tspan
+         id="tspan6063"
+         sodipodi:role="line"
+         x="62.115299"
+         y="20.30863"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934">• Toronto Raptors beat Dallas Mavericks </tspan><tspan
+         sodipodi:role="line"
+         x="62.115299"
+         y="23.089317"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934"
+         id="tspan6297">  by 8 points (94-86).</tspan><tspan
+         sodipodi:role="line"
+         x="62.115299"
+         y="25.870005"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:2.62329px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.245934"
+         id="tspan6077">...</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.5522px;line-height:1.25;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.222363"
+       x="91.323372"
+       y="-4.2430086"
+       id="text1193-5-4"><tspan
+         sodipodi:role="line"
+         x="91.323372"
+         y="-4.2430086"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:2.5522px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.222363"
+         id="tspan1241-5">simple (hand-crafted templates)</tspan></text>
+    <use
+       id="use81668"
+       transform="matrix(1.0404896,0,0,1,-14.103296,19.573927)"
+       style="fill:#e6e6e6;stroke:#e6e6e6"
+       xlink:href="#ic_forward_24px"
+       x="0"
+       y="0"
+       width="100%"
+       height="100%" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:2.17332px;line-height:1.25;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.189355"
+       x="65.830032"
+       y="84.069023"
+       id="text1193-5-4-3"><tspan
+         sodipodi:role="line"
+         x="65.830032"
+         y="84.069023"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:2.17332px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.189355"
+         id="tspan1241-5-3">rule-based</tspan><tspan
+         sodipodi:role="line"
+         x="65.830032"
+         y="86.785675"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:2.17332px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.189355"
+         id="tspan81698">NLG</tspan></text>
+    <g
+       id="g1"
+       transform="matrix(0.86225557,0,0,0.86225557,-23.074296,-163.23499)">
+      <text
+         id="text192935-8-4"
+         y="200.91197"
+         x="112.77281"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:2.82222px;line-height:1;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#333333;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         xml:space="preserve"><tspan
+           id="tspan192962-80"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:2.82222px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#333333;stroke-width:0.264583"
+           y="200.91197"
+           x="112.77281"
+           sodipodi:role="line">simple (hand-crafted templates)</tspan></text>
+      <g
+         id="g193037-8"
+         transform="matrix(0.31298663,0,0,0.31298663,102.34036,152.85327)">
+        <path
+           id="path193001-1"
+           d="m 20.770595,153.59577 c -0.158291,9.5e-4 -0.281999,-0.13636 -0.264584,-0.29369 L 20.70974,151.45 c 0.0073,-0.0592 0.03429,-0.11421 0.07673,-0.15611 l 4.328583,-4.32858 c 0.33078,-0.33144 0.867782,-0.33144 1.198562,0 l 0.822855,0.82285 c 0.331441,0.33078 0.331441,0.86778 0,1.19856 l -4.325938,4.32594 c -0.0419,0.0424 -0.09691,0.0695 -0.156104,0.0767 l -1.852083,0.20373 z m 0.457729,-1.99761 -0.15875,1.43404 1.434041,-0.15875 4.259792,-4.25979 c 0.124512,-0.12408 0.124512,-0.32571 0,-0.44979 l -0.8255,-0.8255 c -0.12408,-0.12451 -0.325712,-0.12451 -0.449792,0 l -1.254562,1.25456 z"
+           class="cls-1"
+           inkscape:connector-curvature="0"
+           style="fill:#101820;stroke-width:0.264583"
+           sodipodi:nodetypes="ccccccccccccccccccccc" />
+        <path
+           id="path193003-0"
+           d="m 26.326845,149.68258 a 0.26458333,0.26458333 0 0 1 -0.187855,-0.0767 l -1.643062,-1.64835 a 0.26566638,0.26566638 0 0 1 0.375708,-0.37571 l 1.648354,1.64835 a 0.26458333,0.26458333 0 0 1 0,0.37571 0.26458333,0.26458333 0 0 1 -0.193145,0.0767 z"
+           class="cls-1"
+           inkscape:connector-curvature="0"
+           style="fill:#101820;stroke-width:0.264583" />
+        <path
+           style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 24.68067,148.14758 -3.452346,3.45058 -0.15875,1.43404 1.434041,-0.15875 3.446585,-3.45634 z"
+           id="path193022-2"
+           inkscape:connector-curvature="0" />
+        <rect
+           id="rect193005-2"
+           y="122.84454"
+           x="-91.113182"
+           width="2.9130626"
+           transform="rotate(-45)"
+           height="0.5291667"
+           class="cls-1"
+           style="fill:#101820;stroke-width:0.264583" />
+        <path
+           id="path193007-9"
+           d="m 28.178928,153.59577 h -4.233333 a 0.264585,0.264585 0 0 1 0,-0.52917 h 4.233333 a 0.264585,0.264585 0 0 1 0,0.52917 z"
+           class="cls-1"
+           inkscape:connector-curvature="0"
+           style="fill:#101820;stroke-width:0.264583" />
+        <path
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="path193028-7"
+           d="m 25.073222,147.76338 0.657734,-0.5763 1.219418,1.186 -0.62015,0.67236 z"
+           style="fill:#1a1a1a;stroke:#101820;stroke-width:0.165;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      </g>
+      <rect
+         ry="0.88317591"
+         y="197.50072"
+         x="106.47937"
+         height="4.73842"
+         width="43.768764"
+         id="rect74833-5"
+         style="fill:none;fill-opacity:1;stroke:#999999;stroke-width:0.111074;stroke-miterlimit:4;stroke-dasharray:0.444297, 0.111074;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="g6"
+       transform="translate(11.400253,6.90389)">
+      <text
+         id="text1"
+         y="3.098587"
+         x="114.74672"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:2.43348px;line-height:1;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#333333;fill-opacity:1;stroke:none;stroke-width:0.228138"
+         xml:space="preserve"><tspan
+           id="tspan1"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:2.43348px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#333333;stroke-width:0.228138"
+           y="3.098587"
+           x="114.74672"
+           sodipodi:role="line">compact (FORGe system)</tspan></text>
+      <g
+         id="g5"
+         transform="matrix(0.26987447,0,0,0.26987447,105.75128,-38.340297)">
+        <path
+           id="path1"
+           d="m 20.770595,153.59577 c -0.158291,9.5e-4 -0.281999,-0.13636 -0.264584,-0.29369 L 20.70974,151.45 c 0.0073,-0.0592 0.03429,-0.11421 0.07673,-0.15611 l 4.328583,-4.32858 c 0.33078,-0.33144 0.867782,-0.33144 1.198562,0 l 0.822855,0.82285 c 0.331441,0.33078 0.331441,0.86778 0,1.19856 l -4.325938,4.32594 c -0.0419,0.0424 -0.09691,0.0695 -0.156104,0.0767 l -1.852083,0.20373 z m 0.457729,-1.99761 -0.15875,1.43404 1.434041,-0.15875 4.259792,-4.25979 c 0.124512,-0.12408 0.124512,-0.32571 0,-0.44979 l -0.8255,-0.8255 c -0.12408,-0.12451 -0.325712,-0.12451 -0.449792,0 l -1.254562,1.25456 z"
+           class="cls-1"
+           inkscape:connector-curvature="0"
+           style="fill:#101820;stroke-width:0.264583"
+           sodipodi:nodetypes="ccccccccccccccccccccc" />
+        <path
+           id="path2"
+           d="m 26.326845,149.68258 a 0.26458333,0.26458333 0 0 1 -0.187855,-0.0767 l -1.643062,-1.64835 a 0.26566638,0.26566638 0 0 1 0.375708,-0.37571 l 1.648354,1.64835 a 0.26458333,0.26458333 0 0 1 0,0.37571 0.26458333,0.26458333 0 0 1 -0.193145,0.0767 z"
+           class="cls-1"
+           inkscape:connector-curvature="0"
+           style="fill:#101820;stroke-width:0.264583" />
+        <path
+           style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 24.68067,148.14758 -3.452346,3.45058 -0.15875,1.43404 1.434041,-0.15875 3.446585,-3.45634 z"
+           id="path3"
+           inkscape:connector-curvature="0" />
+        <rect
+           id="rect3"
+           y="122.84454"
+           x="-91.113182"
+           width="2.9130626"
+           transform="rotate(-45)"
+           height="0.5291667"
+           class="cls-1"
+           style="fill:#101820;stroke-width:0.264583" />
+        <path
+           id="path4"
+           d="m 28.178928,153.59577 h -4.233333 a 0.264585,0.264585 0 0 1 0,-0.52917 h 4.233333 a 0.264585,0.264585 0 0 1 0,0.52917 z"
+           class="cls-1"
+           inkscape:connector-curvature="0"
+           style="fill:#101820;stroke-width:0.264583" />
+        <path
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="path5"
+           d="m 25.073222,147.76338 0.657734,-0.5763 1.219418,1.186 -0.62015,0.67236 z"
+           style="fill:#1a1a1a;stroke:#101820;stroke-width:0.165;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      </g>
+      <rect
+         ry="0.76152337"
+         y="0.15721345"
+         x="109.32016"
+         height="4.0857291"
+         width="31.059586"
+         id="rect5"
+         style="fill:none;fill-opacity:1;stroke:#999999;stroke-width:0.0957742;stroke-miterlimit:4;stroke-dasharray:0.383098, 0.0957742;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <text
+       id="text81874"
+       y="9.9822197"
+       x="136.89711"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.5522px;line-height:1.25;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.222363"
+       xml:space="preserve"><tspan
+         id="tspan81872"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:2.5522px;font-family:'Universalis ADF Std';-inkscape-font-specification:'Universalis ADF Std, Bold Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.222363"
+         y="9.9822197"
+         x="136.89711"
+         sodipodi:role="line" /></text>
+  </g>
+</svg>

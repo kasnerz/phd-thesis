@@ -1,0 +1,563 @@
+%%% The main file. It contains definitions of basic parameters and includes all other parts.
+
+%% Settings for single-side (simplex) printing
+% Margins: left 40mm, right 25mm, top and bottom 25mm
+% (but beware, LaTeX adds 1in implicitly)
+\documentclass[12pt,notitlepage,a4paper,openright]{report}
+\pagestyle{plain}
+\usepackage{url}
+\def\UrlBreaks{\do\/\do-}
+\PassOptionsToPackage{hyperfootnotes=false}{hyperref}
+
+% fix pdfx
+\usepackage{etoolbox}
+% \makeatletter
+% \@ifl@t@r\fmtversion{2021-06-01}%
+%  {\AddToHook{package/after/xmpincl}
+%    {\patchcmd\mcs@xmpincl@patchFile{\if\par}{\ifx\par}{}{\fail}}}{}
+% \makeatother
+
+\usepackage[usenames,dvipsnames,svgnames,table,rgb]{xcolor}
+\usepackage[a-2u]{pdfx}
+\usepackage{fontspec}
+
+\usepackage[czech,english]{babel}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\usepackage[defaultlines=4,all]{nowidow}
+
+% Turn this on when needed:
+\usepackage{microtype}
+
+\usepackage{graphicx}
+\usepackage[twoside, inner=3.7cm, outer=2.9cm, top=2.6cm, bottom=3.4cm]{geometry}
+\usepackage{thesis}
+\usepackage[round]{natbib}
+\usepackage{multirow}
+\usepackage{arydshln} % dashed lines in tables
+\usepackage{array}
+\usepackage{amssymb,latexsym,pifont}
+\usepackage{amsmath}
+\usepackage{enumitem} % custom lists
+\usepackage[normalem]{ulem} % underlining
+\usepackage{setspace} % line spacing
+\usepackage{varioref} % nice references (above/below)
+\usepackage[above,section]{placeins} % avoid figures pushed at end of chapters
+\usepackage{listings}
+\usepackage{colortbl}
+
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
+% \lstset{framextopmargin=50pt}
+
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+  language=Python,
+  basicstyle={\tt},
+  morekeywords={self},              % Add keywords here
+  keywordstyle=\color{deepblue},
+  emph={MyClass,__init__},          % Custom highlighting
+  emphstyle=\color{deepred},    % Custom highlighting style
+  stringstyle=\color{deepgreen},
+  frame=none,                         % Any extra options here
+  showstringspaces=false
+  }}
+  % Bash style for highlighting
+\newcommand\bashstyle{\lstset{
+  language=Bash,
+  basicstyle=\tt,
+  morekeywords={},              % Add keywords here
+  keywordstyle=\color{black},
+  emph={MyClass,__init__},          % Custom highlighting
+  emphstyle=\color{deepred},    % Custom highlighting style
+  stringstyle=\color{deepgreen},
+  frame=none,                         % Any extra options here
+  showstringspaces=false
+}}
+
+
+% Python environment
+\lstnewenvironment{python}[1][] {
+\pythonstyle
+\lstset{#1}
+}{}
+% Bash environment
+\lstnewenvironment{bash}[1][] {
+\bashstyle
+\lstset{#1}
+}{}
+
+\setlist[itemize]{itemsep=0.02cm,topsep=0.2cm}
+\setlist[enumerate]{itemsep=0.02cm,topsep=0.2cm,label={(\arabic*)}}
+
+\usepackage{tabularx}
+\usepackage{booktabs} % nicer lines in table
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{gnuplot-lua-tikz}
+\usetikzlibrary{shapes.geometric}
+\usepackage{epstopdf}
+% \usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{mathtools}
+\usepackage{quoting,xparse}
+\usepackage{tikz}
+\usepackage{cleveref}
+% \usepackage{soul}
+\usepackage{lua-ul}
+% \usepackage{pbox}
+% oxford comma
+\newcommand{\creflastconjunction}{, and\nobreakspace}
+
+% \usepackage[parfill]{parskip}
+
+% acronyms and glossaries
+\usepackage[acronym, nomain]{glossaries}
+\usepackage[shortcuts=ac]{glossaries-extra}
+\makeglossaries
+\preto\chapter{\glsresetall}
+
+\setabbreviationstyle[acronym]{long-short}
+
+\usepackage{subcaption} % sub figures in a fiture
+\usepackage{standalone} % include standoalone tikz images
+\usepackage{bibentry}
+\usepackage{nameref}
+\usepackage{tcolorbox}
+
+\definecolor{incorrect}{HTML}{FFBCBC}
+\definecolor{notcheckable}{HTML}{E9D2FF}
+\definecolor{misleading}{HTML}{FFF79F}
+\definecolor{other}{HTML}{DDDDDD}
+
+
+\makeatletter % This line is needed for environment definitions
+% Define a new tcolorbox environment with rounded corners
+\newtcolorbox{verbatimbox}{
+  colback=black!4, % Background color
+  colframe=black!4, % Border color
+  arc=1pt, % Radius of the rounded corners
+  boxrule=0.5pt, % Border width
+  fontupper=\ttfamily % Use monospaced font for verbatim text
+}
+\newtcolorbox{refbox}{%
+  fontupper=\small,
+  fontlower=\small,
+  arc=2pt,
+  left=0.5cm,
+  right=0.5cm,
+  top=0.2cm,
+  bottom=0.2cm,
+  colupper=black!90!white,
+  collower=black!90!white,
+  colback=gray!2!white,
+  colframe=gray!80,
+  bottomrule=0.02cm,
+  rightrule=0.03cm,
+  leftrule=0.02cm,
+  toprule=0.02cm
+}
+\makeatother % This line closes the environment definition
+
+\makeatletter
+\let\orgdescriptionlabel\descriptionlabel
+\renewcommand*{\descriptionlabel}[1]{%
+  \let\orglabel\label
+  \let\label\@gobble
+  \phantomsection
+  \protected@edef\@currentlabel{#1\unskip}%
+  %\edef\@currentlabelname{#1}%
+  \let\label\orglabel
+  \orgdescriptionlabel{#1}%
+}
+\makeatother
+
+% \makeatletter
+% \def\namedlabel#1#2{\begingroup
+%    \def\@currentlabel{#2}%
+%    \label{#1}\endgroup
+% }
+% \makeatother
+
+\def\ZK#1{{\color{green!60!black!100}ZK: \it #1}}
+\def\ZKdel#1{{\color{green!60!black!100}ZKdel: {\sout{#1}}}}
+\def\TODO#1{{\color{green!60!black!100}TODO: \it #1}}
+
+% hack bibentry command for list of publications
+\makeatletter
+\renewcommand\bibentry[1]{\nocite{#1}{\frenchspacing
+     \@nameuse{BR@r@#1\@extra@b@citeb}}}
+\makeatother
+
+\renewcommand{\chapterautorefname}{Chapter}
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Section}
+\renewcommand{\subsubsectionautorefname}{Section}
+
+
+\newcommand{\redund}[1]{{\color{black!30!red!100}\underline{#1}}}
+\newcommand{\greenund}[1]{{\color{black!40!green!100}\underline{#1}}}
+\newcommand{\blueund}[1]{{\color{black!30!blue!100}\underline{#1}}}
+
+\definecolor{lightblue}{RGB}{4, 89, 186}
+\newcommand{\lightblue}[1]{{\leavevmode\color{lightblue}{#1}}}
+\newcommand{\green}[1]{{\leavevmode\color{green!70!black!100}{#1}}}
+\newcommand{\red}[1]{{\leavevmode\color{red!70!black!100}{#1}}}
+\newcommand{\orange}[1]{{\leavevmode\color{orange}{#1}}}
+
+
+\definecolor{hlblue}{RGB}{115, 193, 214}
+\newcommand{\hlblue}[1]{{\leavevmode\color{hlblue}{#1}}}
+\definecolor{hlyellow}{RGB}{255, 230, 128}
+\newcommand{\hlyellow}[1]{{\leavevmode\color{hlyellow}{#1}}}
+
+\newcommand{\eh}{\colorbox{hlblue}{\parbox{\widthof{$s$}}{$s$}}}
+\newcommand{\et}{\colorbox{hlyellow}{\parbox{\widthof{$o$}}{$o$}}}
+\newcommand{\etf}{\colorbox{hlyellow}{\parbox{\widthof{$o_1$}}{$o_1$}}}
+\newcommand{\ets}{\colorbox{hlyellow}{\parbox{\widthof{$o_2$}}{$o_2$}}}
+
+\newcommand{\modeltemplates}{\mbox{T5-T}}
+\newcommand{\modelstruct}{\mbox{T5-S}}
+\newcommand{\modelfnr}{\mbox{T5-F+T}}
+\newcommand{\modelfnrzero}{\mbox{T5-F-zero}}
+\newcommand{\baselinecopy}{\textsc{Copy}}
+
+\newcommand{\BARTr}{\textit{full-rel2text}}
+\newcommand{\BARTk}{\textit{full-kelm}}
+\newcommand{\BARTw}{\textit{full-webnlg}}
+
+\newcommand*{\datatool}{\textsc{Quintd}}
+\newcommand*{\benchmark}{\textsc{Quintd}-1}
+\newcommand*{\gptmetric}{$\mathcal{E}_{\text{gpt}}$}
+\newcommand*{\humanmetric}{$\mathcal{E}_{\text{hum}}$}
+
+% \usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\includegraphics[width=0.23cm]{img/cmark.png}}%
+\newcommand{\xmark}{\includegraphics[width=0.23cm]{img/xmark.png}}%
+
+
+
+\definecolor{mydarkblue}{rgb}{0,0.08,0.45}
+\hypersetup{ %
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=mydarkblue,
+  filecolor=mydarkblue,
+  urlcolor=mydarkblue,
+  unicode=true
+}
+
+
+\definecolor{errred}{HTML}{C9404F}
+\definecolor{errblue}{HTML}{404EC9}
+\definecolor{errorange}{HTML}{E29C30}
+\definecolor{erryellow}{HTML}{C9AB40}
+\definecolor{errpurple}{HTML}{954CB0}
+\definecolor{errgrey}{HTML}{A0A0A0}
+\definecolor{errok}{HTML}{4CB055}
+% \definecolor{hlyellow}{HTML}{F0EE47}
+
+% colors for each error
+\newcommand{\errnum}[1]{{\leavevmode\color{errblue} \underLine{\textbf{#1\textsuperscript{N}}}}}
+\newcommand{\errent}[1]{{\leavevmode\color{errred} \underLine{\textbf{#1\textsuperscript{E}}}}}
+\newcommand{\errinc}[1]{{\leavevmode\color{errred} \underLine{\textbf{#1\textsuperscript{I}}}}}
+\newcommand{\errword}[1]{{\leavevmode\color{errorange} \underLine{\textbf{#1\textsuperscript{W}}}}}
+\newcommand{\errctx}[1]{{\leavevmode\color{erryellow} \underLine{\textbf{#1\textsuperscript{C}}}}}
+\newcommand{\errmis}[1]{{\leavevmode\color{erryellow} \underLine{\textbf{#1\textsuperscript{S}}}}}
+\newcommand{\errnc}[1]{{\leavevmode\color{errpurple} \underLine{\textbf{#1\textsuperscript{NC}}}}}
+\newcommand{\errother}[1]{{\leavevmode\color{errgrey} \underLine{\textbf{#1\textsuperscript{O}}}}}
+\newcommand{\errok}[1]{{\leavevmode\color{errok} \underLine{\textbf{#1\textsuperscript{O}}}}}
+
+
+\newcommand{\lineacross}{\rule{\linewidth}{1pt}}
+
+
+% \hypersetup{
+%     colorlinks=false,
+%     pdfborder={0 0 0},
+%     unicode=true,
+% }
+
+\input{acronyms}
+
+% Czech babel conflicts with cline, hacky fix (http://tex.stackexchange.com/questions/111999/slovak-and-czech-babel-gives-problems-with-cmidrule-and-cline):
+% - basically disables hyphenation in tables, but it's not used anyway so it doesn't matter
+\preto\tabular{\shorthandoff{-}}
+\preto\tikzpicture{\shorthandoff{-}}
+%
+%
+\hyphenation{%
+da-ta-sets
+da-ta-set
+} % -- custom hyphenation
+
+% cdashlinelr
+% https://tex.stackexchange.com/questions/319198/why-is-it-so-difficult-to-generate-a-midrule-dashed-in-latex
+\makeatletter
+\def\adl@drawiv#1#2#3{%
+  \hskip.5\tabcolsep
+  \xleaders#3{#2.5\@tempdimb #1{1}#2.5\@tempdimb}%
+  #2\z@ plus1fil minus1fil\relax
+  \hskip.5\tabcolsep}
+\newcommand{\cdashlinelr}[1]{%
+  \noalign{\vskip\aboverulesep
+    \global\let\@dashdrawstore\adl@draw
+    \global\let\adl@draw\adl@drawiv}
+  \cdashline{#1}
+  \noalign{\global\let\adl@draw\@dashdrawstore
+    \vskip\belowrulesep}}
+\makeatother
+
+% \setmainfont[Ligatures=Common]{Libertinus Serif}
+\setmainfont[Ligatures=Common]{Linux Libertine O}
+\setsansfont[Scale=MatchLowercase]{DejaVu Sans}
+\setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
+
+% \setmainfont[Russian]{DejaVu Serif}
+
+\NewDocumentCommand{\bywhom}{m}{% the Bourbaki trick
+  {\nobreak\hfill\penalty50\hskip1em\null\nobreak
+   \hfill\mbox{\normalfont(#1)}%
+   \parfillskip=0pt \finalhyphendemerits=0 \par}%
+}
+
+\NewDocumentEnvironment{pquotation}{m}
+  {\begin{quoting}[
+     indentfirst=true,
+     leftmargin=\parindent,
+     rightmargin=\parindent]}
+  {\bywhom{#1}\end{quoting}}
+
+\setstretch{1.1} % line spacing
+
+\expandafter\def\expandafter\quote\expandafter{\quote\small} % smaller quotations font
+
+
+% orphan & widow control
+%\clubpenalty 10000
+%\widowpenalty 10000
+
+% gaps between text and footnotes
+\def\footnoteskip#1{
+  \renewcommand\footnoterule{
+     \vspace{#1}
+     \hrule width 0.4\columnwidth%
+     \vspace{3pt}
+}
+}
+\footnoteskip{0.8em}
+\newcommand{\argmax}[1]{\underset{#1}{\operatorname{arg}\,\operatorname{max}}\;}
+
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{2}
+
+%% cutting down warnings
+\hfuzz=2pt
+\hbadness=10000
+
+% force-ordering citations according to dummy keys
+\newcommand{\dummybiborderkey}[1]{}
+
+\input{macros}
+
+\newcommand{\veryshortarrow}[1][3pt]{\mathrel{%
+     \vcenter{\hbox{\rule[-.5\fontdimen8\textfont3]{#1}{\fontdimen8\textfont3}}}%
+     \mkern-4mu\hbox{\usefont{U}{lasy}{m}{n}\symbol{41}}}}
+
+\newcommand{\paperdisclaim}[1]{%
+\begin{center}\begin{minipage}{0.9\textwidth}
+\footnotesize\it #1
+\end{minipage}\end{center}
+}
+\renewcommand\cite{\citep}
+
+\def\ignorecolumn#1\unskip{}
+
+
+\begin{document}
+\pagenumbering{gobble}
+\selectlanguage{english}
+\begin{titlepage}
+  \begin{center}
+    \ \\
+
+    \vspace{20mm}
+
+    \includegraphics[height=25mm]{logo-mff.pdf}
+
+    \vspace{30mm}
+
+    {\Large\bf \uppercase{Abstract of Doctoral Thesis}}
+
+    \vspace{20mm}
+
+    {\Large\textnormal Zdeněk Kasner}\\
+
+    \vspace{\gapsize}
+    {\Large\bf Data-to-Text Generation with Neural Language Models}\\
+  \end{center}
+  \vspace{1mm}
+  \begin{center}
+    \large
+    Institute of Formal and Applied Linguistics\\
+    \vspace{\gapsize}
+    \noindent Supervisor: Mgr. et Mgr. Ondřej Dušek, Ph.D.\\
+    \vspace{\gapsize}
+    {%\normalsize
+      \noindent Study Program: Computational Linguistics\\
+    }
+    \vspace{\gapsize}
+    Prague 2024
+  \end{center}
+\end{titlepage}
+
+
+\pagestyle{plain}
+\normalsize
+
+\noindent The results of this thesis were achieved in the period of a doctoral study at the Faculty of Mathematics and Physics, Charles University in years 2019–2024.
+
+\begin{description}[leftmargin=15.5em,labelwidth=15.5em,labelindent=0em,labelsep=0em]
+  \item[Doctoral Candidate:] Ing. Zdeněk Kasner\\Institute of Formal and Applied Linguistics
+  \item[Supervisor:] Mgr. et Mgr. Ondřej Dušek, Ph.D.\\Institute of Formal and Applied Linguistics
+  \item[Department:]  Institute of Formal and Applied Linguistics,
+    \\Faculty of Mathematics and Physics,
+    \\Charles University
+    \\Malostranské náměstí 25,
+    \\118 00 Prague 1, Czech Republic
+
+  \item[Opponents:] prof. dr. Emiel Krahmer\\School of Humanities and Digital Sciences\\Department of Communication and Cognition\\Tilburg University\\Tilburg, Netherlands\\ \\ dr. Yaji Sripada\\ School of Natural and Computing Sciences\\University of Aberdeen\\Aberdeen, United Kingdom
+
+  \item[Chairman of Academic Council:] doc. RNDr. Pavel Pecina, Ph.D\\Institute of Formal and Applied Linguistics
+\end{description}
+
+\vfill
+\noindent This abstract was distributed on \today.
+
+\vspace{0.5cm}
+
+\noindent The thesis defense will take place on September 5, 2024 at 9:30 a.m. in front of a committee for thesis defenses in the branch Mathematical Linguistics at the Faculty of Mathematics and Physics, Charles University, Malostranské nám. 25, Prague 1, room S1.
+
+\vspace{0.5cm}
+
+\noindent The thesis can be viewed at the Study Department of Doctoral Studies of the Faculty of Mathematics and Physics, Charles University, Ke Karlovu 3, Prague 2.
+
+\cleardoublepage{}
+\selectlanguage{czech}
+
+\begin{titlepage}
+  \begin{center}
+    \ \\
+
+    \vspace{20mm}
+
+    \includegraphics[height=25mm]{logo-mff-cz.png}
+
+    \vspace{30mm}
+
+    {\Large\bf \uppercase{Autoreferát disertační práce}}
+
+    \vspace{20mm}
+
+    {\Large\textnormal Zdeněk Kasner}\\
+
+    \vspace{\gapsize}
+    {\Large\bf Generování textu z dat s neuronovými jazykovými modely}\\
+  \end{center}
+  \vspace{1mm}
+  \begin{center}
+    \large
+    Ústav formální a aplikované lingvistiky\\
+    \vspace{\gapsize}
+    \noindent Školitel: Mgr. et Mgr. Ondřej Dušek, Ph.D.\\
+    \vspace{\gapsize}
+    {%\normalsize
+      \noindent Studijní program: Matematická lingvistika\\
+    }
+    \vspace{\gapsize}
+    Praha 2024
+  \end{center}
+\end{titlepage}
+
+
+\pagestyle{plain}
+\normalsize
+
+\noindent Disertační práce byla vypracována na základě výsledků získaných během doktorského studia na Matematicko-fyzikální fakultě Univerzity Karlovy v letech 2019–2024.
+
+\begin{description}[leftmargin=15.5em,labelwidth=15.5em,labelindent=0em,labelsep=0em]
+  \item[Doktorand:] Ing. Zdeněk Kasner\\Ústav formální a aplikované lingvistiky
+  \item[Školitel:] Mgr. et Mgr. Ondřej Dušek, Ph.D.\\Ústav formální a aplikované lingvistiky
+  \item[Školicí pracoviště:]  Ústav formální a aplikované lingvistiky,
+    \\Matematicko-fyzikální fakulta,
+    \\Univerzita Karlova
+    \\Malostranské náměstí 25,
+    \\118 00 Praha 1, Česká republika
+
+  \item[Oponenti:] prof. dr. Emiel Krahmer\\School of Humanities and Digital Sciences\\Department of Communication and Cognition\\Tilburg University\\Tilburg, Nizozemsko\\ \\ dr. Yaji Sripada\\ School of Natural and Computing Sciences\\University of Aberdeen\\Aberdeen, Velká Británie
+
+  \item[Předseda RDSO:] doc. RNDr. Pavel Pecina, Ph.D\\Ústav formální a aplikované lingvistiky
+\end{description}
+
+\vfill
+
+\noindent Autoreferát byl rozeslán dne \today.
+
+\vspace{0.5cm}
+
+\noindent Obhajoba disertační práce se koná dne 5. září 2024 v 09:30 před komisí pro obhajoby disertačních prací v oboru Matematická lingvistika na Matematicko-fyzikální fakultě UK, Malostranské nám. 25, Praha 1, v místnosti S1.
+
+\vspace{0.5cm}
+
+\noindent S disertační prací je možno se seznámit na studijním oddělení Matematicko-fyzikální fakulty UK, Ke Karlovu 3, Praha 2.
+
+\selectlanguage{english}
+
+
+\cleardoublepage{}
+\ \vspace{10mm}
+
+\vfill
+
+\renewcommand{\chapterheadstartvskip}{\vspace*{-10mm}} % chapter spacing
+\setstretch{1.2} % line spacing
+%
+% TEXT START
+%
+% \renewcommand{\thepage}{\arabic{page}}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\setcounter{chapter}{1}
+
+
+\sloppy
+\cite{kasner2022neural}
+% \include{01-intro}
+% \include{02-background}
+% \include{03-lowres}
+% \include{04-evaluation}
+% \include{05-visualization}
+% \include{06-investigating}
+% \include{07-conclusions}
+
+
+%
+% TEXT END
+%
+
+\renewcommand{\chapterheadstartvskip}{\vspace*{0mm}} % chapter spacing
+
+\cleardoublepage{}
+\bibliographystyle{csplainnat}
+{\small \bibliography{references}}
+
+\cleardoublepage{}
+\include{list_of_publications}
+
+\end{document}
